@@ -7,7 +7,7 @@ include <BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
-Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, PCB_DXF]
+Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
 
 /* [View Settings] */
 Explode_Factor = 100; // [0:1:100]
@@ -27,9 +27,12 @@ screw_hole = 3.2; //M3
 m3_insert_hole = 4.2;
 
 // Port Locations (Radius from center)
-port_radius = 12;
-angle_fluid_in = 0;
-angle_fluid_out = 180;
+port_radius = 20; // Expanded for 1/4" NPT fittings
+angle_fluid_in_bot = -30;
+angle_fluid_in_top = 30;
+angle_fluid_out_bot = 150;
+angle_fluid_out_top = 210;
+
 angle_elec_cis = 90;  // Top electrode (via)
 angle_elec_trans = 270; // Bottom electrode (direct)
 
@@ -131,9 +134,13 @@ module Plate_1_Base() {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
-        // Bottom Ports
-        rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
+        // Bottom Flush Ports
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+        // Top Flush Ports (Pass-through)
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         rotate([0,0,angle_elec_trans]) translate([port_radius, 0]) circle(d=2);
         // Trans-electrode trace
@@ -157,15 +164,13 @@ module Gasket_Main() {
         BoltHoles();
         circle(d=10); // Chip area
         // Pass-throughs
-        rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
-
-        // Pogo Pin Access (if outside center hole)
-        // Center hole is d=10 (r=5). Pogo pins at y=2.5, x=[-3..3].
-        // x=3, y=2.5 -> r = sqrt(9 + 6.25) = 3.9.
-        // All pins are inside the d=10 hole. No changes needed.
     }
 }
 
@@ -175,15 +180,21 @@ module Plate_2_Channel() {
         circle(d=plate_diam);
         BoltHoles();
         square([i_width + 0.2, i_length + 0.2], center=true); // Interposer Pocket
-        // Channels
+
+        // Bottom Flush Channels (Connect Bottom Ports to Chip Pocket)
         hull() {
-            rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
+            rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
             translate([3,0]) circle(d=3);
         }
         hull() {
-            rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
+            rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
             translate([-3,0]) circle(d=3);
         }
+
+        // Top Flush Ports (Pass-through to Plate 3)
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
     }
@@ -195,6 +206,17 @@ module Plate_3_Top() {
         circle(d=plate_diam);
         BoltHoles();
         circle(d=6); // Sample Well
+
+        // Top Flush Channels (Connect Top Ports to Sample Well)
+        hull() {
+             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+             translate([3, 0]) circle(d=3); // Connect to well
+        }
+        hull() {
+             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+             translate([-3, 0]) circle(d=3); // Connect to well
+        }
+
         // Cis-Electrode Termination
         hull() {
             rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
@@ -206,6 +228,10 @@ module Plate_3_Top() {
 
 module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
+
+    // 0. Bottom Pusher Plate (Under Base Plate)
+    down(3 + Explode_Factor/4) // 3mm thickness
+        Bottom_Pusher_Plate();
 
     // 1. Base Plate
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base();
@@ -251,6 +277,31 @@ module Cartridge_Stack_3D() {
                 translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
             }
         }
+}
+
+// ==============================================================================
+// MODULE: BOTTOM PUSHER PLATE (TPU Seal)
+// ==============================================================================
+module Bottom_Pusher_Plate() {
+    color("LightSlateGray")
+    diff("remove")
+    cyl(h=3, d=neck_id-0.5) { // Fits in neck
+        tag("remove") {
+            // Fluid Ports
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0]) {
+                    cyl(h=10, d=6, center=true); // Through hole
+                    // O-Ring Seats (Top and Bottom)
+                    position(TOP) torus(d_major=8, d_minor=1.5, anchor=CENTER);
+                    position(BOTTOM) torus(d_major=8, d_minor=1.5, anchor=CENTER);
+                }
+            }
+            // Electrode Ports
+            for(a = [angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) cyl(h=10, d=4, center=true);
+            }
+        }
+    }
 }
 
 // ==============================================================================
@@ -422,12 +473,29 @@ module Housing_Lid() {
         position(TOP) down(5)
         cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
 
-        // Interface Shelf Openings (Through Lid)
+        // Bosses for 1/4" NPT Fittings (Underside)
+        attach(BOTTOM) {
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0])
+                cyl(h=12, d=22, anchor=TOP) {
+                    // 1/4" NPT Thread (Approximate: Tapered hole + thread)
+                    // NPT 1/4" OD is ~13.7mm at large end. Pitch 18TPI ~1.4mm.
+                    tag("remove")
+                    threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=BOTTOM);
+                }
+            }
+        }
+
+        // Pass-throughs (Through Lid)
         tag("remove")
         position(CENTER) {
-            cyl(h=wall*3, d=40, center=true); // Center opening
-            for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
-                zrot(a) right(port_radius) cyl(h=wall*3, d=6, center=true);
+            // Fluid Ports (Small pass-throughs aligning with threads)
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) right(port_radius) cyl(h=wall*5, d=8, center=true);
+            }
+            // Electrode Ports
+            for(a = [angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) cyl(h=wall*5, d=4, center=true);
             }
         }
 
@@ -534,6 +602,8 @@ if (Output_Mode == "Assembly") {
     Torque_Cap_Inner();
 } else if (Output_Mode == "Pressure_Puck_STL") {
     Pressure_Puck_3D();
+} else if (Output_Mode == "Bottom_Pusher_Plate_STL") {
+    Bottom_Pusher_Plate();
 } else if (Output_Mode == "PCB_DXF") {
     projection(cut=false) PCB_2D();
 }
