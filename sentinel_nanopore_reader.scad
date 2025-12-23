@@ -50,30 +50,6 @@ $fn = 80;
 epsilon = 0.01;
 
 // ==============================================================================
-// HELPER: THREADS
-// ==============================================================================
-module ScrewThread(od, pitch, height, internal=false) {
-    turns = height / pitch;
-    d_eff = internal ? od : od - 1;
-    difference() {
-        cylinder(h=height, d=d_eff);
-        if(internal) {
-             for(i=[0:1:turns*30]) {
-                translate([0,0, i*(pitch/30)]) rotate([0,0,i*12])
-                translate([od/2, 0, 0]) rotate([90,0,0])
-                cylinder(h=5, d=pitch*0.6, $fn=3, center=true);
-            }
-        } else {
-             for(i=[0:1:turns*30]) {
-                translate([0,0, i*(pitch/30)]) rotate([0,0,i*12])
-                translate([od/2, 0, 0]) rotate([90,0,0])
-                cylinder(h=2, d=pitch*0.6, $fn=3, center=true);
-            }
-        }
-    }
-}
-
-// ==============================================================================
 // MODULES: CARTRIDGE LAYERS (Round + Bottom Ports)
 // ==============================================================================
 
@@ -152,16 +128,20 @@ module Plate_3_Top() {
 }
 
 module Cartridge_Stack_3D() {
-    color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base();
-    translate([0,0,plate_thick + Explode_Factor/4]) color("Red") linear_extrude(gasket_thick) Gasket_Main();
-    translate([0,0,plate_thick + gasket_thick + Explode_Factor*2/4]) color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_2_Channel();
-    translate([0,0,plate_thick*2 + gasket_thick + Explode_Factor*3/4]) color("Red") linear_extrude(gasket_thick) Gasket_Main();
-    translate([0,0,plate_thick*2 + gasket_thick*2 + Explode_Factor]) color("PowderBlue", 0.5) {
-        difference() {
-            linear_extrude(plate_thick*2) Plate_3_Top();
-            translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
-        }
-    }
+    color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base()
+        attach(TOP, overlap=-Explode_Factor/4)
+        color("Red") linear_extrude(gasket_thick) Gasket_Main()
+            attach(TOP, overlap=-Explode_Factor/4)
+            color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_2_Channel()
+                attach(TOP, overlap=-Explode_Factor/4)
+                color("Red") linear_extrude(gasket_thick) Gasket_Main()
+                    attach(TOP, overlap=-Explode_Factor/4)
+                    color("PowderBlue", 0.5) {
+                        difference() {
+                            linear_extrude(plate_thick*2) Plate_3_Top();
+                            translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
+                        }
+                    }
 }
 
 // ==============================================================================
@@ -191,22 +171,23 @@ module Pressure_Puck_3D() {
 // MODULE: TORQUE-LOCK CAP (Hollow for Pipette)
 // ==============================================================================
 module Torque_Cap_Inner() {
-    color("Silver") {
-        difference() {
-            union() {
-                cylinder(h=20, d=neck_od + 4); // Main Ring
-                // Ratchet Teeth
-                for(r=[0:(360/Torque_Teeth_Count):360]) {
-                    rotate([0,0,r]) translate([(neck_od+4)/2, 0, 0])
-                    cylinder(h=20, d=3, $fn=3);
-                }
-            }
-            // Threads
-            //translate([0,0,-1]) ScrewThread(od=neck_od+1, pitch=3, height=22, internal=true);
-            translate([0,0,-1]) threaded_rod(d=neck_od+1, l=22, internal=true, pitch=20);
-            // Pipette Access Hole
-            translate([0,0,-1]) cylinder(h=30, d=22);
+    color("Silver")
+    diff("remove")
+    cyl(h=20, d=neck_od + 4, anchor=BOTTOM) {
+        // Ratchet Teeth
+        for(r=[0:(360/Torque_Teeth_Count):360]) {
+            zrot(r) attach(RIGHT, overlap=1.5) cyl(h=20, d=3, $fn=3);
         }
+
+        // Threads
+        tag("remove")
+        position(BOTTOM) down(1)
+        threaded_rod(d=neck_od+1, l=22, internal=true, pitch=20, anchor=BOTTOM);
+
+        // Pipette Access Hole
+        tag("remove")
+        position(BOTTOM) down(1)
+        cyl(h=30, d=22, anchor=BOTTOM);
     }
 }
 
@@ -238,45 +219,47 @@ module Torque_Cap_Outer() {
 // MODULE: HOUSING (Integrated Internal Mounts)
 // ==============================================================================
 module Housing_3D() {
-    color("WhiteSmoke") {
-        difference() {
-            union() {
-                // Optimized housing body
-                linear_extrude(height=base_h+wall/2)
-                    offset(r=wall)
-                    square([base_w, base_l], center=true);
+    color("WhiteSmoke")
+    diff("remove")
+    cuboid([base_w+2*wall, base_l+2*wall, base_h+wall/2], rounding=wall, edges="Z", anchor=BOTTOM) {
 
-                translate([0,0,base_h]) cylinder(h=10, d1=base_w-10, d2=neck_od);
-                translate([0,0,base_h+10]) threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
+        // Neck Transition & Thread
+        attach(TOP, overlap=wall/2)
+        cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
+            attach(TOP)
+            threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
+
+        // Internal Cavity
+        tag("remove")
+        position(BOTTOM) up(wall)
+        cuboid([base_w-2*wall, base_l-2*wall, base_h+neck_h], anchor=BOTTOM);
+
+        // Neck Bore
+        tag("remove")
+        position(TOP) down(5)
+        cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
+
+        // Interface Shelf Openings (Top of base_h)
+        tag("remove")
+        position(TOP) down(wall/2) {
+            cyl(h=10, d=40, center=true); // Center opening
+            for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) down(5) cyl(h=20, d=6, center=true);
             }
+        }
 
-            // Internal Cavity
-
-            cube([base_w-2*wall, base_l-2*wall, base_h+neck_h], center=true);
-
-            // Neck Bore
-            translate([0,0,base_h-5]) cylinder(h=neck_h+20, d=neck_id);
-
-            // The Interface Shelf (z=base_h)
-            translate([0,0,base_h]) {
-                cylinder(h=10, d=40, center=true); // Center opening
-                // Port Clearance
-                for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
-                    rotate([0,0,a]) translate([port_radius, 0, -5]) cylinder(h=20, d=6, center=true);
-                }
-            }
-
-            // Access Ports
-            translate([0, -base_l/2, 20]) rotate([90,0,0]) cylinder(h=20, d=15);
-            translate([base_w/2, 0, 30]) rotate([0,90,0]) cylinder(h=20, d=10);
+        // Access Ports
+        tag("remove") {
+            attach(FRONT, overlap=10) up(20) cyl(h=20, d=15);
+            attach(RIGHT, overlap=10) up(30) cyl(h=20, d=10);
         }
 
         // --- INTERNAL COMPONENT MOUNTS ---
 
-        // 1. Pump Mount (Vertical or Horizontal logic)
-        // Placing Pump on the Right Wall, Motor Down
-        translate([base_w/2 - pump_w - 5, base_l/2 - pump_l - 5, wall]) {
-            difference() {
+        // 1. Pump Mount
+        // Position relative to center of floor
+        position(BOTTOM) up(wall) translate([base_w/2 - pump_w - 5, base_l/2 - pump_l - 5, 0]) {
+             difference() {
                  cube([pump_w+5, pump_w+5, 10]); // Bracket Base
                  translate([2.5, 2.5, -1]) cube([pump_w, pump_w, 12]); // Motor cutout
             }
@@ -285,8 +268,8 @@ module Housing_3D() {
             translate([2.5 + (pump_w-31)/2 + 31, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
         }
 
-        // 2. PCB Mount (Left Floor)
-        translate([-base_w/2 + 10, -base_l/2 + 10, wall]) {
+        // 2. PCB Mount
+        position(BOTTOM) up(wall) translate([-base_w/2 + 10, -base_l/2 + 10, 0]) {
              cylinder(h=5, d=6); // Standoff 1
              translate([pcb_w-5, 0, 0]) cylinder(h=5, d=6);
              translate([0, pcb_l-5, 0]) cylinder(h=5, d=6);
