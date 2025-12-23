@@ -117,6 +117,11 @@ module Plate_1_Base() {
              circle(d=2);
         }
         translate([plate_diam/2 - 3, 0]) circle(d=2); // Keying pin
+
+        // Pogo Pin Access
+        translate([0, 2.5]) {
+            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
+        }
     }
 }
 
@@ -131,6 +136,11 @@ module Gasket_Main() {
         rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
+
+        // Pogo Pin Access (if outside center hole)
+        // Center hole is d=10 (r=5). Pogo pins at y=2.5, x=[-3..3].
+        // x=3, y=2.5 -> r = sqrt(9 + 6.25) = 3.9.
+        // All pins are inside the d=10 hole. No changes needed.
     }
 }
 
@@ -182,8 +192,26 @@ module Cartridge_Stack_3D() {
     // 3. Channel Plate + Interposer
     up(plate_thick + gasket_thick + Explode_Factor*2/4) {
         color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_2_Channel();
-        // Interposer sits inside Plate 2 (same Z level relative to this layer)
-        Interposer();
+        // Interposer sits inside Plate 2
+        // Pads need to face DOWN (towards PCB).
+        // Original: pads at z=thickness.
+        // Flipped: zrot(0) xrot(180) -> pads at z=-thickness (relative to center?).
+        // Interposer module is 0..thickness.
+        // translate([0,0,thickness]) rotate([180,0,0]) Interposer()?
+        // If rotate 180 X, [x,y,z] -> [x, -y, -z].
+        // 0..1 becomes 0..-1.
+        // Translate up by 1 -> 1..0.
+        // Correct position.
+        // Y coordinates also flip. Original pads at +y. Now at -y.
+        // Original: i_length/2 - pad_length - 2 = 7.5 - 3 - 2 = 2.5.
+        // Flipped: -2.5.
+        // But our holes are at +2.5.
+        // So we need to rotate 180 Z as well? Or flip Y?
+        // rotate([180, 0, 180])?
+        // If rotate 180 X: y->-y.
+        // If rotate 180 Z: -y->y.
+        // So rotate([180, 0, 180]) restores Y to +y, but Z is inverted (pads down).
+        translate([0,0,i_thickness]) rotate([180, 0, 180]) Interposer();
     }
 
     // 4. Gasket 2
@@ -325,13 +353,6 @@ module Housing_Case() {
             translate([2.5 + (pump_w-31)/2 + 31, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
         }
 
-        // 2. PCB Mount (On Floor)
-        translate([-base_w/2 + 10, -base_l/2 + 10, wall]) {
-             cylinder(h=5, d=6); // Standoff 1
-             translate([pcb_w-5, 0, 0]) cylinder(h=5, d=6);
-             translate([0, pcb_l-5, 0]) cylinder(h=5, d=6);
-             translate([pcb_w-5, pcb_l-5, 0]) cylinder(h=5, d=6);
-        }
     }
 }
 
@@ -339,6 +360,31 @@ module Housing_Lid() {
     color("Gainsboro")
     diff("remove")
     cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
+
+        // PCB Mounts (Underside)
+        attach(BOTTOM) {
+            translate([0,0,0]) {
+                // 1mm Standoffs for PCB (80x60 centered)
+                for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+                    translate([mx, my, 0]) cyl(h=1, d=6, anchor=TOP) {
+                        tag("remove") cyl(h=5, d=2.5, anchor=BOTTOM); // Mounting screw hole
+                    }
+                }
+            }
+        }
+
+        // Pogo Pin Holes
+        // Pads at y = 2.5 (approx). Width 6mm centered.
+        // We need corresponding holes in the Lid.
+        tag("remove")
+        position(CENTER) {
+             translate([0, 2.5, 0]) // Position under pads
+             // pad_pitch = 2. num_pads=4.
+             // start_x = -3. x = -3, -1, 1, 3.
+             for(px = [-3, -1, 1, 3]) {
+                 translate([px, 0, 0]) cyl(h=wall*3, d=1.2, center=true);
+             }
+        }
 
         // Neck Transition & Thread
         attach(TOP, overlap=wall/2) // Embed into plate
@@ -387,8 +433,26 @@ if (Output_Mode == "Assembly") {
 
             // Internals (Visual Only)
             if(!Cross_Section) {
-                // PCB
-                color("Green") translate([-base_w/2 + 10, -base_l/2 + 10, wall+5- Explode_Factor]) cube([pcb_w, pcb_l, 1.6]);
+                // PCB (Attached to Lid Standoffs)
+                // Lid is at base_h. Standoffs are 1mm down.
+                // PCB top surface is at base_h - 1. PCB thickness 1.6.
+                // PCB is centered.
+                translate([0,0, base_h - 1 - 1.6]) {
+                    difference() {
+                        color("Green") cube([pcb_w, pcb_l, 1.6], center=true);
+                        // Cutouts for Pass-throughs
+                         cylinder(h=10, d=40, center=true); // Center
+                         for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+                             rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
+                         }
+                    }
+                    // Visual Pogo Pins
+                    color("Gold")
+                    translate([0, 2.5, 1.6/2]) { // On top surface
+                         for(px = [-3, -1, 1, 3]) translate([px, 0, 0]) cylinder(h=10, d=1);
+                    }
+                }
+
                 // Pump
                 color("Silver") translate([base_w/2 - pump_w - 2.5, base_l/2 - pump_l - 2.5, wall- Explode_Factor]) cube([pump_w, pump_w, 40]);
 
