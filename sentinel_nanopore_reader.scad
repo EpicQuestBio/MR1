@@ -7,7 +7,7 @@ include <BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
-Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL]
+Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, PCB_DXF]
 
 /* [View Settings] */
 Explode_Factor = 100; // [0:1:100]
@@ -63,6 +63,31 @@ epsilon = 0.01;
 // ==============================================================================
 // MODULES: CARTRIDGE LAYERS (Round + Bottom Ports)
 // ==============================================================================
+
+// PCB 2D Projection
+module PCB_2D() {
+    difference() {
+        square([pcb_w, pcb_l], center=true);
+
+        // Mounting Holes
+        for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+            translate([mx, my]) circle(d=3);
+        }
+
+        // Central Pass-through
+        circle(d=40);
+
+        // Port Pass-throughs
+        for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+            rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
+        }
+
+        // Pogo Pin Markers (y=2.5)
+        translate([0, 2.5]) {
+             for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1);
+        }
+    }
+}
 
 // 1. THE DISPOSABLE INTERPOSER CARD
 module Interposer() {
@@ -509,4 +534,6 @@ if (Output_Mode == "Assembly") {
     Torque_Cap_Inner();
 } else if (Output_Mode == "Pressure_Puck_STL") {
     Pressure_Puck_3D();
+} else if (Output_Mode == "PCB_DXF") {
+    projection(cut=false) PCB_2D();
 }
