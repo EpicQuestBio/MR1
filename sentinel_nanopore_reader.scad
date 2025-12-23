@@ -7,7 +7,7 @@ include <BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
-Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Base_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL]
+Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, PCB_DXF]
 
 /* [View Settings] */
 Explode_Factor = 100; // [0:1:100]
@@ -64,6 +64,31 @@ epsilon = 0.01;
 // MODULES: CARTRIDGE LAYERS (Round + Bottom Ports)
 // ==============================================================================
 
+// PCB 2D Projection
+module PCB_2D() {
+    difference() {
+        square([pcb_w, pcb_l], center=true);
+
+        // Mounting Holes
+        for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+            translate([mx, my]) circle(d=3);
+        }
+
+        // Central Pass-through
+        circle(d=40);
+
+        // Port Pass-throughs
+        for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+            rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
+        }
+
+        // Pogo Pin Markers (y=2.5)
+        translate([0, 2.5]) {
+             for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1);
+        }
+    }
+}
+
 // 1. THE DISPOSABLE INTERPOSER CARD
 module Interposer() {
     color("White", 0.8) { // Acrylic/COC plastic appearance
@@ -117,6 +142,11 @@ module Plate_1_Base() {
              circle(d=2);
         }
         translate([plate_diam/2 - 3, 0]) circle(d=2); // Keying pin
+
+        // Pogo Pin Access
+        translate([0, 2.5]) {
+            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
+        }
     }
 }
 
@@ -131,6 +161,11 @@ module Gasket_Main() {
         rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
+
+        // Pogo Pin Access (if outside center hole)
+        // Center hole is d=10 (r=5). Pogo pins at y=2.5, x=[-3..3].
+        // x=3, y=2.5 -> r = sqrt(9 + 6.25) = 3.9.
+        // All pins are inside the d=10 hole. No changes needed.
     }
 }
 
@@ -182,8 +217,26 @@ module Cartridge_Stack_3D() {
     // 3. Channel Plate + Interposer
     up(plate_thick + gasket_thick + Explode_Factor*2/4) {
         color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_2_Channel();
-        // Interposer sits inside Plate 2 (same Z level relative to this layer)
-        Interposer();
+        // Interposer sits inside Plate 2
+        // Pads need to face DOWN (towards PCB).
+        // Original: pads at z=thickness.
+        // Flipped: zrot(0) xrot(180) -> pads at z=-thickness (relative to center?).
+        // Interposer module is 0..thickness.
+        // translate([0,0,thickness]) rotate([180,0,0]) Interposer()?
+        // If rotate 180 X, [x,y,z] -> [x, -y, -z].
+        // 0..1 becomes 0..-1.
+        // Translate up by 1 -> 1..0.
+        // Correct position.
+        // Y coordinates also flip. Original pads at +y. Now at -y.
+        // Original: i_length/2 - pad_length - 2 = 7.5 - 3 - 2 = 2.5.
+        // Flipped: -2.5.
+        // But our holes are at +2.5.
+        // So we need to rotate 180 Z as well? Or flip Y?
+        // rotate([180, 0, 180])?
+        // If rotate 180 X: y->-y.
+        // If rotate 180 Z: -y->y.
+        // So rotate([180, 0, 180]) restores Y to +y, but Z is inverted (pads down).
+        translate([0,0,i_thickness]) rotate([180, 0, 180]) Interposer();
     }
 
     // 4. Gasket 2
@@ -232,7 +285,8 @@ module Torque_Cap_Inner() {
     cyl(h=20, d=neck_od + 4, anchor=BOTTOM) {
         // Ratchet Teeth
         for(r=[0:(360/Torque_Teeth_Count):360]) {
-            zrot(r) attach(RIGHT, overlap=1.5) cyl(h=20, d=3, $fn=3);
+            // Position teeth vertically at the perimeter
+            zrot(r) position(RIGHT) cyl(h=20, d=3, $fn=3, anchor=CENTER);
         }
 
         // Threads
@@ -272,39 +326,20 @@ module Torque_Cap_Outer() {
 }
 
 // ==============================================================================
-// MODULE: HOUSING (Integrated Internal Mounts)
+// MODULE: HOUSING SPLIT (Case + Lid)
 // ==============================================================================
-module Housing_3D() {
+
+module Housing_Case() {
     color("WhiteSmoke")
     union() {
-        // Main Hollow Body
+        // Main Hollow Box (Open Top)
         diff("remove")
-        cuboid([base_w+2*wall, base_l+2*wall, base_h+wall/2], rounding=wall, edges="Z", anchor=BOTTOM) {
+        cuboid([base_w+2*wall, base_l+2*wall, base_h], rounding=wall, edges="Z", anchor=BOTTOM) {
 
-            // Neck Transition & Thread
-            attach(TOP, overlap=wall/2)
-            cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
-                attach(TOP)
-                threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
-
-            // Internal Cavity
+            // Internal Cavity (Bucket)
             tag("remove")
             position(BOTTOM) up(wall)
-            cuboid([base_w-2*wall, base_l-2*wall, base_h+neck_h], anchor=BOTTOM);
-
-            // Neck Bore
-            tag("remove")
-            position(TOP) down(5)
-            cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
-
-            // Interface Shelf Openings (Top of base_h)
-            tag("remove")
-            position(TOP) down(wall/2) {
-                cyl(h=10, d=40, center=true); // Center opening
-                for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
-                    zrot(a) right(port_radius) down(5) cyl(h=20, d=6, center=true);
-                }
-            }
+            cuboid([base_w-2*wall, base_l-2*wall, base_h+wall], anchor=BOTTOM); // Go up through top
 
             // Access Ports
             tag("remove") {
@@ -321,12 +356,18 @@ module Housing_3D() {
                     }
                 }
             }
+
+            // Lid Mounting Posts
+            for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
+                 position(BOTTOM) up(wall)
+                 cyl(h=base_h-wall, d=8, anchor=BOTTOM) {
+                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM); // Screw hole
+                 }
+            }
         }
 
-        // --- INTERNAL COMPONENT MOUNTS ---
-        // Added via union to avoid subtraction by internal cavity
-
-        // 1. Pump Mount
+        // 1. Pump Mount (On Floor)
         translate([base_w/2 - pump_w - 5, base_l/2 - pump_l - 5, wall]) {
              difference() {
                  cube([pump_w+5, pump_w+5, 10]); // Bracket Base
@@ -337,14 +378,72 @@ module Housing_3D() {
             translate([2.5 + (pump_w-31)/2 + 31, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
         }
 
-        // 2. PCB Mount
-        translate([-base_w/2 + 10, -base_l/2 + 10, wall]) {
-             cylinder(h=5, d=6); // Standoff 1
-             translate([pcb_w-5, 0, 0]) cylinder(h=5, d=6);
-             translate([0, pcb_l-5, 0]) cylinder(h=5, d=6);
-             translate([pcb_w-5, pcb_l-5, 0]) cylinder(h=5, d=6);
+    }
+}
+
+module Housing_Lid() {
+    color("Gainsboro")
+    diff("remove")
+    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
+
+        // PCB Mounts (Underside)
+        attach(BOTTOM) {
+            translate([0,0,0]) {
+                // 1mm Standoffs for PCB (80x60 centered)
+                for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+                    translate([mx, my, 0]) cyl(h=1, d=6, anchor=TOP) {
+                        tag("remove") cyl(h=5, d=2.5, anchor=BOTTOM); // Mounting screw hole
+                    }
+                }
+            }
+        }
+
+        // Pogo Pin Holes
+        // Pads at y = 2.5 (approx). Width 6mm centered.
+        // We need corresponding holes in the Lid.
+        tag("remove")
+        position(CENTER) {
+             translate([0, 2.5, 0]) // Position under pads
+             // pad_pitch = 2. num_pads=4.
+             // start_x = -3. x = -3, -1, 1, 3.
+             for(px = [-3, -1, 1, 3]) {
+                 translate([px, 0, 0]) cyl(h=wall*3, d=1.2, center=true);
+             }
+        }
+
+        // Neck Transition & Thread
+        attach(TOP, overlap=wall/2) // Embed into plate
+        cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
+            attach(TOP)
+            threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
+
+        // Neck Bore
+        tag("remove")
+        position(TOP) down(5)
+        cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
+
+        // Interface Shelf Openings (Through Lid)
+        tag("remove")
+        position(CENTER) {
+            cyl(h=wall*3, d=40, center=true); // Center opening
+            for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) cyl(h=wall*3, d=6, center=true);
+            }
+        }
+
+        // Mounting Holes (Corners)
+        tag("remove") {
+            for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
+                 cyl(h=wall*3, d=3.5, center=true);
+            }
         }
     }
+}
+
+module Housing_3D() {
+    Housing_Case();
+    translate([0,0,base_h]) Housing_Lid();
 }
 
 // ==============================================================================
@@ -359,8 +458,26 @@ if (Output_Mode == "Assembly") {
 
             // Internals (Visual Only)
             if(!Cross_Section) {
-                // PCB
-                color("Green") translate([-base_w/2 + 10, -base_l/2 + 10, wall+5- Explode_Factor]) cube([pcb_w, pcb_l, 1.6]);
+                // PCB (Attached to Lid Standoffs)
+                // Lid is at base_h. Standoffs are 1mm down.
+                // PCB top surface is at base_h - 1. PCB thickness 1.6.
+                // PCB is centered.
+                translate([0,0, base_h - 1 - 1.6]) {
+                    difference() {
+                        color("Green") cube([pcb_w, pcb_l, 1.6], center=true);
+                        // Cutouts for Pass-throughs
+                         cylinder(h=10, d=40, center=true); // Center
+                         for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+                             rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
+                         }
+                    }
+                    // Visual Pogo Pins
+                    color("Gold")
+                    translate([0, 2.5, 1.6/2]) { // On top surface
+                         for(px = [-3, -1, 1, 3]) translate([px, 0, 0]) cylinder(h=10, d=1);
+                    }
+                }
+
                 // Pump
                 color("Silver") translate([base_w/2 - pump_w - 2.5, base_l/2 - pump_l - 2.5, wall- Explode_Factor]) cube([pump_w, pump_w, 40]);
 
@@ -407,12 +524,16 @@ if (Output_Mode == "Assembly") {
     projection(cut=false) Plate_3_Top();
 } else if (Output_Mode == "Gasket_Main_DXF") {
     projection(cut=false) Gasket_Main();
-} else if (Output_Mode == "Housing_Base_STL") {
-    Housing_3D();
+} else if (Output_Mode == "Housing_Case_STL") {
+    Housing_Case();
+} else if (Output_Mode == "Housing_Lid_STL") {
+    Housing_Lid();
 } else if (Output_Mode == "Torque_Cap_Outer_STL") {
     Torque_Cap_Outer();
 } else if (Output_Mode == "Torque_Cap_Inner_STL") {
     Torque_Cap_Inner();
 } else if (Output_Mode == "Pressure_Puck_STL") {
     Pressure_Puck_3D();
+} else if (Output_Mode == "PCB_DXF") {
+    projection(cut=false) PCB_2D();
 }
