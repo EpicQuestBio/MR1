@@ -292,8 +292,8 @@ module Bottom_Pusher_Plate() {
                 zrot(a) translate([port_radius, 0, 0]) {
                     cyl(h=10, d=6, center=true); // Through hole
                     // O-Ring Seats (Top and Bottom)
-                    position(TOP) torus(d_major=8, d_minor=1.5, anchor=CENTER);
-                    position(BOTTOM) torus(d_major=8, d_minor=1.5, anchor=CENTER);
+                    position(TOP) torus(d_maj=8, d_min=1.5, anchor=CENTER);
+                    position(BOTTOM) torus(d_maj=8, d_min=1.5, anchor=CENTER);
                 }
             }
             // Electrode Ports
@@ -535,7 +535,7 @@ if (Output_Mode == "Assembly") {
                         color("Green") cube([pcb_w, pcb_l, 1.6], center=true);
                         // Cutouts for Pass-throughs
                          cylinder(h=10, d=40, center=true); // Center
-                         for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+                         for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_elec_cis, angle_elec_trans]) {
                              rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
                          }
                     }
@@ -551,8 +551,8 @@ if (Output_Mode == "Assembly") {
 
                 // Routing Lines (Visual)
                 color("DeepSkyBlue") {
-                    rotate([0,0,angle_fluid_in]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
-                    rotate([0,0,angle_fluid_out]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
+                    rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
+                    rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
                 }
             }
 
