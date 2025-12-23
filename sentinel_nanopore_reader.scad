@@ -155,17 +155,21 @@ module Gasket_Main() {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
-        circle(d=10); // Chip area
+
+        // Central Fluid Cavity (Restricted to isolate pins)
+        // Covers chip (4x4) and channel ends, but stays away from pins at Y=2.5
+        square([14, 4.2], center=true);
+
+        // Pogo Pin Penetration Holes
+        translate([0, 2.5]) {
+            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
+        }
+
         // Pass-throughs
         rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
-
-        // Pogo Pin Access (if outside center hole)
-        // Center hole is d=10 (r=5). Pogo pins at y=2.5, x=[-3..3].
-        // x=3, y=2.5 -> r = sqrt(9 + 6.25) = 3.9.
-        // All pins are inside the d=10 hole. No changes needed.
     }
 }
 
@@ -418,8 +422,9 @@ module Housing_Lid() {
             threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
 
         // Neck Bore
+        // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
         tag("remove")
-        position(TOP) down(5)
+        position(TOP)
         cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
 
         // Interface Shelf Openings (Through Lid)
@@ -443,7 +448,7 @@ module Housing_Lid() {
 
 module Housing_3D() {
     Housing_Case();
-    translate([0,0,base_h]) Housing_Lid();
+    translate([0,0,base_h + Explode_Factor*1.5]) Housing_Lid();
 }
 
 // ==============================================================================
