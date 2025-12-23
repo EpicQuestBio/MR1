@@ -7,7 +7,7 @@ include <BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
-Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Base_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL]
+Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL]
 
 /* [View Settings] */
 Explode_Factor = 100; // [0:1:100]
@@ -232,7 +232,8 @@ module Torque_Cap_Inner() {
     cyl(h=20, d=neck_od + 4, anchor=BOTTOM) {
         // Ratchet Teeth
         for(r=[0:(360/Torque_Teeth_Count):360]) {
-            zrot(r) attach(RIGHT, overlap=1.5) cyl(h=20, d=3, $fn=3);
+            // Position teeth vertically at the perimeter
+            zrot(r) position(RIGHT) cyl(h=20, d=3, $fn=3, anchor=CENTER);
         }
 
         // Threads
@@ -272,39 +273,20 @@ module Torque_Cap_Outer() {
 }
 
 // ==============================================================================
-// MODULE: HOUSING (Integrated Internal Mounts)
+// MODULE: HOUSING SPLIT (Case + Lid)
 // ==============================================================================
-module Housing_3D() {
+
+module Housing_Case() {
     color("WhiteSmoke")
     union() {
-        // Main Hollow Body
+        // Main Hollow Box (Open Top)
         diff("remove")
-        cuboid([base_w+2*wall, base_l+2*wall, base_h+wall/2], rounding=wall, edges="Z", anchor=BOTTOM) {
+        cuboid([base_w+2*wall, base_l+2*wall, base_h], rounding=wall, edges="Z", anchor=BOTTOM) {
 
-            // Neck Transition & Thread
-            attach(TOP, overlap=wall/2)
-            cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
-                attach(TOP)
-                threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
-
-            // Internal Cavity
+            // Internal Cavity (Bucket)
             tag("remove")
             position(BOTTOM) up(wall)
-            cuboid([base_w-2*wall, base_l-2*wall, base_h+neck_h], anchor=BOTTOM);
-
-            // Neck Bore
-            tag("remove")
-            position(TOP) down(5)
-            cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
-
-            // Interface Shelf Openings (Top of base_h)
-            tag("remove")
-            position(TOP) down(wall/2) {
-                cyl(h=10, d=40, center=true); // Center opening
-                for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
-                    zrot(a) right(port_radius) down(5) cyl(h=20, d=6, center=true);
-                }
-            }
+            cuboid([base_w-2*wall, base_l-2*wall, base_h+wall], anchor=BOTTOM); // Go up through top
 
             // Access Ports
             tag("remove") {
@@ -321,12 +303,18 @@ module Housing_3D() {
                     }
                 }
             }
+
+            // Lid Mounting Posts
+            for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
+                 position(BOTTOM) up(wall)
+                 cyl(h=base_h-wall, d=8, anchor=BOTTOM) {
+                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM); // Screw hole
+                 }
+            }
         }
 
-        // --- INTERNAL COMPONENT MOUNTS ---
-        // Added via union to avoid subtraction by internal cavity
-
-        // 1. Pump Mount
+        // 1. Pump Mount (On Floor)
         translate([base_w/2 - pump_w - 5, base_l/2 - pump_l - 5, wall]) {
              difference() {
                  cube([pump_w+5, pump_w+5, 10]); // Bracket Base
@@ -337,7 +325,7 @@ module Housing_3D() {
             translate([2.5 + (pump_w-31)/2 + 31, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
         }
 
-        // 2. PCB Mount
+        // 2. PCB Mount (On Floor)
         translate([-base_w/2 + 10, -base_l/2 + 10, wall]) {
              cylinder(h=5, d=6); // Standoff 1
              translate([pcb_w-5, 0, 0]) cylinder(h=5, d=6);
@@ -345,6 +333,46 @@ module Housing_3D() {
              translate([pcb_w-5, pcb_l-5, 0]) cylinder(h=5, d=6);
         }
     }
+}
+
+module Housing_Lid() {
+    color("Gainsboro")
+    diff("remove")
+    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
+
+        // Neck Transition & Thread
+        attach(TOP, overlap=wall/2) // Embed into plate
+        cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
+            attach(TOP)
+            threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
+
+        // Neck Bore
+        tag("remove")
+        position(TOP) down(5)
+        cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
+
+        // Interface Shelf Openings (Through Lid)
+        tag("remove")
+        position(CENTER) {
+            cyl(h=wall*3, d=40, center=true); // Center opening
+            for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) cyl(h=wall*3, d=6, center=true);
+            }
+        }
+
+        // Mounting Holes (Corners)
+        tag("remove") {
+            for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
+                 cyl(h=wall*3, d=3.5, center=true);
+            }
+        }
+    }
+}
+
+module Housing_3D() {
+    Housing_Case();
+    translate([0,0,base_h]) Housing_Lid();
 }
 
 // ==============================================================================
@@ -407,8 +435,10 @@ if (Output_Mode == "Assembly") {
     projection(cut=false) Plate_3_Top();
 } else if (Output_Mode == "Gasket_Main_DXF") {
     projection(cut=false) Gasket_Main();
-} else if (Output_Mode == "Housing_Base_STL") {
-    Housing_3D();
+} else if (Output_Mode == "Housing_Case_STL") {
+    Housing_Case();
+} else if (Output_Mode == "Housing_Lid_STL") {
+    Housing_Lid();
 } else if (Output_Mode == "Torque_Cap_Outer_STL") {
     Torque_Cap_Outer();
 } else if (Output_Mode == "Torque_Cap_Inner_STL") {
