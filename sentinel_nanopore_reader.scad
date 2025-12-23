@@ -24,6 +24,7 @@ plate_thick = 4;
 gasket_thick = 0.8;
 screw_bcd = 50;
 screw_hole = 3.2; //M3
+m3_insert_hole = 4.2;
 
 // Port Locations (Radius from center)
 port_radius = 12;
@@ -252,6 +253,16 @@ module Housing_3D() {
         tag("remove") {
             attach(FRONT, overlap=10) up(20) cyl(h=20, d=15);
             attach(RIGHT, overlap=10) up(30) cyl(h=20, d=10);
+        }
+
+        // Feet
+        attach(BOTTOM) {
+            for(x = [-1, 1], y = [-1, 1]) {
+                translate([x * (base_w/2 - 10), y * (base_l/2 - 10), 0])
+                cyl(h=5, d=10, anchor=TOP) {
+                    tag("remove") attach(BOTTOM, overlap=8) cyl(h=8, d=m3_insert_hole, anchor=BOTTOM);
+                }
+            }
         }
 
         // --- INTERNAL COMPONENT MOUNTS ---
