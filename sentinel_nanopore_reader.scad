@@ -7,7 +7,7 @@ include <BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
-Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
+Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Pump_Case_STL, Housing_Pump_Lid_STL, Housing_Reader_Case_STL, Housing_Reader_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
 
 /* [View Settings] */
 Explode_Factor = 0; // [0:1:100]
@@ -52,7 +52,11 @@ pad_width = 1;
 /* [Dimensions - Housing & Components] */
 base_w = 110; // Slightly wider for components
 base_l = 110;
-base_h = 60;
+// Reader Module (Top) Height
+reader_h = 40;
+// Pump Module (Bottom) Height
+pump_h = 70;
+
 neck_od = 90;
 neck_id = 61;
 neck_h = 45;
@@ -432,98 +436,143 @@ module Peristaltic_Pump_12V() {
 }
 
 // ==============================================================================
-// MODULE: HOUSING SPLIT (Case + Lid)
+// MODULE: PUMP MODULE (Bottom Unit)
 // ==============================================================================
+module Housing_Pump_Case() {
+    color("DimGray")
+    diff("remove")
+    cuboid([base_w+2*wall, base_l+2*wall, pump_h], rounding=wall, edges="Z", anchor=BOTTOM) {
 
-module Housing_Case() {
-    color("WhiteSmoke")
-    union() {
-        // Main Hollow Box (Open Top)
-        diff("remove")
-        cuboid([base_w+2*wall, base_l+2*wall, base_h], rounding=wall, edges="Z", anchor=BOTTOM) {
+        // Internal Bucket
+        tag("remove") position(BOTTOM) up(wall)
+        cuboid([base_w-2*wall, base_l-2*wall, pump_h+wall], anchor=BOTTOM);
 
-            // Internal Cavity (Bucket)
-            tag("remove")
-            position(BOTTOM) up(wall)
-            cuboid([base_w-2*wall, base_l-2*wall, base_h+wall], anchor=BOTTOM); // Go up through top
+        // Fluid Ports (Base Side Walls)
+        // 2x Input (Left), 2x Output (Right)
+        attach(LEFT) {
+             for(y_pos = [-20, 20]) {
+                 translate([0, y_pos, pump_h/2]) rotate([0,90,0])
+                 cyl(h=wall*3, d=20, anchor=CENTER) {
+                    tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                 }
+             }
+        }
+        attach(RIGHT) {
+             for(y_pos = [-20, 20]) {
+                 translate([0, y_pos, pump_h/2]) rotate([0,90,0])
+                 cyl(h=wall*3, d=20, anchor=CENTER) {
+                    tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                 }
+             }
+        }
 
-            // Access Ports
-            tag("remove") {
-                // USB/Power Ports
-                attach(FRONT, overlap=10) up(20) cyl(h=20, d=15);
-                attach(RIGHT, overlap=10) up(30) cyl(h=20, d=10);
-            }
+        // Connectivity (Back Wall)
+        // DIN 5 MIDI (~16mm hole?) + Barrel Jack (8mm)
+        attach(BACK) {
+            // DIN 5
+            translate([-20, 0, pump_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=16, anchor=CENTER) tag("remove");
 
-            // External Fluid Ports (4x 1/4" NPT Threaded Holes)
-            // Left Wall
-            attach(LEFT) {
-                for(y_pos = [-20, 20]) {
-                    translate([0, y_pos, 30])
-                    rotate([0, 90, 0])
-                    cyl(h=wall*3, d=20, anchor=CENTER) {
-                        tag("remove")
-                        threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
-                    }
-                }
-            }
-            // Right Wall (Additional ports if needed, or keeping it clean)
-            // User asked for ports on outer shell. Putting 2 on Left, 2 on Right?
-            // Or all 4 on one side? Spacing is better if distributed or all on Back/Sides.
-            // Let's put 2 on LEFT, 2 on BACK to avoid the USB port on RIGHT/FRONT.
+            // Barrel Jack
+            translate([20, 0, pump_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=8, anchor=CENTER) tag("remove");
+        }
 
-            attach(BACK) {
-                for(x_pos = [-30, 30]) {
-                    translate([x_pos, 0, 30])
-                    rotate([90, 0, 0])
-                    cyl(h=wall*3, d=20, anchor=CENTER) {
-                        tag("remove")
-                        threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
-                    }
-                }
-            }
-
-            // Feet
-            attach(BOTTOM) {
-                for(x = [-1, 1], y = [-1, 1]) {
-                    translate([x * (base_w/2 - 10), y * (base_l/2 - 10), 0])
-                    cyl(h=5, d=10, anchor=TOP) {
-                        tag("remove") attach(BOTTOM, overlap=8) cyl(h=8, d=m3_insert_hole, anchor=BOTTOM);
-                    }
-                }
-            }
-
-            // Lid Mounting Posts
-            for(x = [-1, 1], y = [-1, 1]) {
+        // Lid Mounts
+        for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
                  position(BOTTOM) up(wall)
-                 cyl(h=base_h-wall, d=8, anchor=BOTTOM) {
-                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM); // Screw hole
+                 cyl(h=pump_h-wall, d=8, anchor=BOTTOM) {
+                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM);
                  }
+        }
+    }
+
+    // Pump Mounting Plate (Swappable Insert)
+    translate([0, 0, wall]) {
+        // Simple plate on standoffs
+        difference() {
+            cube([base_w-5, base_l-5, 5], center=true); // Plate
+            // Mounting for 2x Diitao Pumps
+             for(side = [-1, 1]) {
+                translate([side * (base_w/4), 20, 0]) cylinder(h=10, d=28, center=true);
+             }
+        }
+    }
+}
+
+module Housing_Pump_Lid() {
+    color("Silver")
+    diff("remove")
+    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
+
+        // Male Interlock Lugs (Top Surface)
+        // 4 corners, tapered squares or cylinders
+        attach(TOP) {
+            for(x = [-1, 1], y = [-1, 1]) {
+                translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
+                cuboid([10, 10, 5], rounding=2, edges="Z", anchor=BOTTOM);
             }
         }
 
-        // 1. Pump Mounts (On Floor)
-        // Two 12V Peristaltic Pumps (27.6mm dia motor)
-        // Positioned symmetrically
-        for(side = [-1, 1]) {
-            translate([side * (base_w/4), -base_l/2 + 25, wall]) {
-                // Pump socket
-                difference() {
-                    cylinder(h=15, d=34); // Socket Wall
-                    translate([0,0,-1]) cylinder(h=17, d=28); // Motor clearance (27.6 + tolerance)
-
-                    // Wire/Vent cutout
-                    translate([0, -10, 5]) cube([10, 20, 20], center=true);
-                }
+        // Mounting Holes
+        tag("remove") {
+            for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
+                 cyl(h=wall*3, d=3.5, center=true);
             }
         }
     }
 }
 
-module Housing_Lid() {
+// ==============================================================================
+// MODULE: READER MODULE (Top Unit)
+// ==============================================================================
+module Housing_Case_Reader() {
+    color("WhiteSmoke")
+    diff("remove")
+    cuboid([base_w+2*wall, base_l+2*wall, reader_h], rounding=wall, edges="Z", anchor=BOTTOM) {
+
+        // Internal Bucket
+        tag("remove") position(BOTTOM) up(wall)
+        cuboid([base_w-2*wall, base_l-2*wall, reader_h+wall], anchor=BOTTOM);
+
+        // Female Interlock Recesses (Bottom)
+         attach(BOTTOM) {
+            for(x = [-1, 1], y = [-1, 1]) {
+                translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
+                cuboid([10.5, 10.5, 6], rounding=2, edges="Z", anchor=BOTTOM) tag("remove");
+            }
+        }
+
+        // Connectivity (Back Wall)
+        attach(BACK) {
+            // DIN 5
+            translate([-20, 0, reader_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=16, anchor=CENTER) tag("remove");
+            // Barrel Jack
+            translate([20, 0, reader_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=8, anchor=CENTER) tag("remove");
+        }
+
+         // Lid Mounting Posts
+        for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
+                 position(BOTTOM) up(wall)
+                 cyl(h=reader_h-wall, d=8, anchor=BOTTOM) {
+                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM);
+                 }
+        }
+    }
+}
+
+// Reader Module Lid (Top Unit) - Thicker for side ports
+module Housing_Lid_Reader() {
+    lid_thick = 15; // Increased thickness for horizontal ports
+
     color("Gainsboro")
     diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
+    cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=BOTTOM) {
 
         // PCB Mounts (Underside)
         attach(BOTTOM) {
@@ -538,53 +587,57 @@ module Housing_Lid() {
         }
 
         // Pogo Pin Holes
-        // Pads at y = 2.5 (approx). Width 6mm centered.
-        // We need corresponding holes in the Lid.
         tag("remove")
-        position(CENTER) {
-             translate([0, 2.5, 0]) // Position under pads
-             // pad_pitch = 2. num_pads=4.
-             // start_x = -3. x = -3, -1, 1, 3.
+        position(BOTTOM) up(lid_thick/2) {
+             translate([0, 2.5, 0])
              for(px = [-3, -1, 1, 3]) {
-                 translate([px, 0, 0]) cyl(h=wall*3, d=1.2, center=true);
+                 translate([px, 0, 0]) cyl(h=lid_thick*3, d=1.2, center=true);
              }
         }
 
-        // Neck Transition & Thread
-        attach(TOP, overlap=wall/2) // Embed into plate
+        // Neck Transition & Thread (On Top)
+        attach(TOP, overlap=5) // Embed into plate
         difference(){
-        cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
+            cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
             attach(TOP)
             threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
 
-        // Neck Bore
-        //tag("remove")
-        position(TOP) down(5)
-        cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
-        }
-        // Bosses for 1/4" NPT Fittings (Underside)
-        attach(BOTTOM) {
-            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                zrot(a) translate([port_radius, 0, 0])
-                cyl(h=12, d=22, anchor=BOTTOM) {
-                    // 1/4" NPT Thread (Approximate: Tapered hole + thread)
-                    // NPT 1/4" OD is ~13.7mm at large end. Pitch 18TPI ~1.4mm.
-                    tag("remove")
-                    threaded_rod(d=13.7, l=21, pitch=1.411, internal=true);
-                }
-            }
+            position(TOP) down(5)
+            cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
         }
 
-        // Pass-throughs (Through Lid)
+        // Horizontal Fluid Ports (Exiting Side)
+        // We need 4 ports: Top In/Out, Bot In/Out.
+        // Let's bring them all out the LEFT side for loop connectivity to Pump Module below?
+        // Or Split Left/Right.
+        // User said: "Have them come out of the lid... These are the connections that go to the stack."
+        // We will make 4 side ports.
+        attach(LEFT) {
+             for(i = [0:3]) {
+                 // Spaced out along Y
+                 translate([0, -30 + (i*20), lid_thick/2]) rotate([0,90,0])
+                 cyl(h=wall*4, d=8, anchor=CENTER) { // Luer/Barb adapter hole
+                    tag("remove") cyl(h=20, d=5, center=true); // 5mm through hole
+                 }
+             }
+        }
+
+        // Internal Routing Channels (Connecting Side Ports to Central Manifold)
+        // This is complex CSG. For visualization, we just ensure the manifold holes go UP.
+        // In reality, printed channels would turn 90 degrees.
+        // We will make vertical holes at the Port Locations (radius 20) going DOWN.
+        // And horizontal holes from the side meeting them?
+        // For now, let's keep the vertical pass-throughs for the stack interface.
+
         tag("remove")
         position(CENTER) {
-            // Fluid Ports (Small pass-throughs aligning with threads)
+            // Fluid Ports (Pass-through to bottom for stack)
             for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                zrot(a) right(port_radius) cyl(h=wall*5, d=8, center=true);
+                zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
             }
             // Electrode Ports
             for(a = [angle_elec_cis, angle_elec_trans]) {
-                zrot(a) right(port_radius) cyl(h=wall*5, d=4, center=true);
+                zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
             }
         }
 
@@ -592,16 +645,50 @@ module Housing_Lid() {
         tag("remove") {
             for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
-                 cyl(h=wall*3, d=3.5, center=true);
+                 cyl(h=lid_thick*3, d=3.5, center=true);
             }
         }
     }
 }
 
-module Housing_3D() {
-    Housing_Case();
-    translate([0,0,base_h+ Explode_Factor*0.4]) Housing_Lid();
+// 1. Pump Module Assembly
+module Pump_Module_Assembly() {
+    Housing_Pump_Case();
+    translate([0,0,pump_h + Explode_Factor]) Housing_Pump_Lid();
+
+    // Internal Components
+    if(!Cross_Section) {
+         // Pumps (Visual)
+        for(side = [-1, 1]) {
+             translate([side * (base_w/4), 20, wall+5]) // On plate (wall+5)
+             Peristaltic_Pump_12V();
+        }
+    }
 }
+
+// 2. Reader Module Assembly
+module Reader_Module_Assembly() {
+    Housing_Case_Reader();
+    translate([0,0,reader_h + Explode_Factor]) Housing_Lid_Reader();
+
+    // Stack & Cap on top of Lid
+    translate([0,0, reader_h + 15 + Explode_Factor]) { // 15 is lid thick
+        Cartridge_Stack_3D();
+         // Torque Cap (Inner + Outer)
+        translate([0,0, neck_h - 15 + Explode_Factor*2.5]) {
+             Torque_Cap_Inner();
+             translate([0,0,-2]) Torque_Cap_Outer();
+        }
+    }
+
+    // PCB (Attached to Lid Underside)
+    // Lid bottom is at z = reader_h
+    // Standoffs 1mm down. PCB top at reader_h - 1.
+    translate([0,0, reader_h - 1 - 1.6]) {
+        color("Green") linear_extrude(1.6)PCB_2D();
+    }
+}
+
 
 // ==============================================================================
 // MAIN RENDER LOGIC
@@ -611,89 +698,34 @@ if (Output_Mode == "Assembly") {
 
     difference() {
         union() {
-          #  Housing_3D();
+            // Bottom Unit: Pump Module
+            Pump_Module_Assembly();
 
-            // Internals (Visual Only)
-            if(!Cross_Section) {
-                // PCB (Attached to Lid Standoffs)
-                // Lid is at base_h. Standoffs are 1mm down.
-                // PCB top surface is at base_h - 1. PCB thickness 1.6.
-                // PCB is centered.
-                translate([0,0, base_h - 1 - 1.6]) {
-                    difference() {
-                        color("Green") 
-                        linear_extrude(1.6)PCB_2D();
-                        
-                    }
-                    // Visual Pogo Pins
-                    color("Gold")
-                    translate([0, 2.5, 1.6/2]) { // On top surface
-                         for(px = [-3, -1, 1, 3]) translate([px, 0, 0]) cylinder(h=10, d=1);
-                    }
-                }
-
-                // Pumps (Visual)
-                for(side = [-1, 1]) {
-                     translate([side * (base_w/4), -base_l/2 + 25, wall - Explode_Factor])
-                     Peristaltic_Pump_12V();
-                }
-
-                // Routing Lines (Visual)
-                // Tubing: External Ports -> Pumps -> Lid Ports
-                color("DeepSkyBlue") {
-                    // Left Pump (Side -1) -> Left Wall Ports
-                    // Path: Wall (-55) -> Pump In -> Pump Out -> Lid (-30 deg)
-
-                    // Simple schematic lines
-                    // External In -> Pump
-                    hull() {
-                        translate([-55, -20, 30]) sphere(d=4);
-                        translate([-(base_w/4) + 12, -base_l/2 + 25 + 5, wall + 38 + 10]) sphere(d=4);
-                    }
-
-                    // Pump -> Lid Port (Inlet Bottom -30)
-                    hull() {
-                        translate([-(base_w/4) + 12, -base_l/2 + 25 - 5, wall + 38 + 10]) sphere(d=4);
-                        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, base_h]) sphere(d=4);
-                    }
-
-                    // Right Pump (Side 1) -> Back Wall Ports?
-                    // Let's route Right Pump to Top Inlet (30)
-                    // External In -> Pump
-                     hull() {
-                        translate([-30, 55, 30]) sphere(d=4); // Back Port
-                        translate([(base_w/4) + 12, -base_l/2 + 25 + 5, wall + 38 + 10]) sphere(d=4);
-                    }
-
-                    // Pump -> Lid Port (Inlet Top 30)
-                    hull() {
-                        translate([(base_w/4) + 12, -base_l/2 + 25 - 5, wall + 38 + 10]) sphere(d=4);
-                        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, base_h]) sphere(d=4);
-                    }
-
-                    // Outlets (Direct to Waste Ports)
-                    // Outlet Bot (150) -> Left Wall 2
-                    hull() {
-                         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, base_h]) sphere(d=4);
-                         translate([-55, 20, 30]) sphere(d=4);
-                    }
-                    // Outlet Top (210) -> Back Wall 2
-                    hull() {
-                         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, base_h]) sphere(d=4);
-                         translate([30, 55, 30]) sphere(d=4);
-                    }
-                }
+            // Top Unit: Reader Module
+            // Sits on top of Pump Module (Height pump_h + lid_wall)
+            translate([0,0, pump_h + wall + Explode_Factor]) {
+                Reader_Module_Assembly();
             }
 
-            // Stack
-            translate([0,0, base_h + wall + Explode_Factor]) Cartridge_Stack_3D();
-
-
-
-            // Torque Cap (Inner + Outer)
-            translate([0,0, base_h + neck_h - 15 + Explode_Factor*2.5]) {
-                 Torque_Cap_Inner();
-                 translate([0,0,-2]) Torque_Cap_Outer();
+            // External Tubing Loops (Visual)
+            // Connecting Pump Module Side Ports -> Reader Module Side Ports
+            if(!Cross_Section) {
+                color("DeepSkyBlue") {
+                    // Pump Out (Right Side) -> Reader In (Left Side)
+                    // Visual loop around back
+                    hull() {
+                        translate([55+10, 20, pump_h/2]) sphere(d=4); // Pump Out
+                        translate([55+30, 20, pump_h/2]) sphere(d=4); // Loop out
+                    }
+                     hull() {
+                        translate([55+30, 20, pump_h/2]) sphere(d=4);
+                        translate([55+30, 20, pump_h + reader_h + 15/2]) sphere(d=4); // Up
+                    }
+                    hull() {
+                        translate([55+30, 20, pump_h + reader_h + 15/2]) sphere(d=4);
+                         translate([-55-10, 20, pump_h + reader_h + 15/2]) sphere(d=4); // Over to Left
+                    }
+                }
             }
         }
 
@@ -705,8 +737,8 @@ if (Output_Mode == "Assembly") {
     // Labels
     if (Explode_Factor > 0) {
         color("Black") {
-            translate([0, -base_l/2 - 20, 0]) text("Rev 11: Master Integration", halign="center");
-            translate([0, 0, base_h + neck_h + Explode_Factor*2.5 + 30]) text("Torque-Lock Cap (Hollow)", halign="center");
+            translate([0, -base_l/2 - 20, 0]) text("Rev 12: Modular Split", halign="center");
+            translate([0, 0, pump_h + reader_h + neck_h + Explode_Factor*2.5 + 30]) text("Torque-Lock Cap", halign="center");
         }
     }
 
@@ -719,10 +751,14 @@ if (Output_Mode == "Assembly") {
     projection(cut=false) Plate_3_Top();
 } else if (Output_Mode == "Gasket_Main_DXF") {
     projection(cut=false) Gasket_Main();
-} else if (Output_Mode == "Housing_Case_STL") {
-    Housing_Case();
-} else if (Output_Mode == "Housing_Lid_STL") {
-    Housing_Lid();
+} else if (Output_Mode == "Housing_Pump_Case_STL") {
+    Housing_Pump_Case();
+} else if (Output_Mode == "Housing_Pump_Lid_STL") {
+    Housing_Pump_Lid();
+} else if (Output_Mode == "Housing_Reader_Case_STL") {
+    Housing_Case_Reader();
+} else if (Output_Mode == "Housing_Reader_Lid_STL") {
+    Housing_Lid_Reader();
 } else if (Output_Mode == "Torque_Cap_Outer_STL") {
     Torque_Cap_Outer();
 } else if (Output_Mode == "Torque_Cap_Inner_STL") {
