@@ -177,11 +177,6 @@ module Gasket_Main(pogo= false) {
         // Covers chip (4x4) and channel ends, but stays away from pins at Y=2.5
         square([14, 4.2], center=true);
 
-        // Pogo Pin Penetration Holes
-        translate([0, 2.5]) {
-            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
-        }
-
         // Pass-throughs
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
@@ -190,6 +185,8 @@ module Gasket_Main(pogo= false) {
 
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
+
+        // Pogo Pin Penetration Holes
         if(pogo) PogoPinHoles();
 
     }
