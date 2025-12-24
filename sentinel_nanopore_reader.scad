@@ -7,16 +7,19 @@ include <BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
-Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, PCB_DXF]
+Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
 
 /* [View Settings] */
-Explode_Factor = 100; // [0:1:100]
+Explode_Factor = 0; // [0:1:100]
 Cross_Section = false;
 
 /* [Torque Mechanism Settings] */
 // How "stiff" the torque fingers appear (visual only)
 Torque_Stiffness = 1.2;
 Torque_Teeth_Count = 24;
+
+/* [Sealed Top Option] */
+Sealed_Top_Mode = false; // [true, false]
 
 /* [Dimensions - Round Cartridge] */
 plate_diam = 60;
@@ -27,9 +30,12 @@ screw_hole = 3.2; //M3
 m3_insert_hole = 4.2;
 
 // Port Locations (Radius from center)
-port_radius = 12;
-angle_fluid_in = 0;
-angle_fluid_out = 180;
+port_radius = 20; // Expanded for 1/4" NPT fittings
+angle_fluid_in_bot = -30;
+angle_fluid_in_top = 30;
+angle_fluid_out_bot = 150;
+angle_fluid_out_top = 210;
+
 angle_elec_cis = 90;  // Top electrode (via)
 angle_elec_trans = 270; // Bottom electrode (direct)
 
@@ -75,17 +81,19 @@ module PCB_2D() {
         }
 
         // Central Pass-through
-        circle(d=40);
+       // circle(d=40);
 
         // Port Pass-throughs
-        for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+        for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
             rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
         }
 
-        // Pogo Pin Markers (y=2.5)
-        translate([0, 2.5]) {
-             for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1);
-        }
+                        // Cutouts for Pass-throughs
+                        // cylinder(h=10, d=40, center=true); // Center
+                        // for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_elec_cis, angle_elec_trans]) {
+                        //     rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
+                        // }
+        PogoPinHoles();
     }
 }
 
@@ -126,14 +134,25 @@ module BoltHoles() {
     }
 }
 
+module PogoPinHoles() {
+     // Pogo Pin Access
+        translate([0, 2.5]) {
+            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
+        }
+}
+
 // L1: Base Plate (Interface)
 module Plate_1_Base() {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
-        // Bottom Ports
-        rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
+        // Bottom Flush Ports
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+        // Top Flush Ports (Pass-through)
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         rotate([0,0,angle_elec_trans]) translate([port_radius, 0]) circle(d=2);
         // Trans-electrode trace
@@ -144,14 +163,12 @@ module Plate_1_Base() {
         translate([plate_diam/2 - 3, 0]) circle(d=2); // Keying pin
 
         // Pogo Pin Access
-        translate([0, 2.5]) {
-            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
-        }
+        PogoPinHoles();
     }
 }
 
-// G1: Main Gasket
-module Gasket_Main() {
+// G1:  Gasket with or without pogo pins
+module Gasket_Main(pogo= false) {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
@@ -166,10 +183,15 @@ module Gasket_Main() {
         }
 
         // Pass-throughs
-        rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
+        if(pogo) PogoPinHoles();
+
     }
 }
 
@@ -179,15 +201,21 @@ module Plate_2_Channel() {
         circle(d=plate_diam);
         BoltHoles();
         square([i_width + 0.2, i_length + 0.2], center=true); // Interposer Pocket
-        // Channels
+
+        // Bottom Flush Channels (Connect Bottom Ports to Chip Pocket)
         hull() {
-            rotate([0,0,angle_fluid_in]) translate([port_radius, 0]) circle(d=4);
+            rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
             translate([3,0]) circle(d=3);
         }
         hull() {
-            rotate([0,0,angle_fluid_out]) translate([port_radius, 0]) circle(d=4);
+            rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
             translate([-3,0]) circle(d=3);
         }
+
+        // Top Flush Ports (Pass-through to Plate 3)
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
     }
@@ -198,7 +226,24 @@ module Plate_3_Top() {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
-        circle(d=6); // Sample Well
+
+        // Sample Well / Pipette Access
+        // If Sealed_Top_Mode is true, we remove this hole to seal the chamber.
+        if (!Sealed_Top_Mode) {
+             circle(d=6);
+        }
+
+        // Top Flush Channels (Connect Top Ports to Sample Well)
+        // Even if sealed, we need the fluid path to the center.
+        hull() {
+             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+             translate([3, 0]) circle(d=3); // Connect to well
+        }
+        hull() {
+             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+             translate([-3, 0]) circle(d=3); // Connect to well
+        }
+
         // Cis-Electrode Termination
         hull() {
             rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
@@ -210,6 +255,10 @@ module Plate_3_Top() {
 
 module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
+
+    // 0. Bottom Pusher Plate (Under Base Plate)
+    down( Explode_Factor/4) // 3mm thickness
+        Bottom_Pusher_Plate();
 
     // 1. Base Plate
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base();
@@ -245,16 +294,42 @@ module Cartridge_Stack_3D() {
 
     // 4. Gasket 2
     up(plate_thick*2 + gasket_thick + Explode_Factor*3/4)
-        color("Red") linear_extrude(gasket_thick) Gasket_Main();
+        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo= true);
 
     // 5. Top Plate
     up(plate_thick*2 + gasket_thick*2 + Explode_Factor)
-        color("PowderBlue", 0.5) {
-            difference() {
-                linear_extrude(plate_thick*2) Plate_3_Top();
-                translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
+        color("PowderBlue", 0.5)linear_extrude(plate_thick) Plate_3_Top(); 
+        
+    // 6. Puck
+    up ( plate_thick*3 + gasket_thick*2 + Explode_Factor*2.3)
+                Pressure_Puck_3D();
+        
+}
+
+// ==============================================================================
+// MODULE: BOTTOM PUSHER PLATE (TPU Seal)
+// ==============================================================================
+module Bottom_Pusher_Plate() {
+    color("LightSlateGray")
+    diff("remove")
+    cyl(h=3, d=neck_id-0.5) { // Fits in neck
+        tag("remove") {
+            // Fluid Ports
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0]) {
+                    cyl(h=10, d=6, center=true); // Through hole
+                    // O-Ring Seats (Top and Bottom)
+                    position(TOP) torus(d_maj=8, d_min=1.5, anchor=CENTER);
+                    position(BOTTOM) torus(d_maj=8, d_min=1.5, anchor=CENTER);
+                }
             }
+            // Electrode Ports
+            for(a = [angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) cyl(h=10, d=4, center=true);
+            }
+            PogoPinHoles();
         }
+    }
 }
 
 // ==============================================================================
@@ -269,8 +344,12 @@ module Pressure_Puck_3D() {
                 translate([0, 22, 0]) cylinder(h=6, d=8);
                 translate([0, -22, 0]) cylinder(h=6, d=8);
             }
+            
+            
+              //  #translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
+            
             // Center Hole for Pipette Access (Through-hole)
-            translate([0,0,-1]) cylinder(h=20, d=16);
+            translate([0,0,-1]) cylinder(h=20, d1=6, d2=16);
             // Underside recess to avoid crushing Top Plate features
             translate([0,0,-1]) difference() {
                 cylinder(h=3, d=neck_id-4);
@@ -330,6 +409,38 @@ module Torque_Cap_Outer() {
 }
 
 // ==============================================================================
+// MODULE: 12V PERISTALTIC PUMP (Diitao Style)
+// ==============================================================================
+module Peristaltic_Pump_12V() {
+    // Dimensions based on Diitao/generic 12V dosing pump
+    // Motor: ~27.6mm dia, 38mm length
+    // Head: ~31.7mm dia, 20mm height
+    // Total Height: ~58mm
+
+    // Motor Body
+    color("Silver") cylinder(h=38, d=27.6);
+
+    // Pump Head
+    translate([0,0,38]) {
+        color("DodgerBlue") {
+             difference() {
+                cylinder(h=20, d=31.7);
+                // Snap detents (visual)
+                translate([0, 16, 10]) cube([10, 2, 10], center=true);
+                translate([0, -16, 10]) cube([10, 2, 10], center=true);
+             }
+        }
+
+        // Tubing Stubs (3mm ID x 5mm OD)
+        // Usually exit sideways or top. Visualizing side exit.
+        color("White", 0.5) {
+            translate([12, 5, 10]) rotate([0, 90, 30]) cylinder(h=20, d=5); // In
+            translate([12, -5, 10]) rotate([0, 90, -30]) cylinder(h=20, d=5); // Out
+        }
+    }
+}
+
+// ==============================================================================
 // MODULE: HOUSING SPLIT (Case + Lid)
 // ==============================================================================
 
@@ -347,8 +458,37 @@ module Housing_Case() {
 
             // Access Ports
             tag("remove") {
+                // USB/Power Ports
                 attach(FRONT, overlap=10) up(20) cyl(h=20, d=15);
                 attach(RIGHT, overlap=10) up(30) cyl(h=20, d=10);
+            }
+
+            // External Fluid Ports (4x 1/4" NPT Threaded Holes)
+            // Left Wall
+            attach(LEFT) {
+                for(y_pos = [-20, 20]) {
+                    translate([0, y_pos, 30])
+                    rotate([0, 90, 0])
+                    cyl(h=wall*3, d=20, anchor=CENTER) {
+                        tag("remove")
+                        threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    }
+                }
+            }
+            // Right Wall (Additional ports if needed, or keeping it clean)
+            // User asked for ports on outer shell. Putting 2 on Left, 2 on Right?
+            // Or all 4 on one side? Spacing is better if distributed or all on Back/Sides.
+            // Let's put 2 on LEFT, 2 on BACK to avoid the USB port on RIGHT/FRONT.
+
+            attach(BACK) {
+                for(x_pos = [-30, 30]) {
+                    translate([x_pos, 0, 30])
+                    rotate([90, 0, 0])
+                    cyl(h=wall*3, d=20, anchor=CENTER) {
+                        tag("remove")
+                        threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    }
+                }
             }
 
             // Feet
@@ -371,17 +511,21 @@ module Housing_Case() {
             }
         }
 
-        // 1. Pump Mount (On Floor)
-        translate([base_w/2 - pump_w - 5, base_l/2 - pump_l - 5, wall]) {
-             difference() {
-                 cube([pump_w+5, pump_w+5, 10]); // Bracket Base
-                 translate([2.5, 2.5, -1]) cube([pump_w, pump_w, 12]); // Motor cutout
-            }
-            // Screw holes for NEMA17 (31mm spacing)
-            translate([2.5 + (pump_w-31)/2, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
-            translate([2.5 + (pump_w-31)/2 + 31, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
-        }
+        // 1. Pump Mounts (On Floor)
+        // Two 12V Peristaltic Pumps (27.6mm dia motor)
+        // Positioned symmetrically
+        for(side = [-1, 1]) {
+            translate([side * (base_w/4), -base_l/2 + 25, wall]) {
+                // Pump socket
+                difference() {
+                    cylinder(h=15, d=34); // Socket Wall
+                    translate([0,0,-1]) cylinder(h=17, d=28); // Motor clearance (27.6 + tolerance)
 
+                    // Wire/Vent cutout
+                    translate([0, -10, 5]) cube([10, 20, 20], center=true);
+                }
+            }
+        }
     }
 }
 
@@ -417,6 +561,7 @@ module Housing_Lid() {
 
         // Neck Transition & Thread
         attach(TOP, overlap=wall/2) // Embed into plate
+        difference(){
         cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
             attach(TOP)
             threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
@@ -424,15 +569,32 @@ module Housing_Lid() {
         // Neck Bore
         // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
         tag("remove")
-        position(TOP)
+        position(TOP) down(5)
         cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
+        }
+        // Bosses for 1/4" NPT Fittings (Underside)
+        attach(BOTTOM) {
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0])
+                cyl(h=12, d=22, anchor=BOTTOM) {
+                    // 1/4" NPT Thread (Approximate: Tapered hole + thread)
+                    // NPT 1/4" OD is ~13.7mm at large end. Pitch 18TPI ~1.4mm.
+                    tag("remove")
+                    threaded_rod(d=13.7, l=21, pitch=1.411, internal=true);
+                }
+            }
+        }
 
-        // Interface Shelf Openings (Through Lid)
+        // Pass-throughs (Through Lid)
         tag("remove")
         position(CENTER) {
-            cyl(h=wall*3, d=40, center=true); // Center opening
-            for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
-                zrot(a) right(port_radius) cyl(h=wall*3, d=6, center=true);
+            // Fluid Ports (Small pass-throughs aligning with threads)
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) right(port_radius) cyl(h=wall*5, d=8, center=true);
+            }
+            // Electrode Ports
+            for(a = [angle_elec_cis, angle_elec_trans]) {
+                zrot(a) right(port_radius) cyl(h=wall*5, d=4, center=true);
             }
         }
 
@@ -448,7 +610,7 @@ module Housing_Lid() {
 
 module Housing_3D() {
     Housing_Case();
-    translate([0,0,base_h + Explode_Factor*1.5]) Housing_Lid();
+    translate([0,0,base_h+ Explode_Factor*0.4]) Housing_Lid();
 }
 
 // ==============================================================================
@@ -459,7 +621,7 @@ if (Output_Mode == "Assembly") {
 
     difference() {
         union() {
-            Housing_3D();
+          #  Housing_3D();
 
             // Internals (Visual Only)
             if(!Cross_Section) {
@@ -469,12 +631,9 @@ if (Output_Mode == "Assembly") {
                 // PCB is centered.
                 translate([0,0, base_h - 1 - 1.6]) {
                     difference() {
-                        color("Green") cube([pcb_w, pcb_l, 1.6], center=true);
-                        // Cutouts for Pass-throughs
-                         cylinder(h=10, d=40, center=true); // Center
-                         for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
-                             rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
-                         }
+                        color("Green") 
+                        linear_extrude(1.6)PCB_2D();
+                        
                     }
                     // Visual Pogo Pins
                     color("Gold")
@@ -483,22 +642,63 @@ if (Output_Mode == "Assembly") {
                     }
                 }
 
-                // Pump
-                color("Silver") translate([base_w/2 - pump_w - 2.5, base_l/2 - pump_l - 2.5, wall- Explode_Factor]) cube([pump_w, pump_w, 40]);
+                // Pumps (Visual)
+                for(side = [-1, 1]) {
+                     translate([side * (base_w/4), -base_l/2 + 25, wall - Explode_Factor])
+                     Peristaltic_Pump_12V();
+                }
 
                 // Routing Lines (Visual)
+                // Tubing: External Ports -> Pumps -> Lid Ports
                 color("DeepSkyBlue") {
-                    rotate([0,0,angle_fluid_in]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
-                    rotate([0,0,angle_fluid_out]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
+                    // Left Pump (Side -1) -> Left Wall Ports
+                    // Path: Wall (-55) -> Pump In -> Pump Out -> Lid (-30 deg)
+
+                    // Simple schematic lines
+                    // External In -> Pump
+                    hull() {
+                        translate([-55, -20, 30]) sphere(d=4);
+                        translate([-(base_w/4) + 12, -base_l/2 + 25 + 5, wall + 38 + 10]) sphere(d=4);
+                    }
+
+                    // Pump -> Lid Port (Inlet Bottom -30)
+                    hull() {
+                        translate([-(base_w/4) + 12, -base_l/2 + 25 - 5, wall + 38 + 10]) sphere(d=4);
+                        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, base_h]) sphere(d=4);
+                    }
+
+                    // Right Pump (Side 1) -> Back Wall Ports?
+                    // Let's route Right Pump to Top Inlet (30)
+                    // External In -> Pump
+                     hull() {
+                        translate([-30, 55, 30]) sphere(d=4); // Back Port
+                        translate([(base_w/4) + 12, -base_l/2 + 25 + 5, wall + 38 + 10]) sphere(d=4);
+                    }
+
+                    // Pump -> Lid Port (Inlet Top 30)
+                    hull() {
+                        translate([(base_w/4) + 12, -base_l/2 + 25 - 5, wall + 38 + 10]) sphere(d=4);
+                        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, base_h]) sphere(d=4);
+                    }
+
+                    // Outlets (Direct to Waste Ports)
+                    // Outlet Bot (150) -> Left Wall 2
+                    hull() {
+                         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, base_h]) sphere(d=4);
+                         translate([-55, 20, 30]) sphere(d=4);
+                    }
+                    // Outlet Top (210) -> Back Wall 2
+                    hull() {
+                         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, base_h]) sphere(d=4);
+                         translate([30, 55, 30]) sphere(d=4);
+                    }
                 }
             }
 
             // Stack
-            translate([0,0, base_h + Explode_Factor]) Cartridge_Stack_3D();
+            translate([0,0, base_h + wall + Explode_Factor]) Cartridge_Stack_3D();
 
-            // Puck
-            translate([0,0, base_h + (plate_thick*4 + gasket_thick*2) + Explode_Factor*2.3])
-                Pressure_Puck_3D();
+
 
             // Torque Cap (Inner + Outer)
             translate([0,0, base_h + neck_h - 15 + Explode_Factor*2.5]) {
@@ -539,6 +739,8 @@ if (Output_Mode == "Assembly") {
     Torque_Cap_Inner();
 } else if (Output_Mode == "Pressure_Puck_STL") {
     Pressure_Puck_3D();
+} else if (Output_Mode == "Bottom_Pusher_Plate_STL") {
+    Bottom_Pusher_Plate();
 } else if (Output_Mode == "PCB_DXF") {
     projection(cut=false) PCB_2D();
 }
