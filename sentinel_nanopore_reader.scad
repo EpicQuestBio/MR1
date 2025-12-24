@@ -176,7 +176,11 @@ module Gasket_Main(pogo= false) {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
-        circle(d=10); // Chip area
+
+        // Central Fluid Cavity (Restricted to isolate pins)
+        // Covers chip (4x4) and channel ends, but stays away from pins at Y=2.5
+        square([14, 4.2], center=true);
+
         // Pass-throughs
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
@@ -185,6 +189,8 @@ module Gasket_Main(pogo= false) {
 
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
+
+        // Pogo Pin Penetration Holes
         if(pogo) PogoPinHoles();
 
     }
@@ -602,8 +608,11 @@ module Housing_Lid_Reader() {
             attach(TOP)
             threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
 
-            position(TOP) down(5)
-            cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
+        // Neck Bore
+        // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
+        tag("remove")
+        position(TOP) down(5)
+        cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
         }
 
         // Horizontal Fluid Ports (Exiting Side)
