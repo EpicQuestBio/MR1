@@ -10,7 +10,7 @@ include <BOSL2/threading.scad>
 Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Case_STL, Housing_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
 
 /* [View Settings] */
-Explode_Factor = 100; // [0:1:100]
+Explode_Factor = 0; // [0:1:100]
 Cross_Section = false;
 
 /* [Torque Mechanism Settings] */
@@ -78,17 +78,19 @@ module PCB_2D() {
         }
 
         // Central Pass-through
-        circle(d=40);
+       // circle(d=40);
 
         // Port Pass-throughs
-        for(a = [angle_fluid_in, angle_fluid_out, angle_elec_cis, angle_elec_trans]) {
+        for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
             rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
         }
 
-        // Pogo Pin Markers (y=2.5)
-        translate([0, 2.5]) {
-             for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1);
-        }
+                        // Cutouts for Pass-throughs
+                        // cylinder(h=10, d=40, center=true); // Center
+                        // for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_elec_cis, angle_elec_trans]) {
+                        //     rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
+                        // }
+        PogoPinHoles();
     }
 }
 
@@ -129,6 +131,13 @@ module BoltHoles() {
     }
 }
 
+module PogoPinHoles() {
+     // Pogo Pin Access
+        translate([0, 2.5]) {
+            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
+        }
+}
+
 // L1: Base Plate (Interface)
 module Plate_1_Base() {
     difference() {
@@ -151,14 +160,12 @@ module Plate_1_Base() {
         translate([plate_diam/2 - 3, 0]) circle(d=2); // Keying pin
 
         // Pogo Pin Access
-        translate([0, 2.5]) {
-            for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
-        }
+        PogoPinHoles();
     }
 }
 
-// G1: Main Gasket
-module Gasket_Main() {
+// G1:  Gasket with or without pogo pins
+module Gasket_Main(pogo= false) {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
@@ -171,6 +178,8 @@ module Gasket_Main() {
 
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
+        if(pogo) PogoPinHoles();
+
     }
 }
 
@@ -230,7 +239,7 @@ module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
 
     // 0. Bottom Pusher Plate (Under Base Plate)
-    down(3 + Explode_Factor/4) // 3mm thickness
+    down( Explode_Factor/4) // 3mm thickness
         Bottom_Pusher_Plate();
 
     // 1. Base Plate
@@ -267,16 +276,16 @@ module Cartridge_Stack_3D() {
 
     // 4. Gasket 2
     up(plate_thick*2 + gasket_thick + Explode_Factor*3/4)
-        color("Red") linear_extrude(gasket_thick) Gasket_Main();
+        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo= true);
 
     // 5. Top Plate
     up(plate_thick*2 + gasket_thick*2 + Explode_Factor)
-        color("PowderBlue", 0.5) {
-            difference() {
-                linear_extrude(plate_thick*2) Plate_3_Top();
-                translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
-            }
-        }
+        color("PowderBlue", 0.5)linear_extrude(plate_thick) Plate_3_Top(); 
+        
+    // 6. Puck
+    up ( plate_thick*3 + gasket_thick*2 + Explode_Factor*2.3)
+                Pressure_Puck_3D();
+        
 }
 
 // ==============================================================================
@@ -300,6 +309,7 @@ module Bottom_Pusher_Plate() {
             for(a = [angle_elec_cis, angle_elec_trans]) {
                 zrot(a) right(port_radius) cyl(h=10, d=4, center=true);
             }
+            PogoPinHoles();
         }
     }
 }
@@ -316,8 +326,12 @@ module Pressure_Puck_3D() {
                 translate([0, 22, 0]) cylinder(h=6, d=8);
                 translate([0, -22, 0]) cylinder(h=6, d=8);
             }
+            
+            
+              //  #translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
+            
             // Center Hole for Pipette Access (Through-hole)
-            translate([0,0,-1]) cylinder(h=20, d=16);
+            translate([0,0,-1]) cylinder(h=20, d1=6, d2=16);
             // Underside recess to avoid crushing Top Plate features
             translate([0,0,-1]) difference() {
                 cylinder(h=3, d=neck_id-4);
@@ -464,24 +478,25 @@ module Housing_Lid() {
 
         // Neck Transition & Thread
         attach(TOP, overlap=wall/2) // Embed into plate
+        difference(){
         cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
             attach(TOP)
             threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
 
         // Neck Bore
-        tag("remove")
+        //tag("remove")
         position(TOP) down(5)
         cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
-
+        }
         // Bosses for 1/4" NPT Fittings (Underside)
         attach(BOTTOM) {
             for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
                 zrot(a) translate([port_radius, 0, 0])
-                cyl(h=12, d=22, anchor=TOP) {
+                cyl(h=12, d=22, anchor=BOTTOM) {
                     // 1/4" NPT Thread (Approximate: Tapered hole + thread)
                     // NPT 1/4" OD is ~13.7mm at large end. Pitch 18TPI ~1.4mm.
                     tag("remove")
-                    threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=BOTTOM);
+                    threaded_rod(d=13.7, l=21, pitch=1.411, internal=true);
                 }
             }
         }
@@ -511,7 +526,7 @@ module Housing_Lid() {
 
 module Housing_3D() {
     Housing_Case();
-    translate([0,0,base_h]) Housing_Lid();
+    translate([0,0,base_h+ Explode_Factor*0.4]) Housing_Lid();
 }
 
 // ==============================================================================
@@ -522,7 +537,7 @@ if (Output_Mode == "Assembly") {
 
     difference() {
         union() {
-            Housing_3D();
+          #  Housing_3D();
 
             // Internals (Visual Only)
             if(!Cross_Section) {
@@ -532,12 +547,9 @@ if (Output_Mode == "Assembly") {
                 // PCB is centered.
                 translate([0,0, base_h - 1 - 1.6]) {
                     difference() {
-                        color("Green") cube([pcb_w, pcb_l, 1.6], center=true);
-                        // Cutouts for Pass-throughs
-                         cylinder(h=10, d=40, center=true); // Center
-                         for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_elec_cis, angle_elec_trans]) {
-                             rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
-                         }
+                        color("Green") 
+                        linear_extrude(1.6)PCB_2D();
+                        
                     }
                     // Visual Pogo Pins
                     color("Gold")
@@ -553,15 +565,15 @@ if (Output_Mode == "Assembly") {
                 color("DeepSkyBlue") {
                     rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
                     rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
+                    rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
+                    rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
                 }
             }
 
             // Stack
-            translate([0,0, base_h + Explode_Factor]) Cartridge_Stack_3D();
+            translate([0,0, base_h + wall + Explode_Factor]) Cartridge_Stack_3D();
 
-            // Puck
-            translate([0,0, base_h + (plate_thick*4 + gasket_thick*2) + Explode_Factor*2.3])
-                Pressure_Puck_3D();
+
 
             // Torque Cap (Inner + Outer)
             translate([0,0, base_h + neck_h - 15 + Explode_Factor*2.5]) {
