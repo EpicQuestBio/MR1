@@ -18,6 +18,9 @@ Cross_Section = false;
 Torque_Stiffness = 1.2;
 Torque_Teeth_Count = 24;
 
+/* [Sealed Top Option] */
+Sealed_Top_Mode = false; // [true, false]
+
 /* [Dimensions - Round Cartridge] */
 plate_diam = 60;
 plate_thick = 4;
@@ -214,9 +217,15 @@ module Plate_3_Top() {
     difference() {
         circle(d=plate_diam);
         BoltHoles();
-        circle(d=6); // Sample Well
+
+        // Sample Well / Pipette Access
+        // If Sealed_Top_Mode is true, we remove this hole to seal the chamber.
+        if (!Sealed_Top_Mode) {
+             circle(d=6);
+        }
 
         // Top Flush Channels (Connect Top Ports to Sample Well)
+        // Even if sealed, we need the fluid path to the center.
         hull() {
              rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
              translate([3, 0]) circle(d=3); // Connect to well
@@ -391,6 +400,38 @@ module Torque_Cap_Outer() {
 }
 
 // ==============================================================================
+// MODULE: 12V PERISTALTIC PUMP (Diitao Style)
+// ==============================================================================
+module Peristaltic_Pump_12V() {
+    // Dimensions based on Diitao/generic 12V dosing pump
+    // Motor: ~27.6mm dia, 38mm length
+    // Head: ~31.7mm dia, 20mm height
+    // Total Height: ~58mm
+
+    // Motor Body
+    color("Silver") cylinder(h=38, d=27.6);
+
+    // Pump Head
+    translate([0,0,38]) {
+        color("DodgerBlue") {
+             difference() {
+                cylinder(h=20, d=31.7);
+                // Snap detents (visual)
+                translate([0, 16, 10]) cube([10, 2, 10], center=true);
+                translate([0, -16, 10]) cube([10, 2, 10], center=true);
+             }
+        }
+
+        // Tubing Stubs (3mm ID x 5mm OD)
+        // Usually exit sideways or top. Visualizing side exit.
+        color("White", 0.5) {
+            translate([12, 5, 10]) rotate([0, 90, 30]) cylinder(h=20, d=5); // In
+            translate([12, -5, 10]) rotate([0, 90, -30]) cylinder(h=20, d=5); // Out
+        }
+    }
+}
+
+// ==============================================================================
 // MODULE: HOUSING SPLIT (Case + Lid)
 // ==============================================================================
 
@@ -408,8 +449,37 @@ module Housing_Case() {
 
             // Access Ports
             tag("remove") {
+                // USB/Power Ports
                 attach(FRONT, overlap=10) up(20) cyl(h=20, d=15);
                 attach(RIGHT, overlap=10) up(30) cyl(h=20, d=10);
+            }
+
+            // External Fluid Ports (4x 1/4" NPT Threaded Holes)
+            // Left Wall
+            attach(LEFT) {
+                for(y_pos = [-20, 20]) {
+                    translate([0, y_pos, 30])
+                    rotate([0, 90, 0])
+                    cyl(h=wall*3, d=20, anchor=CENTER) {
+                        tag("remove")
+                        threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    }
+                }
+            }
+            // Right Wall (Additional ports if needed, or keeping it clean)
+            // User asked for ports on outer shell. Putting 2 on Left, 2 on Right?
+            // Or all 4 on one side? Spacing is better if distributed or all on Back/Sides.
+            // Let's put 2 on LEFT, 2 on BACK to avoid the USB port on RIGHT/FRONT.
+
+            attach(BACK) {
+                for(x_pos = [-30, 30]) {
+                    translate([x_pos, 0, 30])
+                    rotate([90, 0, 0])
+                    cyl(h=wall*3, d=20, anchor=CENTER) {
+                        tag("remove")
+                        threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    }
+                }
             }
 
             // Feet
@@ -432,17 +502,21 @@ module Housing_Case() {
             }
         }
 
-        // 1. Pump Mount (On Floor)
-        translate([base_w/2 - pump_w - 5, base_l/2 - pump_l - 5, wall]) {
-             difference() {
-                 cube([pump_w+5, pump_w+5, 10]); // Bracket Base
-                 translate([2.5, 2.5, -1]) cube([pump_w, pump_w, 12]); // Motor cutout
-            }
-            // Screw holes for NEMA17 (31mm spacing)
-            translate([2.5 + (pump_w-31)/2, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
-            translate([2.5 + (pump_w-31)/2 + 31, 2.5 + (pump_w-31)/2, 0]) cylinder(h=5, d=3);
-        }
+        // 1. Pump Mounts (On Floor)
+        // Two 12V Peristaltic Pumps (27.6mm dia motor)
+        // Positioned symmetrically
+        for(side = [-1, 1]) {
+            translate([side * (base_w/4), -base_l/2 + 25, wall]) {
+                // Pump socket
+                difference() {
+                    cylinder(h=15, d=34); // Socket Wall
+                    translate([0,0,-1]) cylinder(h=17, d=28); // Motor clearance (27.6 + tolerance)
 
+                    // Wire/Vent cutout
+                    translate([0, -10, 5]) cube([10, 20, 20], center=true);
+                }
+            }
+        }
     }
 }
 
@@ -558,15 +632,56 @@ if (Output_Mode == "Assembly") {
                     }
                 }
 
-                // Pump
-                color("Silver") translate([base_w/2 - pump_w - 2.5, base_l/2 - pump_l - 2.5, wall- Explode_Factor]) cube([pump_w, pump_w, 40]);
+                // Pumps (Visual)
+                for(side = [-1, 1]) {
+                     translate([side * (base_w/4), -base_l/2 + 25, wall - Explode_Factor])
+                     Peristaltic_Pump_12V();
+                }
 
                 // Routing Lines (Visual)
+                // Tubing: External Ports -> Pumps -> Lid Ports
                 color("DeepSkyBlue") {
-                    rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
-                    rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
-                    rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
-                    rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, 20]) cylinder(h=40, d=3);
+                    // Left Pump (Side -1) -> Left Wall Ports
+                    // Path: Wall (-55) -> Pump In -> Pump Out -> Lid (-30 deg)
+
+                    // Simple schematic lines
+                    // External In -> Pump
+                    hull() {
+                        translate([-55, -20, 30]) sphere(d=4);
+                        translate([-(base_w/4) + 12, -base_l/2 + 25 + 5, wall + 38 + 10]) sphere(d=4);
+                    }
+
+                    // Pump -> Lid Port (Inlet Bottom -30)
+                    hull() {
+                        translate([-(base_w/4) + 12, -base_l/2 + 25 - 5, wall + 38 + 10]) sphere(d=4);
+                        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, base_h]) sphere(d=4);
+                    }
+
+                    // Right Pump (Side 1) -> Back Wall Ports?
+                    // Let's route Right Pump to Top Inlet (30)
+                    // External In -> Pump
+                     hull() {
+                        translate([-30, 55, 30]) sphere(d=4); // Back Port
+                        translate([(base_w/4) + 12, -base_l/2 + 25 + 5, wall + 38 + 10]) sphere(d=4);
+                    }
+
+                    // Pump -> Lid Port (Inlet Top 30)
+                    hull() {
+                        translate([(base_w/4) + 12, -base_l/2 + 25 - 5, wall + 38 + 10]) sphere(d=4);
+                        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, base_h]) sphere(d=4);
+                    }
+
+                    // Outlets (Direct to Waste Ports)
+                    // Outlet Bot (150) -> Left Wall 2
+                    hull() {
+                         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, base_h]) sphere(d=4);
+                         translate([-55, 20, 30]) sphere(d=4);
+                    }
+                    // Outlet Top (210) -> Back Wall 2
+                    hull() {
+                         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, base_h]) sphere(d=4);
+                         translate([30, 55, 30]) sphere(d=4);
+                    }
                 }
             }
 
