@@ -474,7 +474,7 @@ module Housing_Pump_Case() {
 
         // Connectivity (Back Wall)
         // DIN 5 MIDI (~16mm hole?) + Barrel Jack (8mm)
-        attach(BACK) {
+        #attach(BACK) {
             // DIN 5
             tag("remove") translate([-20, 0, pump_h/2]) rotate([90,0,0])
             cyl(h=wall*3, d=16, anchor=CENTER) ;
@@ -574,16 +574,15 @@ module Housing_Case_Reader() {
 
 // Reader Module Lid (Top Unit) - Thicker for side ports
 module Housing_Lid_Reader() {
-    lid_thick = 15; // Increased thickness for horizontal ports
+    lid_thick = 25; // Increased thickness for horizontal ports
 
     color("Gainsboro")
-    //union(){
     diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=BOTTOM) {
+    cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
         
         // Internal Bucket
-        tag("remove") position(BOTTOM) up(wall)
-        cuboid([base_w-2*wall, base_l-2*wall, lid_thick+wall], anchor=TOP);
+        tag("remove") position(TOP) down(wall)
+        cuboid([base_w-2*wall, base_l-2*wall, lid_thick+1*wall], anchor=TOP);
 
         // PCB Mounts (Underside)
         attach(BOTTOM) {
@@ -598,7 +597,7 @@ module Housing_Lid_Reader() {
         }
 
         // Pogo Pin Holes
-        #tag("remove")
+        tag("remove")
         position(BOTTOM) down(lid_thick/2) 
         linear_extrude(lid_thick*3)PogoPinHoles();
       
