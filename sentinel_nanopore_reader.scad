@@ -1,5 +1,5 @@
 // ==============================================================================
-// SENTINEL NANOPORE READER - REV 11 (MASTER MERGE)
+// SENTINEL NANOPORE READER - REV 12 (Modular Split)
 // Features: Torque-Lock Cap + Round Stack + Bottom Integration + Internal Layout
 // ==============================================================================
 include <BOSL2/std.scad>
@@ -10,7 +10,7 @@ include <BOSL2/threading.scad>
 Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Pump_Case_STL, Housing_Pump_Lid_STL, Housing_Reader_Case_STL, Housing_Reader_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
 
 /* [View Settings] */
-Explode_Factor = 0; // [0:1:100]
+Explode_Factor = 100; // [0:1:100]
 Cross_Section = false;
 
 /* [Torque Mechanism Settings] */
@@ -140,7 +140,7 @@ module BoltHoles() {
 
 module PogoPinHoles() {
      // Pogo Pin Access
-        translate([0, 2.5]) {
+        translate([0, 3.5]) {
             for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
         }
 }
@@ -179,7 +179,7 @@ module Gasket_Main(pogo= false) {
 
         // Central Fluid Cavity (Restricted to isolate pins)
         // Covers chip (4x4) and channel ends, but stays away from pins at Y=2.5
-        square([14, 4.2], center=true);
+        square([4.2, 4.2], center=true);
 
         // Pass-throughs
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
@@ -266,7 +266,7 @@ module Cartridge_Stack_3D() {
 
     // 2. Gasket 1
     up(plate_thick + Explode_Factor/4)
-        color("Red") linear_extrude(gasket_thick) Gasket_Main();
+        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo= true);
 
     // 3. Channel Plate + Interposer
     up(plate_thick + gasket_thick + Explode_Factor*2/4) {
@@ -295,14 +295,14 @@ module Cartridge_Stack_3D() {
 
     // 4. Gasket 2
     up(plate_thick*2 + gasket_thick + Explode_Factor*3/4)
-        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo= true);
+        color("Red") linear_extrude(gasket_thick) Gasket_Main();
 
     // 5. Top Plate
     up(plate_thick*2 + gasket_thick*2 + Explode_Factor)
         color("PowderBlue", 0.5)linear_extrude(plate_thick) Plate_3_Top(); 
         
     // 6. Puck
-    up ( plate_thick*3 + gasket_thick*2 + Explode_Factor*2.3)
+    up ( plate_thick*3 + gasket_thick*2 + Explode_Factor*1.2)
                 Pressure_Puck_3D();
         
 }
@@ -328,7 +328,7 @@ module Bottom_Pusher_Plate() {
             for(a = [angle_elec_cis, angle_elec_trans]) {
                 zrot(a) right(port_radius) cyl(h=10, d=4, center=true);
             }
-            PogoPinHoles();
+            linear_extrude(4)PogoPinHoles();
         }
     }
 }
@@ -476,12 +476,12 @@ module Housing_Pump_Case() {
         // DIN 5 MIDI (~16mm hole?) + Barrel Jack (8mm)
         attach(BACK) {
             // DIN 5
-            translate([-20, 0, pump_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=16, anchor=CENTER) tag("remove");
+            tag("remove") translate([-20, 0, pump_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=16, anchor=CENTER) ;
 
             // Barrel Jack
-            translate([20, 0, pump_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=8, anchor=CENTER) tag("remove");
+            tag("remove") translate([20, 0, pump_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=8, anchor=CENTER) ;
         }
 
         // Lid Mounts
@@ -546,19 +546,19 @@ module Housing_Case_Reader() {
         // Female Interlock Recesses (Bottom)
          attach(BOTTOM) {
             for(x = [-1, 1], y = [-1, 1]) {
-                translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
-                cuboid([10.5, 10.5, 6], rounding=2, edges="Z", anchor=BOTTOM) tag("remove");
+                 tag("remove") translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
+                 tag("remove") cuboid([10.5, 10.5, 6], rounding=2, edges="Z", anchor=BOTTOM);
             }
         }
 
         // Connectivity (Back Wall)
         attach(BACK) {
             // DIN 5
-            translate([-20, 0, reader_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=16, anchor=CENTER) tag("remove");
+            tag("remove") translate([-20, 0, reader_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=16, anchor=CENTER) ;
             // Barrel Jack
-            translate([20, 0, reader_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=8, anchor=CENTER) tag("remove");
+            tag("remove") translate([20, 0, reader_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=8, anchor=CENTER) ;
         }
 
          // Lid Mounting Posts
@@ -577,8 +577,13 @@ module Housing_Lid_Reader() {
     lid_thick = 15; // Increased thickness for horizontal ports
 
     color("Gainsboro")
+    //union(){
     diff("remove")
     cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=BOTTOM) {
+        
+        // Internal Bucket
+        tag("remove") position(BOTTOM) up(wall)
+        cuboid([base_w-2*wall, base_l-2*wall, lid_thick+wall], anchor=TOP);
 
         // PCB Mounts (Underside)
         attach(BOTTOM) {
@@ -593,17 +598,14 @@ module Housing_Lid_Reader() {
         }
 
         // Pogo Pin Holes
-        tag("remove")
-        position(BOTTOM) up(lid_thick/2) {
-             translate([0, 2.5, 0])
-             for(px = [-3, -1, 1, 3]) {
-                 translate([px, 0, 0]) cyl(h=lid_thick*3, d=1.2, center=true);
-             }
-        }
+        #tag("remove")
+        position(BOTTOM) down(lid_thick/2) 
+        linear_extrude(lid_thick*3)PogoPinHoles();
+      
 
         // Neck Transition & Thread (On Top)
         attach(TOP, overlap=5) // Embed into plate
-        difference(){
+        {
             cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
             attach(TOP)
             threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
@@ -611,7 +613,7 @@ module Housing_Lid_Reader() {
         // Neck Bore
         // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
         tag("remove")
-        position(TOP) down(5)
+        position(TOP) 
         cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
         }
 
@@ -621,10 +623,10 @@ module Housing_Lid_Reader() {
         // Or Split Left/Right.
         // User said: "Have them come out of the lid... These are the connections that go to the stack."
         // We will make 4 side ports.
-        attach(LEFT) {
+        attach(LEFT, overlap=5) {
              for(i = [0:3]) {
                  // Spaced out along Y
-                 translate([0, -30 + (i*20), lid_thick/2]) rotate([0,90,0])
+                 rotate([0,0,90]) translate([0, -30 + (i*20), lid_thick/2]) 
                  cyl(h=wall*4, d=8, anchor=CENTER) { // Luer/Barb adapter hole
                     tag("remove") cyl(h=20, d=5, center=true); // 5mm through hole
                  }
@@ -657,6 +659,7 @@ module Housing_Lid_Reader() {
                  cyl(h=lid_thick*3, d=3.5, center=true);
             }
         }
+    //}
     }
 }
 
@@ -678,13 +681,13 @@ module Pump_Module_Assembly() {
 // 2. Reader Module Assembly
 module Reader_Module_Assembly() {
     Housing_Case_Reader();
-    translate([0,0,reader_h + Explode_Factor]) Housing_Lid_Reader();
+    translate([0,0,reader_h + Explode_Factor*0.4]) Housing_Lid_Reader();
 
     // Stack & Cap on top of Lid
     translate([0,0, reader_h + 15 + Explode_Factor]) { // 15 is lid thick
         Cartridge_Stack_3D();
          // Torque Cap (Inner + Outer)
-        translate([0,0, neck_h - 15 + Explode_Factor*2.5]) {
+        translate([0,0, neck_h - 15 + Explode_Factor*1.5]) {
              Torque_Cap_Inner();
              translate([0,0,-2]) Torque_Cap_Outer();
         }
