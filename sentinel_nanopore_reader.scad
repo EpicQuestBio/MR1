@@ -457,7 +457,7 @@ module Housing_Pump_Case() {
         // 2x Input (Left), 2x Output (Right)
         attach(LEFT) {
              for(y_pos = [-20, 20]) {
-                 translate([0, y_pos, pump_h/2]) rotate([0,90,0])
+                 translate([0, y_pos, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
                     tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
                  }
@@ -465,7 +465,7 @@ module Housing_Pump_Case() {
         }
         attach(RIGHT) {
              for(y_pos = [-20, 20]) {
-                 translate([0, y_pos, pump_h/2]) rotate([0,90,0])
+                 translate([0, y_pos, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
                     tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
                  }
@@ -625,7 +625,7 @@ module Housing_Lid_Reader() {
         attach(LEFT, overlap=5) {
              for(i = [0:3]) {
                  // Spaced out along Y
-                 rotate([0,0,90]) translate([0, -30 + (i*20), lid_thick/2]) 
+                 translate([0, -30 + (i*20), 0])
                  cyl(h=wall*4, d=8, anchor=CENTER) { // Luer/Barb adapter hole
                     tag("remove") cyl(h=20, d=5, center=true); // 5mm through hole
                  }
