@@ -266,36 +266,20 @@ module Cartridge_Stack_3D() {
 
     // 2. Gasket 1
     up(plate_thick + Explode_Factor/4)
-        color("Red") linear_extrude(gasket_thick) Gasket_Main();
+        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo=true);
 
     // 3. Channel Plate + Interposer
     up(plate_thick + gasket_thick + Explode_Factor*2/4) {
         color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_2_Channel();
         // Interposer sits inside Plate 2
         // Pads need to face DOWN (towards PCB).
-        // Original: pads at z=thickness.
-        // Flipped: zrot(0) xrot(180) -> pads at z=-thickness (relative to center?).
-        // Interposer module is 0..thickness.
-        // translate([0,0,thickness]) rotate([180,0,0]) Interposer()?
-        // If rotate 180 X, [x,y,z] -> [x, -y, -z].
-        // 0..1 becomes 0..-1.
-        // Translate up by 1 -> 1..0.
-        // Correct position.
-        // Y coordinates also flip. Original pads at +y. Now at -y.
-        // Original: i_length/2 - pad_length - 2 = 7.5 - 3 - 2 = 2.5.
-        // Flipped: -2.5.
-        // But our holes are at +2.5.
-        // So we need to rotate 180 Z as well? Or flip Y?
-        // rotate([180, 0, 180])?
-        // If rotate 180 X: y->-y.
-        // If rotate 180 Z: -y->y.
-        // So rotate([180, 0, 180]) restores Y to +y, but Z is inverted (pads down).
-        translate([0,0,i_thickness]) rotate([180, 0, 180]) Interposer();
+        // Rotate 180 around Y to flip pads to bottom.
+        translate([0,0,i_thickness]) rotate([0, 180, 0]) Interposer();
     }
 
     // 4. Gasket 2
     up(plate_thick*2 + gasket_thick + Explode_Factor*3/4)
-        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo= true);
+        color("Red") linear_extrude(gasket_thick) Gasket_Main(pogo=false);
 
     // 5. Top Plate
     up(plate_thick*2 + gasket_thick*2 + Explode_Factor)
