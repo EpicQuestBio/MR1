@@ -577,90 +577,89 @@ module Housing_Lid_Reader() {
     lid_thick = 25; // Increased thickness for horizontal ports
 
     color("Gainsboro")
-    diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
-        
-        // Internal Bucket
-        tag("remove") position(TOP) down(wall)
-        cuboid([base_w-2*wall, base_l-2*wall, lid_thick+1*wall], anchor=TOP);
+    union() {
+        // 1. Shell with Cuts
+        diff("remove")
+        cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
+
+            // Internal Bucket
+            tag("remove") position(TOP) down(wall)
+            cuboid([base_w-2*wall, base_l-2*wall, lid_thick+1*wall], anchor=TOP);
+
+            // Pogo Pin Holes
+            tag("remove")
+            position(BOTTOM) down(lid_thick/2)
+            linear_extrude(lid_thick*3)PogoPinHoles();
+
+            // Neck Transition & Thread (On Top)
+            attach(TOP, overlap=5) // Embed into plate
+            {
+                cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
+                attach(TOP)
+                threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
+
+                // Neck Bore
+                // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
+                tag("remove")
+                position(TOP)
+                cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
+            }
+
+            // Horizontal Fluid Ports (Exiting Side)
+            attach(LEFT, overlap=5) {
+                 for(i = [0:3]) {
+                     // Spaced out along Y
+                     translate([ -30 + (i*20), 0,0])
+                     cyl(h=wall*4, d=8, anchor=CENTER) { // Luer/Barb adapter hole
+                        tag("remove") cyl(h=20, d=5, center=true); // 5mm through hole
+                     }
+                 }
+            }
+
+            // Internal Routing Channels
+            tag("remove")
+            position(CENTER) {
+                // Fluid Ports (Pass-through to bottom for stack)
+                for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                    zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
+                }
+                // Electrode Ports
+                for(a = [angle_elec_cis, angle_elec_trans]) {
+                    zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
+                }
+            }
+        }
+
+        // 2. Additive Features (Preserved from Bucket Cut)
 
         // PCB Mounts (Underside)
-        attach(BOTTOM) {
+        // Positioned relative to TOP anchor of main block.
+        // attach(BOTTOM) puts it at [0,0,-lid_thick] facing down (Z+ -> World Z-).
+        translate([0,0,-lid_thick]) rotate([180,0,0]) {
             translate([0,0,0]) {
                 // 1mm Standoffs for PCB (80x60 centered)
                 for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
-                    translate([mx, my, 0]) cyl(h=1, d=6, anchor=TOP) {
+                    translate([mx, my, 0])
+                    diff("remove") // Ensure local screw hole removal
+                    cyl(h=1, d=6, anchor=TOP) {
                         tag("remove") cyl(h=5, d=2.5, anchor=BOTTOM); // Mounting screw hole
                     }
                 }
             }
         }
 
-        // Pogo Pin Holes
-        tag("remove")
-        position(BOTTOM) down(lid_thick/2) 
-        linear_extrude(lid_thick*3)PogoPinHoles();
-      
-
-        // Neck Transition & Thread (On Top)
-        attach(TOP, overlap=5) // Embed into plate
-        {
-            cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
-            attach(TOP)
-            threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
-
-        // Neck Bore
-        // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
-        tag("remove")
-        position(TOP) 
-        cyl(h=neck_h+20, d=neck_id, anchor=BOTTOM);
-        }
-
-        // Horizontal Fluid Ports (Exiting Side)
-        // We need 4 ports: Top In/Out, Bot In/Out.
-        // Let's bring them all out the LEFT side for loop connectivity to Pump Module below?
-        // Or Split Left/Right.
-        // User said: "Have them come out of the lid... These are the connections that go to the stack."
-        // We will make 4 side ports.
-        attach(LEFT, overlap=5) {
-             for(i = [0:3]) {
-                 // Spaced out along Y
-                 translate([ -30 + (i*20), 0,0])
-                 cyl(h=wall*4, d=8, anchor=CENTER) { // Luer/Barb adapter hole
-                    tag("remove") cyl(h=20, d=5, center=true); // 5mm through hole
-                 }
-             }
-        }
-
-        // Internal Routing Channels (Connecting Side Ports to Central Manifold)
-        // This is complex CSG. For visualization, we just ensure the manifold holes go UP.
-        // In reality, printed channels would turn 90 degrees.
-        // We will make vertical holes at the Port Locations (radius 20) going DOWN.
-        // And horizontal holes from the side meeting them?
-        // For now, let's keep the vertical pass-throughs for the stack interface.
-
-        tag("remove")
-        position(CENTER) {
-            // Fluid Ports (Pass-through to bottom for stack)
-            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
-            }
-            // Electrode Ports
-            for(a = [angle_elec_cis, angle_elec_trans]) {
-                zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
-            }
-        }
-
         // Mounting Holes (Corners)
-         {
-            for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 - wall*1), y * (base_l/2 - wall*1), 0]){
+        // Positioned relative to parent origin (TOP surface).
+        // We shift them down by lid_thick/2 so they sit within the lid volume (0 to -lid_thick)
+        // instead of protruding out the top.
+        for(x = [-1, 1], y = [-1, 1]) {
+             translate([x * (base_w/2 - wall*1), y * (base_l/2 - wall*1), -lid_thick/2])
+             diff("remove")
+             union() {
                  cyl(h=lid_thick, d=wall*2.5, center=true);
                  tag("remove") cyl(h=lid_thick*3, d=3.5, center=true);
-                 }
-            }
+             }
         }
-    //}
     }
 }
 
