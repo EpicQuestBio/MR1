@@ -625,7 +625,7 @@ module Housing_Lid_Reader() {
         attach(LEFT, overlap=5) {
              for(i = [0:3]) {
                  // Spaced out along Y
-                 translate([0, -30 + (i*20), 0])
+                 translate([ -30 + (i*20), 0,0])
                  cyl(h=wall*4, d=8, anchor=CENTER) { // Luer/Barb adapter hole
                     tag("remove") cyl(h=20, d=5, center=true); // 5mm through hole
                  }
@@ -652,10 +652,12 @@ module Housing_Lid_Reader() {
         }
 
         // Mounting Holes (Corners)
-        tag("remove") {
+         {
             for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
-                 cyl(h=lid_thick*3, d=3.5, center=true);
+                 translate([x * (base_w/2 - wall*1), y * (base_l/2 - wall*1), 0]){
+                 cyl(h=lid_thick, d=wall*2.5, center=true);
+                 tag("remove") cyl(h=lid_thick*3, d=3.5, center=true);
+                 }
             }
         }
     //}
