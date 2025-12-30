@@ -35,6 +35,12 @@ hex_wall = 3;  // Minimum wall thickness for frames
 pogo_y = -15;  // Y position of the pogo pin row
 pogo_x_spacing = 5; // Spacing between pins
 
+/* [Internal Sealing & Potting] */
+oring_id = 10;
+oring_cs = 1.78;
+Show_Potting = true;
+Show_O_Rings = true;
+
 // Port Locations (Radius from center)
 port_radius = 20; // Expanded for 1/4" NPT fittings
 angle_fluid_in_bot = -30;
@@ -107,48 +113,76 @@ module PCB_2D() {
     }
 }
 
-// 2. THE CARRIER PCB INSERT (Kelvin Sensing)
+// 2. THE CARRIER PCB INSERT (Kelvin Sensing + Potting + Ribbons)
 module PCB_Kelvin_Insert() {
     // Dimensions: 28 x 38
     // Layout: 5 pads at pogo_y
     // F+, S+, G, S-, F-
-    // G connects to annular ring at center
+    // Features: Potting Puck (White), Mesh (Gray), Ribbons (Silver)
 
     ins_w = 28;
     ins_l = 38;
 
+    // 1. RAW FR4 BOARD
     difference() {
         color("ForestGreen")
         translate([-ins_w/2, -ins_l/2, 0])
         cube([ins_w, ins_l, 1.6]); // PCB Thickness
 
-        // Central Hole for Pore Access
-        cylinder(h=10, d=2, center=true);
+        // Central Void for Potting Mass (12mm)
+        cylinder(h=10, d=12, center=true);
     }
 
-    // Electrodes / Pads
+    // 2. ELECTRODES / PADS / TRACES
     color("Gold") {
-        // Pogo Pads
-        // 5 pins centered at X=0, Y=pogo_y
+        // Pogo Pads (5 pins centered at X=0, Y=pogo_y)
         for(i=[-2:2]) {
              translate([i*pogo_x_spacing, pogo_y, 1.6])
              cube([3, 3, 0.1], center=true);
         }
 
-        // Annular Ring (Ground) connected to center pin (i=0 -> G)
-        // Trace
-        translate([0, pogo_y/2, 1.6]) cube([1, abs(pogo_y), 0.1], center=true);
-        // Ring
-        translate([0,0,1.6]) difference() {
-            cylinder(h=0.1, d=6, center=true);
-            cylinder(h=0.2, d=3, center=true);
+        // Traces to Center
+        // Top Pair (F+/S+ at -10, -5 X) -> Top Ribbon area
+        // Bottom Pair (S-/F- at 5, 10 X) -> Bottom Ribbon area
+
+        // Ground Trace (Center to Void Edge)
+        translate([0, pogo_y/2, 1.6]) cube([1, abs(pogo_y)-6, 0.1], center=true);
+    }
+
+    // 3. SILVER RIBBONS (Active Electrodes)
+    // 3x6mm strips. One Top, One Bottom.
+    // Positioned near the 12mm void edge (R=6).
+    // Top Ribbon (Cis) - Top Surface
+    color("Silver") translate([0, 7.5, 1.6]) cube([6, 3, 0.1], center=true);
+
+    // Bottom Ribbon (Trans) - Bottom Surface
+    color("Silver") translate([0, -7.5, 0]) cube([6, 3, 0.1], center=true);
+
+    // 4. MESH & CHIP (Floating in Void)
+    translate([0,0,1.6/2]) {
+        color("Silver") cube([4,4,0.5], center=true); // Chip
+        color("Gray") for(i=[-5:1:5]) { // Mesh
+            translate([i,0,0]) cube([0.05, 12, 0.05], center=true);
+            translate([0,i,0]) cube([12, 0.05, 0.05], center=true);
         }
     }
 
-    // Chip/Mesh representation
-    translate([0,0,1.6/2]) {
-        color("Silver") cube([5,5,0.5], center=true);
-        color("Gray") cube([10,10,0.05], center=true);
+    // 5. POTTING PUCK (Sealing)
+    if(Show_Potting) {
+         translate([0,0,0]) {
+            color("White", 0.6) difference() {
+                union() {
+                    // Central Mass (Fills Void)
+                    cylinder(h=1.6, d=12);
+                    // Top Flange (Seal Surface)
+                    translate([0,0,1.6]) cylinder(h=0.5, d=16);
+                    // Bottom Flange (Seal Surface)
+                    translate([0,0,-0.5]) cylinder(h=0.5, d=16);
+                }
+                // Central Aperture
+                cylinder(h=10, d=2, center=true);
+            }
+        }
     }
 }
 
@@ -187,6 +221,15 @@ module BoltHoles() {
     for(r = [45:90:360]) {
         rotate([0,0,r]) translate([screw_bcd/2, 0]) circle(d=screw_hole);
     }
+}
+
+// O_Ring_Inner: Seals Fluid Path to Potting Puck
+module O_Ring_Inner() {
+    // Standard Torus
+    color("DeepSkyBlue")
+    rotate_extrude($fn=60)
+    translate([oring_id/2 + oring_cs/2, 0, 0]) // ID + CS/2 = Center Radius
+    circle(d=oring_cs, $fn=20);
 }
 
 // L2_Hex: Carrier Frame (Hexagonal)
@@ -420,26 +463,36 @@ module Cartridge_Stack_3D() {
 
     // 2. Gasket 1 (Hex) - Bottom (Between Base and Carrier)
     // No pogo pins here.
-    up(plate_thick + Explode_Factor/4)
+    up(plate_thick + Explode_Factor/6)
         color("Red") linear_extrude(gasket_thick) Gasket_Hex(pogo=false);
 
+    // 2b. Inner O-Ring (Bottom Seal)
+    // Seals Carrier/PCB Potting to Base Plate
+    if(Show_O_Rings)
+        up(plate_thick + gasket_thick + Explode_Factor*2/6)
+            O_Ring_Inner();
+
     // 3. Carrier Frame (Hex) + PCB Insert
-    up(plate_thick + gasket_thick + Explode_Factor*2/4) {
+    up(plate_thick + gasket_thick + Explode_Factor*3/6) {
         color("PowderBlue", 0.5) linear_extrude(plate_thick) Carrier_Frame_Hex();
 
         // PCB Insert sits inside the Frame pocket
-        // Center of PCB is center of Frame.
         // PCB Thickness = 1.6, Frame = 4.
         // Center it in Z? Or align bottom?
-        // Rev 18 code: `translate([0,0, (carrier_thick - pcb_thick)/2])`
         // Here plate_thick=4, pcb=1.6. Center Z = (4-1.6)/2 = 1.2
         translate([0,0, 1.2]) PCB_Kelvin_Insert();
     }
 
     // 4. Gasket 2 (Hex) - Top (Between Carrier and Top Plate)
     // Pogo pins pass through here.
-    up(plate_thick*2 + gasket_thick + Explode_Factor*3/4)
+    up(plate_thick*2 + gasket_thick + Explode_Factor*4/6)
         color("Red") linear_extrude(gasket_thick) Gasket_Hex(pogo=true);
+
+    // 4b. Inner O-Ring (Top Seal)
+    // Seals Carrier/PCB Potting to Top Plate
+    if(Show_O_Rings)
+        up(plate_thick*2 + gasket_thick*2 + Explode_Factor*5/6)
+            O_Ring_Inner();
 
     // 5. Top Plate (Hex)
     up(plate_thick*2 + gasket_thick*2 + Explode_Factor)
