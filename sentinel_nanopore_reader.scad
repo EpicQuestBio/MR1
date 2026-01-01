@@ -523,40 +523,46 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
     or_cs = 1.5;
     or_maj = 8.0;
 
-    color("LightSlateGray")
-    diff("remove")
-    cyl(h=pp_h, d=hex_diam, $fn=6) { // Fits in HEX neck
+    union() {
+        color("LightSlateGray")
+        diff("remove")
+        cyl(h=pp_h, d=hex_diam, $fn=6) { // Fits in HEX neck
 
-        // Fluid Ports (4x)
-        for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-            zrot(a) translate([port_radius, 0, 0]) {
+            // Fluid Ports (4x)
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0]) {
 
-                // 1. Through Hole
-                tag("remove") cyl(h=pp_h + 1, d=port_d, center=true, $fn=g_fn);
+                    // 1. Through Hole
+                    tag("remove") cyl(h=pp_h + 1, d=port_d, center=true, $fn=g_fn);
 
-                // 2. O-Ring Seats (Subtractive)
-                tag("remove") {
-                     position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
-                     position(BOTTOM) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                    // 2. O-Ring Seats (Subtractive)
+                    tag("remove") {
+                        position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                        position(BOTTOM) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                    }
                 }
+            }
 
-                // 3. O-Rings (Additive, Visual)
-                if (show_orings) {
+            // Pogo Pin Clearance
+            tag("remove") linear_extrude(10, center= true) PogoPinHoles();
+        }
+
+        // 3. O-Rings (Additive, Visual)
+        if (show_orings) {
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0]) {
                     // Top O-Ring
-                    position(TOP)
+                    translate([0,0, pp_h/2])
                         color("DeepSkyBlue")
                         torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
 
                     // Bottom O-Ring
-                    position(BOTTOM)
+                    translate([0,0, -pp_h/2])
                         color("DeepSkyBlue")
                         torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
                 }
             }
         }
-
-        // Pogo Pin Clearance
-        tag("remove") linear_extrude(10, center= true) PogoPinHoles();
     }
 }
 
