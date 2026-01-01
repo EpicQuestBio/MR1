@@ -86,6 +86,9 @@ pump_w = 42; pump_l = 60;
 
 /* [Global] */
 $fn = 80;
+fn_draft = 40;
+fn_prod = 200;
+g_fn = fn_draft;
 epsilon = 0.01;
 
 // ==============================================================================
@@ -209,9 +212,9 @@ module BoltHoles() {
 module O_Ring_Inner() {
     // Standard Torus
     color("DeepSkyBlue")
-    rotate_extrude($fn=60)
+    rotate_extrude($fn=g_fn)
     translate([oring_id/2 + oring_cs/2, 0, 0]) // ID + CS/2 = Center Radius
-    circle(d=oring_cs, $fn=20);
+    circle(d=oring_cs, $fn=g_fn);
 }
 
 // L2_Hex: Carrier Frame (Hexagonal)
@@ -228,7 +231,7 @@ module Carrier_Frame_Hex() {
 
     difference() {
         circle(d=hex_diam, $fn=6); // Corner-to-corner hex
-        BoltHoles();
+      //  BoltHoles();
 
         // PCB Pocket (Through Hole)
         square([ins_w + 0.5, ins_l + 0.5], center=true);
@@ -250,7 +253,7 @@ module PogoPinHoles() {
     // NEW Pogo Pin Access (Rev 18/Hex Linear)
     // 5 pins at pogo_y
     for(i=[-2:2]) {
-         translate([i*pogo_x_spacing, pogo_y]) circle(d=3.2); // Clearance for pogo head/shaft
+         translate([i*pogo_x_spacing, pogo_y]) circle(d=3.2, $fn=g_fn); // Clearance for pogo head/shaft
     }
 }
 
@@ -258,7 +261,7 @@ module PogoPinHoles() {
 module Plate_1_Base_Hex() {
     difference() {
         circle(d=hex_diam, $fn=6);
-        BoltHoles();
+       // BoltHoles();
         // All Ports are simple vertical pass-throughs or seats
         // Channels are now in the Gasket
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
@@ -272,7 +275,7 @@ module Plate_1_Base_Hex() {
 module Plate_1_Base() {
     difference() {
         circle(d=plate_diam);
-        BoltHoles();
+        //BoltHoles();
         // Bottom Flush Ports
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
@@ -298,7 +301,7 @@ module Plate_1_Base() {
 module Gasket_Main(pogo= false) {
     difference() {
         circle(d=plate_diam);
-        BoltHoles();
+       // BoltHoles();
 
         // Central Fluid Cavity (Restricted to isolate pins)
         // Covers chip (4x4) and channel ends, but stays away from pins at Y=2.5
@@ -344,7 +347,7 @@ module Gasket_Low_Dead_Volume(type="bottom") {
 
     difference() {
         circle(d=hex_diam, $fn=6);
-        BoltHoles();
+      //  BoltHoles();
 
         // Pass-throughs
         for(a = pass_angles) {
@@ -386,7 +389,7 @@ module Gasket_Hex(pogo=false) {
 module Plate_2_Channel() {
     difference() {
         circle(d=plate_diam);
-        BoltHoles();
+      //  BoltHoles();
         square([i_width + 0.2, i_length + 0.2], center=true); // Interposer Pocket
 
         // Bottom Flush Channels (Connect Bottom Ports to Chip Pocket)
@@ -412,7 +415,7 @@ module Plate_2_Channel() {
 module Plate_3_Top_Hex() {
     difference() {
         circle(d=hex_diam, $fn=6);
-        BoltHoles();
+        //BoltHoles();
 
         // Sample Well / Pipette Access
         // Used to access the central Gasket Channel from above
@@ -434,7 +437,7 @@ module Plate_3_Top_Hex() {
 module Plate_3_Top() {
     difference() {
         circle(d=plate_diam);
-        BoltHoles();
+      //  BoltHoles();
 
         // Sample Well / Pipette Access
         // If Sealed_Top_Mode is true, we remove this hole to seal the chamber.
@@ -469,10 +472,21 @@ module Cartridge_Stack_3D() {
     // 0. Bottom Pusher Plate (Under Base Plate)
     down( Explode_Factor/4) // 3mm thickness
         Bottom_Pusher_Plate();
-
+        
+    // 0.5. INNER O-RING (Bottom Seal)
+    //if(Show_O_Rings)
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
+        
     // 1. Base Plate (Hex) - 4mm
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
-
+    
+    // 1.5. INNER O-RING (Bottom Seal)
+    if(Show_O_Rings)
+        translate([0,0,stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
+        
     // 2. Gasket 1 (Hex) - Bottom - 0.8mm
     up(plate_thick + Explode_Factor/6)
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
@@ -511,10 +525,10 @@ module Bottom_Pusher_Plate() {
             // Fluid Ports
             for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
                 zrot(a) translate([port_radius, 0, 0]) {
-                    cyl(h=10, d=6, center=true); // Through hole
+                    cyl(h=10, d=6, center=true, $fn=g_fn); // Through hole
                     // O-Ring Seats (Top and Bottom)
-                    position(TOP) torus(d_maj=8, d_min=1.5, anchor=CENTER);
-                    position(BOTTOM) torus(d_maj=8, d_min=1.5, anchor=CENTER);
+                    position(TOP) torus(d_maj=8, d_min=1.5, anchor=CENTER, $fn=g_fn);
+                    position(BOTTOM) torus(d_maj=8, d_min=1.5, anchor=CENTER, $fn=g_fn);
                 }
             }
             // Electrode Ports - REMOVED (Replaced by Pogo Pins)
@@ -523,7 +537,7 @@ module Bottom_Pusher_Plate() {
             // }
 
             // Pogo Pin Clearance
-            linear_extrude(4)PogoPinHoles();
+            linear_extrude(10, center= true)PogoPinHoles();
         }
     }
 }
