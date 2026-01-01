@@ -469,6 +469,9 @@ module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
     // UPDATED FOR REV 19 RIGID ACTIVE CARTRIDGE
 
+    plate_thick_pp = 3;
+    stack_z = -3;
+
     // 0. Bottom Pusher Plate (Under Base Plate)
     down( Explode_Factor/4) // 3mm thickness
         Bottom_Pusher_Plate();
