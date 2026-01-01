@@ -281,16 +281,12 @@ module Plate_1_Base_Hex() {
     difference() {
         circle(d=hex_diam, $fn=6);
         BoltHoles();
-        // Bottom Flush Ports
+        // All Ports are simple vertical pass-throughs or seats
+        // Channels are now in the Gasket
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
-        // Top Flush Ports (Pass-through)
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
-
-        // Pogo Pin Access REMOVED for Top-Down Pogo Pins (Rev 12 Style)
-        // Pins come from Lid -> Top Plate -> Gasket -> PCB.
-        // Base plate is below PCB and should be solid here.
     }
 }
 
@@ -345,24 +341,67 @@ module Gasket_Main(pogo= false) {
     }
 }
 
-// G1_Hex: Gasket (Hexagonal)
-module Gasket_Hex(pogo=false) {
+// Gasket Low Dead Volume (Replaces Gasket_Hex)
+module Gasket_Low_Dead_Volume(type="bottom") {
+    // type: "bottom" or "top"
+
+    // Determine angles based on type
+    // Bottom: In=-30, Out=150. Top: In=30, Out=210.
+    active_in = (type=="bottom") ? angle_fluid_in_bot : angle_fluid_in_top;
+    active_out = (type=="bottom") ? angle_fluid_out_bot : angle_fluid_out_top;
+
+    // Determine pass-through angles (the other pair)
+    pass_angles = (type=="bottom")
+        ? [angle_fluid_in_top, angle_fluid_out_top]
+        : [angle_fluid_in_bot, angle_fluid_out_bot];
+
+    // Slot Connection Points (Y coordinates)
+    // Bottom In (Y~-10) -> Connect to South Slot End (-8)
+    // Top In (Y~10) -> Connect to North Slot End (8)
+    slot_y_in = (type=="bottom") ? -8 : 8;
+
+    // Bottom Out (Y~10) -> Connect to North Slot End (8)
+    // Top Out (Y~-10) -> Connect to South Slot End (-8)
+    slot_y_out = (type=="bottom") ? 8 : -8;
+
     difference() {
         circle(d=hex_diam, $fn=6);
         BoltHoles();
 
-        // Central Fluid Cavity
-        square([4.2, 4.2], center=true);
-
         // Pass-throughs
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+        for(a = pass_angles) {
+            rotate([0,0,a]) translate([port_radius, 0]) circle(d=4);
+        }
 
-        // Pogo Pin Penetration Holes
-        if(pogo) PogoPinHoles();
+        // --- LOW DEAD VOLUME CHANNEL ---
+        // 1. Central "Race Track" Slot over Chip & Ribbons
+        hull() {
+             translate([0, -8, 0]) circle(d=8);
+             translate([0, 8, 0]) circle(d=8);
+        }
+
+        // 2. Connection from Inlet Port to Slot
+        hull() {
+             rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=4);
+             translate([0, slot_y_in, 0]) circle(d=4);
+        }
+
+        // 3. Connection from Slot to Outlet Port
+        hull() {
+             rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=4);
+             translate([0, slot_y_out, 0]) circle(d=4);
+        }
+
+        // Pogo Pin Penetration Holes (Only for Top Gasket)
+        if(type == "top") {
+             PogoPinHoles();
+        }
     }
+}
+
+// G1_Hex: Gasket (Hexagonal) - Legacy
+module Gasket_Hex(pogo=false) {
+   Gasket_Low_Dead_Volume(type = pogo ? "top" : "bottom");
 }
 
 // L2: Channel/Chip Layer
@@ -398,22 +437,17 @@ module Plate_3_Top_Hex() {
         BoltHoles();
 
         // Sample Well / Pipette Access
+        // Used to access the central Gasket Channel from above
         if (!Sealed_Top_Mode) {
              circle(d=6);
         }
 
-        // Top Flush Channels
-        hull() {
-             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-             translate([3, 0]) circle(d=3);
-        }
-        hull() {
-             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
-             translate([-3, 0]) circle(d=3);
-        }
+        // Channels are now in the Gasket.
+        // We just need vertical port holes.
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
 
         // Pogo Pin Access (Top-Down)
-        // Pins come from Lid, must pass through Top Plate to reach PCB.
         PogoPinHoles();
     }
 }
@@ -464,7 +498,7 @@ module Cartridge_Stack_3D() {
     // 2. Gasket 1 (Hex) - Bottom (Between Base and Carrier)
     // No pogo pins here.
     up(plate_thick + Explode_Factor/6)
-        color("Red") linear_extrude(gasket_thick) Gasket_Hex(pogo=false);
+        color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
 
     // 2b. Inner O-Ring (Bottom Seal)
     // Seals Carrier/PCB Potting to Base Plate
@@ -486,7 +520,7 @@ module Cartridge_Stack_3D() {
     // 4. Gasket 2 (Hex) - Top (Between Carrier and Top Plate)
     // Pogo pins pass through here.
     up(plate_thick*2 + gasket_thick + Explode_Factor*4/6)
-        color("Red") linear_extrude(gasket_thick) Gasket_Hex(pogo=true);
+        color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
 
     // 4b. Inner O-Ring (Top Seal)
     // Seals Carrier/PCB Potting to Top Plate
@@ -1061,7 +1095,10 @@ if (Output_Mode == "Assembly") {
 } else if (Output_Mode == "Plate_3_Top_DXF") {
     projection(cut=false) Plate_3_Top_Hex();
 } else if (Output_Mode == "Gasket_Main_DXF") {
-    projection(cut=false) Gasket_Hex();
+    // Export Top version by default or union? Usually individual.
+    // Let's assume Top since it has more holes (conservative) or just Bottom.
+    // User can change the call or we can add a mode.
+    projection(cut=false) Gasket_Low_Dead_Volume(type="top");
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
 } else if (Output_Mode == "Housing_Pump_Lid_STL") {
