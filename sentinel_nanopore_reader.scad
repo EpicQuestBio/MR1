@@ -469,16 +469,12 @@ module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
     // UPDATED FOR REV 19 RIGID ACTIVE CARTRIDGE
 
+    plate_thick_pp = 3;
+    stack_z = -3;
+
     // 0. Bottom Pusher Plate (Under Base Plate)
     down( Explode_Factor/4) // 3mm thickness
         Bottom_Pusher_Plate();
-        
-    // 0.5. INNER O-RING (Bottom Seal)
-    //if(Show_O_Rings)
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
         
     // 1. Base Plate (Hex) - 4mm
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
@@ -517,28 +513,50 @@ module Cartridge_Stack_3D() {
 // ==============================================================================
 // MODULE: BOTTOM PUSHER PLATE (TPU Seal)
 // ==============================================================================
-module Bottom_Pusher_Plate() {
+module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
+    // Dimensions
+    pp_h = 3;
+    port_d = 6;
+
+    // O-Ring Dimensions (Port Seals)
+    // Seat: d_maj=8, d_min=1.5 (CS)
+    or_cs = 1.5;
+    or_maj = 8.0;
+
     color("LightSlateGray")
     diff("remove")
-    cyl(h=3, d=hex_diam, $fn=6) { // Fits in HEX neck
-        tag("remove") {
-            // Fluid Ports
-            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                zrot(a) translate([port_radius, 0, 0]) {
-                    cyl(h=10, d=6, center=true, $fn=g_fn); // Through hole
-                    // O-Ring Seats (Top and Bottom)
-                    position(TOP) torus(d_maj=8, d_min=1.5, anchor=CENTER, $fn=g_fn);
-                    position(BOTTOM) torus(d_maj=8, d_min=1.5, anchor=CENTER, $fn=g_fn);
+    cyl(h=pp_h, d=hex_diam, $fn=6) { // Fits in HEX neck
+
+        // Fluid Ports (4x)
+        for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+            zrot(a) translate([port_radius, 0, 0]) {
+
+                // 1. Through Hole
+                tag("remove") cyl(h=pp_h + 1, d=port_d, center=true, $fn=g_fn);
+
+                // 2. O-Ring Seats (Subtractive)
+                tag("remove") {
+                     position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                     position(BOTTOM) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                }
+
+                // 3. O-Rings (Additive, Visual)
+                if (show_orings) {
+                    // Top O-Ring
+                    position(TOP)
+                        color("DeepSkyBlue")
+                        torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+
+                    // Bottom O-Ring
+                    position(BOTTOM)
+                        color("DeepSkyBlue")
+                        torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
                 }
             }
-            // Electrode Ports - REMOVED (Replaced by Pogo Pins)
-            // for(a = [angle_elec_cis, angle_elec_trans]) {
-            //    zrot(a) right(port_radius) cyl(h=10, d=4, center=true);
-            // }
-
-            // Pogo Pin Clearance
-            linear_extrude(10, center= true)PogoPinHoles();
         }
+
+        // Pogo Pin Clearance
+        tag("remove") linear_extrude(10, center= true) PogoPinHoles();
     }
 }
 
@@ -1091,7 +1109,7 @@ if (Output_Mode == "Assembly") {
 } else if (Output_Mode == "Pressure_Puck_STL") {
     Pressure_Puck_3D();
 } else if (Output_Mode == "Bottom_Pusher_Plate_STL") {
-    Bottom_Pusher_Plate();
+    Bottom_Pusher_Plate(show_orings=false);
 } else if (Output_Mode == "PCB_DXF") {
     projection(cut=false) PCB_2D();
 }
