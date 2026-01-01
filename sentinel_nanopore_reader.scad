@@ -35,6 +35,12 @@ hex_wall = 3;  // Minimum wall thickness for frames
 pogo_y = -15;  // Y position of the pogo pin row
 pogo_x_spacing = 5; // Spacing between pins
 
+/* [Active Cartridge Settings] */
+pcb_thick = 0.8;      // THIN RIGID FR4
+carrier_thick = 2.6;  // Reduced height for thin PCB + components
+opamp_h = 1.75;       // SOIC-8 Height
+Show_Components = true;
+
 /* [Internal Sealing & Potting] */
 oring_id = 10;
 oring_cs = 1.78;
@@ -113,77 +119,53 @@ module PCB_2D() {
     }
 }
 
-// 2. THE CARRIER PCB INSERT (Kelvin Sensing + Potting + Ribbons)
-module PCB_Kelvin_Insert() {
-    // Dimensions: 28 x 38
-    // Layout: 5 pads at pogo_y
-    // F+, S+, G, S-, F-
-    // Features: Potting Puck (White), Mesh (Gray), Ribbons (Silver)
+// 2. THE RIGID ACTIVE PCB (Rev 19)
+module PCB_Rigid_Active() {
+    // 0.8mm FR4 Substrate
+    pcb_w = 28; pcb_l = 38;
 
-    ins_w = 28;
-    ins_l = 38;
-
-    // 1. RAW FR4 BOARD
     difference() {
+        // 0.8mm FR4 Substrate (Green)
         color("ForestGreen")
-        translate([-ins_w/2, -ins_l/2, 0])
-        cube([ins_w, ins_l, 1.6]); // PCB Thickness
+        translate([-pcb_w/2, -pcb_l/2, 0]) cube([pcb_w, pcb_l, pcb_thick]);
 
-        // Central Void for Potting Mass (12mm)
-        cylinder(h=10, d=12, center=true);
+        // Chip Void
+        cylinder(h=10, d=10, center=true);
     }
 
-    // 2. ELECTRODES / PADS / TRACES
+    // --- ACTIVE COMPONENTS (Top Side) ---
+    if(Show_Components) {
+        // LMP7721 OpAmp (The Critical Component)
+        // Placed as close to the void as possible to minimize trace length
+        translate([8, 6, pcb_thick]) {
+            color("#333333") cube([5, 6, opamp_h]); // Body
+            color("Silver") translate([-1, 0.5, 0]) cube([1, 5, 0.5]); // Pins
+            color("Silver") translate([5, 0.5, 0]) cube([1, 5, 0.5]); // Pins
+        }
+
+        // Feedback Resistor (100M/1G)
+        translate([8, -2, pcb_thick]) color("Blue") cube([3.2, 1.6, 0.6]);
+
+        // Decoupling Caps (0.1uF)
+        translate([12, 14, pcb_thick]) color("Brown") cube([1.6, 0.8, 0.6]);
+    }
+
+    // --- ELECTRODES (Silver Ribbons) ---
+    // Solder pads + Ribbons leading into the void
+    color("Silver") {
+        // Top Ribbon (V+)
+        translate([-4, 8, pcb_thick]) cube([2, 4, 0.1]); // Pad
+        translate([-3, 5, pcb_thick]) cube([2, 3, 0.1]); // Trace
+    }
+
+    // --- INTERFACE PADS (Bottom Side) ---
+    // These touch the Pogo Pins in the Base
     color("Gold") {
-        // Pogo Pads (5 pins centered at X=0, Y=pogo_y)
-        for(i=[-2:2]) {
-             translate([i*pogo_x_spacing, pogo_y, 1.6])
-             cube([3, 3, 0.1], center=true);
-        }
-
-        // Traces to Center
-        // Top Pair (F+/S+ at -10, -5 X) -> Top Ribbon area
-        // Bottom Pair (S-/F- at 5, 10 X) -> Bottom Ribbon area
-
-        // Ground Trace (Center to Void Edge)
-        translate([0, pogo_y/2, 1.6]) cube([1, abs(pogo_y)-6, 0.1], center=true);
+        for(i=[-2:2]) translate([i*5, -15, -0.01]) cube([3, 3, 0.05], center=true);
     }
 
-    // 3. SILVER RIBBONS (Active Electrodes)
-    // 3x6mm strips. One Top, One Bottom.
-    // Positioned near the 12mm void edge (R=6).
-    // Top Ribbon (Cis) - Top Surface
-    color("Silver") translate([0, 7.5, 1.6]) cube([6, 3, 0.1], center=true);
-
-    // Bottom Ribbon (Trans) - Bottom Surface
-    color("Silver") translate([0, -7.5, 0]) cube([6, 3, 0.1], center=true);
-
-    // 4. MESH & CHIP (Floating in Void)
-    translate([0,0,1.6/2]) {
-        color("Silver") cube([4,4,0.5], center=true); // Chip
-        color("Gray") for(i=[-5:1:5]) { // Mesh
-            translate([i,0,0]) cube([0.05, 12, 0.05], center=true);
-            translate([0,i,0]) cube([12, 0.05, 0.05], center=true);
-        }
-    }
-
-    // 5. POTTING PUCK (Sealing)
-    if(Show_Potting) {
-         translate([0,0,0]) {
-            color("White", 0.6) difference() {
-                union() {
-                    // Central Mass (Fills Void)
-                    cylinder(h=1.6, d=12);
-                    // Top Flange (Seal Surface)
-                    translate([0,0,1.6]) cylinder(h=0.5, d=16);
-                    // Bottom Flange (Seal Surface)
-                    translate([0,0,-0.5]) cylinder(h=0.5, d=16);
-                }
-                // Central Aperture
-                cylinder(h=10, d=2, center=true);
-            }
-        }
-    }
+    // Chip Mockup
+    color("Silver") translate([0,0,pcb_thick/2]) cube([5,5,0.5], center=true);
 }
 
 // 1. THE DISPOSABLE INTERPOSER CARD
@@ -235,7 +217,11 @@ module O_Ring_Inner() {
 // L2_Hex: Carrier Frame (Hexagonal)
 module Carrier_Frame_Hex() {
     // Replaces Plate_2_Channel
-    // Holds PCB_Kelvin_Insert (28x38)
+    // Holds PCB_Rigid_Active (28x38x0.8)
+
+    // New dimensions
+    // Thickness = 2.6mm (carrier_thick)
+    // PCB Pocket = Through hole (PCB sits on bottom gasket)
 
     ins_w = 28;
     ins_l = 38;
@@ -244,22 +230,14 @@ module Carrier_Frame_Hex() {
         circle(d=hex_diam, $fn=6); // Corner-to-corner hex
         BoltHoles();
 
-        // PCB Pocket
+        // PCB Pocket (Through Hole)
         square([ins_w + 0.5, ins_l + 0.5], center=true);
 
         // Fluid Pass-throughs (Outside the PCB area)
-        // PCB is 28 wide. Ports at radius 20.
-        // X = 20*cos(30) = 17.3 > 14 (PCB half width). Clear.
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
-
-        // Pogo Pin Pass-throughs?
-        // Carrier Frame surrounds the PCB. Pogo pins hit the PCB surface.
-        // We might need clearance *above* the PCB (in Plate_1 or Gasket) but the Frame is coplanar with PCB.
-        // If PCB is thinner than Frame (1.6 vs 4), the PCB sits in a pocket.
-        // If the frame is the same thickness, it's just a surround.
     }
 }
 
@@ -486,54 +464,38 @@ module Plate_3_Top() {
 
 module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
-    // UPDATED FOR HEXAGONAL STACK + CARRIER PCB
+    // UPDATED FOR REV 19 RIGID ACTIVE CARTRIDGE
 
     // 0. Bottom Pusher Plate (Under Base Plate)
     down( Explode_Factor/4) // 3mm thickness
         Bottom_Pusher_Plate();
 
-    // 1. Base Plate (Hex)
+    // 1. Base Plate (Hex) - 4mm
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
 
-    // 2. Gasket 1 (Hex) - Bottom (Between Base and Carrier)
-    // No pogo pins here.
+    // 2. Gasket 1 (Hex) - Bottom - 0.8mm
     up(plate_thick + Explode_Factor/6)
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
 
-    // 2b. Inner O-Ring (Bottom Seal)
-    // Seals Carrier/PCB Potting to Base Plate
-    if(Show_O_Rings)
-        up(plate_thick + gasket_thick + Explode_Factor*2/6)
-            O_Ring_Inner();
-
-    // 3. Carrier Frame (Hex) + PCB Insert
+    // 3. Carrier Frame (Hex) + PCB Rigid Active
+    // Carrier height reduced to 2.6mm
     up(plate_thick + gasket_thick + Explode_Factor*3/6) {
-        color("PowderBlue", 0.5) linear_extrude(plate_thick) Carrier_Frame_Hex();
+        color("PowderBlue", 0.5) linear_extrude(carrier_thick) Carrier_Frame_Hex();
 
-        // PCB Insert sits inside the Frame pocket
-        // PCB Thickness = 1.6, Frame = 4.
-        // Center it in Z? Or align bottom?
-        // Here plate_thick=4, pcb=1.6. Center Z = (4-1.6)/2 = 1.2
-        translate([0,0, 1.2]) PCB_Kelvin_Insert();
+        // PCB Sits inside, flush with bottom
+        translate([0,0,0]) PCB_Rigid_Active();
     }
 
-    // 4. Gasket 2 (Hex) - Top (Between Carrier and Top Plate)
-    // Pogo pins pass through here.
-    up(plate_thick*2 + gasket_thick + Explode_Factor*4/6)
+    // 4. Gasket 2 (Hex) - Top - 0.8mm
+    up(plate_thick + gasket_thick + carrier_thick + Explode_Factor*4/6)
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
 
-    // 4b. Inner O-Ring (Top Seal)
-    // Seals Carrier/PCB Potting to Top Plate
-    if(Show_O_Rings)
-        up(plate_thick*2 + gasket_thick*2 + Explode_Factor*5/6)
-            O_Ring_Inner();
-
-    // 5. Top Plate (Hex)
-    up(plate_thick*2 + gasket_thick*2 + Explode_Factor)
+    // 5. Top Plate (Hex) - 4mm
+    up(plate_thick + gasket_thick + carrier_thick + gasket_thick + Explode_Factor)
         color("PowderBlue", 0.5)linear_extrude(plate_thick) Plate_3_Top_Hex();
         
     // 6. Puck
-    up ( plate_thick*3 + gasket_thick*2 + Explode_Factor*1.2)
+    up ( plate_thick*2 + gasket_thick*2 + carrier_thick + Explode_Factor*1.2)
                 Pressure_Puck_3D();
         
 }
@@ -577,17 +539,18 @@ module Pressure_Puck_3D() {
                 // Handle Tabs
                 translate([0, 22, 0]) cylinder(h=6, d=8);
                 translate([0, -22, 0]) cylinder(h=6, d=8);
+
+                // EXTENSION RING for Thinner Stack (Rev 19)
+                // Stack lost ~1.4mm. We add a ring to push down further.
+                translate([0,0,-1.4]) cylinder(h=1.4, d=neck_id - 1);
             }
             
-            
-              //  #translate([0,0,2]) cylinder(h=plate_thick*2, d1=6, d2=14);
-            
             // Center Hole for Pipette Access (Through-hole)
-            translate([0,0,-1]) cylinder(h=20, d1=6, d2=16);
+            translate([0,0,-5]) cylinder(h=20, d1=6, d2=16);
             // Underside recess to avoid crushing Top Plate features
-            translate([0,0,-1]) difference() {
-                cylinder(h=3, d=neck_id-4);
-                cylinder(h=4, d=20); // Only press on center ring
+            translate([0,0,-5]) difference() {
+                cylinder(h=3 + 4 + 1.4, d=neck_id-4); // Increased clear depth
+                cylinder(h=10, d=20); // Only press on center ring
             }
         }
     }
