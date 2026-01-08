@@ -121,6 +121,53 @@ module PCB_2D() {
         PogoPinHoles();
     }
 }
+// 2. CHANNEL GASKET (The Microfluidics)
+// ==============================================================================
+module Channel_Gasket_Production() {
+    color("Red", 0.8) 
+    difference() {
+        // Gasket Body
+        cylinder(h=gasket_thick, d=hex_diam, $fn=6);
+        
+        // THE FLUID CHANNEL
+        // Defines the flow path from In -> Chip -> Out
+        hull() {
+            translate([0, 15, -1]) cylinder(h=5, d=5); // Input Area
+            translate([0, -15, -1]) cylinder(h=5, d=5); // Output Area
+            translate([0, 0, -1]) cylinder(h=5, d=8);   // Chip Chamber
+        }
+        
+        // Bolt Holes (Must align perfectly)
+        for(r=[0:60:360]) rotate([0,0,r]) 
+            translate([screw_bcd/2, 0, -1]) cylinder(h=5, d=screw_hole);
+    }
+}
+
+// ==============================================================================
+// 3. FR4 INTERPOSER (The Chip Carrier)
+// ==============================================================================
+module FR4_Interposer_Production() {
+    color("ForestGreen") 
+    difference() {
+        // Standard 1.6mm FR4 Disk
+        cylinder(h=0.8, d=hex_diam, $fn=6);
+        
+        // Chip Aperture (Drill Hit)
+        translate([0,0,-1]) cylinder(h=10, d=1.5); 
+        
+        // Fluid Ports (Drill Hits)
+        translate([0, 15, -1]) cylinder(h=10, d=3); // Inlet
+        translate([0, -15, -1]) cylinder(h=10, d=3); // Outlet
+        
+        // Bolt Holes
+        for(r=[0:60:360]) rotate([0,0,r]) 
+            translate([screw_bcd/2, 0, -1]) cylinder(h=10, d=screw_hole);
+    }
+    
+    // Visual: The Chip glued on top
+    if(Output_Mode == "Assembly")
+        color("Black") translate([0,0,pcb_thick]) cube([5,5,0.3], center=true);
+}
 
 // 2. THE RIGID ACTIVE PCB (Rev 19)
 module PCB_Rigid_Active() {
@@ -474,7 +521,7 @@ module Cartridge_Stack_3D() {
 
     // 0. Bottom Pusher Plate (Under Base Plate)
     down( Explode_Factor/4) // 3mm thickness
-        Bottom_Pusher_Plate();
+        Bottom_Pusher_Plate(show_orings=true);
         
     // 1. Base Plate (Hex) - 4mm
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
