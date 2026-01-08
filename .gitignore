@@ -2,3 +2,30 @@ node_modules/
 output/
 libraries/
 clone_retry.log
+
+# KiCad
+# For the PCB designer
+*.kicad_prl
+*.kicad_pcb-bak
+*.kicad_sch-bak
+fp-info-cache
+
+# Backups
+*-backups
+_autosave-*
+\#*#
+.#*
+
+# Compressed files
+*.zip
+
+# Generated files
+*.net
+*.xml
+*.csv
+*.gbr
+*.drl
+*.pos
+*.rpt
+*.g?
+*.pho

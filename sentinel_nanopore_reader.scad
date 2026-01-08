@@ -205,17 +205,15 @@ module PCB_Rigid_Active() {
     }
 
     // --- ELECTRODES (Silver Ribbons) ---
-    // Solder pads + Ribbons leading into the void
+    // Single-Sided PCBA: 4 Solder Pads on Bottom
     color("Silver") {
-        // Top Ribbon (V+)
-        translate([-4, 8, pcb_thick]) cube([2, 4, 0.1]); // Pad
-        translate([-3, 5, pcb_thick]) cube([2, 3, 0.1]); // Trace
-    }
+        // Trans Loop Pads (Bottom Fluid Contact)
+        translate([-3, -10, -0.01]) cube([4, 4, 0.1], center=true); // Trans Drive
+        translate([3, -10, -0.01]) cube([4, 4, 0.1], center=true);  // Trans Sense
 
-    // --- INTERFACE PADS (Bottom Side) ---
-    // These touch the Pogo Pins in the Base
-    color("Gold") {
-        for(i=[-2:2]) translate([i*5, -15, -0.01]) cube([3, 3, 0.05], center=true);
+        // Cis Chamber Pads (Top Fluid Contact via PCB Holes?)
+        translate([-3, 10, -0.01]) cube([4, 4, 0.1], center=true);  // Cis Drive
+        translate([3, 10, -0.01]) cube([4, 4, 0.1], center=true);   // Cis Sense
     }
 
     // Chip Mockup
@@ -296,29 +294,71 @@ module Carrier_Frame_Hex() {
 }
 
 module PogoPinHoles() {
-    // OLD Pogo Pin Access (Rev 12 Cluster)
-    // translate([0, 3.5]) {
-    //    for(px = [-3, -1, 1, 3]) translate([px, 0]) circle(d=1.5);
-    // }
-
-    // NEW Pogo Pin Access (Rev 18/Hex Linear)
-    // 5 pins at pogo_y
-    for(i=[-2:2]) {
-         translate([i*pogo_x_spacing, pogo_y]) circle(d=3.2, $fn=g_fn); // Clearance for pogo head/shaft
-    }
+    // Pogo Pins removed for Single-Sided PCBA
+    // Keeping module for compatibility but empty
 }
 
 // L1: Base Plate (Interface) - Hexagonal Version
+// 2D Projection for DXF
 module Plate_1_Base_Hex() {
+    projection(cut=false) Plate_1_Base_Hex_3D();
+}
+
+// L1: Base Plate (3D with Internal Channels)
+module Plate_1_Base_Hex_3D() {
     difference() {
-        circle(d=hex_diam, $fn=6);
-       // BoltHoles();
-        // All Ports are simple vertical pass-throughs or seats
-        // Channels are now in the Gasket
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+        linear_extrude(plate_thick) circle(d=hex_diam, $fn=6);
+
+        // Pass-throughs (Top Fluid) - Simple Cylinders
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+
+        // --- BOTTOM FLUID (TRANS LOOP) ---
+        // 1. Inlet Port (-30) to Trans Loop Up-Via
+        // Port Entry
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+
+        // Channel: Port -> Up-Via (Left side of Trans Chamber)
+        // Via A at Y=-10, X=-3
+        hull() {
+             rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, plate_thick/2]) sphere(d=4);
+             translate([-3, -10, plate_thick/2]) sphere(d=3);
+        }
+        // Vertical Up-Via A
+        translate([-3, -10, 0]) cylinder(h=10, d=2);
+
+        // 2. Trans Loop Down-Via -> Center
+        // Vertical Down-Via B (Y=-10, X=3)
+        translate([3, -10, 0]) cylinder(h=10, d=2);
+
+        // Channel: Via B -> Center
+        // Raise spheres so they cut a TRENCH (open top), not a TUNNEL.
+        // Sphere Center Z should be at 'plate_thick' to cut depth = radius.
+        // We use larger spheres or offset Z to control depth/width.
+
+        hull() {
+             // Via B is at Z=0..plate_thick.
+             // Connect Via B to the Channel Start (Center)
+             // Use a sphere at Z=plate_thick to ensure open connection
+             translate([3, -10, plate_thick]) sphere(d=3); // Depth 1.5
+             translate([0, 0, plate_thick]) sphere(d=3);   // Depth 1.5
+        }
+
+        // 3. "Sloped Roof" Channel: Center -> Outlet Port (150)
+        // RISING FLOOR: Depth decreases from Center (1.5) to Outlet (0.5)
+        // To achieve Depth 0.5 with Sphere R=1.5: Center Z = plate_thick + (1.5 - 0.5) = plate_thick + 1.0.
+
+        // Outlet Port
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+
+        hull() {
+             // Center: Depth 1.5 (Z_floor = 2.5)
+             translate([0, 0, plate_thick]) sphere(d=3);
+
+             // Outlet: Depth 0.5 (Z_floor = 3.5)
+             rotate([0,0,angle_fluid_out_bot])
+             translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
+        }
     }
 }
 
@@ -378,7 +418,6 @@ module Gasket_Low_Dead_Volume(type="bottom") {
     // type: "bottom" or "top"
 
     // Determine angles based on type
-    // Bottom: In=-30, Out=150. Top: In=30, Out=210.
     active_in = (type=="bottom") ? angle_fluid_in_bot : angle_fluid_in_top;
     active_out = (type=="bottom") ? angle_fluid_out_bot : angle_fluid_out_top;
 
@@ -386,15 +425,6 @@ module Gasket_Low_Dead_Volume(type="bottom") {
     pass_angles = (type=="bottom")
         ? [angle_fluid_in_top, angle_fluid_out_top]
         : [angle_fluid_in_bot, angle_fluid_out_bot];
-
-    // Slot Connection Points (Y coordinates)
-    // Bottom In (Y~-10) -> Connect to South Slot End (-8)
-    // Top In (Y~10) -> Connect to North Slot End (8)
-    slot_y_in = (type=="bottom") ? -8 : 8;
-
-    // Bottom Out (Y~10) -> Connect to North Slot End (8)
-    // Top Out (Y~-10) -> Connect to South Slot End (-8)
-    slot_y_out = (type=="bottom") ? 8 : -8;
 
     difference() {
         circle(d=hex_diam, $fn=6);
@@ -406,27 +436,33 @@ module Gasket_Low_Dead_Volume(type="bottom") {
         }
 
         // --- LOW DEAD VOLUME CHANNEL ---
-        // 1. Central "Race Track" Slot over Chip & Ribbons
-        hull() {
-             translate([0, -8, 0]) circle(d=8);
-             translate([0, 8, 0]) circle(d=8);
-        }
+        if (type == "bottom") {
+             // Bottom: Split into Chip Hole and Trans Loop Hole
+             // Hole 1: Under Chip (Central)
+             circle(d=6);
 
-        // 2. Connection from Inlet Port to Slot
-        hull() {
-             rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=4);
-             translate([0, slot_y_in, 0]) circle(d=4);
-        }
-
-        // 3. Connection from Slot to Outlet Port
-        hull() {
-             rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=4);
-             translate([0, slot_y_out, 0]) circle(d=4);
-        }
-
-        // Pogo Pin Penetration Holes (Only for Top Gasket)
-        if(type == "top") {
-             PogoPinHoles();
+             // Hole 2: Trans Loop (Over Trans Pads)
+             // Isolates Trans fluid (Y=-10) from Chip fluid until routing happens in Plate 1
+             hull() {
+                 translate([-4, -10, 0]) circle(d=3);
+                 translate([4, -10, 0]) circle(d=3);
+             }
+        } else {
+            // Top: Keep simple central access for Cis
+            hull() {
+                 translate([0, -8, 0]) circle(d=8);
+                 translate([0, 8, 0]) circle(d=8);
+            }
+            // Connection from Inlet Port to Slot
+            hull() {
+                 rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=4);
+                 translate([0, 8, 0]) circle(d=4);
+            }
+            // Connection from Slot to Outlet Port
+            hull() {
+                 rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=4);
+                 translate([0, 8, 0]) circle(d=4);
+            }
         }
     }
 }
@@ -469,18 +505,13 @@ module Plate_3_Top_Hex() {
         //BoltHoles();
 
         // Sample Well / Pipette Access
-        // Used to access the central Gasket Channel from above
         if (!Sealed_Top_Mode) {
              circle(d=6);
         }
 
-        // Channels are now in the Gasket.
-        // We just need vertical port holes.
+        // Vertical port holes.
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
-
-        // Pogo Pin Access (Top-Down)
-        PogoPinHoles();
     }
 }
 
@@ -528,7 +559,7 @@ module Cartridge_Stack_3D() {
         Bottom_Pusher_Plate(show_orings=true);
         
     // 1. Base Plate (Hex) - 4mm
-    color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
+    color("PowderBlue", 0.5) Plate_1_Base_Hex_3D();
     
     
     
