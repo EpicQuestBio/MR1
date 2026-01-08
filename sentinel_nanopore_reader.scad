@@ -527,8 +527,8 @@ module Cartridge_Stack_3D() {
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
     
     // 1.5. INNER O-RING (Bottom Seal)
-    if(Show_O_Rings)
-        translate([0,0,stack_z + plate_thick_pp + 0.2+ Explode_Factor*1/6]) O_Ring_Inner();
+    // if(Show_O_Rings)
+    //      translate([0,0,stack_z + plate_thick_pp + 0.2+ //Explode_Factor*1/6]) O_Ring_Inner();
         
     // 2. Gasket 1 (Hex) - Bottom - 0.8mm
     up(plate_thick + Explode_Factor/6)
