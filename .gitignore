@@ -13,6 +13,11 @@ fp-info-cache
 # Backups
 *-backups
 _autosave-*
+\#*#
+.#*
+
+# Compressed files
+*.zip
 
 # Generated files
 *.net
