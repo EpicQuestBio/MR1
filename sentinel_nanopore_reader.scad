@@ -36,7 +36,8 @@ pogo_y = -15;  // Y position of the pogo pin row
 pogo_x_spacing = 5; // Spacing between pins
 
 /* [Active Cartridge Settings] */
-pcb_thick = 0.8;      // THIN RIGID FR4
+pcb_thick = 1.6;      // THICK, standard RIGID FR4
+pcb_thin = 0.8;      // THIN RIGID FR4
 carrier_thick = 2.6;  // Reduced height for thin PCB + components
 opamp_h = 1.75;       // SOIC-8 Height
 Show_Components = true;
@@ -149,15 +150,18 @@ module Channel_Gasket_Production() {
 module FR4_Interposer_Production() {
     color("ForestGreen") 
     difference() {
-        // Standard 1.6mm FR4 Disk
-        cylinder(h=0.8, d=hex_diam, $fn=6);
+        // Standard 0.8mm FR4 Disk
+        cylinder(h=pcb_thin, d=hex_diam, $fn=6);
         
         // Chip Aperture (Drill Hit)
         translate([0,0,-1]) cylinder(h=10, d=1.5); 
         
         // Fluid Ports (Drill Hits)
-        translate([0, 15, -1]) cylinder(h=10, d=3); // Inlet
-        translate([0, -15, -1]) cylinder(h=10, d=3); // Outlet
+      // Pass-throughs
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
         
         // Bolt Holes
         for(r=[0:60:360]) rotate([0,0,r]) 
@@ -526,6 +530,8 @@ module Cartridge_Stack_3D() {
     // 1. Base Plate (Hex) - 4mm
     color("PowderBlue", 0.5) linear_extrude(plate_thick) Plate_1_Base_Hex();
     
+    
+    
     // 1.5. INNER O-RING (Bottom Seal)
     // if(Show_O_Rings)
     //      translate([0,0,stack_z + plate_thick_pp + 0.2+ //Explode_Factor*1/6]) O_Ring_Inner();
@@ -534,13 +540,14 @@ module Cartridge_Stack_3D() {
     up(plate_thick + Explode_Factor/6)
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
 
+
     // 3. Carrier Frame (Hex) + PCB Rigid Active
     // Carrier height reduced to 2.6mm
     up(plate_thick + gasket_thick + Explode_Factor*3/6) {
-        color("PowderBlue", 0.5) linear_extrude(carrier_thick) Carrier_Frame_Hex();
-
+        //color("PowderBlue", 0.5) linear_extrude(carrier_thick) Carrier_Frame_Hex();
+       FR4_Interposer_Production();
         // PCB Sits inside, flush with bottom
-        translate([0,0,0]) PCB_Rigid_Active();
+        //translate([0,0,0]) PCB_Rigid_Active();
     }
 
     // 4. Gasket 2 (Hex) - Top - 0.8mm
