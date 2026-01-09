@@ -41,6 +41,7 @@ pcb_thin = 0.8;      // THIN RIGID FR4
 carrier_thick = 2.6;  // Reduced height for thin PCB + components
 opamp_h = 1.75;       // SOIC-8 Height
 Show_Components = true;
+carrier_diam = 20;    // Diameter of the inner round Nanopore Carrier
 
 /* [Internal Sealing & Potting] */
 oring_id = 10;
@@ -96,31 +97,58 @@ epsilon = 0.01;
 // MODULES: CARTRIDGE LAYERS (Round + Bottom Ports)
 // ==============================================================================
 
-// PCB 2D Projection
+// Vertical Cable Slot Definition
+module Cable_Slot() {
+    // Slot for JST cable passing down to the reader
+    // Located at "Front" (Y negative, angle 270)
+    translate([0, -26, 0])
+        cube([12, 5, 200], center=true);
+}
+
+// PCB 2D Projection (Updated for Hex Amplifier)
 module PCB_2D() {
     difference() {
-        square([pcb_w, pcb_l], center=true);
+        circle(d=hex_diam, $fn=6); // Hexagonal shape
 
-        // Mounting Holes
-        for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
-            translate([mx, my]) circle(d=3);
-        }
+        // Central Hole for Nanopore Carrier
+        circle(d=carrier_diam);
 
-        // Central Pass-through
-       // circle(d=40);
+        // Cable Slot (2D projection)
+        translate([0, -26]) square([12, 5], center=true);
 
         // Port Pass-throughs
         for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
             rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
         }
-
-                        // Cutouts for Pass-throughs
-                        // cylinder(h=10, d=40, center=true); // Center
-                        // for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_elec_cis, angle_elec_trans]) {
-                        //     rotate([0,0,a]) translate([port_radius, 0, 0]) cylinder(h=10, d=6, center=true);
-                        // }
-        PogoPinHoles();
     }
+
+    // Protruding Tabs (Into the hole)
+    // Union-ed back in for the profile
+    intersection() {
+        circle(d=carrier_diam);
+        union() {
+             for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0])
+                square([5, 4], center=true);
+        }
+    }
+}
+
+// 4. NANOPORE CARRIER (Round Inner PCB)
+module Nanopore_Carrier() {
+    color("ForestGreen")
+    difference() {
+        cylinder(h=pcb_thin, d=carrier_diam);
+
+        // Chip Aperture
+        translate([0,0,-1]) cylinder(h=10, d=1.5);
+
+        // Tab Slots (Cutouts for Amplifier Tabs)
+        // Assume tabs at +/- 90 (Left/Right relative to rotated view?) or 0/180
+        // We align with Amplifier tabs.
+        for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0, 0]) cube([4, 6, 10], center=true);
+    }
+    // Chip
+    color("Black") translate([0,0,pcb_thin]) cube([3,3,0.3], center=true);
 }
 // 2. CHANNEL GASKET (The Microfluidics)
 // ==============================================================================
@@ -173,51 +201,53 @@ module FR4_Interposer_Production() {
         color("Black") translate([0,0,pcb_thick]) cube([5,5,0.3], center=true);
 }
 
-// 2. THE RIGID ACTIVE PCB (Rev 19)
+// 2. THE RIGID ACTIVE PCB (Rev 20 - Hex Amplifier + Round Carrier)
 module PCB_Rigid_Active() {
-    // 0.8mm FR4 Substrate
-    pcb_w = 28; pcb_l = 38;
+    // 0.8mm FR4 Substrate (Hexagonal)
 
     difference() {
-        // 0.8mm FR4 Substrate (Green)
         color("ForestGreen")
-        translate([-pcb_w/2, -pcb_l/2, 0]) cube([pcb_w, pcb_l, pcb_thick]);
+        cylinder(h=pcb_thin, d=hex_diam, $fn=6);
 
-        // Chip Void
-        cylinder(h=10, d=10, center=true);
+        // Central Hole for Carrier
+        translate([0,0,-1]) cylinder(h=10, d=carrier_diam);
+
+        // Cable Slot
+        Cable_Slot();
+    }
+
+    // Protruding Tabs (Into the hole)
+    // Modeled as intersection with the hole area, attached to main body
+    color("ForestGreen")
+    intersection() {
+        cylinder(h=pcb_thin, d=carrier_diam);
+        union() {
+             for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0, pcb_thin/2])
+                cube([5, 4, pcb_thin], center=true);
+        }
     }
 
     // --- ACTIVE COMPONENTS (Top Side) ---
     if(Show_Components) {
-        // LMP7721 OpAmp (The Critical Component)
-        // Placed as close to the void as possible to minimize trace length
-        translate([8, 6, pcb_thick]) {
+        // LMP7721 OpAmp
+        translate([15, 5, pcb_thin]) {
             color("#333333") cube([5, 6, opamp_h]); // Body
-            color("Silver") translate([-1, 0.5, 0]) cube([1, 5, 0.5]); // Pins
-            color("Silver") translate([5, 0.5, 0]) cube([1, 5, 0.5]); // Pins
         }
 
-        // Feedback Resistor (100M/1G)
-        translate([8, -2, pcb_thick]) color("Blue") cube([3.2, 1.6, 0.6]);
-
-        // Decoupling Caps (0.1uF)
-        translate([12, 14, pcb_thick]) color("Brown") cube([1.6, 0.8, 0.6]);
+        // JST Connector (Surface Mount, Right Angle)
+        // Near the Cable Slot (Y=-26)
+        translate([0, -19, pcb_thin]) {
+            color("White") cube([12, 6, 5], center=true); // Body
+             color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
+        }
     }
 
     // --- ELECTRODES (Silver Ribbons) ---
-    // Single-Sided PCBA: 4 Solder Pads on Bottom
+    // On the Tabs
     color("Silver") {
-        // Trans Loop Pads (Bottom Fluid Contact)
-        translate([-3, -10, -0.01]) cube([4, 4, 0.1], center=true); // Trans Drive
-        translate([3, -10, -0.01]) cube([4, 4, 0.1], center=true);  // Trans Sense
-
-        // Cis Chamber Pads (Top Fluid Contact via PCB Holes?)
-        translate([-3, 10, -0.01]) cube([4, 4, 0.1], center=true);  // Cis Drive
-        translate([3, 10, -0.01]) cube([4, 4, 0.1], center=true);   // Cis Sense
+        for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2 - 1, 0, pcb_thin])
+             cube([3, 2, 0.2], center=true);
     }
-
-    // Chip Mockup
-    color("Silver") translate([0,0,pcb_thick/2]) cube([5,5,0.5], center=true);
 }
 
 // 1. THE DISPOSABLE INTERPOSER CARD
@@ -308,6 +338,9 @@ module Plate_1_Base_Hex() {
 module Plate_1_Base_Hex_3D() {
     difference() {
         linear_extrude(plate_thick) circle(d=hex_diam, $fn=6);
+
+        // Cable Slot Pass-through
+        Cable_Slot();
 
         // Pass-throughs (Top Fluid) - Simple Cylinders
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
@@ -428,7 +461,9 @@ module Gasket_Low_Dead_Volume(type="bottom") {
 
     difference() {
         circle(d=hex_diam, $fn=6);
-      //  BoltHoles();
+
+        // Cable Slot
+        Cable_Slot();
 
         // Pass-throughs
         for(a = pass_angles) {
@@ -448,20 +483,24 @@ module Gasket_Low_Dead_Volume(type="bottom") {
                  translate([4, -10, 0]) circle(d=3);
              }
         } else {
-            // Top: Keep simple central access for Cis
+            // Top: Large cutout for Amplifier Components + JST Connector
+            // The gasket frames the PCB components.
+            // Main Central Opening (Hex-ish or Large Circle)
             hull() {
-                 translate([0, -8, 0]) circle(d=8);
-                 translate([0, 8, 0]) circle(d=8);
+                 circle(d=carrier_diam + 4); // Clear the carrier/pore area
+                 translate([0, 10, 0]) circle(d=10); // Clear OpAmp area
+                 translate([0, -18, 0]) circle(d=15); // Clear JST Connector area
             }
-            // Connection from Inlet Port to Slot
+
+            // Connection from Inlet Port to Central Slot
             hull() {
                  rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=4);
-                 translate([0, 8, 0]) circle(d=4);
+                 translate([5, 8, 0]) circle(d=4);
             }
             // Connection from Slot to Outlet Port
             hull() {
                  rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=4);
-                 translate([0, 8, 0]) circle(d=4);
+                 translate([-5, 8, 0]) circle(d=4);
             }
         }
     }
@@ -504,9 +543,20 @@ module Plate_3_Top_Hex() {
         circle(d=hex_diam, $fn=6);
         //BoltHoles();
 
+        // Cable Slot (Clearance for connector body)
+        Cable_Slot();
+
         // Sample Well / Pipette Access
         if (!Sealed_Top_Mode) {
              circle(d=6);
+        }
+
+        // LARGE COMPONENT CUTOUT (Frame Mode)
+        // Cutout for Amplifier components and JST connector
+        hull() {
+             circle(d=carrier_diam + 2);
+             translate([0, 10, 0]) circle(d=10); // OpAmp
+             translate([0, -18, 0]) circle(d=14); // JST
         }
 
         // Vertical port holes.
@@ -572,13 +622,13 @@ module Cartridge_Stack_3D() {
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
 
 
-    // 3. Carrier Frame (Hex) + PCB Rigid Active
-    // Carrier height reduced to 2.6mm
+    // 3. Nanopore Carrier + Amplifier Board
     up(plate_thick + gasket_thick + Explode_Factor*3/6) {
-        //color("PowderBlue", 0.5) linear_extrude(carrier_thick) Carrier_Frame_Hex();
-       FR4_Interposer_Production();
-        // PCB Sits inside, flush with bottom
-        //translate([0,0,0]) PCB_Rigid_Active();
+        // Round Nanopore Carrier (Center)
+        Nanopore_Carrier();
+
+        // Hexagonal Amplifier Board (Surrounding)
+        PCB_Rigid_Active();
     }
 
     // 4. Gasket 2 (Hex) - Top - 0.8mm
@@ -792,15 +842,18 @@ module Housing_Pump_Case() {
         }
 
         // Connectivity (Back Wall)
-        // DIN 5 MIDI (~16mm hole?) + Barrel Jack (8mm)
         #attach(BACK) {
-            // DIN 5
-            tag("remove") translate([-20, 0, pump_h/2]) rotate([90,0,0])
+            // DIN 5 MIDI (Panel Mount)
+            tag("remove") translate([-25, 0, pump_h/2]) rotate([90,0,0])
             cyl(h=wall*3, d=16, anchor=CENTER) ;
 
-            // Barrel Jack
-            tag("remove") translate([20, 0, pump_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=8, anchor=CENTER) ;
+            // USB-C (Panel Mount Cutout)
+            tag("remove") translate([0, 0, pump_h/2]) rotate([90,0,0])
+            cuboid([12, 6, wall*3], rounding=2, edges="Z", anchor=CENTER);
+
+            // Barrel Jack (Panel Mount)
+            tag("remove") translate([25, 0, pump_h/2]) rotate([90,0,0])
+            cyl(h=wall*3, d=12, anchor=CENTER) ;
         }
 
         // Lid Mounts
@@ -872,12 +925,13 @@ module Housing_Case_Reader() {
 
         // Connectivity (Back Wall)
         attach(BACK) {
-            // DIN 5
+            // DIN 5 MIDI (Panel Mount)
             tag("remove") translate([-20, 0, reader_h/2]) rotate([90,0,0])
             cyl(h=wall*3, d=16, anchor=CENTER) ;
-            // Barrel Jack
+
+            // USB-C (Panel Mount Cutout)
             tag("remove") translate([20, 0, reader_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=8, anchor=CENTER) ;
+            cuboid([12, 6, wall*3], rounding=2, edges="Z", anchor=CENTER);
         }
 
          // Lid Mounting Posts
@@ -901,6 +955,9 @@ module Housing_Lid_Reader() {
         // 1. Shell with Cuts
         diff("remove")
         cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
+
+            // Cable Slot through the Lid
+            tag("remove") Cable_Slot();
 
             // Internal Bucket (Now starts lower to leave ceiling room)
             tag("remove") position(TOP) down(ceiling_thick)
