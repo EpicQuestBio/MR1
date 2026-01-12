@@ -240,6 +240,38 @@ module PCB_Rigid_Active() {
             color("White") cube([12, 6, 5], center=true); // Body
              color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
         }
+          // --- DRY ZONE COMPONENTS (Power Filtering) ---
+        
+        // LMP7721 OpAmp (Center of Dry Zone)
+        translate([5, -20, pcb_thick]) {
+            color("#333333") cube([5, 6, opamp_h]); 
+            color("Silver") translate([-1, 0.5, 0]) cube([1, 5, 0.5]); 
+            color("Silver") translate([5, 0.5, 0]) cube([1, 5, 0.5]); 
+        }
+
+        // --- THE POWER FILTERS ---
+        // Located between the Connector and the OpAmp
+        
+        // V+ Rail Filtering
+        translate([10, -25, pcb_thick]) {
+            color("Yellow") cube([3.2, 1.6, 1.5]); // 10uF Tantalum (Bulk)
+            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]); // 0.1uF Ceramic (Bypass)
+        }
+
+        // V- Rail Filtering
+        translate([0, -25, pcb_thick]) {
+            color("Yellow") cube([3.2, 1.6, 1.5]); // 10uF Tantalum (Bulk)
+            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]); // 0.1uF Ceramic (Bypass)
+        }
+
+        // Feedback Network
+        translate([5, -27, pcb_thick]) color("Blue") cube([3.2, 1.6, 0.6]); // 1G Resistor
+        
+        // ESD Protection (Spark Gap)
+        translate([-6, -15, pcb_thick]) color("Gold") cube([2,2,0.05]); 
+    
+    
+        
     }
 
     // --- ELECTRODES (Silver Ribbons) ---
