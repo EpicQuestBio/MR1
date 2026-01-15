@@ -18,14 +18,32 @@ Cross_Section = true;
 Torque_Stiffness = 1.2;
 Torque_Teeth_Count = 24;
 tooth_height = 40;
+cap_thread_pitch = 4; // Robust thread pitch for 90mm cap
 
 /* [Sealed Top Option] */
 Sealed_Top_Mode = false; // [true, false]
 
+/* [Stack Dimensions & Modularity] */
+// Define component thicknesses for dynamic calculation
+pp_h = 3;           // Bottom Pusher Plate (TPU/Seal)
+plate_thick = 4;    // Plate 1 (Base) & Plate 3 (Top)
+gasket_thick = 0.8; // Gaskets
+carrier_thick = 2.6;// PCB + Carrier assembly
+puck_h = 6;         // Pressure Puck height
+
+// Calculate Total Stack Height (Active Components)
+// Pusher + Plate1 + Gasket + Carrier + Gasket + Plate3
+total_stack_height = pp_h + plate_thick + gasket_thick + carrier_thick + gasket_thick + plate_thick;
+
+// Neck Height: Dynamic to fit stack
+// Stack sits on Lid Surface. Neck surrounds it.
+// Neck needs to be tall enough to contain the stack + thread engagement.
+// We add clearance.
+neck_clearance = 10;
+neck_h = total_stack_height + neck_clearance;
+
 /* [Dimensions - Round Cartridge] */
 plate_diam = 60;
-plate_thick = 4;
-gasket_thick = 0.8;
 screw_bcd = 50;
 screw_hole = 3.2; //M3
 m3_insert_hole = 4.2;
@@ -39,7 +57,6 @@ pogo_x_spacing = 5; // Spacing between pins
 /* [Active Cartridge Settings] */
 pcb_thick = 1.6;      // THICK, standard RIGID FR4
 pcb_thin = 0.8;      // THIN RIGID FR4
-carrier_thick = 2.6;  // Reduced height for thin PCB + components
 opamp_h = 1.75;       // SOIC-8 Height
 Show_Components = true;
 carrier_diam = 20;    // Diameter of the inner round Nanopore Carrier
@@ -52,6 +69,9 @@ Show_O_Rings = true;
 
 // Port Locations (Radius from center)
 port_radius = 20; // Expanded for 1/4" NPT fittings
+npt_thread_pitch = 1.411; // 1/4" NPT Pitch (approx 18 TPI)
+npt_thread_d = 13.7;      // 1/4" NPT Major Diameter
+
 angle_fluid_in_bot = -30;
 angle_fluid_in_top = 30;
 angle_fluid_out_bot = 150;
@@ -80,7 +100,6 @@ pump_h = 70;
 
 neck_od = 90;
 neck_id = 61;
-neck_h = 45;
 wall = 4;
 
 // Internal Component Placeholders

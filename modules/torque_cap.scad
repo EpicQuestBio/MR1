@@ -2,10 +2,15 @@
 // MODULE: TORQUE-LOCK CAP (Hollow for Pipette)
 // ==============================================================================
 module Torque_Cap_Inner(access_hole=true) {
+    // Dynamic Thread Length: Needs to cover enough neck to reach stability
+    // neck_h is defined relative to stack.
+    // Cap height should roughly match neck_clearance + engagement.
+    cap_h = 30; // Tall enough to handle threads
+
     // PETG Ring with Sine Teeth
     color("Silver")
     diff("remove")
-    cyl(h=20, d=neck_od + 4, anchor=BOTTOM) {
+    cyl(h=cap_h, d=neck_od + 4, anchor=BOTTOM) {
         // Ratchet Teeth
         for(r=[0:(360/Torque_Teeth_Count):360]) {
             // Position teeth vertically at the perimeter
@@ -15,12 +20,13 @@ module Torque_Cap_Inner(access_hole=true) {
         // Threads
         tag("remove")
         position(BOTTOM) down(1)
-        threaded_rod(d=neck_od+1, l=22, internal=true, pitch=20, anchor=BOTTOM);
+        threaded_rod(d=neck_od+1, l=cap_h+2, internal=true, pitch=cap_thread_pitch, anchor=BOTTOM);
+
         if(access_hole) {
            // Pipette Access Hole
            tag("remove")
            position(BOTTOM) down(1)
-           cyl(h=30, d=22, anchor=BOTTOM);
+           cyl(h=cap_h+10, d=22, anchor=BOTTOM);
         }
     }
 }

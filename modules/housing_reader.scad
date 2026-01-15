@@ -68,11 +68,10 @@ module Housing_Lid_Reader() {
             {
                 cyl(h=10, d1=base_w-10, d2=neck_od, anchor=BOTTOM)
                 attach(TOP)
-                threaded_rod(d=neck_od, l=neck_h, pitch=20, anchor=BOTTOM);
+                threaded_rod(d=neck_od, l=neck_h, pitch=cap_thread_pitch, anchor=BOTTOM);
 
                 // Neck Bore (Hexagonal Socket)
                 // Starts at TOP (Lid Surface) and goes UP to clear the neck, preserving the shelf below.
-                // Replaces cyl(d=neck_id) with hex prism(d=hex_diam + clearance)
                 tag("remove")
                 position(TOP)
                 cyl(h=neck_h+20, d=hex_diam + 1.0, $fn=6, anchor=BOTTOM); // +1mm clearance
@@ -118,8 +117,9 @@ module Housing_Lid_Reader() {
                      translate([t1_x, t1_y, port_z]) sphere(d=cd);
                      translate([t1_x, t1_y, 0.1]) cylinder(h=0.1, d=cd); // Up to surface
                  }
-                 // Side Port Entry (Counterbore)
-                 translate([side_x, -30, port_z]) rotate([0,90,0]) cylinder(h=10, d=8, anchor=BOTTOM);
+                 // Side Port Entry (1/4" NPT)
+                 translate([side_x, -30, port_z]) rotate([0,90,0])
+                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
                  // Path 2: Side Y=-10 -> In Bot (t2)
@@ -144,7 +144,8 @@ module Housing_Lid_Reader() {
                      translate([t2_x, t2_y, port_z]) sphere(d=cd);
                      translate([t2_x, t2_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x, -10, port_z]) rotate([0,90,0]) cylinder(h=10, d=8, anchor=BOTTOM);
+                 translate([side_x, -10, port_z]) rotate([0,90,0])
+                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
                  // Path 3: Side Y=10 -> In Top (t3)
@@ -169,7 +170,8 @@ module Housing_Lid_Reader() {
                      translate([t3_x, t3_y, port_z]) sphere(d=cd);
                      translate([t3_x, t3_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x, 10, port_z]) rotate([0,90,0]) cylinder(h=10, d=8, anchor=BOTTOM);
+                 translate([side_x, 10, port_z]) rotate([0,90,0])
+                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
                  // Path 4: Side Y=30 -> Out Bot (t4)
@@ -186,7 +188,8 @@ module Housing_Lid_Reader() {
                      translate([t4_x, t4_y, port_z]) sphere(d=cd);
                      translate([t4_x, t4_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x, 30, port_z]) rotate([0,90,0]) cylinder(h=10, d=8, anchor=BOTTOM);
+                 translate([side_x, 30, port_z]) rotate([0,90,0])
+                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
             }
 
             // Electrode Ports (Still pass-through?)
@@ -239,10 +242,15 @@ module Reader_Module_Assembly() {
     translate([0,0,reader_h + Explode_Factor*0.4]) Housing_Lid_Reader();
 
     // Stack & Cap on top of Lid
-    translate([0,0, reader_h + 15 + Explode_Factor]) { // 15 is lid thick
+    // Stack sits directly on the TOP surface of the Lid (which is at z = reader_h)
+    translate([0,0, reader_h + Explode_Factor]) {
         Cartridge_Stack_3D();
          // Torque Cap (Inner + Outer)
-        translate([0,0, neck_h - 15 + Explode_Factor*1.5]) {
+         // Cap screws onto the neck. Neck starts at Lid surface.
+         // Cap rests on top of the Neck/Stack.
+         // Position Cap so it "floats" above for Explode view or engaged for Assembly.
+         // Neck Height = neck_h. Cap sits near the top.
+        translate([0,0, neck_h - 10 + Explode_Factor*1.5]) { // Arbitrary engaging position
              Torque_Cap_Inner();
              translate([0,0,-2]) Torque_Cap_Outer();
         }

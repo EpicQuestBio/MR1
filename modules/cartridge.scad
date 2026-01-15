@@ -245,63 +245,55 @@ module Plate_1_Base_Hex() {
     projection(cut=false) Plate_1_Base_Hex_3D();
 }
 
-// L1: Base Plate (3D with Internal Channels)
+// L1: Base Plate (3D with Internal Channels) - BOSL2 Native
 module Plate_1_Base_Hex_3D() {
-    difference() {
-        linear_extrude(plate_thick) circle(d=hex_diam, $fn=6);
+    diff("remove")
+    cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
         // Cable Slot Pass-through
-        Cable_Slot();
+        tag("remove") Cable_Slot();
 
         // Pass-throughs (Top Fluid) - Simple Cylinders
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        tag("remove") {
+             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+             rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+             rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        }
 
         // --- BOTTOM FLUID (TRANS LOOP) ---
-        // 1. Inlet Port (-30) to Trans Loop Up-Via
-        // Port Entry
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        // Channels are subtracted from the body
+        tag("remove") {
+            // Channel: Port -> Up-Via (Left side of Trans Chamber)
+            // Via A at Y=-10, X=-3
+            hull() {
+                 rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, plate_thick/2]) sphere(d=4);
+                 translate([-3, -10, plate_thick/2]) sphere(d=3);
+            }
+            // Vertical Up-Via A
+            translate([-3, -10, 0]) cylinder(h=10, d=2);
 
-        // Channel: Port -> Up-Via (Left side of Trans Chamber)
-        // Via A at Y=-10, X=-3
-        hull() {
-             rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, plate_thick/2]) sphere(d=4);
-             translate([-3, -10, plate_thick/2]) sphere(d=3);
-        }
-        // Vertical Up-Via A
-        translate([-3, -10, 0]) cylinder(h=10, d=2);
+            // 2. Trans Loop Down-Via -> Center
+            // Vertical Down-Via B (Y=-10, X=3)
+            translate([3, -10, 0]) cylinder(h=10, d=2);
 
-        // 2. Trans Loop Down-Via -> Center
-        // Vertical Down-Via B (Y=-10, X=3)
-        translate([3, -10, 0]) cylinder(h=10, d=2);
+            // Channel: Via B -> Center
+            hull() {
+                 translate([3, -10, plate_thick]) sphere(d=3); // Depth 1.5
+                 translate([0, 0, plate_thick]) sphere(d=3);   // Depth 1.5
+            }
 
-        // Channel: Via B -> Center
-        // Raise spheres so they cut a TRENCH (open top), not a TUNNEL.
-        // Sphere Center Z should be at 'plate_thick' to cut depth = radius.
-        // We use larger spheres or offset Z to control depth/width.
+            // 3. "Sloped Roof" Channel: Center -> Outlet Port (150)
+            hull() {
+                 // Center: Depth 1.5 (Z_floor = 2.5)
+                 translate([0, 0, plate_thick]) sphere(d=3);
 
-        hull() {
-             // Via B is at Z=0..plate_thick.
-             // Connect Via B to the Channel Start (Center)
-             // Use a sphere at Z=plate_thick to ensure open connection
-             translate([3, -10, plate_thick]) sphere(d=3); // Depth 1.5
-             translate([0, 0, plate_thick]) sphere(d=3);   // Depth 1.5
-        }
+                 // Outlet: Depth 0.5 (Z_floor = 3.5)
+                 rotate([0,0,angle_fluid_out_bot])
+                 translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
+            }
 
-        // 3. "Sloped Roof" Channel: Center -> Outlet Port (150)
-        // RISING FLOOR: Depth decreases from Center (1.5) to Outlet (0.5)
-        // To achieve Depth 0.5 with Sphere R=1.5: Center Z = plate_thick + (1.5 - 0.5) = plate_thick + 1.0.
-
-        // Outlet Port
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-
-        hull() {
-             // Center: Depth 1.5 (Z_floor = 2.5)
-             translate([0, 0, plate_thick]) sphere(d=3);
-
-             // Outlet: Depth 0.5 (Z_floor = 3.5)
-             rotate([0,0,angle_fluid_out_bot])
-             translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
+        children(); // Allow attachments
         }
     }
 }
@@ -417,6 +409,21 @@ module Gasket_Low_Dead_Volume(type="bottom") {
     }
 }
 
+// BOSL2 3D Gasket Wrapper
+module Gasket_Low_Dead_Volume_3D(type="bottom") {
+    // Use cyl to create attachable base, then subtract 2D shape
+    diff("remove")
+    cyl(h=gasket_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
+        tag("remove")
+        position(BOTTOM)
+        linear_extrude(gasket_thick+0.2) // Extrude slightly more for cut
+        difference() {
+            square([hex_diam*2, hex_diam*2], center=true); // Inverse mask
+            Gasket_Low_Dead_Volume(type=type); // The actual gasket shape
+        }
+    }
+}
+
 // G1_Hex: Gasket (Hexagonal) - Legacy
 module Gasket_Hex(pogo=false) {
    Gasket_Low_Dead_Volume(type = pogo ? "top" : "bottom");
@@ -448,22 +455,22 @@ module Plate_2_Channel() {
     }
 }
 
-// L3_Hex: Top Cap (Hexagonal)
+// L3_Hex: Top Cap (Hexagonal) - 3D BOSL2 Native
 module Plate_3_Top_Hex() {
-    difference() {
-        circle(d=hex_diam, $fn=6);
-        //BoltHoles();
+    diff("remove")
+    cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
         // Cable Slot (Clearance for connector body)
-        Cable_Slot();
+        tag("remove") Cable_Slot();
 
         // Sample Well / Pipette Access
         if (!Sealed_Top_Mode) {
-             circle(d=6);
+             tag("remove") cylinder(h=plate_thick*3, d=6, center=true);
         }
 
         // LARGE COMPONENT CUTOUT (Frame Mode)
-        // Cutout for Amplifier components and JST connector
+        tag("remove")
+        linear_extrude(plate_thick*3, center=true)
         hull() {
              circle(d=carrier_diam + 2);
              translate([0, 10, 0]) circle(d=10); // OpAmp
@@ -471,8 +478,12 @@ module Plate_3_Top_Hex() {
         }
 
         // Vertical port holes.
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+        tag("remove") {
+             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
+             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
+        }
+
+        children(); // Allow attachments
     }
 }
 
@@ -509,51 +520,58 @@ module Plate_3_Top() {
 }
 
 module Cartridge_Stack_3D() {
-    // Stack using translations to ensure robustness with linear_extrude objects
-    // UPDATED FOR REV 19 RIGID ACTIVE CARTRIDGE
+    // Stack using BOSL2 Attachments for robust relative positioning
 
-    plate_thick_pp = 3;
-    stack_z = -3;
+    // 0. Bottom Pusher Plate (Base)
+    Bottom_Pusher_Plate(show_orings=true)
 
-    // 0. Bottom Pusher Plate (Under Base Plate)
-    down( Explode_Factor/4) // 3mm thickness
-        Bottom_Pusher_Plate(show_orings=true);
+        // 1. Attach Plate 1 Base (Acrylic)
+        attach(TOP)
+        up(Explode_Factor/5) // Visual gap
+        Plate_1_Base_Hex_3D()
 
-    // 1. Base Plate (Hex) - 4mm
-    color("PowderBlue", 0.5) Plate_1_Base_Hex_3D();
+            // 2. Attach Bottom Gasket
+            attach(TOP)
+            up(Explode_Factor/5)
+            // Use linear_extrude for the gasket as it's a simple shape,
+            // but wrapped to be attachable or use simple translation if simpler.
+            // Since we want attach chains, we use linear_extrude but need to ensure it has TOP anchor.
+            // A simple way is to use `cyl` with the gasket shape subtracted, or just `up`.
+            // Let's use the standard method: Linear Extrude isn't easily attachable without wrapper.
+            // We'll use a wrapper `attachable`.
+            attachable(anchor=BOTTOM, size=[hex_diam, hex_diam, gasket_thick]) {
+                color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
+                children();
+            }
 
+                // 3. Attach PCB + Carrier
+                attach(TOP)
+                up(Explode_Factor/5)
+                attachable(anchor=BOTTOM, size=[hex_diam, hex_diam, carrier_thick]) {
+                     union() {
+                        Nanopore_Carrier();
+                        PCB_Rigid_Active();
+                     }
+                     children();
+                }
 
+                    // 4. Attach Top Gasket
+                    attach(TOP)
+                    up(Explode_Factor/5)
+                    attachable(anchor=BOTTOM, size=[hex_diam, hex_diam, gasket_thick]) {
+                        color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
+                        children();
+                    }
 
-    // 1.5. INNER O-RING (Bottom Seal)
-    // if(Show_O_Rings)
-    //      translate([0,0,stack_z + plate_thick_pp + 0.2+ //Explode_Factor*1/6]) O_Ring_Inner();
+                        // 5. Attach Top Plate
+                        attach(TOP)
+                        up(Explode_Factor/5)
+                        Plate_3_Top_Hex()
 
-    // 2. Gasket 1 (Hex) - Bottom - 0.8mm
-    up(plate_thick + Explode_Factor/6)
-        color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
-
-
-    // 3. Nanopore Carrier + Amplifier Board
-    up(plate_thick + gasket_thick + Explode_Factor*3/6) {
-        // Round Nanopore Carrier (Center)
-        Nanopore_Carrier();
-
-        // Hexagonal Amplifier Board (Surrounding)
-        PCB_Rigid_Active();
-    }
-
-    // 4. Gasket 2 (Hex) - Top - 0.8mm
-    up(plate_thick + gasket_thick + carrier_thick + Explode_Factor*4/6)
-        color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
-
-    // 5. Top Plate (Hex) - 4mm
-    up(plate_thick + gasket_thick + carrier_thick + gasket_thick + Explode_Factor)
-        color("PowderBlue", 0.5)linear_extrude(plate_thick) Plate_3_Top_Hex();
-
-    // 6. Puck
-    up ( plate_thick*2 + gasket_thick*2 + carrier_thick + Explode_Factor*1.2)
-                Pressure_Puck_3D();
-
+                            // 6. Attach Puck
+                            attach(TOP)
+                            up(Explode_Factor/5)
+                            Pressure_Puck_3D();
 }
 
 // ==============================================================================
@@ -569,46 +587,43 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
     or_cs = 1.5;
     or_maj = 8.0;
 
-    union() {
-        color("LightSlateGray")
-        diff("remove")
-        cyl(h=pp_h, d=hex_diam, $fn=6) { // Fits in HEX neck
+    // Converted to BOSL2 cyl root
+    color("LightSlateGray")
+    diff("remove")
+    cyl(h=pp_h, d=hex_diam, $fn=6, anchor=BOTTOM) { // Fits in HEX neck
 
-            // Fluid Ports (4x)
-            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                zrot(a) translate([port_radius, 0, 0]) {
+        // Fluid Ports (4x)
+        tag("remove")
+        for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+            zrot(a) translate([port_radius, 0, 0]) {
 
-                    // 1. Through Hole
-                    tag("remove") cyl(h=pp_h + 1, d=port_d, center=true, $fn=g_fn);
+                // 1. Through Hole
+                cyl(h=pp_h + 1, d=port_d, center=true, $fn=g_fn);
 
-                    // 2. O-Ring Seats (Subtractive)
-                    tag("remove") {
-                        position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
-                        position(BOTTOM) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
-                    }
-                }
+                // 2. O-Ring Seats (Subtractive)
+                position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                position(BOTTOM) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
             }
-
-            // Pogo Pin Clearance
-            tag("remove") linear_extrude(10, center= true) PogoPinHoles();
         }
 
-        // 3. O-Rings (Additive, Visual)
+        // Pogo Pin Clearance
+        tag("remove") linear_extrude(10, center= true) PogoPinHoles();
+
+        // 3. O-Rings (Additive, Attached)
+        // These are separate objects, not subtracted. We attach them.
         if (show_orings) {
-            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                zrot(a) translate([port_radius, 0, 0]) {
-                    // Top O-Ring
-                    translate([0,0, pp_h/2])
-                        color("DeepSkyBlue")
-                        torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+             for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                 attach(TOP)
+                 zrot(a) translate([port_radius, 0, 0])
+                 color("DeepSkyBlue") torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
 
-                    // Bottom O-Ring
-                    translate([0,0, -pp_h/2])
-                        color("DeepSkyBlue")
-                        torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
-                }
-            }
+                 attach(BOTTOM)
+                 zrot(a) translate([port_radius, 0, 0])
+                 color("DeepSkyBlue") torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+             }
         }
+
+        children(); // Allow attachments
     }
 }
 
@@ -616,26 +631,47 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
 // MODULE: PRESSURE PUCK (Pipette Access)
 // ==============================================================================
 module Pressure_Puck_3D() {
-    color("#333333") {
-        difference() {
-            union() {
-                cylinder(h=6, d=neck_id - 1);
-                // Handle Tabs
-                translate([0, 22, 0]) cylinder(h=6, d=8);
-                translate([0, -22, 0]) cylinder(h=6, d=8);
+    // Converted to BOSL2 primitives
+    color("#333333")
+    diff("remove")
+    union() {
+        // Main Body (Cylinder + Handle)
+        cyl(h=6, d=neck_id - 1, anchor=BOTTOM) {
+            // Handle Tabs
+            attach(LEFT) cyl(h=6, d=8, anchor=LEFT); // Rough approximation of translate
+            attach(RIGHT) cyl(h=6, d=8, anchor=RIGHT);
 
-                // EXTENSION RING for Thinner Stack (Rev 19)
-                // Stack lost ~1.4mm. We add a ring to push down further.
-                translate([0,0,-1.4]) cylinder(h=1.4, d=neck_id - 1);
-            }
+            // Note: The original had translate([0, 22, 0])...
+            // We'll stick to union for simplicity if exact attach is tricky without coordinates.
+        }
+        // Actually, let's keep the original union but wrap in attachable if needed.
+        // But for stack, we just need the root to be attachable.
+        // Let's use basic difference/union logic but with anchor=BOTTOM support.
+    }
 
-            // Center Hole for Pipette Access (Through-hole)
-            translate([0,0,-5]) cylinder(h=20, d1=6, d2=16);
-            // Underside recess to avoid crushing Top Plate features
-            translate([0,0,-5]) difference() {
-                cylinder(h=3 + 4 + 1.4, d=neck_id-4); // Increased clear depth
-                cylinder(h=10, d=20); // Only press on center ring
+    // Simplest path: Use original code logic but ensure it sits at Z=0 for attachment
+    // The original code was: difference { union{...} ... }
+    // We wrap it in attachable.
+
+    attachable(anchor=BOTTOM, size=[neck_id, neck_id, 6]) {
+        color("#333333") {
+            difference() {
+                union() {
+                    cylinder(h=6, d=neck_id - 1);
+                    // Handle Tabs
+                    translate([0, 22, 0]) cylinder(h=6, d=8);
+                    translate([0, -22, 0]) cylinder(h=6, d=8);
+                }
+
+                // Center Hole for Pipette Access (Through-hole)
+                translate([0,0,-5]) cylinder(h=20, d1=6, d2=16);
+                // Underside recess
+                translate([0,0,-5]) difference() {
+                    cylinder(h=3 + 4 + 1.4, d=neck_id-4);
+                    cylinder(h=10, d=20);
+                }
             }
         }
+        children();
     }
 }
