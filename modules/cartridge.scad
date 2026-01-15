@@ -411,15 +411,19 @@ module Gasket_Low_Dead_Volume(type="bottom") {
 
 // BOSL2 3D Gasket Wrapper
 module Gasket_Low_Dead_Volume_3D(type="bottom") {
-    // Use cyl to create attachable base, then subtract 2D shape
-    diff("remove")
-    cyl(h=gasket_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
-        tag("remove")
-        position(BOTTOM)
-        linear_extrude(gasket_thick+0.2) // Extrude slightly more for cut
-        difference() {
-            square([hex_diam*2, hex_diam*2], center=true); // Inverse mask
-            Gasket_Low_Dead_Volume(type=type); // The actual gasket shape
+    // Wrapper using attachable directly
+    // This separates the attachment logic from the geometry generation (diff)
+    // and prevents children() from being processed multiple times by diff().
+    attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick, $fn=6) {
+        diff("remove")
+        cyl(h=gasket_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
+            tag("remove")
+            position(BOTTOM)
+            linear_extrude(gasket_thick+0.2) // Extrude slightly more for cut
+            difference() {
+                square([hex_diam*2, hex_diam*2], center=true); // Inverse mask
+                Gasket_Low_Dead_Volume(type=type); // The actual gasket shape
+            }
         }
         children();
     }
@@ -427,19 +431,15 @@ module Gasket_Low_Dead_Volume_3D(type="bottom") {
 
 // Wrapper for PCB Layer to support BOSL2 attachments
 module PCB_Active_Stack_3D() {
-    // Structural Spacer (Phantom Cylinder)
-    // Acts as the attachment parent with height = carrier_thick (2.6mm)
-    // We use diff("remove") to avoid rendering the solid block,
-    // but the geometry exists for attachment context.
-    diff("remove")
-    cyl(h=carrier_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
-
-        // The Actual PCB Components (Visible)
-        tag("keep") {
+    // Structural Spacer using attachable directly
+    // This defines the attachment geometry (Hex Cylinder, h=carrier_thick)
+    // but only renders the inner children (PCB components).
+    // This prevents a solid block from obscuring the PCB.
+    attachable(anchor=BOTTOM, d=hex_diam, l=carrier_thick, $fn=6) {
+        union() {
             Nanopore_Carrier();
             PCB_Rigid_Active();
         }
-
         children();
     }
 }
