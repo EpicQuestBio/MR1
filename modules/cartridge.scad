@@ -510,50 +510,46 @@ module Plate_3_Top() {
 
 module Cartridge_Stack_3D() {
     // Stack using translations to ensure robustness with linear_extrude objects
-    // UPDATED FOR REV 19 RIGID ACTIVE CARTRIDGE
+    // Updated to use dynamic constants and strict Z-stacking
 
-    plate_thick_pp = 3;
-    stack_z = -3;
-
-    // 0. Bottom Pusher Plate (Under Base Plate)
-    down( Explode_Factor/4) // 3mm thickness
+    // 0. Bottom Pusher Plate (TPU Seal) - Base
+    // Z = 0
+    translate([0,0,0])
         Bottom_Pusher_Plate(show_orings=true);
 
-    // 1. Base Plate (Hex) - 4mm
-    color("PowderBlue", 0.5) Plate_1_Base_Hex_3D();
+    // 1. Base Plate (Hex) - PP/Acrylic
+    // Z = pp_h
+    translate([0,0, pp_h + Explode_Factor/5])
+        color("PowderBlue", 0.5) Plate_1_Base_Hex_3D();
 
-
-
-    // 1.5. INNER O-RING (Bottom Seal)
-    // if(Show_O_Rings)
-    //      translate([0,0,stack_z + plate_thick_pp + 0.2+ //Explode_Factor*1/6]) O_Ring_Inner();
-
-    // 2. Gasket 1 (Hex) - Bottom - 0.8mm
-    up(plate_thick + Explode_Factor/6)
+    // 2. Gasket 1 (Hex) - Bottom
+    // Z = pp_h + plate_thick
+    translate([0,0, pp_h + plate_thick + Explode_Factor*2/5])
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
 
-
     // 3. Nanopore Carrier + Amplifier Board
-    up(plate_thick + gasket_thick + Explode_Factor*3/6) {
+    // Z = pp_h + plate_thick + gasket_thick
+    translate([0,0, pp_h + plate_thick + gasket_thick + Explode_Factor*3/5]) {
         // Round Nanopore Carrier (Center)
         Nanopore_Carrier();
-
         // Hexagonal Amplifier Board (Surrounding)
         PCB_Rigid_Active();
     }
 
-    // 4. Gasket 2 (Hex) - Top - 0.8mm
-    up(plate_thick + gasket_thick + carrier_thick + Explode_Factor*4/6)
+    // 4. Gasket 2 (Hex) - Top
+    // Z = pp_h + plate_thick + gasket_thick + carrier_thick
+    translate([0,0, pp_h + plate_thick + gasket_thick + carrier_thick + Explode_Factor*4/5])
         color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
 
-    // 5. Top Plate (Hex) - 4mm
-    up(plate_thick + gasket_thick + carrier_thick + gasket_thick + Explode_Factor)
+    // 5. Top Plate (Hex)
+    // Z = pp_h + plate_thick + gasket_thick + carrier_thick + gasket_thick
+    translate([0,0, pp_h + plate_thick + gasket_thick + carrier_thick + gasket_thick + Explode_Factor])
         color("PowderBlue", 0.5)linear_extrude(plate_thick) Plate_3_Top_Hex();
 
     // 6. Puck
-    up ( plate_thick*2 + gasket_thick*2 + carrier_thick + Explode_Factor*1.2)
-                Pressure_Puck_3D();
-
+    // Z = total_stack_height
+    translate([0,0, total_stack_height + Explode_Factor*1.2])
+        Pressure_Puck_3D();
 }
 
 // ==============================================================================
