@@ -421,6 +421,26 @@ module Gasket_Low_Dead_Volume_3D(type="bottom") {
             square([hex_diam*2, hex_diam*2], center=true); // Inverse mask
             Gasket_Low_Dead_Volume(type=type); // The actual gasket shape
         }
+        children();
+    }
+}
+
+// Wrapper for PCB Layer to support BOSL2 attachments
+module PCB_Active_Stack_3D() {
+    // Structural Spacer (Phantom Cylinder)
+    // Acts as the attachment parent with height = carrier_thick (2.6mm)
+    // We use diff("remove") to avoid rendering the solid block,
+    // but the geometry exists for attachment context.
+    diff("remove")
+    cyl(h=carrier_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
+
+        // The Actual PCB Components (Visible)
+        tag("keep") {
+            Nanopore_Carrier();
+            PCB_Rigid_Active();
+        }
+
+        children();
     }
 }
 
@@ -533,35 +553,17 @@ module Cartridge_Stack_3D() {
             // 2. Attach Bottom Gasket
             attach(TOP)
             up(Explode_Factor/5)
-            // Use linear_extrude for the gasket as it's a simple shape,
-            // but wrapped to be attachable or use simple translation if simpler.
-            // Since we want attach chains, we use linear_extrude but need to ensure it has TOP anchor.
-            // A simple way is to use `cyl` with the gasket shape subtracted, or just `up`.
-            // Let's use the standard method: Linear Extrude isn't easily attachable without wrapper.
-            // We'll use a wrapper `attachable`.
-            attachable(anchor=BOTTOM, size=[hex_diam, hex_diam, gasket_thick]) {
-                color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
-                children();
-            }
+            color("Red") Gasket_Low_Dead_Volume_3D(type="bottom")
 
                 // 3. Attach PCB + Carrier
                 attach(TOP)
                 up(Explode_Factor/5)
-                attachable(anchor=BOTTOM, size=[hex_diam, hex_diam, carrier_thick]) {
-                     union() {
-                        Nanopore_Carrier();
-                        PCB_Rigid_Active();
-                     }
-                     children();
-                }
+                PCB_Active_Stack_3D()
 
                     // 4. Attach Top Gasket
                     attach(TOP)
                     up(Explode_Factor/5)
-                    attachable(anchor=BOTTOM, size=[hex_diam, hex_diam, gasket_thick]) {
-                        color("Red") linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
-                        children();
-                    }
+                    color("Red") Gasket_Low_Dead_Volume_3D(type="top")
 
                         // 5. Attach Top Plate
                         attach(TOP)
