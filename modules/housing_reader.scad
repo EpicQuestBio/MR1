@@ -10,11 +10,12 @@ module Housing_Case_Reader() {
         tag("remove") position(BOTTOM) up(wall)
         cuboid([base_w-2*wall, base_l-2*wall, reader_h+wall], anchor=BOTTOM);
 
-        // Female Interlock Recesses (Bottom)
+        // Feet / Sensor Enclosures (Bottom)
+        // Replaces Female Interlocks with Threaded Sensor Feet
          attach(BOTTOM) {
             for(x = [-1, 1], y = [-1, 1]) {
-                 tag("remove") translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
-                 tag("remove") cuboid([10.5, 10.5, 6], rounding=2, edges="Z", anchor=BOTTOM);
+                 translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
+                 threaded_rod(d=12, l=2.8, pitch=1.5, anchor=TOP);
             }
         }
 
