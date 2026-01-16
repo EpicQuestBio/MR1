@@ -61,6 +61,16 @@ module Housing_Pump_Case() {
              }
         }
 
+        attach(FRONT) {
+             // Coffee Mug Handle
+             // Oriented vertically, sticking out Z
+             translate([0, 0, -2])
+             rotate([90, 0, 90])
+             rotate_extrude(angle=180, convexity=4)
+             translate([25, 0, 0])
+             circle(d=12);
+        }
+
         // Connectivity (Back Wall)
         #attach(BACK) {
             // DIN 5 MIDI (Panel Mount)
@@ -106,10 +116,11 @@ module Housing_Pump_Lid() {
 
         // Male Interlock Lugs (Top Surface)
         // 4 corners, tapered squares or cylinders
+        // UPDATED: Changed to Dimples for Threaded Sensor Enclosure Feet
         attach(TOP) {
             for(x = [-1, 1], y = [-1, 1]) {
                 translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
-                cuboid([10, 10, 5], rounding=2, edges="Z", anchor=BOTTOM);
+                tag("remove") cyl(h=3, d=13, anchor=TOP); // Dimple/Recess
             }
         }
 
