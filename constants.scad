@@ -19,7 +19,6 @@ Torque_Stiffness = 1.2;
 Torque_Teeth_Count = 24;
 tooth_height = 1;
 cap_thread_pitch = 4; // Robust thread pitch for 90mm cap
-cap_h = 30; // Tall enough to handle threads
 
 /* [Sealed Top Option] */
 Sealed_Top_Mode = false; // [true, false]
@@ -42,6 +41,7 @@ total_stack_height = pp_h + plate_thick + gasket_thick + carrier_thick + gasket_
 // We add clearance.
 neck_clearance = 10;
 neck_h = total_stack_height + neck_clearance;
+cap_h = neck_h + 5; // Tall enough to handle threads
 
 /* [Dimensions - Round Cartridge] */
 plate_diam = 60;
