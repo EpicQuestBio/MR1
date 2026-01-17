@@ -19,6 +19,7 @@ Torque_Stiffness = 1.2;
 Torque_Teeth_Count = 24;
 tooth_height = 1;
 cap_thread_pitch = 4; // Robust thread pitch for 90mm cap
+cap_h = 30; // Tall enough to handle threads
 
 /* [Sealed Top Option] */
 Sealed_Top_Mode = false; // [true, false]
