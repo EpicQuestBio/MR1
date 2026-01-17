@@ -131,6 +131,16 @@ module PCB_Rigid_Active() {
             color("#333333") cube([5, 6, opamp_h]); // Body
         }
 
+    // Electrical Contact Pads (Gold plated)
+    // Located at the "front" edge, away from the central fluid area
+    color("Gold")
+    translate([0, i_length/2 - pad_length - 2, i_thickness]) {
+        start_x = -((num_pads-1)*pad_pitch)/2;
+        for(i = [0:num_pads-1]) {
+            translate([start_x + (i*pad_pitch) - pad_width/2, 0, 0])
+            cube([pad_width, pad_length, 0.1]);
+        }
+    }
         // JST Connector (Surface Mount, Right Angle)
         // Near the Cable Slot (Y=-26)
         translate([0, -19, pcb_thin]) {
@@ -198,16 +208,6 @@ module Interposer() {
     translate([-chip_size/2 + 0.1, -chip_size/2 + 0.1, i_thickness - 0.5])
     cube([chip_size-0.2, chip_size-0.2, 0.5]);
 
-    // Electrical Contact Pads (Gold plated)
-    // Located at the "front" edge, away from the central fluid area
-    color("Gold")
-    translate([0, i_length/2 - pad_length - 2, i_thickness]) {
-        start_x = -((num_pads-1)*pad_pitch)/2;
-        for(i = [0:num_pads-1]) {
-            translate([start_x + (i*pad_pitch) - pad_width/2, 0, 0])
-            cube([pad_width, pad_length, 0.1]);
-        }
-    }
 }
 
 
@@ -318,7 +318,8 @@ module Plate_1_Base() {
              circle(d=2);
         }
         translate([plate_diam/2 - 3, 0]) circle(d=2); // Keying pin
-
+        // Cable Slot Pass-through
+        tag("remove") Cable_Slot();
         // Pogo Pin Access
         PogoPinHoles();
     }
@@ -329,7 +330,8 @@ module Gasket_Main(pogo= false) {
     difference() {
         circle(d=plate_diam);
        // BoltHoles();
-
+        // Cable Slot Pass-through
+        tag("remove") Cable_Slot();
         // Central Fluid Cavity (Restricted to isolate pins)
         // Covers chip (4x4) and channel ends, but stays away from pins at Y=2.5
         square([4.2, 4.2], center=true);

@@ -10,14 +10,14 @@ include <BOSL2/threading.scad>
 Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Housing_Pump_Case_STL, Housing_Pump_Lid_STL, Housing_Reader_Case_STL, Housing_Reader_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF]
 
 /* [View Settings] */
-Explode_Factor = 1; // [0:1:100]
-Cross_Section = true;
+Explode_Factor = 100; // [0:1:100]
+Cross_Section = false;
 
 /* [Torque Mechanism Settings] */
 // How "stiff" the torque fingers appear (visual only)
 Torque_Stiffness = 1.2;
 Torque_Teeth_Count = 24;
-tooth_height = 40;
+tooth_height = 1;
 cap_thread_pitch = 4; // Robust thread pitch for 90mm cap
 
 /* [Sealed Top Option] */

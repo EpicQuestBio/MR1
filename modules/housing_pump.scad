@@ -137,7 +137,7 @@ module Housing_Pump_Lid() {
 // 1. Pump Module Assembly
 module Pump_Module_Assembly() {
     Housing_Pump_Case();
-    translate([0,0,pump_h + Explode_Factor]) Housing_Pump_Lid();
+    translate([0,0,pump_h + Explode_Factor/2]) Housing_Pump_Lid();
 
     // Internal Components
     if(!Cross_Section) {

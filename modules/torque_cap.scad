@@ -14,7 +14,7 @@ module Torque_Cap_Inner(access_hole=true) {
         // Ratchet Teeth
         for(r=[0:(360/Torque_Teeth_Count):360]) {
             // Position teeth vertically at the perimeter
-            zrot(r) position(RIGHT) cyl(h=tooth_height*2, r=tooth_height, $fn=3, anchor=CENTER);
+            zrot(r) position(RIGHT) cyl(h=cap_h, r=tooth_height, $fn=3, anchor=CENTER);
         }
 
         // Threads
@@ -35,7 +35,7 @@ module Torque_Cap_Outer(access_hole=true) {
     color("Orange") {
         difference() {
             cylinder(h=25, d=neck_od + 20); // Outer Shell
-            translate([0,0,-1]) cylinder(h=27, d=neck_od + 8); // Clearance for Inner
+            translate([0,0,-1]) cylinder(h=cap_h, d=neck_od + 8); // Clearance for Inner
         }
         // Top Lid rim
         if(access_hole) {
@@ -49,8 +49,8 @@ module Torque_Cap_Outer(access_hole=true) {
         for(r=[0:60:360]) {
             rotate([0,0,r]) {
                 translate([neck_od/2 + 6, 0, 10]) {
-                    cube([4, 15, 18], center=true); // Arm
-                    translate([-3, 6, 0]) cylinder(h=18, d=3, center=true); // Pawl
+                    cube([4, 15, cap_h+2], center=true); // Arm
+                    translate([-3, 6, 0]) cylinder(h=cap_h+0, d=3, center=true); // Pawl
                 }
             }
         }
