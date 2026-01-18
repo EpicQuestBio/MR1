@@ -202,6 +202,21 @@ module Housing_Lid_Reader() {
                     zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
                 }
              }
+
+             // Connectivity (Right Side) - Duplicated from Pump Case Back
+             attach(RIGHT) {
+                // DIN 5 MIDI (Panel Mount)
+                tag("remove") translate([-25, 0, 0])
+                cyl(h=wall*3, d=16, anchor=CENTER) ;
+
+                // USB-C (Panel Mount Cutout)
+                tag("remove") translate([0, 0, 0])
+                cuboid([12, 6, wall*3], rounding=2, edges="Z", anchor=CENTER);
+
+                // Barrel Jack (Panel Mount)
+                tag("remove") translate([25, 0, 0])
+                cyl(h=wall*3, d=12, anchor=CENTER) ;
+             }
         }
 
         // 2. Additive Features (Preserved from Bucket Cut)
