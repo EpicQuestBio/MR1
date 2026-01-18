@@ -13,7 +13,7 @@ module Torque_Cap_Inner(access_hole=true) {
         // Ratchet Teeth
         for(r=[0:(360/Torque_Teeth_Count):360]) {
             // Position teeth vertically at the perimeter
-            zrot(r) position(RIGHT) cyl(h=cap_h, r=tooth_height, $fn=3, anchor=CENTER);
+            zrot(r) position(RIGHT) cyl(h=cap_h, r=tooth_height, $fn=3, anchor=BOTTOM);
         }
 
         // Threads
@@ -33,12 +33,12 @@ module Torque_Cap_Inner(access_hole=true) {
 module Torque_Cap_Outer(access_hole=true) {
     color("Orange") {
         difference() {
-            cylinder(h=25, d=neck_od + 20); // Outer Shell
+            cylinder(h=cap_h, d=neck_od + 20); // Outer Shell
             translate([0,0,-1]) cylinder(h=cap_h, d=neck_od + 8); // Clearance for Inner
         }
         // Top Lid rim
         if(access_hole) {
-            translate([0,0,20]) difference() {
+            translate([0,0,cap_h-5]) difference() {
                 cylinder(h=5, d=neck_od + 20);
                 translate([0,0,-1]) cylinder(h=7, d=25); // Pipette Access Hole
             }
@@ -47,9 +47,9 @@ module Torque_Cap_Outer(access_hole=true) {
         // Spring Arms
         for(r=[0:60:360]) {
             rotate([0,0,r]) {
-                translate([neck_od/2 + 6, 0, 10]) {
-                    cube([4, 15, cap_h+2], center=true); // Arm
-                    translate([-3, 6, 0]) cylinder(h=cap_h+0, d=3, center=true); // Pawl
+                translate([neck_od/2 + 6, 0, cap_h/2]) {
+                    cube([4, 15, cap_h], center=true); // Arm
+                    translate([-3, 6, 0]) cylinder(h=cap_h, d=3, center=true); // Pawl
                 }
             }
         }
