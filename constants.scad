@@ -99,14 +99,19 @@ pad_width = 1;
 base_w = 110; // Slightly wider for components
 base_l = 110;
 // Reader Module (Top) Height
-reader_h = 40;
+reader_h = 28;
 // Pump Module (Bottom) Height
-pump_h = 70;
+pump_h = 65;
 
 neck_od = 90;
 neck_id = 61;
-wall = 4;
+wall = 5;
 feet_inset = 12.5; // Offset from edge for feet (bumped out for visibility)
+
+// Sealing & Lids
+seal_cs = 1.78;      // O-ring cross section
+seal_radius = 0.3;   // Knife edge radius
+seal_lip_h = 2.5;    // Indexing lip height
 
 // Internal Component Placeholders
 pcb_w = 80; pcb_l = 60;

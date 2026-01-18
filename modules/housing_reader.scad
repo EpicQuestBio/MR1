@@ -8,7 +8,7 @@ module Housing_Case_Reader() {
 
         // Internal Bucket
         tag("remove") position(BOTTOM) up(wall)
-        cuboid([base_w-2*wall, base_l-2*wall, reader_h+wall], anchor=BOTTOM);
+        cuboid([base_w-2*wall, base_l-2*wall, reader_h+wall], rounding=2, edges="Z", anchor=BOTTOM);
 
         // Feet / Sensor Enclosures (Bottom)
         // Replaces Female Interlocks with Threaded Sensor Feet
@@ -30,13 +30,25 @@ module Housing_Case_Reader() {
             cuboid([12, 6, wall*3], rounding=2, edges="Z", anchor=CENTER);
         }
 
-         // Lid Mounting Posts
-        for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
-                 position(BOTTOM) up(wall)
-                 cyl(h=reader_h-wall, d=8, anchor=BOTTOM) {
-                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM);
-                 }
+         // Lid Mounting Holes (In Wall Corners)
+         // Wall center is base_w/2.
+         // With thicker wall, we put holes in the corners.
+         tag("remove") {
+             for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                 cylinder(h=reader_h*3, d=3.2, center=true);
+             }
+        }
+
+        // Knife Edge (Seal)
+        // Attached to Top Surface
+        attach(TOP) {
+            // Seal path centered inside the screws
+            // Screws at +/- (base_w/2 + 2) (Radius 57)
+            // Wall Inner Edge at +/- (base_w/2 - 5) (Radius 50)
+            // Seal at +/- (base_w/2 - 4) (Radius 51) -> Size [base_w - 8, base_l - 8]
+            path_rect = rect([base_w - 8, base_l - 8], rounding=3);
+            path_sweep(circle(r=seal_radius), path_rect, closed=true);
         }
     }
 }
@@ -57,7 +69,7 @@ module Housing_Lid_Reader() {
 
             // Internal Bucket (Now starts lower to leave ceiling room)
             tag("remove") position(TOP) down(ceiling_thick)
-            cuboid([base_w-2*wall, base_l-2*wall, lid_thick - ceiling_thick + wall], anchor=TOP);
+            cuboid([base_w-2*wall, base_l-2*wall, lid_thick - ceiling_thick + wall], rounding=2, edges="Z", anchor=TOP);
 
             // Pogo Pin Holes
             tag("remove")
@@ -157,9 +169,7 @@ module Housing_Lid_Reader() {
                  threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
             }
 
-            // Electrode Ports (Still pass-through?)
-            // If internal routing is for fluids only, electrodes might need their own paths or pass-throughs.
-            // Assuming electrodes still pass through from bottom for now.
+            // Electrode Ports
              tag("remove")
              position(CENTER) {
                 for(a = [angle_elec_cis, angle_elec_trans]) {
@@ -181,9 +191,27 @@ module Housing_Lid_Reader() {
                 tag("remove") translate([25, 0, 0])
                 cyl(h=wall*10, d=12, anchor=CENTER) ;
              }
+
+             // O-Ring Groove
+             tag("remove") position(BOTTOM) {
+                 path_rect = rect([base_w - 8, base_l - 8], rounding=3);
+                 down(0.01) // Ensure cut
+                 path_sweep(circle(d=seal_cs+0.2), path_rect, closed=true);
+             }
+
+             // Lid Mounting Holes (Through Holes + Counterbore)
+             tag("remove") {
+                 for(x = [-1, 1], y = [-1, 1]) {
+                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     cylinder(h=lid_thick*3, d=3.5, center=true);
+
+                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     position(TOP) down(5) cylinder(h=10, d=6, anchor=BOTTOM);
+                 }
+             }
         }
 
-        // 2. Additive Features (Preserved from Bucket Cut)
+        // 2. Additive Features
 
         // PCB Mounts (Underside)
         // Positioned relative to TOP anchor of main block.
@@ -201,17 +229,14 @@ module Housing_Lid_Reader() {
             }
         }
 
-        // Mounting Holes (Corners)
-        // Positioned relative to parent origin (TOP surface).
-        // We shift them down by lid_thick/2 so they sit within the lid volume (0 to -lid_thick)
-        // instead of protruding out the top.
-        for(x = [-1, 1], y = [-1, 1]) {
-             translate([x * (base_w/2 - wall*1), y * (base_l/2 - wall*1), -lid_thick/2])
-             diff("remove")
-             union() {
-                 cyl(h=lid_thick, d=wall*2.5, center=true);
-                 tag("remove") cyl(h=lid_thick*3, d=3.5, center=true);
-             }
+        // Indexing Lip (Bottom of Lid)
+        // Fits inside Case Inner Bucket: base_w - 2*wall
+        translate([0,0,-lid_thick]) {
+            difference() {
+                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h], rounding=2, edges="Z", anchor=TOP);
+                 up(0.01) // ensure manifold
+                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
+            }
         }
     }
 }

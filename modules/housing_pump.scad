@@ -40,7 +40,7 @@ module Housing_Pump_Case() {
 
         // Internal Bucket
         tag("remove") position(BOTTOM) up(wall)
-        cuboid([base_w-2*wall, base_l-2*wall, pump_h+wall], anchor=BOTTOM);
+        cuboid([base_w-2*wall, base_l-2*wall, pump_h+wall], rounding=2, edges="Z", anchor=BOTTOM);
 
         // Fluid Ports (Base Side Walls)
         // 2x Input (Left), 2x Output (Right)
@@ -86,13 +86,19 @@ module Housing_Pump_Case() {
             cyl(h=wall*3, d=12, anchor=CENTER) ;
         }
 
-        // Lid Mounts
-        for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
-                 position(BOTTOM) up(wall)
-                 cyl(h=pump_h-wall, d=8, anchor=BOTTOM) {
-                    tag("remove") position(TOP) down(10) cyl(h=15, d=3, anchor=BOTTOM);
-                 }
+        // Lid Mounts (In Wall Corners)
+        tag("remove") {
+             for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                 cylinder(h=pump_h*3, d=3.2, center=true);
+             }
+        }
+
+        // Knife Edge (Seal)
+        attach(TOP) {
+            // Updated to match Reader Module logic (base_w - 8)
+            path_rect = rect([base_w - 8, base_l - 8], rounding=3);
+            path_sweep(circle(r=seal_radius), path_rect, closed=true);
         }
     }
 
@@ -110,25 +116,50 @@ module Housing_Pump_Case() {
 }
 
 module Housing_Pump_Lid() {
-    color("Silver")
-    diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
+    lid_thick = wall; // Thin lid
 
-        // Male Interlock Lugs (Top Surface)
-        // 4 corners, tapered squares or cylinders
-        // UPDATED: Changed to Dimples for Threaded Sensor Enclosure Feet
-        attach(TOP) {
-            for(x = [-1, 1], y = [-1, 1]) {
-                translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
-                tag("remove") cyl(h=3, d=13, anchor=TOP); // Dimple/Recess
+    color("Silver")
+    union() {
+        diff("remove")
+        cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=BOTTOM) {
+
+            // Male Interlock Lugs (Top Surface)
+            // UPDATED: Changed to Dimples for Threaded Sensor Enclosure Feet
+            attach(TOP) {
+                for(x = [-1, 1], y = [-1, 1]) {
+                    translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
+                    tag("remove") cyl(h=3, d=13, anchor=TOP); // Dimple/Recess
+                }
             }
+
+            // Mounting Holes (In Corners)
+            tag("remove") {
+                for(x = [-1, 1], y = [-1, 1]) {
+                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     cylinder(h=lid_thick*3, d=3.5, center=true);
+
+                     // Counterbore?
+                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     position(TOP) down(2) cylinder(h=4, d=6, anchor=BOTTOM);
+                }
+            }
+
+            // O-Ring Groove
+             tag("remove") position(BOTTOM) {
+                 path_rect = rect([base_w - 8, base_l - 8], rounding=3);
+                 down(0.01) // Ensure cut
+                 path_sweep(circle(d=seal_cs+0.2), path_rect, closed=true);
+             }
         }
 
-        // Mounting Holes
-        tag("remove") {
-            for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 - wall*1.5), y * (base_l/2 - wall*1.5), 0])
-                 cyl(h=wall*3, d=3.5, center=true);
+        // Indexing Lip (Bottom of Lid)
+        // Note: Pump Lid is `anchor=BOTTOM`. It sits at z=0 to z=wall.
+        // We need the lip to stick DOWN from z=0.
+        translate([0,0,0]) {
+            difference() {
+                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h], rounding=2, edges="Z", anchor=TOP);
+                 up(0.01) // ensure manifold
+                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
             }
         }
     }
