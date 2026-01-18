@@ -8,6 +8,7 @@ const importOpenSCAD = async () => {
 };
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
+const CONSTANTS_FILE = 'constants.scad';
 const LIB_DIR = 'libraries/BOSL2';
 const OUTPUT_DIR = 'output';
 
@@ -57,9 +58,17 @@ async function main() {
   }
 
   // Parse modes
-  const modeMatch = scadContent.match(/Output_Mode\s*=\s*"[^"]*";\s*\/\/\s*\[(.*?)\]/);
+  let modeMatch = scadContent.match(/Output_Mode\s*=\s*"[^"]*";\s*\/\/\s*\[(.*?)\]/);
   if (!modeMatch) {
-    console.error('Could not find Output_Mode definition in SCAD file.');
+      // Check constants.scad
+      if (fs.existsSync(CONSTANTS_FILE)) {
+          const constantsContent = fs.readFileSync(CONSTANTS_FILE, 'utf8');
+          modeMatch = constantsContent.match(/Output_Mode\s*=\s*"[^"]*";\s*\/\/\s*\[(.*?)\]/);
+      }
+  }
+
+  if (!modeMatch) {
+    console.error('Could not find Output_Mode definition in SCAD file or constants.scad.');
     process.exit(1);
   }
   const modes = modeMatch[1].split(',').map(s => s.trim());
@@ -75,8 +84,11 @@ async function main() {
 
         // Load files
         instance.FS.writeFile('/' + SCAD_FILE, scadContent);
+        if (fs.existsSync(CONSTANTS_FILE)) {
+             instance.FS.writeFile('/' + CONSTANTS_FILE, fs.readFileSync(CONSTANTS_FILE));
+        }
         
-        // Load BOSL2
+        // Load BOSL2 & Modules
         function loadDir(localPath, virtualPath) {
             if (!fs.existsSync(localPath)) return;
             try { instance.FS.mkdir(virtualPath); } catch(e) {}
@@ -93,6 +105,7 @@ async function main() {
             }
         }
         loadDir(LIB_DIR, '/BOSL2');
+        loadDir('modules', '/modules');
 
         let ext = 'stl';
         if (mode.endsWith('_DXF')) ext = 'dxf';
