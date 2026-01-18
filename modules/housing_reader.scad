@@ -187,15 +187,15 @@ module Housing_Lid_Reader() {
 
         // PCB Mounts (Underside)
         // Positioned relative to TOP anchor of main block.
-        // attach(BOTTOM) puts it at [0,0,-lid_thick] facing down (Z+ -> World Z-).
-        translate([0,0,-lid_thick]) rotate([180,0,0]) {
+        // Attached to the underside of the ceiling (-ceiling_thick).
+        translate([0,0,-ceiling_thick]) {
             translate([0,0,0]) {
                 // 1mm Standoffs for PCB (80x60 centered)
                 for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
                     translate([mx, my, 0])
                     diff("remove") // Ensure local screw hole removal
                     cyl(h=1, d=6, anchor=TOP) {
-                        tag("remove") cyl(h=5, d=2.5, anchor=BOTTOM); // Mounting screw hole
+                        attach(BOTTOM) tag("remove") cyl(h=5, d=2.5, anchor=BOTTOM); // Mounting screw hole
                     }
                 }
             }
