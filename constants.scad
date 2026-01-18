@@ -41,6 +41,7 @@ total_stack_height = pp_h + plate_thick + gasket_thick + carrier_thick + gasket_
 // We add clearance.
 neck_clearance = 10;
 neck_h = total_stack_height + neck_clearance;
+cap_h = neck_h + 5; // Tall enough to handle threads
 
 /* [Dimensions - Round Cartridge] */
 plate_diam = 60;

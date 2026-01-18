@@ -5,7 +5,6 @@ module Torque_Cap_Inner(access_hole=true) {
     // Dynamic Thread Length: Needs to cover enough neck to reach stability
     // neck_h is defined relative to stack.
     // Cap height should roughly match neck_clearance + engagement.
-    cap_h = 30; // Tall enough to handle threads
 
     // PETG Ring with Sine Teeth
     color("Silver")
