@@ -102,6 +102,7 @@ pump_h = 70;
 neck_od = 90;
 neck_id = 61;
 wall = 4;
+feet_inset = 12.5; // Offset from edge for feet (bumped out for visibility)
 
 // Internal Component Placeholders
 pcb_w = 80; pcb_l = 60;

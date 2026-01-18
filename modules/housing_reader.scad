@@ -14,7 +14,7 @@ module Housing_Case_Reader() {
         // Replaces Female Interlocks with Threaded Sensor Feet
          attach(BOTTOM) {
             for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
+                 translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                  threaded_rod(d=12, l=2.8, pitch=1.5, anchor=TOP);
             }
         }
