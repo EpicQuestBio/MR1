@@ -260,7 +260,7 @@ module Reader_Module_Assembly() {
     // PCB (Attached to Lid Underside)
     // Lid bottom is at z = reader_h
     // Standoffs 1mm down. PCB top at reader_h - 1.
-    translate([0,0, reader_h - 1 - 1.6]) {
-        color("Green") linear_extrude(1.6)PCB_2D();
+    translate([0,0, reader_h]) {
+        color("Green") linear_extrude(1.6)PCB_Solid_Hex();
     }
 }
