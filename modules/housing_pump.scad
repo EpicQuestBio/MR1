@@ -72,7 +72,7 @@ module Housing_Pump_Case() {
         }
 
         // Connectivity (Back Wall)
-        #attach(BACK) {
+        attach(BACK) {
             // DIN 5 MIDI (Panel Mount)
             tag("remove") translate([-25, 0, 0])
             cyl(h=wall*3, d=16, anchor=CENTER) ;
