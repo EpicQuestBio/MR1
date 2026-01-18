@@ -438,12 +438,14 @@ module PCB_Active_Stack_3D() {
     // but only renders the inner children (PCB components).
     // This prevents a solid block from obscuring the PCB.
     attachable(anchor=BOTTOM, d=hex_diam, l=carrier_thick, $fn=6) {
-        union() {
-            Nanopore_Carrier();
-            PCB_Rigid_Active();
-        }
+        PCB_Active_Stack_Parts();
         children();
     }
+}
+
+module PCB_Active_Stack_Parts() {
+    Nanopore_Carrier();
+    PCB_Rigid_Active();
 }
 
 // G1_Hex: Gasket (Hexagonal) - Legacy
