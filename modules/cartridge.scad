@@ -292,9 +292,9 @@ module Plate_1_Base_Hex_3D() {
                  rotate([0,0,angle_fluid_out_bot])
                  translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
             }
+        }
 
         children(); // Allow attachments
-        }
     }
 }
 
