@@ -247,6 +247,7 @@ module Plate_1_Base_Hex() {
 
 // L1: Base Plate (3D with Internal Channels) - BOSL2 Native
 module Plate_1_Base_Hex_3D() {
+    color("White", 0.4) // Acrylic
     diff("remove")
     cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
@@ -417,6 +418,7 @@ module Gasket_Low_Dead_Volume_3D(type="bottom") {
     // This separates the attachment logic from the geometry generation (diff)
     // and prevents children() from being processed multiple times by diff().
     attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick, $fn=6) {
+        color("Red")
         diff("remove")
         cyl(h=gasket_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
             tag("remove")
@@ -481,6 +483,7 @@ module Plate_2_Channel() {
 
 // L3_Hex: Top Cap (Hexagonal) - 3D BOSL2 Native
 module Plate_3_Top_Hex() {
+    color("White", 0.4) // Acrylic
     diff("remove")
     cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
@@ -557,7 +560,7 @@ module Cartridge_Stack_3D() {
             // 2. Attach Bottom Gasket
             attach(TOP)
             up(Explode_Factor/5)
-            color("Red") Gasket_Low_Dead_Volume_3D(type="bottom")
+            Gasket_Low_Dead_Volume_3D(type="bottom")
 
                 // 3. Attach PCB + Carrier
                 attach(TOP)
@@ -567,7 +570,7 @@ module Cartridge_Stack_3D() {
                     // 4. Attach Top Gasket
                     attach(TOP)
                     up(Explode_Factor/5)
-                    color("Red") Gasket_Low_Dead_Volume_3D(type="top")
+                    Gasket_Low_Dead_Volume_3D(type="top")
 
                         // 5. Attach Top Plate
                         attach(TOP)
@@ -594,11 +597,13 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
     or_maj = 8.0;
 
     // Converted to BOSL2 cyl root
-    color("LightSlateGray")
-    diff("remove")
-    cyl(h=pp_h, d=hex_diam, $fn=6, anchor=BOTTOM) { // Fits in HEX neck
+    // We wrap in attachable to separate the geometry color from the children attachments
+    attachable(anchor=BOTTOM, d=hex_diam, l=pp_h, $fn=6) {
+        color("LightSlateGray")
+        diff("remove")
+        cyl(h=pp_h, d=hex_diam, $fn=6, anchor=BOTTOM) { // Fits in HEX neck
 
-        // Fluid Ports (4x)
+            // Fluid Ports (4x)
         tag("remove")
         for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
             zrot(a) translate([port_radius, 0, 0]) {
@@ -612,23 +617,23 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
             }
         }
 
-        // Pogo Pin Clearance
-        tag("remove") linear_extrude(10, center= true) PogoPinHoles();
+            // Pogo Pin Clearance
+            tag("remove") linear_extrude(10, center= true) PogoPinHoles();
 
-        // 3. O-Rings (Additive, Attached)
-        // These are separate objects, not subtracted. We attach them.
-        if (show_orings) {
-             for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                 attach(TOP)
-                 zrot(a) translate([port_radius, 0, 0])
-                 color("DeepSkyBlue") torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+            // 3. O-Rings (Additive, Attached)
+            // These are separate objects, not subtracted. We attach them.
+            if (show_orings) {
+                for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                    attach(TOP)
+                    zrot(a) translate([port_radius, 0, 0])
+                    color("DeepSkyBlue") torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
 
-                 attach(BOTTOM)
-                 zrot(a) translate([port_radius, 0, 0])
-                 color("DeepSkyBlue") torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
-             }
+                    attach(BOTTOM)
+                    zrot(a) translate([port_radius, 0, 0])
+                    color("DeepSkyBlue") torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
+                }
+            }
         }
-
         children(); // Allow attachments
     }
 }
