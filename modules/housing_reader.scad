@@ -79,39 +79,31 @@ module Housing_Lid_Reader() {
             }
 
             // Internal Fluid Routing Channels
-            // Connects Side Ports (Left) to Top Ports (Center Manifold)
+            // Connects Side Ports (Split 2-Left / 2-Right) to Top Ports (Center Manifold)
+            // Ports aligned to Y = +/- 20 to match Pump Case
             tag("remove") {
                  cd = 4; // Channel diameter
                  port_z = -ceiling_thick/2; // Z height of horizontal channels (mid-ceiling)
-                 side_x = -(base_w/2 + wall + 2); // Start slightly outside Left face
-
-                 // Waypoints for jogs (Parametric)
-                 // Jog happens near the wall to start the cross-over
-                 jog_start_x = side_x + 9; // ~ -50
-                 jog_end_x = jog_start_x + 5; // ~ -45
-                 jog_y_offset = 6; // Shift 6mm closer to center (from +/-10 to +/-4)
+                 side_x_left = -(base_w/2 + wall + 2); // Start slightly outside Left face
+                 side_x_right = (base_w/2 + wall + 2); // Start slightly outside Right face
 
                  // Target coordinates on Top Surface (R=20)
-                 t1_x = port_radius * cos(angle_fluid_out_top); // ~ -17.3
+                 t1_x = port_radius * cos(angle_fluid_out_top); // ~ -17.3 (Left side)
                  t1_y = port_radius * sin(angle_fluid_out_top); // ~ -10
 
-                 t2_x = port_radius * cos(angle_fluid_in_bot);  // ~ 17.3
+                 t2_x = port_radius * cos(angle_fluid_in_bot);  // ~ 17.3 (Right side)
                  t2_y = port_radius * sin(angle_fluid_in_bot);  // ~ -10
 
-                 t3_x = port_radius * cos(angle_fluid_in_top);  // ~ 17.3
+                 t3_x = port_radius * cos(angle_fluid_in_top);  // ~ 17.3 (Right side)
                  t3_y = port_radius * sin(angle_fluid_in_top);  // ~ 10
 
-                 t4_x = port_radius * cos(angle_fluid_out_bot); // ~ -17.3
+                 t4_x = port_radius * cos(angle_fluid_out_bot); // ~ -17.3 (Left side)
                  t4_y = port_radius * sin(angle_fluid_out_bot); // ~ 10
 
-                 // Path 1: Side Y=-30 -> Out Top (t1)
-                 // Short path, no conflicts
+                 // Path 1: Left Side Y=-20 -> Out Top (t1)
+                 // Direct path, Left to Left
                  hull() {
-                     translate([side_x, -30, port_z]) sphere(d=cd);
-                     translate([t1_x, -30, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([t1_x, -30, port_z]) sphere(d=cd);
+                     translate([side_x_left, -20, port_z]) sphere(d=cd);
                      translate([t1_x, t1_y, port_z]) sphere(d=cd);
                  }
                  hull() {
@@ -119,77 +111,49 @@ module Housing_Lid_Reader() {
                      translate([t1_x, t1_y, 0.1]) cylinder(h=0.1, d=cd); // Up to surface
                  }
                  // Side Port Entry (1/4" NPT)
-                 translate([side_x, -30, port_z]) rotate([0,90,0])
+                 translate([side_x_left, -20, port_z]) rotate([0,90,0])
                  threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
-                 // Path 2: Side Y=-10 -> In Bot (t2)
-                 // Crosses center. Jogs to Y=-4 to avoid intersecting Path 1 vertical shaft at Y=-10
+                 // Path 2: Right Side Y=-20 -> In Bot (t2)
+                 // Direct path, Right to Right
                  hull() {
-                     translate([side_x, -10, port_z]) sphere(d=cd);
-                     translate([jog_start_x, -10, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([jog_start_x, -10, port_z]) sphere(d=cd);
-                     translate([jog_end_x, -10 + jog_y_offset, port_z]) sphere(d=cd); // Jog In (to -4)
-                 }
-                 hull() {
-                     translate([jog_end_x, -10 + jog_y_offset, port_z]) sphere(d=cd);
-                     translate([t2_x, -10 + jog_y_offset, port_z]) sphere(d=cd); // Run across
-                 }
-                 hull() {
-                     translate([t2_x, -10 + jog_y_offset, port_z]) sphere(d=cd);
-                     translate([t2_x, t2_y, port_z]) sphere(d=cd); // Jog Back
+                     translate([side_x_right, -20, port_z]) sphere(d=cd);
+                     translate([t2_x, t2_y, port_z]) sphere(d=cd);
                  }
                  hull() {
                      translate([t2_x, t2_y, port_z]) sphere(d=cd);
                      translate([t2_x, t2_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x, -10, port_z]) rotate([0,90,0])
+                 translate([side_x_right, -20, port_z]) rotate([0,-90,0])
                  threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
-                 // Path 3: Side Y=10 -> In Top (t3)
-                 // Crosses center. Jogs to Y=4 to avoid intersecting Path 4 vertical shaft at Y=10
+                 // Path 3: Right Side Y=20 -> In Top (t3)
+                 // Direct path, Right to Right
                  hull() {
-                     translate([side_x, 10, port_z]) sphere(d=cd);
-                     translate([jog_start_x, 10, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([jog_start_x, 10, port_z]) sphere(d=cd);
-                     translate([jog_end_x, 10 - jog_y_offset, port_z]) sphere(d=cd); // Jog In (to 4)
-                 }
-                 hull() {
-                     translate([jog_end_x, 10 - jog_y_offset, port_z]) sphere(d=cd);
-                     translate([t3_x, 10 - jog_y_offset, port_z]) sphere(d=cd); // Run across
-                 }
-                 hull() {
-                     translate([t3_x, 10 - jog_y_offset, port_z]) sphere(d=cd);
-                     translate([t3_x, t3_y, port_z]) sphere(d=cd); // Jog Back
+                     translate([side_x_right, 20, port_z]) sphere(d=cd);
+                     translate([t3_x, t3_y, port_z]) sphere(d=cd);
                  }
                  hull() {
                      translate([t3_x, t3_y, port_z]) sphere(d=cd);
                      translate([t3_x, t3_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x, 10, port_z]) rotate([0,90,0])
+                 translate([side_x_right, 20, port_z]) rotate([0,-90,0])
                  threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
-                 // Path 4: Side Y=30 -> Out Bot (t4)
-                 // Short path
+                 // Path 4: Left Side Y=20 -> Out Bot (t4)
+                 // Direct path, Left to Left
                  hull() {
-                     translate([side_x, 30, port_z]) sphere(d=cd);
-                     translate([t4_x, 30, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([t4_x, 30, port_z]) sphere(d=cd);
+                     translate([side_x_left, 20, port_z]) sphere(d=cd);
                      translate([t4_x, t4_y, port_z]) sphere(d=cd);
                  }
                  hull() {
                      translate([t4_x, t4_y, port_z]) sphere(d=cd);
                      translate([t4_x, t4_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x, 30, port_z]) rotate([0,90,0])
+                 translate([side_x_left, 20, port_z]) rotate([0,90,0])
                  threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
             }
 
