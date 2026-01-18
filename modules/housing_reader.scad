@@ -167,19 +167,19 @@ module Housing_Lid_Reader() {
                 }
              }
 
-             // Connectivity (Right Side) - Duplicated from Pump Case Back
-             attach(RIGHT) {
+             // Connectivity (Back Side) - Moved to Positive Y Axis
+             attach(BACK) {
                 // DIN 5 MIDI (Panel Mount)
                 tag("remove") translate([-25, 0, 0])
-                cyl(h=wall*3, d=16, anchor=CENTER) ;
+                cyl(h=wall*10, d=16, anchor=CENTER) ;
 
                 // USB-C (Panel Mount Cutout)
                 tag("remove") translate([0, 0, 0])
-                cuboid([12, 6, wall*3], rounding=2, edges="Z", anchor=CENTER);
+                cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
 
                 // Barrel Jack (Panel Mount)
                 tag("remove") translate([25, 0, 0])
-                cyl(h=wall*3, d=12, anchor=CENTER) ;
+                cyl(h=wall*10, d=12, anchor=CENTER) ;
              }
         }
 
