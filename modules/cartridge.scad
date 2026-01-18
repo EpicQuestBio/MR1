@@ -679,3 +679,25 @@ module Pressure_Puck_3D() {
         children();
     }
 }
+
+// PCB Solid Hex (No Fluid Ports) for Lid Mounting
+module PCB_Solid_Hex() {
+    difference() {
+        circle(d=hex_diam, $fn=6); // Hexagonal shape
+
+        // Central Hole for Nanopore Carrier
+        circle(d=carrier_diam);
+
+        // Cable Slot (2D projection)
+        translate([0, -26]) square([12, 5], center=true);
+    }
+
+    // Protruding Tabs (Into the hole)
+    intersection() {
+        circle(d=carrier_diam);
+        union() {
+             for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0])
+                square([5, 4], center=true);
+        }
+    }
+}
