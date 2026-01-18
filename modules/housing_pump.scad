@@ -119,7 +119,7 @@ module Housing_Pump_Lid() {
         // UPDATED: Changed to Dimples for Threaded Sensor Enclosure Feet
         attach(TOP) {
             for(x = [-1, 1], y = [-1, 1]) {
-                translate([x * (base_w/2 - 15), y * (base_l/2 - 15), 0])
+                translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                 tag("remove") cyl(h=3, d=13, anchor=TOP); // Dimple/Recess
             }
         }
