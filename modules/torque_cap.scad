@@ -17,7 +17,10 @@ module Torque_Cap_Inner(access_hole=true) {
         // Even with top, starting above retention
         for(r=[0:(360/Torque_Teeth_Count):360]) {
             // Position teeth vertically at the perimeter
-            zrot(r) position(RIGHT) up(-cap_retention_h-cap_inner_h) cyl(h=cap_inner_h - cap_retention_h, r=tooth_height, $fn=3, anchor=BOTTOM);
+            zrot(r)
+            translate([neck_od/2 + 2, 0, cap_retention_h])
+            zrot(180) // Point triangle outward
+            cyl(h=cap_inner_h - cap_retention_h, r=tooth_height, $fn=3, anchor=BOTTOM);
         }
 
         // Threads
@@ -57,9 +60,22 @@ module Torque_Cap_Outer(access_hole=true) {
         // Spring Arms
         for(r=[0:60:360]) {
             rotate([0,0,r]) {
-                translate([neck_od/2 + 6, 0, cap_h/2]) {
-                    cube([4, 15, cap_h], center=true); // Arm
-                    translate([-3, 6, 0]) cylinder(h=cap_h, d=3, center=true); // Pawl
+                // Cutout slot for flex
+                tag("remove")
+                translate([neck_od/2 + 6, 0, cap_h/2])
+                cube([6, 18, cap_h+2], center=true);
+
+                // Arm Body
+                translate([neck_od/2 + 6, 0, cap_retention_h + 1]) {
+                     // Arm Base - shift up by retention + 1mm clearance
+                     // Height is remainder
+                     up((cap_h - (cap_retention_h+1))/2)
+                     cube([4, 15, cap_h - (cap_retention_h+1)], center=true); // Arm
+
+                     // Pawl - shift up
+                     up((cap_h - (cap_retention_h+1))/2)
+                     translate([-3, 6, 0])
+                     cylinder(h=cap_h - (cap_retention_h+1), d=3, center=true); // Pawl
                 }
             }
         }
