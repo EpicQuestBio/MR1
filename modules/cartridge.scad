@@ -3,6 +3,10 @@
 // ==============================================================================
 
 // PCB 2D Projection (Updated for Hex Amplifier)
+module PCB_Amplifier_2D() {
+   PCB_2D();
+}
+
 module PCB_2D() {
     difference() {
         circle(d=hex_diam, $fn=6); // Hexagonal shape
@@ -47,6 +51,11 @@ module Nanopore_Carrier() {
     // Chip
     color("Black") translate([0,0,pcb_thin]) cube([3,3,0.3], center=true);
 }
+
+module PCB_Nanopore_Carrier_2D() {
+    projection(cut=false) Nanopore_Carrier();
+}
+
 // 2. CHANNEL GASKET (The Microfluidics)
 // ==============================================================================
 module Channel_Gasket_Production() {

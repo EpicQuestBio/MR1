@@ -72,10 +72,11 @@ if (Output_Mode == "Assembly") {
 } else if (Output_Mode == "Plate_3_Top_DXF") {
     projection(cut=false) Plate_3_Top_Hex();
 } else if (Output_Mode == "Gasket_Main_DXF") {
-    // Export Top version by default or union? Usually individual.
-    // Let's assume Top since it has more holes (conservative) or just Bottom.
-    // User can change the call or we can add a mode.
     projection(cut=false) Gasket_Low_Dead_Volume(type="top");
+} else if (Output_Mode == "Gasket_Top_DXF") {
+    projection(cut=false) Gasket_Low_Dead_Volume(type="top");
+} else if (Output_Mode == "Gasket_Bottom_DXF") {
+    projection(cut=false) Gasket_Low_Dead_Volume(type="bottom");
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
 } else if (Output_Mode == "Housing_Pump_Lid_STL") {
@@ -93,5 +94,12 @@ if (Output_Mode == "Assembly") {
 } else if (Output_Mode == "Bottom_Pusher_Plate_STL") {
     Bottom_Pusher_Plate(show_orings=false);
 } else if (Output_Mode == "PCB_DXF") {
-    projection(cut=false) PCB_2D();
+    // Mapped to Main Reader PCB as per instruction
+    projection(cut=false) PCB_Main_Reader_2D();
+} else if (Output_Mode == "PCB_Main_Reader_DXF") {
+    projection(cut=false) PCB_Main_Reader_2D();
+} else if (Output_Mode == "PCB_Amplifier_DXF") {
+    projection(cut=false) PCB_Amplifier_2D();
+} else if (Output_Mode == "PCB_Nanopore_Carrier_DXF") {
+    PCB_Nanopore_Carrier_2D();
 }
