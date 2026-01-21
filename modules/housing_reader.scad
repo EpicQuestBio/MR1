@@ -265,6 +265,18 @@ module Reader_Module_Assembly() {
     // Lid bottom is at z = reader_h
     // Standoffs 1mm down. PCB top at reader_h - 1.
     translate([0,0, reader_h]) {
-        color("Green") linear_extrude(1.6)PCB_Solid_Hex();
+        color("Green") linear_extrude(1.6)PCB_Main_Reader_2D();
+    }
+}
+
+module PCB_Main_Reader_2D() {
+    difference() {
+        square([pcb_w, pcb_l], center=true);
+
+        // Mounting Holes (Matches Standoffs in Lid)
+        // Standoffs at: +/- (pcb_w/2 - 5), +/- (pcb_l/2 - 5)
+        for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+            translate([mx, my]) circle(d=3.2);
+        }
     }
 }
