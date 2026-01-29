@@ -3,6 +3,10 @@
 // ==============================================================================
 
 // PCB 2D Projection (Updated for Hex Amplifier)
+module PCB_Amplifier_2D() {
+   PCB_2D();
+}
+
 module PCB_2D() {
     difference() {
         circle(d=hex_diam, $fn=6); // Hexagonal shape
@@ -47,6 +51,11 @@ module Nanopore_Carrier() {
     // Chip
     color("Black") translate([0,0,pcb_thin]) cube([3,3,0.3], center=true);
 }
+
+module PCB_Nanopore_Carrier_2D() {
+    projection(cut=false) Nanopore_Carrier();
+}
+
 // 2. CHANNEL GASKET (The Microfluidics)
 // ==============================================================================
 module Channel_Gasket_Production() {
@@ -111,6 +120,12 @@ module PCB_Rigid_Active() {
 
         // Cable Slot
         Cable_Slot();
+
+        // Pass-throughs (To allow fluid flow through the stack)
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
     }
 
     // Protruding Tabs (Into the hole)
@@ -247,54 +262,55 @@ module Plate_1_Base_Hex() {
 
 // L1: Base Plate (3D with Internal Channels) - BOSL2 Native
 module Plate_1_Base_Hex_3D() {
-    color("White", 0.4) // Acrylic
-    diff("remove")
-    cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
+    attachable(anchor=BOTTOM, d=hex_diam, l=plate_thick, $fn=6) {
+        color("White", 0.4) // Acrylic
+        diff("remove")
+        cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
-        // Cable Slot Pass-through
-        tag("remove") Cable_Slot();
+            // Cable Slot Pass-through
+            tag("remove") Cable_Slot();
 
-        // Pass-throughs (Top Fluid) - Simple Cylinders
-        tag("remove") {
-             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-             rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-             rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+            // Pass-throughs (Top Fluid) - Simple Cylinders
+            tag("remove") {
+                rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+                rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+                rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+                rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+            }
+
+            // --- BOTTOM FLUID (TRANS LOOP) ---
+            // Channels are subtracted from the body
+            tag("remove") {
+                // Channel: Port -> Up-Via (Left side of Trans Chamber)
+                // Via A at Y=-10, X=-3
+                hull() {
+                    rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, plate_thick/2]) sphere(d=4);
+                    translate([-3, -10, plate_thick/2]) sphere(d=3);
+                }
+                // Vertical Up-Via A
+                translate([-3, -10, 0]) cylinder(h=10, d=2);
+
+                // 2. Trans Loop Down-Via -> Center
+                // Vertical Down-Via B (Y=-10, X=3)
+                translate([3, -10, 0]) cylinder(h=10, d=2);
+
+                // Channel: Via B -> Center
+                hull() {
+                    translate([3, -10, plate_thick]) sphere(d=3); // Depth 1.5
+                    translate([0, 0, plate_thick]) sphere(d=3);   // Depth 1.5
+                }
+
+                // 3. "Sloped Roof" Channel: Center -> Outlet Port (150)
+                hull() {
+                    // Center: Depth 1.5 (Z_floor = 2.5)
+                    translate([0, 0, plate_thick]) sphere(d=3);
+
+                    // Outlet: Depth 0.5 (Z_floor = 3.5)
+                    rotate([0,0,angle_fluid_out_bot])
+                    translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
+                }
+            }
         }
-
-        // --- BOTTOM FLUID (TRANS LOOP) ---
-        // Channels are subtracted from the body
-        tag("remove") {
-            // Channel: Port -> Up-Via (Left side of Trans Chamber)
-            // Via A at Y=-10, X=-3
-            hull() {
-                 rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, plate_thick/2]) sphere(d=4);
-                 translate([-3, -10, plate_thick/2]) sphere(d=3);
-            }
-            // Vertical Up-Via A
-            translate([-3, -10, 0]) cylinder(h=10, d=2);
-
-            // 2. Trans Loop Down-Via -> Center
-            // Vertical Down-Via B (Y=-10, X=3)
-            translate([3, -10, 0]) cylinder(h=10, d=2);
-
-            // Channel: Via B -> Center
-            hull() {
-                 translate([3, -10, plate_thick]) sphere(d=3); // Depth 1.5
-                 translate([0, 0, plate_thick]) sphere(d=3);   // Depth 1.5
-            }
-
-            // 3. "Sloped Roof" Channel: Center -> Outlet Port (150)
-            hull() {
-                 // Center: Depth 1.5 (Z_floor = 2.5)
-                 translate([0, 0, plate_thick]) sphere(d=3);
-
-                 // Outlet: Depth 0.5 (Z_floor = 3.5)
-                 rotate([0,0,angle_fluid_out_bot])
-                 translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
-            }
-        }
-
         children(); // Allow attachments
     }
 }
@@ -356,6 +372,12 @@ module Gasket_Main(pogo= false) {
 module Gasket_Low_Dead_Volume(type="bottom") {
     // type: "bottom" or "top"
 
+    // SQUISH COMPENSATION DIMENSIONS (50A Silicone)
+    channel_w_laser = 1.2; // Desired 1.0mm
+    port_d_laser = 2.0;    // Desired 1.5mm (Inlet) & Pass-throughs
+    chamber_d = 6.5;       // Chip Size + 1.5mm
+    fillet_r = 0.5;        // Anti-tear fillet radius
+
     // Determine angles based on type
     active_in = (type=="bottom") ? angle_fluid_in_bot : angle_fluid_in_top;
     active_out = (type=="bottom") ? angle_fluid_out_bot : angle_fluid_out_top;
@@ -371,43 +393,35 @@ module Gasket_Low_Dead_Volume(type="bottom") {
         // Cable Slot
         Cable_Slot();
 
-        // Pass-throughs
+        // Pass-throughs (Inactive Ports)
         for(a = pass_angles) {
-            rotate([0,0,a]) translate([port_radius, 0]) circle(d=4);
+            rotate([0,0,a]) translate([port_radius, 0]) circle(d=port_d_laser);
         }
 
-        // --- LOW DEAD VOLUME CHANNEL ---
-        if (type == "bottom") {
-             // Bottom: Split into Chip Hole and Trans Loop Hole
-             // Hole 1: Under Chip (Central)
-             circle(d=6);
+        // --- ACTIVE CHANNEL (Dogbone with Fillets) ---
+        // 1. Center Chamber (d=6.5)
+        // 2. Inlet/Outlet Paths (w=1.2)
+        // 3. Port Bulbs (d=2.0)
+        // 4. Fillets on internal corners (offset -0.5 then +0.5)
 
-             // Hole 2: Trans Loop (Over Trans Pads)
-             // Isolates Trans fluid (Y=-10) from Chip fluid until routing happens in Plate 1
+        offset(r=-fillet_r) offset(r=fillet_r) // Fillet convex corners of Void (Concave in Gasket)
+        union() {
+             // Center Chamber
+             circle(d=chamber_d);
+
+             // Inlet Path
              hull() {
-                 translate([-4, -10, 0]) circle(d=3);
-                 translate([4, -10, 0]) circle(d=3);
+                 circle(d=channel_w_laser); // At Center
+                 rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=channel_w_laser); // At Port
              }
-        } else {
-            // Top: Large cutout for Amplifier Components + JST Connector
-            // The gasket frames the PCB components.
-            // Main Central Opening (Hex-ish or Large Circle)
-            hull() {
-                 circle(d=carrier_diam + 4); // Clear the carrier/pore area
-                 translate([0, 10, 0]) circle(d=10); // Clear OpAmp area
-                 translate([0, -18, 0]) circle(d=15); // Clear JST Connector area
-            }
+             rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=port_d_laser); // Port Bulb
 
-            // Connection from Inlet Port to Central Slot
-            hull() {
-                 rotate([0,0,active_in]) translate([port_radius, 0]) circle(d=4);
-                 translate([5, 8, 0]) circle(d=4);
-            }
-            // Connection from Slot to Outlet Port
-            hull() {
-                 rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=4);
-                 translate([-5, 8, 0]) circle(d=4);
-            }
+             // Outlet Path
+             hull() {
+                 circle(d=channel_w_laser); // At Center
+                 rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=channel_w_laser); // At Port
+             }
+             rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=port_d_laser); // Port Bulb
         }
     }
 }
@@ -483,33 +497,34 @@ module Plate_2_Channel() {
 
 // L3_Hex: Top Cap (Hexagonal) - 3D BOSL2 Native
 module Plate_3_Top_Hex() {
-    color("White", 0.4) // Acrylic
-    diff("remove")
-    cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
+    attachable(anchor=BOTTOM, d=hex_diam, l=plate_thick, $fn=6) {
+        color("White", 0.4) // Acrylic
+        diff("remove")
+        cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
-        // Cable Slot (Clearance for connector body)
-        tag("remove") Cable_Slot();
+            // Cable Slot (Clearance for connector body)
+            tag("remove") Cable_Slot();
 
-        // Sample Well / Pipette Access
-        if (!Sealed_Top_Mode) {
-             tag("remove") cylinder(h=plate_thick*3, d=6, center=true);
+            // Sample Well / Pipette Access
+            if (!Sealed_Top_Mode) {
+                tag("remove") cylinder(h=plate_thick*3, d=6, center=true);
+            }
+
+            // LARGE COMPONENT CUTOUT (Frame Mode)
+            tag("remove")
+            linear_extrude(plate_thick*3, center=true)
+            hull() {
+                circle(d=carrier_diam + 2);
+                translate([0, 10, 0]) circle(d=10); // OpAmp
+                translate([0, -18, 0]) circle(d=14); // JST
+            }
+
+            // Vertical port holes.
+            tag("remove") {
+                rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
+                rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
+            }
         }
-
-        // LARGE COMPONENT CUTOUT (Frame Mode)
-        tag("remove")
-        linear_extrude(plate_thick*3, center=true)
-        hull() {
-             circle(d=carrier_diam + 2);
-             translate([0, 10, 0]) circle(d=10); // OpAmp
-             translate([0, -18, 0]) circle(d=14); // JST
-        }
-
-        // Vertical port holes.
-        tag("remove") {
-             rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-             rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-        }
-
         children(); // Allow attachments
     }
 }
