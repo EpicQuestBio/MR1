@@ -66,9 +66,16 @@ module Housing_Pump_Case() {
              // Oriented vertically, sticking out Z
              translate([0, 0, -2])
              rotate([90, 0, 90])
-             rotate_extrude(angle=180, convexity=4)
-             translate([25, 0, 0])
-             circle(d=12);
+             intersection() {
+                 rotate_extrude(convexity=4)
+                 translate([25, 0, 0])
+                 circle(d=12);
+
+                 // Cut half to simulate angle=180 but safer geometry
+                 // Covers Y positive (angle 0 to 180)
+                 translate([0, 50, 0])
+                 cube([100, 100, 100], center=true);
+             }
         }
 
         // Connectivity (Back Wall)
