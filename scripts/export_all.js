@@ -102,7 +102,8 @@ async function main() {
             const items = fs.readdirSync(localPath);
             for (const item of items) {
                 const loc = path.join(localPath, item);
-                const virt = path.join(virtualPath, item);
+                // Force forward slashes for VFS paths (Windows compatibility)
+                const virt = virtualPath === '/' ? `/${item}` : `${virtualPath}/${item}`;
                 const stat = fs.statSync(loc);
                 if (stat.isDirectory()) {
                     loadDir(loc, virt);
