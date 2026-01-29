@@ -65,18 +65,18 @@ if (Output_Mode == "Assembly") {
 
 // --- DXF / STL EXPORTS ---
 } else if (Output_Mode == "Plate_1_Base_DXF") {
-    projection(cut=false) Plate_1_Base_Hex();
+    Plate_1_Base_Hex();
 } else if (Output_Mode == "Plate_2_Channel_DXF") {
     // Legacy name for Carrier Frame
-    projection(cut=false) Carrier_Frame_Hex();
+    Carrier_Frame_Hex();
 } else if (Output_Mode == "Plate_3_Top_DXF") {
     projection(cut=false) Plate_3_Top_Hex();
 } else if (Output_Mode == "Gasket_Main_DXF") {
-    projection(cut=false) Gasket_Low_Dead_Volume(type="top");
+    Gasket_Low_Dead_Volume(type="top");
 } else if (Output_Mode == "Gasket_Top_DXF") {
-    projection(cut=false) Gasket_Low_Dead_Volume(type="top");
+    Gasket_Low_Dead_Volume(type="top");
 } else if (Output_Mode == "Gasket_Bottom_DXF") {
-    projection(cut=false) Gasket_Low_Dead_Volume(type="bottom");
+    Gasket_Low_Dead_Volume(type="bottom");
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
 } else if (Output_Mode == "Housing_Pump_Lid_STL") {
@@ -95,11 +95,11 @@ if (Output_Mode == "Assembly") {
     Bottom_Pusher_Plate(show_orings=false);
 } else if (Output_Mode == "PCB_DXF") {
     // Mapped to Main Reader PCB as per instruction
-    projection(cut=false) PCB_Main_Reader_2D();
+    PCB_Main_Reader_2D();
 } else if (Output_Mode == "PCB_Main_Reader_DXF") {
-    projection(cut=false) PCB_Main_Reader_2D();
+    PCB_Main_Reader_2D();
 } else if (Output_Mode == "PCB_Amplifier_DXF") {
-    projection(cut=false) PCB_Amplifier_2D();
+    PCB_Amplifier_2D();
 } else if (Output_Mode == "PCB_Nanopore_Carrier_DXF") {
     PCB_Nanopore_Carrier_2D();
 }

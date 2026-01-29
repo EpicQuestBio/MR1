@@ -29,7 +29,13 @@ async function main() {
           console.log('Attempting alternative download (zip)...');
           try {
              execSync('curl -L -o bosl2.zip https://github.com/BelfrySCAD/BOSL2/archive/refs/heads/master.zip');
-             execSync('unzip -q bosl2.zip -d libraries/ && rm -rf libraries/BOSL2 && mv libraries/BOSL2-master libraries/BOSL2 && rm bosl2.zip');
+             // Cross-platform cleanup using fs
+             execSync('unzip -q bosl2.zip -d libraries/');
+             if (fs.existsSync('libraries/BOSL2')) {
+                 fs.rmSync('libraries/BOSL2', { recursive: true, force: true });
+             }
+             fs.renameSync('libraries/BOSL2-master', 'libraries/BOSL2');
+             fs.unlinkSync('bosl2.zip');
           } catch(e2) {
              console.error('Failed to download BOSL2 zip:', e2.message);
              process.exit(1);
@@ -47,9 +53,8 @@ async function main() {
   // Read SCAD file
   let scadContent = fs.readFileSync(SCAD_FILE, 'utf8');
 
-  // WORKAROUND: openscad-wasm compatibility
-  console.log('Applying in-memory patch for WASM compatibility...');
-  scadContent = scadContent.replace(/projection\(cut=false\)\s*/g, '');
+  // NOTE: Removed projection(cut=false) workaround to ensure correct 2D/3D export logic.
+  // If double-projection issues occur, they should be fixed in the SCAD file.
 
   // Parse modes
   let modeMatch = scadContent.match(/Output_Mode\s*=\s*"[^"]*";\s*\/\/\s*\[(.*?)\]/);
