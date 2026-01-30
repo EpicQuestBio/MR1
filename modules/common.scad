@@ -6,6 +6,11 @@ module Cable_Slot() {
         cube([12, 5, 200], center=true);
 }
 
+module Cable_Slot_2D() {
+    translate([0, -26])
+        square([12, 5], center=true);
+}
+
 module BoltHoles() {
     for(r = [45:90:360]) {
         rotate([0,0,r]) translate([screw_bcd/2, 0]) circle(d=screw_hole);
