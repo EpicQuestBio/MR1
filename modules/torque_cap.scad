@@ -11,7 +11,7 @@ module Torque_Cap_Inner(access_hole=true) {
     diff("remove")
     cyl(h=cap_inner_h, d=neck_od + 4, anchor=BOTTOM) {
         // Retention Flange at Bottom
-        position(BOTTOM) cyl(d=neck_od + 7, h=cap_retention_h, anchor=BOTTOM);
+        position(BOTTOM) cyl(d=neck_od + 8, h=cap_retention_h, anchor=BOTTOM);
 
         // Ratchet Teeth
         // Even with top, starting above retention
@@ -19,7 +19,7 @@ module Torque_Cap_Inner(access_hole=true) {
             // Position teeth vertically at the perimeter
             zrot(r)
             translate([neck_od/2 + 2, 0, cap_retention_h])
-            zrot(180) // Point triangle outward
+            // zrot(180) // Point triangle outward
             cyl(h=cap_inner_h - cap_retention_h, r=tooth_height, $fn=3, anchor=BOTTOM);
         }
 
@@ -43,10 +43,10 @@ module Torque_Cap_Outer(access_hole=true) {
             cylinder(h=cap_h, d=neck_od + 20); // Outer Shell
             // Retention Lip at Bottom (neck_od + 6)
             tag("remove")
-            translate([0,0,-0.5]) cylinder(h=cap_retention_h + 1, d=neck_od + 6);
+            translate([0,0,-0.5]) cylinder(h=cap_retention_h + 1, d=neck_od + 5);
             // Main Clearance (neck_od + 8)
             tag("remove")
-            translate([0,0,cap_retention_h-0.5]) cylinder(h=cap_h+1, d=neck_od + 8);
+            translate([0,0,cap_retention_h-0.5]) cylinder(h=cap_h+1, d=neck_od + 9);
         }
         // Top Lid rim
         if(access_hole) {
