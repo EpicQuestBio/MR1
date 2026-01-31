@@ -257,7 +257,7 @@ module Reader_Module_Assembly() {
          // Neck Height = neck_h. Cap sits near the top.
         translate([0,0, neck_h - 10 + Explode_Factor*1.5]) { // Arbitrary engaging position
              Torque_Cap_Inner();
-             translate([0,0,-2]) Torque_Cap_Outer();
+             Torque_Cap_Outer();
         }
     }
 

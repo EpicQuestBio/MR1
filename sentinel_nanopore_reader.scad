@@ -32,24 +32,18 @@ if (Output_Mode == "Assembly") {
             // Connecting Pump Module Side Ports -> Reader Module Side Ports
             if(!Cross_Section) {
                 color("DeepSkyBlue") {
-                    // Pump Out (Right Side) -> Reader In (Left Side)
-                    // Visual loop around back to avoid clipping
+                    // Pump Out (Right Side) -> Reader In (Right Side)
+                    // Visual loop on the side
 
                     // Coordinates
                     p0 = [base_w/2 + 10, 20, pump_h/2]; // Pump Out (Right)
                     p1 = [base_w/2 + 30, 20, pump_h/2]; // Out Clearance
-                    p2 = [base_w/2 + 30, base_l/2 + 20, pump_h/2]; // Back Y
-                    p3 = [base_w/2 + 30, base_l/2 + 20, pump_h + wall + reader_h - 5]; // Up Z
-                    p4 = [-(base_w/2 + 30), base_l/2 + 20, pump_h + wall + reader_h - 5]; // Across X
-                    p5 = [-(base_w/2 + 30), 20, pump_h + wall + reader_h - 5]; // Forward Y
-                    p6 = [-(base_w/2 + 10), 20, pump_h + wall + reader_h - 5]; // Reader In (Left)
+                    p2 = [base_w/2 + 30, 20, pump_h + wall + reader_h - 5]; // Up Z
+                    p3 = [base_w/2 + 10, 20, pump_h + wall + reader_h - 5]; // Reader In (Right)
 
                     hull() { translate(p0) sphere(d=4); translate(p1) sphere(d=4); }
                     hull() { translate(p1) sphere(d=4); translate(p2) sphere(d=4); }
                     hull() { translate(p2) sphere(d=4); translate(p3) sphere(d=4); }
-                    hull() { translate(p3) sphere(d=4); translate(p4) sphere(d=4); }
-                    hull() { translate(p4) sphere(d=4); translate(p5) sphere(d=4); }
-                    hull() { translate(p5) sphere(d=4); translate(p6) sphere(d=4); }
                 }
             }
         }
