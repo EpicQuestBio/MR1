@@ -22,12 +22,12 @@ module Housing_Case_Reader() {
         // Connectivity (Back Wall)
         attach(BACK) {
             // DIN 5 MIDI (Panel Mount)
-            tag("remove") translate([-20, 0, reader_h/2]) rotate([90,0,0])
-            cyl(h=wall*3, d=16, anchor=CENTER) ;
+            tag("remove") translate([-20, 0, 0])
+            cyl(h=wall*10, d=16, anchor=CENTER) ;
 
             // USB-C (Panel Mount Cutout)
-            tag("remove") translate([20, 0, reader_h/2]) rotate([90,0,0])
-            cuboid([12, 6, wall*3], rounding=2, edges="Z", anchor=CENTER);
+            tag("remove") translate([20, 0, 0])
+            cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
         }
 
          // Lid Mounting Holes (In Wall Corners)
@@ -124,7 +124,7 @@ module Housing_Lid_Reader() {
                  }
                  // Side Port Entry (1/4" NPT)
                  translate([side_x_left, -20, port_z]) rotate([0,90,0])
-                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
+                 threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
                  // Path 2: Right Side Y=-20 -> In Bot (t2)
@@ -138,7 +138,7 @@ module Housing_Lid_Reader() {
                      translate([t2_x, t2_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
                  translate([side_x_right, -20, port_z]) rotate([0,-90,0])
-                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
+                 threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
                  // Path 3: Right Side Y=20 -> In Top (t3)
@@ -152,7 +152,7 @@ module Housing_Lid_Reader() {
                      translate([t3_x, t3_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
                  translate([side_x_right, 20, port_z]) rotate([0,-90,0])
-                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
+                 threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
 
 
                  // Path 4: Left Side Y=20 -> Out Bot (t4)
@@ -166,7 +166,7 @@ module Housing_Lid_Reader() {
                      translate([t4_x, t4_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
                  translate([side_x_left, 20, port_z]) rotate([0,90,0])
-                 threaded_rod(d=npt_thread_d, l=15, pitch=npt_thread_pitch, anchor=BOTTOM);
+                 threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
             }
 
             // Electrode Ports
