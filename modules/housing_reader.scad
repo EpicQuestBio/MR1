@@ -219,7 +219,7 @@ module Housing_Lid_Reader() {
         translate([0,0,-ceiling_thick]) {
             translate([0,0,0]) {
                 // 1mm Standoffs for PCB (80x60 centered)
-                for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+                for(mx = [-pcb_w/2 + 2, pcb_w/2 - 2], my = [-pcb_l/2 + 2, pcb_l/2 - 2]) {
                     translate([mx, my, 0])
                     diff("remove") // Ensure local screw hole removal
                     cyl(h=1, d=6, anchor=TOP) {
@@ -276,9 +276,16 @@ module PCB_Main_Reader_2D() {
         square([pcb_w, pcb_l], center=true);
 
         // Mounting Holes (Matches Standoffs in Lid)
-        // Standoffs at: +/- (pcb_w/2 - 5), +/- (pcb_l/2 - 5)
-        for(mx = [-pcb_w/2 + 5, pcb_w/2 - 5], my = [-pcb_l/2 + 5, pcb_l/2 - 5]) {
+        // Standoffs at: +/- (pcb_w/2 - 2), +/- (pcb_l/2 - 2)
+        for(mx = [-pcb_w/2 + 2, pcb_w/2 - 2], my = [-pcb_l/2 + 2, pcb_l/2 - 2]) {
             translate([mx, my]) circle(d=3.2);
         }
+
+        // Connectivity Cutouts (Back Edge)
+        // To clear panel mount connectors
+        // Cut 10mm deep from the back edge (Y=30 -> Y=20)
+        translate([-25, 25]) square([18, 10.1], center=true); // DIN 5
+        translate([0, 25]) square([14, 10.1], center=true);   // USB-C
+        translate([25, 25]) square([14, 10.1], center=true);  // Barrel Jack
     }
 }
