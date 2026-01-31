@@ -35,7 +35,7 @@ module Housing_Case_Reader() {
          // With thicker wall, we put holes in the corners.
          tag("remove") {
              for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                 translate([x * (base_w/2), y * (base_l/2), 0])
                  cylinder(h=reader_h*3, d=3.2, center=true);
              }
         }
@@ -44,7 +44,7 @@ module Housing_Case_Reader() {
         // Attached to Top Surface
         attach(TOP) {
             // Seal path centered inside the screws
-            // Screws at +/- (base_w/2 + 2) (Radius 57)
+            // Screws at +/- (base_w/2) (Radius 55)
             // Wall Inner Edge at +/- (base_w/2 - 5) (Radius 50)
             // Seal at +/- (base_w/2 - 4) (Radius 51) -> Size [base_w - 8, base_l - 8]
             path_rect = rect([base_w - 8, base_l - 8], rounding=3);
@@ -202,10 +202,10 @@ module Housing_Lid_Reader() {
              // Lid Mounting Holes (Through Holes + Counterbore)
              tag("remove") {
                  for(x = [-1, 1], y = [-1, 1]) {
-                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     translate([x * (base_w/2), y * (base_l/2), 0])
                      cylinder(h=lid_thick*3, d=3.5, center=true);
 
-                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     translate([x * (base_w/2), y * (base_l/2), 0])
                      position(TOP) down(5) cylinder(h=10, d=6, anchor=BOTTOM);
                  }
              }

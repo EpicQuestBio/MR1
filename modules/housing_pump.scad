@@ -96,7 +96,7 @@ module Housing_Pump_Case() {
         // Lid Mounts (In Wall Corners)
         tag("remove") {
              for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                 translate([x * (base_w/2), y * (base_l/2), 0])
                  cylinder(h=pump_h*3, d=3.2, center=true);
              }
         }
@@ -142,11 +142,11 @@ module Housing_Pump_Lid() {
             // Mounting Holes (In Corners)
             tag("remove") {
                 for(x = [-1, 1], y = [-1, 1]) {
-                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     translate([x * (base_w/2), y * (base_l/2), 0])
                      cylinder(h=lid_thick*3, d=3.5, center=true);
 
                      // Counterbore?
-                     translate([x * (base_w/2 + 2), y * (base_l/2 + 2), 0])
+                     translate([x * (base_w/2), y * (base_l/2), 0])
                      position(TOP) down(2) cylinder(h=4, d=6, anchor=BOTTOM);
                 }
             }
