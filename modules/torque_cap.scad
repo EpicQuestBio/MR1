@@ -49,8 +49,10 @@ module Torque_Cap_Outer(access_hole=true) {
             translate([0,0,-0.5]) cylinder(h=cap_retention_h + 1, d=neck_od + 5);
 
             // Main Clearance (neck_od + 8)
+            // Stops before the ceiling to create a closed top
             tag("remove")
-            translate([0,0,cap_retention_h-0.5]) cylinder(h=cap_h+1, d=neck_od + 9);
+            translate([0,0,cap_retention_h-0.5])
+            cylinder(h=cap_h - cap_top_thick - (cap_retention_h - 0.5), d=neck_od + 9);
 
             // Top Lid rim Access Hole
             if(access_hole) {
@@ -90,9 +92,15 @@ module Cap_Ribs() {
     // Perimeter D = neck_od + 20
     rib_count = 72; // Every 5 degrees
     for(r=[0:360/rib_count:360]) {
-        rotate([0,0,r])
-        translate([(neck_od + 20)/2, 0, 0])
-        cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
+        // Exclude ribs that interfere with finger slots
+        // Slots are at 0, 60, 120... (Multiples of 60)
+        // Slot width ~10 degrees. We skip +/- 8 degrees to be safe.
+        check = r % 60;
+        if (check > 8 && check < 52) {
+            rotate([0,0,r])
+            translate([(neck_od + 20)/2, 0, 0])
+            cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
+        }
     }
 }
 

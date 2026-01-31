@@ -263,8 +263,10 @@ module Reader_Module_Assembly() {
 
     // PCB (Attached to Lid Underside)
     // Lid bottom is at z = reader_h
-    // Standoffs 1mm down. PCB top at reader_h - 1.
-    translate([0,0, reader_h]) {
+    // Standoffs at -10 (ceiling) - 1 (standoff) = -11 relative to Lid Top.
+    // PCB Top should be at -11. PCB is 1.6 thick.
+    // So PCB bottom at -12.6.
+    translate([0,0, reader_h - 12.6]) {
         color("Green") linear_extrude(1.6)PCB_Main_Reader_2D();
     }
 }
