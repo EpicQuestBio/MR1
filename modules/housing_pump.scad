@@ -45,16 +45,16 @@ module Housing_Pump_Case() {
         // Fluid Ports (Base Side Walls)
         // 2x Input (Left), 2x Output (Right)
         attach(LEFT) {
-             for(y_pos = [-20, 20]) {
-                 translate([0, y_pos, 0])
+             for(x_pos = [-20, 20]) {
+                 translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
                     tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
                  }
              }
         }
         attach(RIGHT) {
-             for(y_pos = [-20, 20]) {
-                 translate([0, y_pos, 0])
+             for(x_pos = [-20, 20]) {
+                 translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
                     tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
                  }
