@@ -45,7 +45,7 @@ cap_h = neck_h + 5; // Tall enough to handle threads
 
 cap_top_thick = 5;
 cap_retention_h = 2;
-cap_inner_h = cap_h - cap_top_thick - 3;
+cap_inner_h = cap_h - cap_top_thick - 5;
 
 /* [Dimensions - Round Cartridge] */
 plate_diam = 60;
