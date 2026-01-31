@@ -62,20 +62,23 @@ module Housing_Pump_Case() {
         }
 
         attach(FRONT) {
-             // Coffee Mug Handle
-             // Oriented vertically, sticking out Z
-             translate([0, 0, -2])
-             rotate([90, 0, 90])
-             intersection() {
-                 rotate_extrude(convexity=4)
-                 translate([25, 0, 0])
-                 circle(d=12);
+             // Coffee Mug Handle (D-Shaped)
+             // Oriented vertically, sticking out Z (relative to attachment)
+             // Designed for adult hand grasp (approx 40mm inner vertical, 30mm inner clearance)
+             h_center = 26;
+             stick_out = 36;
+             tube_d = 12;
 
-                 // Cut half to simulate angle=180 but safer geometry
-                 // Covers Y positive (angle 0 to 180)
-                 translate([0, 50, 0])
-                 cube([100, 100, 100], center=true);
-             }
+             handle_path = [
+                [0, h_center, 0],
+                [0, h_center, stick_out],
+                [0, -h_center, stick_out],
+                [0, -h_center, 0]
+             ];
+
+             // 12mm radius rounding for smooth corners
+             final_path = round_corners(handle_path, radius=12, closed=false);
+             path_sweep(circle(d=tube_d), final_path);
         }
 
         // Connectivity (Back Wall)
