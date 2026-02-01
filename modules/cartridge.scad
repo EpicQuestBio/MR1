@@ -513,10 +513,22 @@ module Plate_3_Top_Hex() {
             // LARGE COMPONENT CUTOUT (Frame Mode)
             tag("remove")
             linear_extrude(plate_thick*3, center=true)
-            hull() {
-                circle(d=carrier_diam + 2);
-                translate([0, 10, 0]) circle(d=10); // OpAmp
-                translate([0, -18, 0]) circle(d=14); // JST
+            union() {
+                // Top Wing (OpAmp 1)
+                hull() {
+                    circle(d=carrier_diam + 2);
+                    translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
+                }
+                // Bottom Wing (JST, OpAmp 2, Filters, Cable Slot)
+                hull() {
+                    circle(d=carrier_diam + 2);
+                    // JST/ESD/CableSlot Area (X[-7, 7], Y[-29, -15])
+                    translate([-7, -29]) square([14, 14]);
+                    // OpAmp 2 Area (X[4, 11], Y[-21, -13])
+                    translate([4, -21]) square([7, 8]);
+                    // Filters Area (X[-1, 14.2], Y[-28, -22])
+                    translate([-1, -28]) square([15.2, 6]);
+                }
             }
 
             // Vertical port holes.
