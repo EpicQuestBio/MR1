@@ -126,6 +126,9 @@ module PCB_Rigid_Active() {
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+
+        // Finger Grip Cutouts
+        Finger_Grip_Cutout(height=20);
     }
 
     // Protruding Tabs (Into the hole)
@@ -250,6 +253,9 @@ module Carrier_Frame_Hex() {
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+
+        // Finger Grip Cutouts
+        Finger_Grip_Cutout_2D();
     }
 }
 
@@ -310,6 +316,9 @@ module Plate_1_Base_Hex_3D() {
                     translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
                 }
             }
+
+            // Finger Grip Cutouts
+            tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
         }
         children(); // Allow attachments
     }
@@ -423,6 +432,9 @@ module Gasket_Low_Dead_Volume(type="bottom") {
              }
              rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=port_d_laser); // Port Bulb
         }
+
+        // Finger Grip Cutouts (Subtractive in 2D)
+        Finger_Grip_Cutout_2D();
     }
 }
 
@@ -536,6 +548,9 @@ module Plate_3_Top_Hex() {
                 rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
                 rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
             }
+
+            // Finger Grip Cutouts
+            tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
         }
         children(); // Allow attachments
     }
@@ -647,6 +662,9 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
             // Pogo Pin Clearance
             tag("remove") linear_extrude(10, center= true) PogoPinHoles();
 
+            // Finger Grip Cutouts
+            tag("remove") Finger_Grip_Cutout(height=pp_h*3);
+
             // 3. O-Rings (Additive, Attached)
             // These are separate objects, not subtracted. We attach them.
             if (show_orings) {
@@ -668,46 +686,38 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
 // ==============================================================================
 // MODULE: PRESSURE PUCK (Pipette Access)
 // ==============================================================================
+module Finger_Grip_Cutout(height=10) {
+     // Side notches for finger grip
+     // Placed at X = +/- 30 (Hex Corners) to avoid internal components
+     translate([30, 0, 0]) cylinder(h=height, d=10, center=true);
+     translate([-30, 0, 0]) cylinder(h=height, d=10, center=true);
+}
+
+module Finger_Grip_Cutout_2D() {
+     translate([30, 0]) circle(d=10);
+     translate([-30, 0]) circle(d=10);
+}
+
 module Pressure_Puck_3D() {
-    // Converted to BOSL2 primitives
-    color("#333333")
-    diff("remove")
-    union() {
-        // Main Body (Cylinder + Handle)
-        cyl(h=6, d=neck_id - 1, anchor=BOTTOM) {
-            // Handle Tabs
-            attach(LEFT) cyl(h=6, d=8, anchor=LEFT); // Rough approximation of translate
-            attach(RIGHT) cyl(h=6, d=8, anchor=RIGHT);
-
-            // Note: The original had translate([0, 22, 0])...
-            // We'll stick to union for simplicity if exact attach is tricky without coordinates.
-        }
-        // Actually, let's keep the original union but wrap in attachable if needed.
-        // But for stack, we just need the root to be attachable.
-        // Let's use basic difference/union logic but with anchor=BOTTOM support.
-    }
-
-    // Simplest path: Use original code logic but ensure it sits at Z=0 for attachment
-    // The original code was: difference { union{...} ... }
-    // We wrap it in attachable.
-
+    // Revised Puck with Recessed Cups (Subtractive)
+    // Removed Additive Handle Tabs
     attachable(anchor=BOTTOM, size=[neck_id, neck_id, 6]) {
         color("#333333") {
             difference() {
-                union() {
-                    cylinder(h=6, d=neck_id - 1);
-                    // Handle Tabs
-                    translate([0, 22, 0]) cylinder(h=6, d=8);
-                    translate([0, -22, 0]) cylinder(h=6, d=8);
-                }
+                // Main Body
+                cylinder(h=6, d=neck_id - 1);
 
                 // Center Hole for Pipette Access (Through-hole)
                 translate([0,0,-5]) cylinder(h=20, d1=6, d2=16);
+
                 // Underside recess
                 translate([0,0,-5]) difference() {
                     cylinder(h=3 + 4 + 1.4, d=neck_id-4);
                     cylinder(h=10, d=20);
                 }
+
+                // New Recessed Cups (Finger Grip)
+                translate([0,0,3]) Finger_Grip_Cutout(height=20);
             }
         }
         children();
