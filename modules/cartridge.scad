@@ -126,6 +126,9 @@ module PCB_Rigid_Active() {
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+
+        // Finger Grip Cutouts
+        Finger_Grip_Cutout(height=20);
     }
 
     // Protruding Tabs (Into the hole)
@@ -141,59 +144,72 @@ module PCB_Rigid_Active() {
 
     // --- ACTIVE COMPONENTS (Top Side) ---
     if(Show_Components) {
-        // LMP7721 OpAmp
-        translate([15, 5, pcb_thin]) {
-            color("#333333") cube([5, 6, opamp_h]); // Body
+
+        // --- NEW PADS (Top and Bottom) ---
+        // Aligned with Liquid Pathway (-30 degrees / 330 degrees)
+        // 2 Pads Top, 2 Pads Bottom
+
+        pad_ang = -30;
+        pad_dist_inner = 12;
+        pad_dist_outer = 17;
+
+        // Top Pads (Gold + Silver Ribbon)
+        rotate([0,0,pad_ang]) {
+            color("Gold") {
+                translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+                translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+            }
+            color("Silver") {
+                translate([pad_dist_inner, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
+                translate([pad_dist_outer, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
+            }
         }
 
-    // Electrical Contact Pads (Gold plated)
-    // Located at the "front" edge, away from the central fluid area
-    color("Gold")
-    translate([0, i_length/2 - pad_length - 2, i_thickness]) {
-        start_x = -((num_pads-1)*pad_pitch)/2;
-        for(i = [0:num_pads-1]) {
-            translate([start_x + (i*pad_pitch) - pad_width/2, 0, 0])
-            cube([pad_width, pad_length, 0.1]);
+        // Bottom Pads (Gold + Silver Ribbon)
+        rotate([0,0,pad_ang]) {
+            color("Gold") {
+                translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
+                translate([pad_dist_outer, 0, 0]) cube([2, 2, 0.1], center=true);
+            }
+            color("Silver") {
+                translate([pad_dist_inner, 0, -0.06]) cube([2, 0.8, 0.1], center=true);
+                translate([pad_dist_outer, 0, -0.06]) cube([2, 0.8, 0.1], center=true);
+            }
         }
-    }
+
         // JST Connector (Surface Mount, Right Angle)
-        // Near the Cable Slot (Y=-26)
-        translate([0, -19, pcb_thin]) {
+        // Moved Z to sit flush on TOP of PCB (pcb_thin + height/2)
+        translate([0, -19, pcb_thin + 2.5]) {
             color("White") cube([12, 6, 5], center=true); // Body
-             color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
+            color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
         }
-          // --- DRY ZONE COMPONENTS (Power Filtering) ---
         
-        // LMP7721 OpAmp (Center of Dry Zone)
-        translate([5, -20, pcb_thick]) {
-            color("#333333") cube([5, 6, opamp_h]); 
-            color("Silver") translate([-1, 0.5, 0]) cube([1, 5, 0.5]); 
-            color("Silver") translate([5, 0.5, 0]) cube([1, 5, 0.5]); 
+        // --- COMPONENT PLACEMENT ---
+        // Spaced out on the connector side (-Y)
+
+        // LMP7721 OpAmp (Near Carrier)
+        // Centered X/Y, Bottom at pcb_thin
+        translate([0, -13, pcb_thin + opamp_h/2]) {
+            color("#333333") cube([5, 6, opamp_h], center=true);
         }
 
-        // --- THE POWER FILTERS ---
-        // Located between the Connector and the OpAmp
-        
-        // V+ Rail Filtering
-        translate([10, -25, pcb_thick]) {
-            color("Yellow") cube([3.2, 1.6, 1.5]); // 10uF Tantalum (Bulk)
-            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]); // 0.1uF Ceramic (Bypass)
+        // V+ Rail Filtering (Left Side)
+        translate([-10, -18, pcb_thin]) {
+            color("Yellow") cube([3.2, 1.6, 1.5]);
+            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]);
         }
 
-        // V- Rail Filtering
-        translate([0, -25, pcb_thick]) {
-            color("Yellow") cube([3.2, 1.6, 1.5]); // 10uF Tantalum (Bulk)
-            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]); // 0.1uF Ceramic (Bypass)
+        // V- Rail Filtering (Right Side)
+        translate([6, -18, pcb_thin]) {
+            color("Yellow") cube([3.2, 1.6, 1.5]);
+            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]);
         }
 
         // Feedback Network
-        translate([5, -27, pcb_thick]) color("Blue") cube([3.2, 1.6, 0.6]); // 1G Resistor
+        translate([8, -24, pcb_thin]) color("Blue") cube([3.2, 1.6, 0.6]);
         
-        // ESD Protection (Spark Gap)
-        translate([-6, -15, pcb_thick]) color("Gold") cube([2,2,0.05]); 
-    
-    
-        
+        // ESD Protection
+        translate([-8, -24, pcb_thin]) color("Gold") cube([2,2,0.05]);
     }
 
     // --- ELECTRODES (Silver Ribbons) ---
@@ -250,6 +266,9 @@ module Carrier_Frame_Hex() {
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
+
+        // Finger Grip Cutouts
+        Finger_Grip_Cutout_2D();
     }
 }
 
@@ -277,6 +296,9 @@ module Plate_1_Base_Hex_3D() {
                 rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
                 rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
             }
+            
+            // Finger Grip Cutouts
+            tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
         }
         children(); // Allow attachments
     }
@@ -390,6 +412,9 @@ module Gasket_Low_Dead_Volume(type="bottom") {
              }
              rotate([0,0,active_out]) translate([port_radius, 0]) circle(d=port_d_laser); // Port Bulb
         }
+
+        // Finger Grip Cutouts (Subtractive in 2D)
+        Finger_Grip_Cutout_2D();
     }
 }
 
@@ -427,7 +452,8 @@ module PCB_Active_Stack_3D() {
 }
 
 module PCB_Active_Stack_Parts() {
-    Nanopore_Carrier();
+    // Carrier moves up in exploded view
+    translate([0, 0, Explode_Factor/3]) Nanopore_Carrier();
     PCB_Rigid_Active();
 }
 
@@ -480,10 +506,22 @@ module Plate_3_Top_Hex() {
             // LARGE COMPONENT CUTOUT (Frame Mode)
             tag("remove")
             linear_extrude(plate_thick*3, center=true)
-            hull() {
-                circle(d=carrier_diam + 2);
-                translate([0, 10, 0]) circle(d=10); // OpAmp
-                translate([0, -18, 0]) circle(d=14); // JST
+            union() {
+                // Top Wing (OpAmp 1)
+                hull() {
+                    circle(d=carrier_diam + 2);
+                    translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
+                }
+                // Bottom Wing (JST, OpAmp 2, Filters, Cable Slot)
+                hull() {
+                    circle(d=carrier_diam + 2);
+                    // JST/ESD/CableSlot Area (X[-7, 7], Y[-29, -15])
+                    translate([-7, -29]) square([14, 14]);
+                    // OpAmp 2 Area (X[4, 11], Y[-21, -13])
+                    translate([4, -21]) square([7, 8]);
+                    // Filters Area (X[-1, 14.2], Y[-28, -22])
+                    translate([-1, -28]) square([15.2, 6]);
+                }
             }
 
             // Vertical port holes.
@@ -491,6 +529,9 @@ module Plate_3_Top_Hex() {
                 rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
                 rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
             }
+
+            // Finger Grip Cutouts
+            tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
         }
         children(); // Allow attachments
     }
@@ -602,6 +643,9 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
             // Pogo Pin Clearance
             tag("remove") linear_extrude(10, center= true) PogoPinHoles();
 
+            // Finger Grip Cutouts
+            tag("remove") Finger_Grip_Cutout(height=pp_h*3);
+
             // 3. O-Rings (Additive, Attached)
             // These are separate objects, not subtracted. We attach them.
             if (show_orings) {
@@ -623,46 +667,38 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
 // ==============================================================================
 // MODULE: PRESSURE PUCK (Pipette Access)
 // ==============================================================================
+module Finger_Grip_Cutout(height=10) {
+     // Side notches for finger grip
+     // Placed at X = +/- 30 (Hex Corners) to avoid internal components
+     translate([30, 0, 0]) cylinder(h=height, d=10, center=true);
+     translate([-30, 0, 0]) cylinder(h=height, d=10, center=true);
+}
+
+module Finger_Grip_Cutout_2D() {
+     translate([30, 0]) circle(d=10);
+     translate([-30, 0]) circle(d=10);
+}
+
 module Pressure_Puck_3D() {
-    // Converted to BOSL2 primitives
-    color("#333333")
-    diff("remove")
-    union() {
-        // Main Body (Cylinder + Handle)
-        cyl(h=6, d=neck_id - 1, anchor=BOTTOM) {
-            // Handle Tabs
-            attach(LEFT) cyl(h=6, d=8, anchor=LEFT); // Rough approximation of translate
-            attach(RIGHT) cyl(h=6, d=8, anchor=RIGHT);
-
-            // Note: The original had translate([0, 22, 0])...
-            // We'll stick to union for simplicity if exact attach is tricky without coordinates.
-        }
-        // Actually, let's keep the original union but wrap in attachable if needed.
-        // But for stack, we just need the root to be attachable.
-        // Let's use basic difference/union logic but with anchor=BOTTOM support.
-    }
-
-    // Simplest path: Use original code logic but ensure it sits at Z=0 for attachment
-    // The original code was: difference { union{...} ... }
-    // We wrap it in attachable.
-
+    // Revised Puck with Recessed Cups (Subtractive)
+    // Removed Additive Handle Tabs
     attachable(anchor=BOTTOM, size=[neck_id, neck_id, 6]) {
         color("#333333") {
             difference() {
-                union() {
-                    cylinder(h=6, d=neck_id - 1);
-                    // Handle Tabs
-                    translate([0, 22, 0]) cylinder(h=6, d=8);
-                    translate([0, -22, 0]) cylinder(h=6, d=8);
-                }
+                // Main Body
+                cylinder(h=6, d=neck_id - 1);
 
                 // Center Hole for Pipette Access (Through-hole)
                 translate([0,0,-5]) cylinder(h=20, d1=6, d2=16);
+
                 // Underside recess
                 translate([0,0,-5]) difference() {
                     cylinder(h=3 + 4 + 1.4, d=neck_id-4);
                     cylinder(h=10, d=20);
                 }
+
+                // New Recessed Cups (Finger Grip)
+                translate([0,0,3]) Finger_Grip_Cutout(height=20);
             }
         }
         children();
