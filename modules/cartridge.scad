@@ -289,47 +289,14 @@ module Plate_1_Base_Hex_3D() {
             // Cable Slot Pass-through
             tag("remove") Cable_Slot();
 
-            // Pass-throughs (Top Fluid) - Simple Cylinders
+            // Pass-throughs - Simple Cylinders
             tag("remove") {
                 rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
                 rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
                 rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
                 rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
             }
-
-            // --- BOTTOM FLUID (TRANS LOOP) ---
-            // Channels are subtracted from the body
-            tag("remove") {
-                // Channel: Port -> Up-Via (Left side of Trans Chamber)
-                // Via A at Y=-10, X=-3
-                hull() {
-                    rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, plate_thick/2]) sphere(d=4);
-                    translate([-3, -10, plate_thick/2]) sphere(d=3);
-                }
-                // Vertical Up-Via A
-                translate([-3, -10, 0]) cylinder(h=10, d=2);
-
-                // 2. Trans Loop Down-Via -> Center
-                // Vertical Down-Via B (Y=-10, X=3)
-                translate([3, -10, 0]) cylinder(h=10, d=2);
-
-                // Channel: Via B -> Center
-                hull() {
-                    translate([3, -10, plate_thick]) sphere(d=3); // Depth 1.5
-                    translate([0, 0, plate_thick]) sphere(d=3);   // Depth 1.5
-                }
-
-                // 3. "Sloped Roof" Channel: Center -> Outlet Port (150)
-                hull() {
-                    // Center: Depth 1.5 (Z_floor = 2.5)
-                    translate([0, 0, plate_thick]) sphere(d=3);
-
-                    // Outlet: Depth 0.5 (Z_floor = 3.5)
-                    rotate([0,0,angle_fluid_out_bot])
-                    translate([port_radius, 0, plate_thick + 1.0]) sphere(d=3);
-                }
-            }
-
+            
             // Finger Grip Cutouts
             tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
         }
