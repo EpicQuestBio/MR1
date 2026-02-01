@@ -146,15 +146,14 @@ module PCB_Rigid_Active() {
     if(Show_Components) {
 
         // --- NEW PADS (Top and Bottom) ---
-        // Aligned with Liquid Pathway (-30 degrees / 330 degrees)
+        // Aligned with Liquid Ports closest to Amplifier (-30 and 210)
         // 2 Pads Top, 2 Pads Bottom
 
-        pad_ang = -30;
         pad_dist_inner = 12;
         pad_dist_outer = 17;
 
-        // Top Pads (Gold + Silver Ribbon)
-        rotate([0,0,pad_ang]) {
+        // Top Pads (Gold + Silver Ribbon) - Aligned with Top Out (210)
+        rotate([0,0,angle_fluid_out_top]) {
             color("Gold") {
                 translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
                 translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
@@ -165,8 +164,8 @@ module PCB_Rigid_Active() {
             }
         }
 
-        // Bottom Pads (Gold + Silver Ribbon)
-        rotate([0,0,pad_ang]) {
+        // Bottom Pads (Gold + Silver Ribbon) - Aligned with Bot In (-30)
+        rotate([0,0,angle_fluid_in_bot]) {
             color("Gold") {
                 translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
                 translate([pad_dist_outer, 0, 0]) cube([2, 2, 0.1], center=true);
@@ -524,11 +523,13 @@ module Plate_3_Top_Hex() {
                 }
             }
 
-            // Vertical port holes.
-            tag("remove") {
-                rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-                rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-            }
+            // Electrode Access
+            tag("remove")
+            rotate([0,0,angle_elec_cis]) translate([port_radius, 0, -1]) cylinder(h=20, d=2);
+
+            // Keying Pin
+            tag("remove")
+            translate([plate_diam/2 - 3, 0, -1]) cylinder(h=20, d=2);
 
             // Finger Grip Cutouts
             tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
