@@ -10,7 +10,7 @@ include <BOSL2/threading.scad>
 Output_Mode = "Assembly"; // [Assembly, Plate_1_Base_DXF, Plate_2_Channel_DXF, Plate_3_Top_DXF, Gasket_Main_DXF, Gasket_Top_DXF, Gasket_Bottom_DXF, Housing_Pump_Case_STL, Housing_Pump_Lid_STL, Housing_Reader_Case_STL, Housing_Reader_Lid_STL, Torque_Cap_Outer_STL, Torque_Cap_Inner_STL, Pressure_Puck_STL, Bottom_Pusher_Plate_STL, PCB_DXF, PCB_Amplifier_DXF, PCB_Nanopore_Carrier_DXF, PCB_Main_Reader_DXF]
 
 /* [View Settings] */
-Explode_Factor = 1; // [0:1:100]
+Explode_Factor = 100; // [0:1:100]
 Cross_Section = false;
 
 /* [Torque Mechanism Settings] */
