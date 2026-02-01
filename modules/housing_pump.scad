@@ -138,7 +138,9 @@ module Housing_Pump_Lid() {
             attach(TOP) {
                 for(x = [-1, 1], y = [-1, 1]) {
                     translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
-                    tag("remove") cyl(h=3, d=13, anchor=TOP); // Dimple/Recess
+                    tag("remove")
+                    down(3) linear_extrude(height=3.1)
+                    trapezoid(w1=15, w2=11, h=13, anchor=CENTER);
                 }
             }
 
