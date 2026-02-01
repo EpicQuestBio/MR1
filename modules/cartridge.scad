@@ -524,17 +524,13 @@ module Plate_3_Top_Hex() {
                 }
             }
 
-            // Vertical port holes.
-            tag("remove") {
-                rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-                rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-                rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-                rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=20, d=4);
-            }
-
             // Electrode Access
             tag("remove")
             rotate([0,0,angle_elec_cis]) translate([port_radius, 0, -1]) cylinder(h=20, d=2);
+
+            // Keying Pin
+            tag("remove")
+            translate([plate_diam/2 - 3, 0, -1]) cylinder(h=20, d=2);
 
             // Finger Grip Cutouts
             tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
