@@ -150,18 +150,28 @@ module PCB_Rigid_Active() {
         pad_dist_inner = 12;
         pad_dist_outer = 17;
 
-        // Top Pads (Gold)
-        color("Gold")
+        // Top Pads (Gold + Silver Ribbon)
         rotate([0,0,pad_ang]) {
-            translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
-            translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+            color("Gold") {
+                translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+                translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+            }
+            color("Silver") {
+                translate([pad_dist_inner, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
+                translate([pad_dist_outer, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
+            }
         }
 
-        // Bottom Pads (Silver)
-        color("Silver")
+        // Bottom Pads (Gold + Silver Ribbon)
         rotate([0,0,pad_ang]) {
-            translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
-            translate([pad_dist_outer, 0, 0]) cube([2, 2, 0.1], center=true);
+            color("Gold") {
+                translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
+                translate([pad_dist_outer, 0, 0]) cube([2, 2, 0.1], center=true);
+            }
+            color("Silver") {
+                translate([pad_dist_inner, 0, -0.06]) cube([2, 0.8, 0.1], center=true);
+                translate([pad_dist_outer, 0, -0.06]) cube([2, 0.8, 0.1], center=true);
+            }
         }
 
         // JST Connector (Surface Mount, Right Angle)
