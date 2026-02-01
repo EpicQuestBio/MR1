@@ -4,30 +4,15 @@
 module Housing_Case_Reader() {
     color("WhiteSmoke")
     diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, reader_h], rounding=wall, edges="Z", anchor=BOTTOM) {
-
-        // Internal Bucket
-        tag("remove") position(BOTTOM) up(wall)
-        cuboid([base_w-2*wall, base_l-2*wall, reader_h+wall], rounding=2, edges="Z", anchor=BOTTOM);
+    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
 
         // Feet / Sensor Enclosures (Bottom)
-        // Replaces Female Interlocks with Threaded Sensor Feet
-         attach(BOTTOM) {
+        // Female Interlocks (Holes) matching Pump Lid Dimples
+         tag("remove") {
             for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
-                 threaded_rod(d=12, l=2.8, pitch=1.5, anchor=TOP);
+                 cylinder(h=wall*3, d=13, center=true);
             }
-        }
-
-        // Connectivity (Back Wall)
-        attach(BACK) {
-            // DIN 5 MIDI (Panel Mount)
-            tag("remove") translate([-20, 0, 0])
-            cyl(h=wall*10, d=16, anchor=CENTER) ;
-
-            // USB-C (Panel Mount Cutout)
-            tag("remove") translate([20, 0, 0])
-            cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
         }
 
          // Lid Mounting Holes (In Wall Corners)
@@ -36,7 +21,7 @@ module Housing_Case_Reader() {
          tag("remove") {
              for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2), y * (base_l/2), 0])
-                 cylinder(h=reader_h*3, d=3.2, center=true);
+                 cylinder(h=wall*3, d=3.2, center=true);
              }
         }
 
@@ -243,12 +228,21 @@ module Housing_Lid_Reader() {
 
 // 2. Reader Module Assembly
 module Reader_Module_Assembly() {
+    lid_thick = 25; // Matched to Housing_Lid_Reader
+
     Housing_Case_Reader();
-    translate([0,0,reader_h + Explode_Factor*0.4]) Housing_Lid_Reader();
+
+    // Calculate Top Surface Z
+    // Baseplate is height 'wall' (5mm).
+    // Lid sits on top of Baseplate. Lid has thickness 25mm.
+    // Lid anchor=TOP, so translation needs to bring its TOP to (wall + lid_thick).
+    top_z = wall + lid_thick;
+
+    translate([0,0, top_z + Explode_Factor*0.4]) Housing_Lid_Reader();
 
     // Stack & Cap on top of Lid
-    // Stack sits directly on the TOP surface of the Lid (which is at z = reader_h)
-    translate([0,0, reader_h + Explode_Factor]) {
+    // Stack sits directly on the TOP surface of the Lid
+    translate([0,0, top_z + Explode_Factor]) {
         Cartridge_Stack_3D();
          // Torque Cap (Inner + Outer)
          // Cap screws onto the neck. Neck starts at Lid surface.
@@ -262,11 +256,12 @@ module Reader_Module_Assembly() {
     }
 
     // PCB (Attached to Lid Underside)
-    // Lid bottom is at z = reader_h
+    // Lid bottom is at z = top_z - lid_thick = wall.
     // Standoffs at -10 (ceiling) - 1 (standoff) = -11 relative to Lid Top.
-    // PCB Top should be at -11. PCB is 1.6 thick.
-    // So PCB bottom at -12.6.
-    translate([0,0, reader_h - 12.6]) {
+    // PCB Top should be at top_z - 11.
+    // PCB is 1.6 thick.
+    // So PCB bottom at top_z - 11 - 1.6 = top_z - 12.6.
+    translate([0,0, top_z - 12.6 + Explode_Factor*0.4]) {
         color("Green") linear_extrude(1.6)PCB_Main_Reader_2D();
     }
 }
