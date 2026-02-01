@@ -141,59 +141,62 @@ module PCB_Rigid_Active() {
 
     // --- ACTIVE COMPONENTS (Top Side) ---
     if(Show_Components) {
-        // LMP7721 OpAmp
-        translate([15, 5, pcb_thin]) {
-            color("#333333") cube([5, 6, opamp_h]); // Body
+
+        // --- NEW PADS (Top and Bottom) ---
+        // Aligned with Liquid Pathway (-30 degrees / 330 degrees)
+        // 2 Pads Top, 2 Pads Bottom
+
+        pad_ang = -30;
+        pad_dist_inner = 12;
+        pad_dist_outer = 17;
+
+        // Top Pads (Gold)
+        color("Gold")
+        rotate([0,0,pad_ang]) {
+            translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+            translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
         }
 
-    // Electrical Contact Pads (Gold plated)
-    // Located at the "front" edge, away from the central fluid area
-    color("Gold")
-    translate([0, i_length/2 - pad_length - 2, i_thickness]) {
-        start_x = -((num_pads-1)*pad_pitch)/2;
-        for(i = [0:num_pads-1]) {
-            translate([start_x + (i*pad_pitch) - pad_width/2, 0, 0])
-            cube([pad_width, pad_length, 0.1]);
+        // Bottom Pads (Silver)
+        color("Silver")
+        rotate([0,0,pad_ang]) {
+            translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
+            translate([pad_dist_outer, 0, 0]) cube([2, 2, 0.1], center=true);
         }
-    }
+
         // JST Connector (Surface Mount, Right Angle)
-        // Near the Cable Slot (Y=-26)
-        translate([0, -19, pcb_thin]) {
+        // Moved Z to sit flush on TOP of PCB (pcb_thin + height/2)
+        translate([0, -19, pcb_thin + 2.5]) {
             color("White") cube([12, 6, 5], center=true); // Body
-             color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
+            color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
         }
-          // --- DRY ZONE COMPONENTS (Power Filtering) ---
         
-        // LMP7721 OpAmp (Center of Dry Zone)
-        translate([5, -20, pcb_thick]) {
-            color("#333333") cube([5, 6, opamp_h]); 
-            color("Silver") translate([-1, 0.5, 0]) cube([1, 5, 0.5]); 
-            color("Silver") translate([5, 0.5, 0]) cube([1, 5, 0.5]); 
+        // --- COMPONENT PLACEMENT ---
+        // Spaced out on the connector side (-Y)
+
+        // LMP7721 OpAmp (Near Carrier)
+        // Centered X/Y, Bottom at pcb_thin
+        translate([0, -13, pcb_thin + opamp_h/2]) {
+            color("#333333") cube([5, 6, opamp_h], center=true);
         }
 
-        // --- THE POWER FILTERS ---
-        // Located between the Connector and the OpAmp
-        
-        // V+ Rail Filtering
-        translate([10, -25, pcb_thick]) {
-            color("Yellow") cube([3.2, 1.6, 1.5]); // 10uF Tantalum (Bulk)
-            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]); // 0.1uF Ceramic (Bypass)
+        // V+ Rail Filtering (Left Side)
+        translate([-10, -18, pcb_thin]) {
+            color("Yellow") cube([3.2, 1.6, 1.5]);
+            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]);
         }
 
-        // V- Rail Filtering
-        translate([0, -25, pcb_thick]) {
-            color("Yellow") cube([3.2, 1.6, 1.5]); // 10uF Tantalum (Bulk)
-            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]); // 0.1uF Ceramic (Bypass)
+        // V- Rail Filtering (Right Side)
+        translate([6, -18, pcb_thin]) {
+            color("Yellow") cube([3.2, 1.6, 1.5]);
+            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]);
         }
 
         // Feedback Network
-        translate([5, -27, pcb_thick]) color("Blue") cube([3.2, 1.6, 0.6]); // 1G Resistor
+        translate([8, -24, pcb_thin]) color("Blue") cube([3.2, 1.6, 0.6]);
         
-        // ESD Protection (Spark Gap)
-        translate([-6, -15, pcb_thick]) color("Gold") cube([2,2,0.05]); 
-    
-    
-        
+        // ESD Protection
+        translate([-8, -24, pcb_thin]) color("Gold") cube([2,2,0.05]);
     }
 
     // --- ELECTRODES (Silver Ribbons) ---
@@ -460,7 +463,8 @@ module PCB_Active_Stack_3D() {
 }
 
 module PCB_Active_Stack_Parts() {
-    Nanopore_Carrier();
+    // Carrier moves up in exploded view
+    translate([0, 0, Explode_Factor/3]) Nanopore_Carrier();
     PCB_Rigid_Active();
 }
 
