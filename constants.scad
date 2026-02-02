@@ -78,9 +78,9 @@ npt_thread_pitch = 1.411; // 1/4" NPT Pitch (approx 18 TPI)
 npt_thread_d = 13.7;      // 1/4" NPT Major Diameter
 
 angle_fluid_in_bot = -30;
-angle_fluid_in_top = 30;
+angle_fluid_in_top = 210;
 angle_fluid_out_bot = 150;
-angle_fluid_out_top = 210;
+angle_fluid_out_top = 30;
 
 angle_elec_cis = 90;  // Top electrode (via)
 angle_elec_trans = 270; // Bottom electrode (direct)

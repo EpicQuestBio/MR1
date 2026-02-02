@@ -28,7 +28,7 @@ module PCB_2D() {
     intersection() {
         circle(d=carrier_diam);
         union() {
-             for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0])
+             for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0])
                 square([5, 4], center=true);
         }
     }
@@ -46,7 +46,7 @@ module Nanopore_Carrier() {
         // Tab Slots (Cutouts for Amplifier Tabs)
         // Assume tabs at +/- 90 (Left/Right relative to rotated view?) or 0/180
         // We align with Amplifier tabs.
-        for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0, 0]) cube([4, 6, 10], center=true);
+        for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0, 0]) cube([4, 6, 10], center=true);
     }
     // Chip
     color("Black") translate([0,0,pcb_thin]) cube([3,3,0.3], center=true);
@@ -67,14 +67,12 @@ module Channel_Gasket_Production() {
         // THE FLUID CHANNEL
         // Defines the flow path from In -> Chip -> Out
         hull() {
-            translate([0, 15, -1]) cylinder(h=5, d=5); // Input Area
-            translate([0, -15, -1]) cylinder(h=5, d=5); // Output Area
-            translate([0, 0, -1]) cylinder(h=5, d=8);   // Chip Chamber
+            translate([0, 15, -1]) cylinder(h=gasket_thick+2, d=5); // Input Area
+            translate([0, -15, -1]) cylinder(h=gasket_thick+2, d=5); // Output Area
+            translate([0, 0, -1]) cylinder(h=gasket_thick+2, d=8);   // Chip Chamber
         }
 
-        // Bolt Holes (Must align perfectly)
-        for(r=[0:60:360]) rotate([0,0,r])
-            translate([screw_bcd/2, 0, -1]) cylinder(h=5, d=screw_hole);
+        
     }
 }
 
@@ -97,9 +95,7 @@ module FR4_Interposer_Production() {
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
 
-        // Bolt Holes
-        for(r=[0:60:360]) rotate([0,0,r])
-            translate([screw_bcd/2, 0, -1]) cylinder(h=10, d=screw_hole);
+
     }
 
     // Visual: The Chip glued on top
@@ -137,7 +133,7 @@ module PCB_Rigid_Active() {
     intersection() {
         cylinder(h=pcb_thin, d=carrier_diam);
         union() {
-             for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2, 0, pcb_thin/2])
+             for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0, pcb_thin/2])
                 cube([5, 4, pcb_thin], center=true);
         }
     }
@@ -152,8 +148,8 @@ module PCB_Rigid_Active() {
         pad_dist_inner = 12;
         pad_dist_outer = 17;
 
-        // Top Pads (Gold + Silver Ribbon) - Aligned with Top Out (210)
-        rotate([0,0,angle_fluid_out_top]) {
+        // Top Pads (Gold + Silver Ribbon) - Aligned with Top In 
+        rotate([0,0,angle_fluid_in_top]) {
             color("Gold") {
                 translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
                 translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
@@ -164,7 +160,7 @@ module PCB_Rigid_Active() {
             }
         }
 
-        // Bottom Pads (Gold + Silver Ribbon) - Aligned with Bot In (-30)
+        // Bottom Pads (Gold + Silver Ribbon) - Aligned with Bot In 
         rotate([0,0,angle_fluid_in_bot]) {
             color("Gold") {
                 translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
@@ -214,7 +210,7 @@ module PCB_Rigid_Active() {
     // --- ELECTRODES (Silver Ribbons) ---
     // On the Tabs
     color("Silver") {
-        for(a=[0, 180]) rotate([0,0,a]) translate([carrier_diam/2 - 1, 0, pcb_thin])
+        for(a=[[angle_fluid_in_top, angle_fluid_in_bot],[1,-1]]) rotate([0,0,a[0]]) translate([carrier_diam/2 - 1, 0, a[1]*pcb_thin])
              cube([3, 2, 0.2], center=true);
     }
 }

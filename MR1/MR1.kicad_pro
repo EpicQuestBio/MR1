@@ -588,6 +588,120 @@
           "label": "Mouser PN",
           "name": "Mouser PN",
           "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Cost",
+          "name": "Cost",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Distributor 2",
+          "name": "Distributor 2",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Distributor 2 PN",
+          "name": "Distributor 2 PN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC",
+          "name": "LCSC",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MPN",
+          "name": "MPN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer",
+          "name": "Manufacturer",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer_Name",
+          "name": "Manufacturer_Name",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer_Part_Number",
+          "name": "Manufacturer_Part_Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Configuration",
+          "name": "Configuration",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Mouser Part Number",
+          "name": "Mouser Part Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Mouser Price/Stock",
+          "name": "Mouser Price/Stock",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "PARTREV",
+          "name": "PARTREV",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Quantity",
+          "name": "Quantity",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Device",
+          "name": "Sim.Device",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Pins",
+          "name": "Sim.Pins",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "price",
+          "name": "price",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "ALT_Part_Number",
+          "name": "ALT_Part_Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Alternate Part Number 1",
+          "name": "Alternate Part Number 1",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "AssemblyType",
+          "name": "AssemblyType",
+          "show": false
         }
       ],
       "filter_string": "",
