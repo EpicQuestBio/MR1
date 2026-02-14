@@ -31,9 +31,38 @@ module Peristaltic_Pump_12V() {
 }
 
 // ==============================================================================
+// MODULE: PUMP VISUAL & CUTOUT HELPERS
+// ==============================================================================
+
+module Pump_Visual(type="Diitao") {
+    if (type == "Diitao") {
+        Peristaltic_Pump_12V();
+    } else if (type == "Custom") {
+        // Generic representation based on constants
+        color("Silver") cylinder(h=38, d=pump_motor_d);
+        translate([0,0,38]) {
+             color("DodgerBlue") cylinder(h=20, d=pump_head_d);
+        }
+    } else if (type == "Blank") {
+        // No pump visual
+    }
+}
+
+module Pump_Mount_Cutout(type="Diitao") {
+    if (type == "Diitao") {
+        cylinder(h=10, d=28, center=true);
+    } else if (type == "Custom") {
+        cylinder(h=10, d=pump_mount_d, center=true);
+    } else if (type == "Blank") {
+        // No cutout
+    }
+}
+
+
+// ==============================================================================
 // MODULE: PUMP MODULE (Bottom Unit)
 // ==============================================================================
-module Housing_Pump_Case() {
+module Housing_Pump_Case(pump_type=Pump_Type) {
     color("DimGray")
     diff("remove")
     cuboid([base_w+2*wall, base_l+2*wall, pump_h], rounding=wall, edges="Z", anchor=BOTTOM) {
@@ -117,9 +146,9 @@ module Housing_Pump_Case() {
         // Simple plate on standoffs
         difference() {
             cube([base_w-5, base_l-5, 5], center=true); // Plate
-            // Mounting for 2x Diitao Pumps
+            // Mounting for Pumps (Configurable)
              for(side = [-1, 1]) {
-                translate([side * (base_w/4), 20, 0]) cylinder(h=10, d=28, center=true);
+                translate([side * (base_w/4), 20, 0]) Pump_Mount_Cutout(type=pump_type);
              }
         }
     }
@@ -178,8 +207,8 @@ module Housing_Pump_Lid() {
 }
 
 // 1. Pump Module Assembly
-module Pump_Module_Assembly() {
-    Housing_Pump_Case();
+module Pump_Module_Assembly(pump_type=Pump_Type) {
+    Housing_Pump_Case(pump_type=pump_type);
     translate([0,0,pump_h + Explode_Factor/2]) Housing_Pump_Lid();
 
     // Internal Components
@@ -187,7 +216,7 @@ module Pump_Module_Assembly() {
          // Pumps (Visual)
         for(side = [-1, 1]) {
              translate([side * (base_w/4), 20, wall+5]) // On plate (wall+5)
-             Peristaltic_Pump_12V();
+             Pump_Visual(type=pump_type);
         }
     }
 }

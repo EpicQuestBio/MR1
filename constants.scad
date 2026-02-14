@@ -117,6 +117,13 @@ seal_lip_h = 2.5;    // Indexing lip height
 pcb_w = 80; pcb_l = 60;
 pump_w = 42; pump_l = 60;
 
+/* [Pump Configuration] */
+Pump_Type = "Diitao"; // [Diitao, Blank, Custom]
+// Custom Pump Settings (if Pump_Type == "Custom")
+pump_motor_d = 27.6;
+pump_head_d = 31.7;
+pump_mount_d = 28.0; // Diameter of mounting hole
+
 /* [Global] */
 $fn = 80;
 fn_draft = 40;
