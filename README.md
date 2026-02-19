@@ -6,10 +6,16 @@ This project includes a script to automatically export all defined parts (STLs a
 
 ### Setup
 
-Ensure dependencies are installed:
+Run the installation script to set up dependencies and the BOSL2 library:
 ```bash
-npm install
+./install.sh
 ```
+This script handles:
+- Checking for Node.js (required for exports).
+- Installing NPM dependencies.
+- Installing the BOSL2 library (as a git submodule or local download) into `libraries/`.
+
+If you do not have Node.js, the script will still attempt to download the BOSL2 library so you can open the SCAD files in the OpenSCAD GUI.
 
 ### Usage
 

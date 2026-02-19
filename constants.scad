@@ -2,8 +2,8 @@
 // SENTINEL NANOPORE READER - REV 12 (Modular Split)
 // Features: Torque-Lock Cap + Round Stack + Bottom Integration + Internal Layout
 // ==============================================================================
-include <BOSL2/std.scad>
-include <BOSL2/threading.scad>
+include <libraries/BOSL2/std.scad>
+include <libraries/BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
