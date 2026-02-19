@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { ensureBOSL2 } = require('./lib_setup');
 
 const importOpenSCAD = async () => {
     // Dynamic import is needed for ESM modules in CommonJS
@@ -10,38 +10,13 @@ const importOpenSCAD = async () => {
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
 const CONSTANTS_FILE = 'constants.scad';
-const LIB_DIR = 'libraries/BOSL2';
 const OUTPUT_DIR = 'exports';
 
 async function main() {
   console.log('Initializing Export Script...');
 
   // 1. Ensure BOSL2 Library exists
-  if (!fs.existsSync(LIB_DIR)) {
-      console.log('BOSL2 library not found. Cloning...');
-      try {
-        fs.mkdirSync('libraries', { recursive: true });
-        execSync('git clone --depth 1 https://github.com/BOSL2/BOSL2.git libraries/BOSL2', { stdio: 'inherit' });
-        console.log('BOSL2 cloned successfully.');
-      } catch (e) {
-          console.error('Failed to clone BOSL2:', e.message);
-          // Fallback logic
-          console.log('Attempting alternative download (zip)...');
-          try {
-             execSync('curl -L -o bosl2.zip https://github.com/BelfrySCAD/BOSL2/archive/refs/heads/master.zip');
-             // Cross-platform cleanup using fs
-             execSync('unzip -q bosl2.zip -d libraries/');
-             if (fs.existsSync('libraries/BOSL2')) {
-                 fs.rmSync('libraries/BOSL2', { recursive: true, force: true });
-             }
-             fs.renameSync('libraries/BOSL2-master', 'libraries/BOSL2');
-             fs.unlinkSync('bosl2.zip');
-          } catch(e2) {
-             console.error('Failed to download BOSL2 zip:', e2.message);
-             process.exit(1);
-          }
-      }
-  }
+  await ensureBOSL2();
 
   // 2. Prepare Output Directory
   if (!fs.existsSync(OUTPUT_DIR)) {
@@ -52,9 +27,6 @@ async function main() {
 
   // Read SCAD file
   let scadContent = fs.readFileSync(SCAD_FILE, 'utf8');
-
-  // NOTE: Removed projection(cut=false) workaround to ensure correct 2D/3D export logic.
-  // If double-projection issues occur, they should be fixed in the SCAD file.
 
   // Parse modes
   let modeMatch = scadContent.match(/Output_Mode\s*=\s*"[^"]*";\s*\/\/\s*\[(.*?)\]/);
@@ -112,7 +84,9 @@ async function main() {
                 }
             }
         }
-        loadDir(LIB_DIR, '/BOSL2');
+
+        // Mount 'libraries' to '/libraries' so 'include <libraries/BOSL2/std.scad>' works
+        loadDir('libraries', '/libraries');
         loadDir('modules', '/modules');
 
         let ext = 'stl';
