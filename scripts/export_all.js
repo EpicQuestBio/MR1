@@ -61,6 +61,13 @@ async function main() {
         const wrapper = await createOpenSCAD({ noInitialRun: true });
         const instance = wrapper.getInstance();
 
+        // Workaround for "[OpenSCAD]: Could not initialize localization" warning
+        try {
+            instance.FS.mkdir('/locale');
+        } catch (e) {
+            // Ignore if directory exists
+        }
+
         // Load files
         instance.FS.writeFile('/' + SCAD_FILE, scadContent);
         if (fs.existsSync(CONSTANTS_FILE)) {
