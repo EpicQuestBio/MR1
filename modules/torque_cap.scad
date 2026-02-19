@@ -37,6 +37,19 @@ module Torque_Cap_Inner(access_hole=true) {
     }
 }
 
+module Torque_Cap_Assembly(access_hole=true) {
+    Torque_Cap_Outer(access_hole=access_hole);
+    // Raise inner cap to sit on retention lip
+    // Lip height is effectively cap_retention_h (approx 2mm)
+    // Inner flange height is cap_retention_h (2mm)
+    // Inner starts at Z=0.
+    // Outer cavity starts at Z=cap_retention_h - 0.5 (1.5mm)
+    // To clear the lip (Z=1.5), Inner needs to be at Z >= 1.5.
+    // I will use cap_retention_h (2.0) for safety/tolerance.
+    translate([0,0, cap_retention_h])
+    Torque_Cap_Inner(access_hole=access_hole);
+}
+
 module Torque_Cap_Outer(access_hole=true) {
     #color("Orange") {
         diff("remove") {
