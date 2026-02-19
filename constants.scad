@@ -103,7 +103,7 @@ reader_h = 28;
 // Pump Module (Bottom) Height
 pump_h = 65;
 
-neck_od = 90;
+neck_od = 75;
 neck_id = 61;
 wall = 5;
 feet_inset = 12.5; // Offset from edge for feet (bumped out for visibility)
