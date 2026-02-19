@@ -99,7 +99,7 @@ pad_width = 1;
 base_w = 110; // Slightly wider for components
 base_l = 110;
 // Reader Module (Top) Height
-reader_h = 28;
+reader_h = 30;
 // Pump Module (Bottom) Height
 pump_h = 65;
 

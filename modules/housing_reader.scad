@@ -250,8 +250,7 @@ module Reader_Module_Assembly() {
          // Position Cap so it "floats" above for Explode view or engaged for Assembly.
          // Neck Height = neck_h. Cap sits near the top.
         translate([0,0, neck_h - 10 + Explode_Factor*1.5]) { // Arbitrary engaging position
-             Torque_Cap_Inner();
-             Torque_Cap_Outer();
+             Torque_Cap_Assembly();
         }
     }
 
