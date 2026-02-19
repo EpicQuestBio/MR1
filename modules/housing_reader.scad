@@ -154,6 +154,13 @@ module Housing_Lid_Reader() {
                  threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
             }
 
+                 // Port Pass-throughs
+            tag("remove") {
+                for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
+            
+                    rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
+                }
+            }
             // Electrode Ports
              tag("remove")
              position(CENTER) {

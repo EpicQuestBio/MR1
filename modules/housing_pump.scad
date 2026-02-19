@@ -156,6 +156,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
 
 module Housing_Pump_Lid() {
     lid_thick = wall; // Thin lid
+    local_seal_lip_h = 5; // Increased from 2.5 to 5.0 for better engagement
 
     color("Silver")
     union() {
@@ -168,7 +169,7 @@ module Housing_Pump_Lid() {
                 for(x = [-1, 1], y = [-1, 1]) {
                     translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                     tag("remove")
-                    down(3) linear_extrude(height=3.1)
+                    down(1) linear_extrude(height=3.1)
                     trapezoid(w1=15, w2=11, h=13, anchor=CENTER);
                 }
             }
@@ -198,9 +199,9 @@ module Housing_Pump_Lid() {
         // We need the lip to stick DOWN from z=0.
         translate([0,0,0]) {
             difference() {
-                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h], rounding=2, edges="Z", anchor=TOP);
+                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, local_seal_lip_h], rounding=2, edges="Z", anchor=TOP);
                  up(0.01) // ensure manifold
-                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
+                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, local_seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
             }
         }
     }
