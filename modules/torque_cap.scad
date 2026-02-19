@@ -108,7 +108,9 @@ module Cap_Ribs() {
         // Slots are at 0, 60, 120... (Multiples of 60)
         // Slot width ~10 degrees. We skip +/- 8 degrees to be safe.
         check = r % 60;
-        if (check > 8 && check < 52) {
+        // Avoid Finger Slots (0, 60) AND Grip Indentations (15, 45)
+        // Ribs at 25, 30, 35 are safe.
+        if (check >= 25 && check <= 35) {
             rotate([0,0,r])
             translate([(neck_od + 20)/2, 0, 0])
             cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
