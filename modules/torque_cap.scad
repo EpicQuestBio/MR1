@@ -42,7 +42,19 @@ module Torque_Cap_Outer(access_hole=true) {
         diff("remove") {
             // Main Body with Rounded Top Edge
             // d = neck_od + 20
-            cyl(h=cap_h, d=neck_od + 20, rounding2=5, anchor=BOTTOM);
+            // Rounding applied to both top and bottom edges (2mm)
+            cyl(h=cap_h, d=neck_od + 20, rounding=2, anchor=BOTTOM);
+
+            // Grip Indentations (12 recessed rounded slots)
+            // Positioned at 15, 45, 75... to offset from the finger slots (0, 60...)
+            // Cut depth controlled by radius offset
+            for(r=[15:30:360]) {
+                rotate([0,0,r])
+                tag("remove")
+                translate([(neck_od + 20)/2, 0, cap_h/2])
+                // Vertical rounded indentation
+                cylinder(h=cap_h+1, d=8, center=true);
+            }
 
             // Retention Lip at Bottom (neck_od + 6)
             tag("remove")
