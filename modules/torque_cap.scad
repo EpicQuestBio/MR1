@@ -15,7 +15,7 @@ module Torque_Cap_Inner(access_hole=true) {
 
         // Ratchet Teeth
         // Even with top, starting above retention
-        for(r=[0:(360/Torque_Teeth_Count):360]) {
+        position(BOTTOM) for(r=[0:(360/Torque_Teeth_Count):360]) {
             // Position teeth vertically at the perimeter
             zrot(r)
             translate([neck_od/2 + 2, 0, cap_retention_h])
@@ -38,7 +38,7 @@ module Torque_Cap_Inner(access_hole=true) {
 }
 
 module Torque_Cap_Outer(access_hole=true) {
-    color("Orange") {
+    #color("Orange") {
         diff("remove") {
             // Main Body with Rounded Top Edge
             // d = neck_od + 20
@@ -110,7 +110,7 @@ module Cap_Ribs() {
         check = r % 60;
         if (check > 8 && check < 52) {
             rotate([0,0,r])
-            translate([(neck_od + 20)/2, 0, 0])
+            translate([(neck_od + 20)/2, 0, cap_retention_h])
             cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
         }
     }
