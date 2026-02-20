@@ -490,26 +490,27 @@ module Plate_3_Top_Hex() {
         diff("remove")
         cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
-            // Cable Slot (Clearance for connector body)
-            tag("remove") Cable_Slot();
+            tag("remove") union() {
+                // Cable Slot (Clearance for connector body)
+                Cable_Slot();
 
-            // Sample Well / Pipette Access
-            if (!Sealed_Top_Mode) {
-                tag("remove") cylinder(h=plate_thick*3, d=6, center=true);
-            }
-
-            // LARGE COMPONENT CUTOUT (Frame Mode)
-            tag("remove")
-            linear_extrude(plate_thick*3, center=true)
-            union() {
-                // Top Wing (OpAmp 1)
-                hull() {
-                    circle(d=carrier_diam + 2);
-                    translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
+                // Sample Well / Pipette Access
+                if (!Sealed_Top_Mode) {
+                    cylinder(h=plate_thick*3, d=6, center=true);
                 }
-                // Bottom Wing (JST, OpAmp 2, Filters, Cable Slot)
-                hull() {
-                    circle(d=carrier_diam + 2);
+
+                // Fluid Ports (Top In/Out) - Ensure connectivity
+                for(a=[angle_fluid_in_top, angle_fluid_out_top])
+                    rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=plate_thick*3, d=4, center=true);
+
+                // COMPONENT CUTOUTS (Frame Mode)
+                // Updated to avoid cutting the central seal area (d ~ 10mm)
+                linear_extrude(plate_thick*3, center=true)
+                union() {
+                    // Top Wing (OpAmp 1)
+                    translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
+
+                    // Bottom Wing (JST, OpAmp 2, Filters, Cable Slot)
                     // JST/ESD/CableSlot Area (X[-7, 7], Y[-29, -15])
                     translate([-7, -29]) square([14, 14]);
                     // OpAmp 2 Area (X[4, 11], Y[-21, -13])
@@ -517,18 +518,16 @@ module Plate_3_Top_Hex() {
                     // Filters Area (X[-1, 14.2], Y[-28, -22])
                     translate([-1, -28]) square([15.2, 6]);
                 }
+
+                // Electrode Access
+                rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) cylinder(h=20, d=2, center=true);
+
+                // Keying Pin
+                translate([plate_diam/2 - 3, 0]) cylinder(h=20, d=2, center=true);
+
+                // Finger Grip Cutouts
+                Finger_Grip_Cutout(height=plate_thick*3);
             }
-
-            // Electrode Access
-            tag("remove")
-            rotate([0,0,angle_elec_cis]) translate([port_radius, 0, -1]) cylinder(h=20, d=2);
-
-            // Keying Pin
-            tag("remove")
-            translate([plate_diam/2 - 3, 0, -1]) cylinder(h=20, d=2);
-
-            // Finger Grip Cutouts
-            tag("remove") Finger_Grip_Cutout(height=plate_thick*3);
         }
         children(); // Allow attachments
     }
