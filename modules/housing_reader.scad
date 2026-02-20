@@ -158,7 +158,7 @@ module Housing_Lid_Reader() {
             tag("remove") {
                 for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
             
-                    rotate([0,0,a]) translate([port_radius, 0]) circle(d=6);
+                    rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=100, d=6, center=true);
                 }
             }
             // Electrode Ports
@@ -208,7 +208,8 @@ module Housing_Lid_Reader() {
         // PCB Mounts (Underside)
         // Positioned relative to TOP anchor of main block.
         // Attached to the underside of the ceiling (-ceiling_thick).
-        translate([0,0,-ceiling_thick]) {
+        // Added 0.1 overlap
+        translate([0,0,-ceiling_thick+0.1]) {
             translate([0,0,0]) {
                 // 1mm Standoffs for PCB (80x60 centered)
                 for(mx = [-pcb_w/2 + 2, pcb_w/2 - 2], my = [-pcb_l/2 + 2, pcb_l/2 - 2]) {
@@ -223,7 +224,8 @@ module Housing_Lid_Reader() {
 
         // Indexing Lip (Bottom of Lid)
         // Fits inside Case Inner Bucket: base_w - 2*wall
-        translate([0,0,-lid_thick]) {
+        // Added 0.1 overlap
+        translate([0,0,-lid_thick+0.1]) {
             difference() {
                  cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h], rounding=2, edges="Z", anchor=TOP);
                  up(0.01) // ensure manifold
