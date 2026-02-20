@@ -77,7 +77,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    tag("remove") cylinder(h=25, d=13.7, center=true);
                  }
              }
         }
@@ -85,7 +85,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    tag("remove") cylinder(h=25, d=13.7, center=true);
                  }
              }
         }
