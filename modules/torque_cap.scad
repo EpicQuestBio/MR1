@@ -51,7 +51,7 @@ module Torque_Cap_Assembly(access_hole=true) {
 }
 
 module Torque_Cap_Outer(access_hole=true) {
-    #color("Orange") {
+    color("Orange") {
         diff("remove") {
             // Main Body with Rounded Top Edge
             // d = neck_od + 20
