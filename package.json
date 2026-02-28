@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "export": "node scripts/export_all.js"
+    "export": "node scripts/export_all.js",
+    "install-lib": "node scripts/install_libraries.js"
   },
   "repository": {
     "type": "git",

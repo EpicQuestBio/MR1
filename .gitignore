@@ -1,6 +1,6 @@
 node_modules/
 output/
-libraries/
+libraries/*
 clone_retry.log
 
 # KiCad

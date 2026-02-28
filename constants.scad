@@ -2,8 +2,8 @@
 // SENTINEL NANOPORE READER - REV 12 (Modular Split)
 // Features: Torque-Lock Cap + Round Stack + Bottom Integration + Internal Layout
 // ==============================================================================
-include <BOSL2/std.scad>
-include <BOSL2/threading.scad>
+include <libraries/BOSL2/std.scad>
+include <libraries/BOSL2/threading.scad>
 
 /* [Render Mode] */
 // Select "Assembly" for 3D view, or a specific layer for export
@@ -99,11 +99,11 @@ pad_width = 1;
 base_w = 110; // Slightly wider for components
 base_l = 110;
 // Reader Module (Top) Height
-reader_h = 28;
+reader_h = 30;
 // Pump Module (Bottom) Height
 pump_h = 65;
 
-neck_od = 90;
+neck_od = 75;
 neck_id = 61;
 wall = 5;
 feet_inset = 12.5; // Offset from edge for feet (bumped out for visibility)
@@ -116,6 +116,13 @@ seal_lip_h = 2.5;    // Indexing lip height
 // Internal Component Placeholders
 pcb_w = 80; pcb_l = 60;
 pump_w = 42; pump_l = 60;
+
+/* [Pump Configuration] */
+Pump_Type = "Diitao"; // [Diitao, Blank, Custom]
+// Custom Pump Settings (if Pump_Type == "Custom")
+pump_motor_d = 27.6;
+pump_head_d = 31.7;
+pump_mount_d = 28.0; // Diameter of mounting hole
 
 /* [Global] */
 $fn = 80;

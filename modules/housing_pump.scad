@@ -31,9 +31,38 @@ module Peristaltic_Pump_12V() {
 }
 
 // ==============================================================================
+// MODULE: PUMP VISUAL & CUTOUT HELPERS
+// ==============================================================================
+
+module Pump_Visual(type="Diitao") {
+    if (type == "Diitao") {
+        Peristaltic_Pump_12V();
+    } else if (type == "Custom") {
+        // Generic representation based on constants
+        color("Silver") cylinder(h=38, d=pump_motor_d);
+        translate([0,0,38]) {
+             color("DodgerBlue") cylinder(h=20, d=pump_head_d);
+        }
+    } else if (type == "Blank") {
+        // No pump visual
+    }
+}
+
+module Pump_Mount_Cutout(type="Diitao") {
+    if (type == "Diitao") {
+        cylinder(h=10, d=28, center=true);
+    } else if (type == "Custom") {
+        cylinder(h=10, d=pump_mount_d, center=true);
+    } else if (type == "Blank") {
+        // No cutout
+    }
+}
+
+
+// ==============================================================================
 // MODULE: PUMP MODULE (Bottom Unit)
 // ==============================================================================
-module Housing_Pump_Case() {
+module Housing_Pump_Case(pump_type=Pump_Type) {
     color("DimGray")
     diff("remove")
     cuboid([base_w+2*wall, base_l+2*wall, pump_h], rounding=wall, edges="Z", anchor=BOTTOM) {
@@ -48,7 +77,7 @@ module Housing_Pump_Case() {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    tag("remove") up(0.01) threaded_rod(d=npt_thread_d, l=100, pitch=npt_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
                  }
              }
         }
@@ -56,7 +85,7 @@ module Housing_Pump_Case() {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") threaded_rod(d=13.7, l=20, pitch=1.411, internal=true, anchor=CENTER);
+                    tag("remove") up(0.01) threaded_rod(d=npt_thread_d, l=100, pitch=npt_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
                  }
              }
         }
@@ -117,9 +146,9 @@ module Housing_Pump_Case() {
         // Simple plate on standoffs
         difference() {
             cube([base_w-5, base_l-5, 5], center=true); // Plate
-            // Mounting for 2x Diitao Pumps
+            // Mounting for Pumps (Configurable)
              for(side = [-1, 1]) {
-                translate([side * (base_w/4), 20, 0]) cylinder(h=10, d=28, center=true);
+                translate([side * (base_w/4), 20, 0]) Pump_Mount_Cutout(type=pump_type);
              }
         }
     }
@@ -127,6 +156,7 @@ module Housing_Pump_Case() {
 
 module Housing_Pump_Lid() {
     lid_thick = wall; // Thin lid
+    local_seal_lip_h = 5; // Increased from 2.5 to 5.0 for better engagement
 
     color("Silver")
     union() {
@@ -139,7 +169,8 @@ module Housing_Pump_Lid() {
                 for(x = [-1, 1], y = [-1, 1]) {
                     translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                     tag("remove")
-                    down(3) linear_extrude(height=3.1)
+                    down(3) rotate(-[90,0,0])linear_extrude(height=3.1)
+                    
                     trapezoid(w1=15, w2=11, h=13, anchor=CENTER);
                 }
             }
@@ -169,17 +200,17 @@ module Housing_Pump_Lid() {
         // We need the lip to stick DOWN from z=0.
         translate([0,0,0]) {
             difference() {
-                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h], rounding=2, edges="Z", anchor=TOP);
+                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, local_seal_lip_h], rounding=2, edges="Z", anchor=TOP);
                  up(0.01) // ensure manifold
-                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
+                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, local_seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
             }
         }
     }
 }
 
 // 1. Pump Module Assembly
-module Pump_Module_Assembly() {
-    Housing_Pump_Case();
+module Pump_Module_Assembly(pump_type=Pump_Type) {
+    Housing_Pump_Case(pump_type=pump_type);
     translate([0,0,pump_h + Explode_Factor/2]) Housing_Pump_Lid();
 
     // Internal Components
@@ -187,7 +218,7 @@ module Pump_Module_Assembly() {
          // Pumps (Visual)
         for(side = [-1, 1]) {
              translate([side * (base_w/4), 20, wall+5]) // On plate (wall+5)
-             Peristaltic_Pump_12V();
+             Pump_Visual(type=pump_type);
         }
     }
 }
