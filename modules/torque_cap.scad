@@ -26,7 +26,7 @@ module Torque_Cap_Inner(access_hole=true) {
         // Threads
         tag("remove")
         position(BOTTOM) down(1)
-        threaded_rod(d=neck_od+1, l=cap_inner_h+2, internal=true, pitch=cap_thread_pitch, anchor=BOTTOM);
+        threaded_rod(d=neck_od+1, l=cap_inner_h, internal=true, pitch=cap_thread_pitch, anchor=BOTTOM);
 
         if(access_hole) {
            // Pipette Access Hole
@@ -46,7 +46,7 @@ module Torque_Cap_Assembly(access_hole=true) {
     // Outer cavity starts at Z=cap_retention_h - 0.5 (1.5mm)
     // To clear the lip (Z=1.5), Inner needs to be at Z >= 1.5.
     // I will use cap_retention_h (2.0) for safety/tolerance.
-    translate([0,0, cap_retention_h])
+   !translate([0,0, cap_retention_h + Explode_Factor])
     Torque_Cap_Inner(access_hole=access_hole);
 }
 
