@@ -44,59 +44,6 @@ if (Output_Mode == "Assembly") {
                     hull() { translate(p0) sphere(d=4); translate(p1) sphere(d=4); }
                     hull() { translate(p1) sphere(d=4); translate(p2) sphere(d=4); }
                     hull() { translate(p2) sphere(d=4); translate(p3) sphere(d=4); }
-                    
-                      
-                 // Path 1: Left Side Y=-20 -> Out Top (t1)
-                 // Direct path, Left to Left
-                 hull() {
-                     translate([side_x_left, -20, port_z]) sphere(d=cd);
-                     translate([t1_x, t1_y, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([t1_x, t1_y, port_z]) sphere(d=cd);
-                     translate([t1_x, t1_y, 0.1]) cylinder(h=0.1, d=cd); // Up to surface
-                 }
-                 // Path 2: Right Side Y=-20 -> In Bot (t2)
-                 // Direct path, Right to Right
-                 hull() {
-                     translate([side_x_right, -20, port_z]) sphere(d=cd);
-                     translate([t2_x, t2_y, port_z]) sphere(d=cd);
-                 }
-                 #hull() {
-                     translate([t2_x, t2_y, port_z]) sphere(d=cd);
-                     translate([t2_x, t2_y, 0.1]) cylinder(h=0.1, d=cd);
-                 }
-
-
-
-                 // Path 3: Right Side Y=20 -> In Top (t3)
-                 // Direct path, Right to Right
-                 hull() {
-                     translate([side_x_right, 20, port_z]) sphere(d=cd);
-                     translate([t3_x, t3_y, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([t3_x, t3_y, port_z]) sphere(d=cd);
-                     translate([t3_x, t3_y, 0.1]) cylinder(h=0.1, d=cd);
-                 }
-                 translate([side_x_right, 20, port_z]) rotate([0,-90,0])
-                 threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
-
-
-                 // Path 4: Left Side Y=20 -> Out Bot (t4)
-                 // Direct path, Left to Left
-                 hull() {
-                     translate([side_x_left, 20, port_z]) sphere(d=cd);
-                     translate([t4_x, t4_y, port_z]) sphere(d=cd);
-                 }
-                 hull() {
-                     translate([t4_x, t4_y, port_z]) sphere(d=cd);
-                     translate([t4_x, t4_y, 0.1]) cylinder(h=0.1, d=cd);
-                 }
-                 translate([side_x_left, 20, port_z]) rotate([0,90,0])
-                 threaded_rod(d=npt_thread_d, l=30, pitch=npt_thread_pitch, anchor=BOTTOM);
-            
-
                 }
             }
         }
