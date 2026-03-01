@@ -32,7 +32,7 @@ module Torque_Cap_Inner(access_hole=true) {
            // Pipette Access Hole
            tag("remove")
            position(BOTTOM) down(1)
-           cyl(h=cap_inner_h+10, d=neck_id/10, anchor=BOTTOM);
+           cyl(h=cap_inner_h+10, d=25, anchor=BOTTOM);
         }
     }
 }
@@ -46,7 +46,7 @@ module Torque_Cap_Assembly(access_hole=true) {
     // Outer cavity starts at Z=cap_retention_h - 0.5 (1.5mm)
     // To clear the lip (Z=1.5), Inner needs to be at Z >= 1.5.
     // I will use cap_retention_h (2.0) for safety/tolerance.
-   !translate([0,0, cap_retention_h + Explode_Factor])
+   translate([0,0, cap_retention_h + Explode_Factor])
     Torque_Cap_Inner(access_hole=access_hole);
 }
 
@@ -64,7 +64,7 @@ module Torque_Cap_Outer(access_hole=true) {
             for(r=[15:30:360]) {
                 rotate([0,0,r])
                 tag("remove")
-                translate([(neck_od + 20)/2, 0, cap_h/2])
+                translate([(neck_od + 20)/2, 0, slot_height/2])
                 // Vertical rounded indentation
                 cylinder(h=cap_h+1, d=8, center=true);
             }
