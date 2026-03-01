@@ -11,7 +11,7 @@ module Torque_Cap_Inner(access_hole=true) {
     diff("remove")
     cyl(h=cap_inner_h, d=neck_od + 4, anchor=BOTTOM) {
         // Retention Flange at Bottom
-        position(BOTTOM) cyl(d=neck_od + 8, h=cap_retention_h, anchor=BOTTOM);
+        position(BOTTOM) cyl(d=neck_od + 6.4, h=cap_retention_h, rounding=1, anchor=BOTTOM);
 
         // Ratchet Teeth
         // Even with top, starting above retention
