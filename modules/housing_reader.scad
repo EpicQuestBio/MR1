@@ -8,14 +8,13 @@ module Housing_Case_Reader() {
 
         // Feet / Sensor Enclosures (Bottom)
         // Female Interlocks (Holes) matching Pump Lid Dimples
-        // TODO: These should be spheres with a flat bottom that should match the Pump Lid Dimples
          tag("add") {
             for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
-                 // Half sphere pointing down
+                 // Truncated sphere pointing down (3.5mm depth)
                  down(0) intersection() {
                      sphere(d=13);
-                     translate([0, 0, -13/2]) cube([13, 13, 13], center=true);
+                     translate([0, 0, -3.5/2]) cube([15, 15, 3.5], center=true);
                  }
             }
         }
