@@ -166,15 +166,17 @@ module Housing_Pump_Lid() {
             // Male Interlock Lugs (Top Surface)
             // UPDATED: Changed to Dimples for Threaded Sensor Enclosure Feet
             attach(TOP) {
-                for(x = [-1, 1], y = [-1, 1]) {
-                    translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
-                    tag("remove")
-                    down(3) rotate(-[90,0,0])linear_extrude(height=3.1)
-                    
-                    trapezoid(w1=15, w2=11, h=13, anchor=CENTER);
-                }
+         tag("remove") {
+            for(x = [-1, 1], y = [-1, 1]) {
+                 translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
+                 // Half sphere pointing down
+                 down(0) intersection() {
+                     sphere(d=13);
+                     translate([0, 0, -13/2]) cube([13, 13, 13], center=true);
+                 }
             }
-
+        }
+        }
             // Mounting Holes (In Corners)
             tag("remove") {
                 for(x = [-1, 1], y = [-1, 1]) {
