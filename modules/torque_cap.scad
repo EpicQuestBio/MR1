@@ -1,6 +1,9 @@
 // ==============================================================================
 // MODULE: TORQUE-LOCK CAP (Hollow for Pipette)
 // ==============================================================================
+
+//TODO: Torque_Cap_Inner height needs to be consistent with maybe wall thickness
+
 module Torque_Cap_Inner(access_hole=true) {
     // Dynamic Thread Length: Needs to cover enough neck to reach stability
     // neck_h is defined relative to stack.
