@@ -12,9 +12,10 @@ module Housing_Case_Reader() {
             for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                  // Truncated sphere pointing down (3.5mm depth)
+                 // Added +0.1 to height and Z-offset to prevent boolean artifacts when joining
                  down(0) intersection() {
                      sphere(d=13);
-                     translate([0, 0, -3.5/2]) cube([15, 15, 3.5], center=true);
+                     translate([0, 0, -3.5/2 + 0.1/2]) cube([15, 15, 3.5 + 0.1], center=true);
                  }
             }
         }

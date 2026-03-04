@@ -170,9 +170,10 @@ module Housing_Pump_Lid() {
             for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                  // Truncated sphere pointing down (4mm depth for clearance)
+                 // Added +0.1 to height and Z-offset to prevent boolean artifacts at the top surface
                  down(0) intersection() {
                      sphere(d=13.5);
-                     translate([0, 0, -4/2]) cube([15, 15, 4], center=true);
+                     translate([0, 0, -4/2 + 0.1/2]) cube([15, 15, 4 + 0.1], center=true);
                  }
             }
         }
