@@ -112,6 +112,7 @@ feet_inset = 12.5; // Offset from edge for feet (bumped out for visibility)
 seal_cs = 1.78;      // O-ring cross section
 seal_radius = 0.3;   // Knife edge radius
 seal_lip_h = 2.5;    // Indexing lip height
+pump_lid_thick = wall + 2; // Increased to 7mm for deeper foot dimples
 
 // Internal Component Placeholders
 pcb_w = 80; pcb_l = 60;

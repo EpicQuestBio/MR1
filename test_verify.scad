@@ -24,8 +24,8 @@ if (Output_Mode == "Assembly") {
             Pump_Module_Assembly();
 
             // Top Unit: Reader Module
-            // Sits on top of Pump Module (Height pump_h + lid_wall)
-            translate([0,0, pump_h + wall + Explode_Factor]) {
+            // Sits on top of Pump Module (Height pump_h + pump_lid_thick)
+            translate([0,0, pump_h + pump_lid_thick + Explode_Factor]) {
                 Reader_Module_Assembly();
             }
 
@@ -41,11 +41,11 @@ if (Output_Mode == "Assembly") {
                     }
                      hull() {
                         translate([55+30, 20, pump_h/2]) sphere(d=4);
-                        translate([55+30, 20, pump_h + wall + reader_h - 5]) sphere(d=4); // Up to new port Z (-5 from top)
+                        translate([55+30, 20, pump_h + pump_lid_thick + reader_h - 5]) sphere(d=4); // Up to new port Z (-5 from top)
                     }
                     hull() {
-                        translate([55+30, 20, pump_h + wall + reader_h - 5]) sphere(d=4);
-                         translate([-55-10, 20, pump_h + wall + reader_h - 5]) sphere(d=4); // Over to Left
+                        translate([55+30, 20, pump_h + pump_lid_thick + reader_h - 5]) sphere(d=4);
+                         translate([-55-10, 20, pump_h + pump_lid_thick + reader_h - 5]) sphere(d=4); // Over to Left
                     }
                 }
             }
