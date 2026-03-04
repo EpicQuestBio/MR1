@@ -23,8 +23,8 @@ if (Output_Mode == "Assembly") {
             Pump_Module_Assembly();
 
             // Top Unit: Reader Module
-            // Sits on top of Pump Module (Height pump_h + lid_wall)
-            translate([0,0, pump_h + wall + Explode_Factor]) {
+            // Sits on top of Pump Module (Height pump_h + pump_lid_thick)
+            translate([0,0, pump_h + pump_lid_thick + Explode_Factor]) {
                 Reader_Module_Assembly();
             }
 

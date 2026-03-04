@@ -155,7 +155,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
 }
 
 module Housing_Pump_Lid() {
-    lid_thick = wall; // Thin lid
+    lid_thick = pump_lid_thick; // Thicker lid to clear foot dimples
     local_seal_lip_h = 5; // Increased from 2.5 to 5.0 for better engagement
 
     color("Silver")
