@@ -58,8 +58,9 @@ module Housing_Lid_Reader() {
             tag("remove") Cable_Slot();
 
             // Internal Bucket (Now starts lower to leave ceiling room)
+            // Added +0.1 padding to depth to prevent Z-fighting at the bottom boundary
             tag("remove") position(TOP) down(ceiling_thick)
-            cuboid([base_w-2*wall, base_l-2*wall, lid_thick - ceiling_thick + wall], rounding=2, edges="Z", anchor=TOP);
+            cuboid([base_w-2*wall-0.4, base_l-2*wall-0.4, lid_thick - ceiling_thick + wall + 0.1], rounding=2, edges="Z", anchor=TOP);
 
             // Pogo Pin Holes
             tag("remove")
@@ -234,9 +235,9 @@ module Housing_Lid_Reader() {
         // Added 0.1 overlap
         translate([0,0,-lid_thick+0.1]) {
             difference() {
-                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h], rounding=2, edges="Z", anchor=TOP);
+                 cuboid([base_w - 2*wall - 0.4, base_l - 2*wall - 0.4, seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
                  up(0.01) // ensure manifold
-                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, seal_lip_h + 0.1], rounding=2, edges="Z", anchor=TOP);
+                 cuboid([base_w - 2*wall - 0.4 - 3, base_l - 2*wall - 0.4 - 3, seal_lip_h + 0.2], rounding=2, edges="Z", anchor=TOP);
             }
         }
     }
