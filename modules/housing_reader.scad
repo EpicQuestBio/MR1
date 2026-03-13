@@ -60,7 +60,7 @@ module Housing_Lid_Reader() {
             // Internal Bucket (Now starts lower to leave ceiling room)
             // Added +0.1 padding to depth to prevent Z-fighting at the bottom boundary
             tag("remove") position(TOP) down(ceiling_thick)
-            cuboid([base_w-2*wall-0.4, base_l-2*wall-0.4, lid_thick - ceiling_thick + wall + 0.1], rounding=2, edges="Z", anchor=TOP);
+            cuboid([base_w-2*wall-0.4-3, base_l-2*wall-0.4-3, lid_thick - ceiling_thick + wall + 0.1], rounding=2, edges="Z", anchor=TOP);
 
             // Pogo Pin Holes
             tag("remove")
