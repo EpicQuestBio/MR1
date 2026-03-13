@@ -77,7 +77,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") up(0.01) threaded_rod(d=npt_thread_d, l=100, pitch=npt_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
+                    tag("remove") up(0.01) threaded_rod(d=luer_thread_d, l=100, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
                  }
              }
         }
@@ -85,7 +85,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") up(0.01) threaded_rod(d=npt_thread_d, l=100, pitch=npt_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
+                    tag("remove") up(0.01) threaded_rod(d=luer_thread_d, l=100, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
                  }
              }
         }
