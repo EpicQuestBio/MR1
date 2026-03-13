@@ -73,9 +73,9 @@ Show_Potting = true;
 Show_O_Rings = true;
 
 // Port Locations (Radius from center)
-port_radius = 20; // Expanded for 1/4" NPT fittings
-npt_thread_pitch = 1.411; // 1/4" NPT Pitch (approx 18 TPI)
-npt_thread_d = 13.7;      // 1/4" NPT Major Diameter
+port_radius = 20; // Expanded for Luer Lock (1/4-28 UNF) fittings
+luer_thread_pitch = 0.907; // 1/4-28 UNF Pitch
+luer_thread_d = 6.35;      // 1/4-28 UNF Major Diameter
 
 angle_fluid_in_bot = -30;
 angle_fluid_in_top = 210;
