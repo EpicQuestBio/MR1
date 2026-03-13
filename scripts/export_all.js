@@ -47,9 +47,11 @@ async function main() {
   const args = process.argv.slice(2);
   if (args.length > 0) {
       const requested = args.filter(a => !a.startsWith('-'));
-      if (requested.length > 0) {
+      if (requested.length > 0 && !requested.includes('all')) {
           modes = modes.filter(m => requested.includes(m));
           console.log(`Filtering to: ${modes.join(', ')}`);
+      } else if (requested.includes('all')) {
+          console.log('Exporting all modes.');
       }
   }
 
