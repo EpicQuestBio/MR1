@@ -107,7 +107,8 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
 
              // 12mm radius rounding for smooth corners
              final_path = round_corners(handle_path, radius=12, closed=false);
-             path_sweep(circle(d=tube_d), final_path);
+             // Ensure intersection is completely inside the wall to avoid nonplanar manifold errors
+             translate([0, 0, -1]) path_sweep(circle(d=tube_d, $fn=16), final_path);
         }
 
         // Connectivity (Back Wall)
@@ -137,7 +138,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
         attach(TOP) {
             // Updated to match Reader Module logic (base_w - 8)
             path_rect = rect([base_w - 8, base_l - 8], rounding=3);
-            path_sweep(circle(r=seal_radius), path_rect, closed=true);
+            path_sweep(square([seal_radius*2, seal_radius*2], center=true), path_rect, closed=true);
         }
     }
 
@@ -194,7 +195,7 @@ module Housing_Pump_Lid() {
              tag("remove") position(BOTTOM) {
                  path_rect = rect([base_w - 8, base_l - 8], rounding=3);
                  down(0.01) // Ensure cut
-                 path_sweep(circle(d=seal_cs+0.2), path_rect, closed=true);
+                 path_sweep(square([seal_cs+0.2, seal_cs+0.2], center=true), path_rect, closed=true);
              }
         }
 
