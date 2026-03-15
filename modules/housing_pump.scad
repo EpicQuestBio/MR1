@@ -69,28 +69,28 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
 
         // Internal Bucket
         tag("remove") position(BOTTOM) up(wall)
-        cuboid([base_w-2*wall, base_l-2*wall, pump_h+wall], rounding=2, edges="Z", anchor=BOTTOM);
+        cuboid([base_w-2*wall, base_l-2*wall, pump_h], rounding=2, edges="Z", anchor=BOTTOM);
 
         // Fluid Ports (Base Side Walls)
         // 2x Input (Left), 2x Output (Right)
-        attach(LEFT) {
+        attach(LEFT, overlap=0.1) {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
-                 cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") up(0.01) threaded_rod(d=luer_thread_d, l=100, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
+                 cyl(h=wall*3, d=20, anchor=CENTER, $fn=32) {
+                    tag("remove") threaded_rod(d=luer_thread_d, l=wall*5, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
                  }
              }
         }
-        attach(RIGHT) {
+        attach(RIGHT, overlap=0.1) {
              for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
-                 cyl(h=wall*3, d=20, anchor=CENTER) {
-                    tag("remove") up(0.01) threaded_rod(d=luer_thread_d, l=100, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
+                 cyl(h=wall*3, d=20, anchor=CENTER, $fn=32) {
+                    tag("remove") threaded_rod(d=luer_thread_d, l=wall*5, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
                  }
              }
         }
 
-        attach(FRONT) {
+        attach(FRONT, overlap=0.1) {
              // Coffee Mug Handle (D-Shaped)
              // Oriented vertically, sticking out Z (relative to attachment)
              // Designed for adult hand grasp (approx 40mm inner vertical, 30mm inner clearance)
@@ -99,23 +99,22 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              tube_d = 12;
 
              handle_path = [
-                [0, h_center, 0],
+                [0, h_center, -1],
                 [0, h_center, stick_out],
                 [0, -h_center, stick_out],
-                [0, -h_center, 0]
+                [0, -h_center, -1]
              ];
 
              // 12mm radius rounding for smooth corners
              final_path = round_corners(handle_path, radius=12, closed=false);
-             // Ensure intersection is completely inside the wall to avoid nonplanar manifold errors
-             translate([0, 0, -1]) path_sweep(circle(d=tube_d, $fn=16), final_path);
+             path_sweep(circle(d=tube_d, $fn=16), final_path);
         }
 
         // Connectivity (Back Wall)
-        attach(BACK) {
+        attach(BACK, overlap=0.1) {
             // DIN 5 MIDI (Panel Mount)
             tag("remove") translate([-25, 0, 0])
-            cyl(h=wall*10, d=16, anchor=CENTER) ;
+            cyl(h=wall*10, d=16, anchor=CENTER, $fn=32) ;
 
             // USB-C (Panel Mount Cutout)
             tag("remove") translate([0, 0, 0])
@@ -123,22 +122,22 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
 
             // Barrel Jack (Panel Mount)
             tag("remove") translate([25, 0, 0])
-            cyl(h=wall*10, d=12, anchor=CENTER) ;
+            cyl(h=wall*10, d=12, anchor=CENTER, $fn=32) ;
         }
 
         // Lid Mounts (In Wall Corners)
         tag("remove") {
              for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2), y * (base_l/2), 0])
-                 cylinder(h=pump_h*3, d=3.2, center=true);
+                 cylinder(h=pump_h*3, d=3.2, center=true, $fn=16);
              }
         }
 
         // Knife Edge (Seal)
-        attach(TOP) {
+        attach(TOP, overlap=0.1) {
             // Updated to match Reader Module logic (base_w - 8)
             path_rect = rect([base_w - 8, base_l - 8], rounding=3);
-            path_sweep(square([seal_radius*2, seal_radius*2], center=true), path_rect, closed=true);
+            path_sweep(circle(r=seal_radius, $fn=16), path_rect, closed=true);
         }
     }
 
@@ -195,7 +194,7 @@ module Housing_Pump_Lid() {
              tag("remove") position(BOTTOM) {
                  path_rect = rect([base_w - 8, base_l - 8], rounding=3);
                  down(0.01) // Ensure cut
-                 path_sweep(square([seal_cs+0.2, seal_cs+0.2], center=true), path_rect, closed=true);
+                 path_sweep(circle(d=seal_cs+0.2, $fn=16), path_rect, closed=true);
              }
         }
 
