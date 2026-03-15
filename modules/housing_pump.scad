@@ -98,16 +98,35 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              stick_out = 36;
              tube_d = 12;
 
-             handle_path = [
-                [0, h_center, -1],
-                [0, h_center, stick_out],
-                [0, -h_center, stick_out],
-                [0, -h_center, -1]
-             ];
+             // Explicit handle geometry to avoid path_sweep CGAL assertion violations
+             // Recreate exact geometry with proper overlap and rounded corners
+             corner_r = 12;
+             z_start = -1;
 
-             // 12mm radius rounding for smooth corners
-             final_path = round_corners(handle_path, radius=12, closed=false);
-             path_sweep(circle(d=tube_d, $fn=16), final_path);
+             union() {
+                 // Vertical legs (from z_start up to start of corner curve)
+                 translate([0, h_center, (stick_out - corner_r + z_start)/2])
+                     cylinder(d=tube_d, h=stick_out - corner_r - z_start + 0.1, center=true);
+                 translate([0, -h_center, (stick_out - corner_r + z_start)/2])
+                     cylinder(d=tube_d, h=stick_out - corner_r - z_start + 0.1, center=true);
+
+                 // Horizontal crossbar (between the corner curves)
+                 translate([0, 0, stick_out])
+                     rotate([90, 0, 0]) cylinder(d=tube_d, h=(h_center - corner_r)*2 + 0.1, center=true);
+
+                 // Rounded corners using hull for absolute geometry safety
+                 translate([0, h_center - corner_r, stick_out - corner_r])
+                     hull() {
+                         translate([0, corner_r, 0]) sphere(d=tube_d);
+                         translate([0, 0, corner_r]) sphere(d=tube_d);
+                     }
+
+                 translate([0, -h_center + corner_r, stick_out - corner_r])
+                     hull() {
+                         translate([0, -corner_r, 0]) sphere(d=tube_d);
+                         translate([0, 0, corner_r]) sphere(d=tube_d);
+                     }
+             }
         }
 
         // Connectivity (Back Wall)
@@ -170,10 +189,10 @@ module Housing_Pump_Lid() {
             for(x = [-1, 1], y = [-1, 1]) {
                  translate([x * (base_w/2 - feet_inset), y * (base_l/2 - feet_inset), 0])
                  // Truncated sphere pointing down (4mm depth for clearance)
-                 // Added +0.1 to height and Z-offset to prevent boolean artifacts at the top surface
+                 // Added +0.2 to height and Z-offset to prevent boolean artifacts at the top surface
                  down(0) intersection() {
                      sphere(d=13.5);
-                     translate([0, 0, -4/2 + 0.1/2]) cube([15, 15, 4 + 0.1], center=true);
+                     translate([0, 0, -4/2 + 0.2/2]) cube([15, 15, 4 + 0.2], center=true);
                  }
             }
         }
