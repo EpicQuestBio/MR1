@@ -74,7 +74,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
         // Fluid Ports (Base Side Walls)
         // 2x Input (Left), 2x Output (Right)
         attach(LEFT, overlap=0.1) {
-             for(x_pos = [-20, 20]) {
+             tag("add") for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER, $fn=32) {
                     tag("remove") threaded_rod(d=luer_thread_d, l=wall*5, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
@@ -82,7 +82,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              }
         }
         attach(RIGHT, overlap=0.1) {
-             for(x_pos = [-20, 20]) {
+             tag("add") for(x_pos = [-20, 20]) {
                  translate([x_pos, 0, 0])
                  cyl(h=wall*3, d=20, anchor=CENTER, $fn=32) {
                     tag("remove") threaded_rod(d=luer_thread_d, l=wall*5, pitch=luer_thread_pitch, internal=true, anchor=CENTER, $fn=30, spin=45);
@@ -103,7 +103,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
              corner_r = 12;
              z_start = -1;
 
-             union() {
+             tag("add") union() {
                  // Vertical legs (from z_start up to start of corner curve)
                  translate([0, h_center, (stick_out - corner_r + z_start)/2])
                      cylinder(d=tube_d, h=stick_out - corner_r - z_start + 0.1, center=true);
@@ -155,8 +155,10 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
         // Knife Edge (Seal)
         attach(TOP, overlap=0.1) {
             // Updated to match Reader Module logic (base_w - 8)
-            path_rect = rect([base_w - 8, base_l - 8], rounding=3);
-            path_sweep(circle(r=seal_radius, $fn=16), path_rect, closed=true);
+            tag("add") {
+                path_rect = rect([base_w - 8, base_l - 8], rounding=3);
+                path_sweep(circle(r=seal_radius, $fn=16), path_rect, closed=true);
+            }
         }
     }
 

@@ -63,9 +63,12 @@ module Housing_Lid_Reader() {
             cuboid([base_w-2*wall-0.4, base_l-2*wall-0.4, lid_thick - ceiling_thick + wall + 0.1], rounding=2, edges="Z", anchor=TOP);
 
             // Pogo Pin Holes
-            tag("remove")
-            position(BOTTOM) down(lid_thick/2)
-            linear_extrude(lid_thick*3)PogoPinHoles();
+            // Wrapped in if(false) to prevent empty linear_extrude which causes 2D/3D mixing errors
+            if(false) {
+                tag("remove")
+                position(BOTTOM) down(lid_thick/2)
+                linear_extrude(lid_thick*3)PogoPinHoles();
+            }
 
             // Neck Transition & Thread (On Top)
             attach(TOP, overlap=5) // Embed into plate
