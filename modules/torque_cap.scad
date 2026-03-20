@@ -40,8 +40,8 @@ module Torque_Cap_Inner(access_hole=true) {
     }
 }
 
-module Torque_Cap_Assembly(access_hole=true) {
-    Torque_Cap_Outer(access_hole=access_hole);
+module Torque_Cap_Assembly(access_hole=true, flex_style="ratchet") {
+    Torque_Cap_Outer(access_hole=access_hole, flex_style=flex_style);
     // Raise inner cap to sit on retention lip
     // Lip height is effectively cap_retention_h (approx 2mm)
     // Inner flange height is cap_retention_h (2mm)
@@ -53,7 +53,7 @@ module Torque_Cap_Assembly(access_hole=true) {
     Torque_Cap_Inner(access_hole=access_hole);
 }
 
-module Torque_Cap_Outer(access_hole=true) {
+module Torque_Cap_Outer(access_hole=true, flex_style="ratchet") {
     color("Orange") {
         diff("remove") {
             // Main Body with Rounded Top Edge
@@ -92,54 +92,117 @@ module Torque_Cap_Outer(access_hole=true) {
             // Slots for Fingers
             // Wider slots to allow fingers to flex inward/outward
             // Positioned to align with fingers
-            for(r=[0:60:360]) {
-                rotate([0,0,r]) {
-                    // Cutout slot for flex
-                    tag("remove")
-                    translate([neck_od/2 + 6, 0, cap_h/2])
-                    cube([6, 18, cap_h+2], center=true);
+            if (flex_style == "ratchet") {
+                for(r=[0:60:360]) {
+                    rotate([0,0,r]) {
+                        // Cutout slot for flex (wider)
+                        tag("remove")
+                        translate([neck_od/2 + 6, 0, cap_h/2])
+                        cube([6, 18, cap_h+2], center=true);
+                    }
+                }
+            } else if (flex_style == "vertical") {
+                slot_bottom = cap_retention_h + 1;
+                slot_top = cap_h - 3;
+                slot_height = slot_top - slot_bottom;
+                slot_z = slot_bottom + slot_height/2;
+
+                for(r=[0:60:360]) {
+                    rotate([0,0,r]) {
+                        tag("remove")
+                        translate([neck_od/2 + 6, 0, slot_z])
+                        cube([10, 12, slot_height], center=true);
+                    }
                 }
             }
         }
 
         // Additive Ribbing (Knurling)
-        Cap_Ribs();
+        Cap_Ribs(flex_style=flex_style);
 
-        // Spring Arms (Ratchet Style Torque Limiter)
-        for(r=[0:60:360]) {
-            rotate([0,0,r]) {
-                // Arm Body
-                translate([neck_od/2 + 6, 0, cap_retention_h + 1]) {
-                     // Arm Base - shift up by retention + 1mm clearance
-                     // Height is remainder
-                     up((cap_h - (cap_retention_h+1))/2)
-                     cube([4, 15, cap_h - (cap_retention_h+1)], center=true); // Arm
+        if (flex_style == "ratchet") {
+            // Spring Arms (Ratchet Style Torque Limiter)
+            for(r=[0:60:360]) {
+                rotate([0,0,r]) {
+                    // Arm Body
+                    translate([neck_od/2 + 6, 0, cap_retention_h + 1]) {
+                         // Arm Base - shift up by retention + 1mm clearance
+                         // Height is remainder
+                         up((cap_h - (cap_retention_h+1))/2)
+                         cube([4, 15, cap_h - (cap_retention_h+1)], center=true); // Arm
 
-                     // Pawl - shift up
-                     up((cap_h - (cap_retention_h+1))/2)
-                     translate([-3, 6, 0])
-                     cylinder(h=cap_h - (cap_retention_h+1), d=3, center=true); // Pawl
+                         // Pawl - shift up
+                         up((cap_h - (cap_retention_h+1))/2)
+                         translate([-3, 6, 0])
+                         cylinder(h=cap_h - (cap_retention_h+1), d=3, center=true); // Pawl
+                    }
                 }
             }
+        } else if (flex_style == "vertical") {
+            // Additive Fingers (Attached to Top)
+            Cap_Fingers();
         }
     }
 }
 
-module Cap_Ribs() {
+module Cap_Ribs(flex_style="ratchet") {
     // Vertical ribs around the perimeter
     // Perimeter D = neck_od + 20
     rib_count = 72; // Every 5 degrees
     for(r=[0:360/rib_count:360]) {
         // Exclude ribs that interfere with finger slots
         // Slots are at 0, 60, 120... (Multiples of 60)
-        // Slot width ~18 degrees. We skip +/- 15 degrees to be safe.
         check = r % 60;
-        // Avoid Finger Slots (0, 60) AND Grip Indentations (15, 45)
-        // Ribs at 25, 30, 35 are safe.
-        if (check >= 25 && check <= 35) {
-            rotate([0,0,r])
-            translate([(neck_od + 20)/2, 0, cap_retention_h])
-            cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
+
+        if (flex_style == "ratchet") {
+            // Slot width ~18 degrees. We skip +/- 15 degrees to be safe.
+            // Avoid Finger Slots (0, 60) AND Grip Indentations (15, 45)
+            // Ribs at 25, 30, 35 are safe.
+            if (check >= 25 && check <= 35) {
+                rotate([0,0,r])
+                translate([(neck_od + 20)/2, 0, cap_retention_h])
+                cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
+            }
+        } else if (flex_style == "vertical") {
+            // Slot width ~10 degrees. We skip +/- 8 degrees to be safe.
+            // Avoid Finger Slots (0, 60) AND Grip Indentations (15, 45)
+            // Ribs at 25, 30, 35 are safe.
+            if (check >= 25 && check <= 35) {
+                rotate([0,0,r])
+                translate([(neck_od + 20)/2, 0, cap_retention_h])
+                cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
+            }
         }
+    }
+}
+
+module Cap_Fingers() {
+    for(r=[0:60:360]) {
+        rotate([0,0,r]) {
+            // Finger attached at Top
+            // Positions:
+            // Top Z = cap_h (Base of cantilever)
+            // Center Radius = neck_od/2 + 6
+            translate([neck_od/2 + 6, 0, cap_h])
+            rotate([0, 180, 0]) // Hang down
+            Cap_Finger_Single();
+        }
+    }
+}
+
+module Cap_Finger_Single() {
+    len = cap_h - (cap_retention_h + 1);
+
+    // Finger Body (Thinner for flexibility)
+    // 3mm thick (Radial), 8mm wide (Tangential)
+    // Attached at base (which is Top of cap in world space)
+    cuboid([3, 8, len], anchor=BOTTOM) {
+        // Pawl for engagement
+        // Positioned near the "Tip" (Local TOP)
+        // Local X+ points World Inward (after rotation)
+        position(TOP) down(5)
+        translate([1.5, 0, 0]) // On Inner Face (Local +X)
+        rotate([0,90,0]) // Point along +X
+        cyl(h=3, d=3, rounding2=1.5, anchor=BOTTOM); // Pawl with rounded tip
     }
 }
