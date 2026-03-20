@@ -104,13 +104,8 @@ async function main() {
                 }
             }
         }
-        // Create /libraries first
-        try { instance.FS.mkdir('/libraries'); } catch(e) {}
-        loadDir(LIB_DIR, '/libraries/BOSL2');
+        loadDir(LIB_DIR, '/BOSL2');
         loadDir('modules', '/modules');
-
-        // Suppress localization warning
-        try { instance.FS.mkdir('/locale'); } catch(e) {}
 
         let ext = 'stl';
         if (mode.endsWith('_DXF')) ext = 'dxf';
