@@ -67,7 +67,7 @@ module Torque_Cap_Outer(access_hole=true) {
             for(r=[15:30:360]) {
                 rotate([0,0,r])
                 tag("remove")
-                translate([(neck_od + 20)/2, 0, slot_height/2])
+                translate([(neck_od + 20)/2, 0, cap_h/2])
                 // Vertical rounded indentation
                 cylinder(h=cap_h+1, d=8, center=true);
             }
@@ -92,18 +92,12 @@ module Torque_Cap_Outer(access_hole=true) {
             // Slots for Fingers
             // Wider slots to allow fingers to flex inward/outward
             // Positioned to align with fingers
-            // FIX: Don't cut top rim (bridge) or bottom retention ring
-            slot_bottom = cap_retention_h + 1;
-            slot_top = cap_h - 3;
-            slot_height = slot_top - slot_bottom;
-            slot_z = slot_bottom + slot_height/2;
-
             for(r=[0:60:360]) {
                 rotate([0,0,r]) {
+                    // Cutout slot for flex
                     tag("remove")
-                    // Offset Y to accommodate the horizontal tangential arm of 15mm
-                    translate([neck_od/2 + 6, 15/2, slot_z])
-                    cube([10, 22, slot_height], center=true);
+                    translate([neck_od/2 + 6, 0, cap_h/2])
+                    cube([6, 18, cap_h+2], center=true);
                 }
             }
         }
@@ -111,8 +105,23 @@ module Torque_Cap_Outer(access_hole=true) {
         // Additive Ribbing (Knurling)
         Cap_Ribs();
 
-        // Additive Fingers (Attached to Side)
-        Cap_Fingers();
+        // Spring Arms (Ratchet Style Torque Limiter)
+        for(r=[0:60:360]) {
+            rotate([0,0,r]) {
+                // Arm Body
+                translate([neck_od/2 + 6, 0, cap_retention_h + 1]) {
+                     // Arm Base - shift up by retention + 1mm clearance
+                     // Height is remainder
+                     up((cap_h - (cap_retention_h+1))/2)
+                     cube([4, 15, cap_h - (cap_retention_h+1)], center=true); // Arm
+
+                     // Pawl - shift up
+                     up((cap_h - (cap_retention_h+1))/2)
+                     translate([-3, 6, 0])
+                     cylinder(h=cap_h - (cap_retention_h+1), d=3, center=true); // Pawl
+                }
+            }
+        }
     }
 }
 
@@ -123,50 +132,14 @@ module Cap_Ribs() {
     for(r=[0:360/rib_count:360]) {
         // Exclude ribs that interfere with finger slots
         // Slots are at 0, 60, 120... (Multiples of 60)
-        // Horizontal arm slot is extended (up to ~30 degrees), so we skip more ribs.
+        // Slot width ~18 degrees. We skip +/- 15 degrees to be safe.
         check = r % 60;
-        // Ribs at 35, 40 are safe. The slot cuts through 0..30 roughly.
-        // We also want to avoid Grip Indentations at 45.
-        // So we only keep ribs at check == 35 or check == 40 to prevent floating ribs.
-        if (check == 35 || check == 40) {
+        // Avoid Finger Slots (0, 60) AND Grip Indentations (15, 45)
+        // Ribs at 25, 30, 35 are safe.
+        if (check >= 25 && check <= 35) {
             rotate([0,0,r])
             translate([(neck_od + 20)/2, 0, cap_retention_h])
             cyl(h=cap_h-5, d=2, anchor=BOTTOM); // Stop before the rounded top
         }
-    }
-}
-
-module Cap_Fingers() {
-    slot_bottom = cap_retention_h + 1;
-    slot_top = cap_h - 3;
-    slot_height = slot_top - slot_bottom;
-    slot_z = slot_bottom + slot_height/2;
-
-    for(r=[0:60:360]) {
-        rotate([0,0,r]) {
-            // Finger attached at the wall
-            // Positions:
-            // Center Z = slot_z
-            // Center Radius = neck_od/2 + 6
-            translate([neck_od/2 + 6, 0, slot_z])
-            Cap_Finger_Single(h=slot_height - 2);
-        }
-    }
-}
-
-module Cap_Finger_Single(h) {
-    len = 15; // Based on historically discovered length for more flex
-
-    // Finger Body (Horizontal/Tangential)
-    // 3mm thick (Radial), 15mm long (Tangential), h height (Vertical)
-    // Attached at base (Y=0 locally) pointing +Y
-    cuboid([3, len, h], anchor=FRONT) {
-        // Pawl for engagement
-        // Positioned near the free end (BACK in local frame)
-        // Local X- points World Inward
-        position(BACK)
-        translate([-1.5, 0, 0]) // On Inner Face (Local -X)
-        rotate([0,90,0]) // Point along -X
-        cyl(h=3, d=3, rounding2=1.5, anchor=TOP); // Pawl with rounded tip
     }
 }
