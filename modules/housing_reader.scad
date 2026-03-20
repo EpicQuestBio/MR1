@@ -4,8 +4,12 @@
 module Housing_Case_Reader() {
     color("WhiteSmoke")
     diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, wall], rounding=wall, edges="Z", anchor=BOTTOM) {
-
+    cuboid([base_w+2*wall, base_l+2*wall, reader_lid_thick], rounding=wall, edges="Z", anchor=BOTTOM) {
+    
+        // Internal Bucket
+        tag("remove") position(BOTTOM) up(wall)
+        cuboid([base_w-2*wall, base_l-2*wall, reader_lid_thick], rounding=2, edges="Z", anchor=BOTTOM);
+        
         // Feet / Sensor Enclosures (Bottom)
         // Female Interlocks (Holes) matching Pump Lid Dimples
          tag("add") {
@@ -60,15 +64,10 @@ module Housing_Lid_Reader() {
             // Internal Bucket (Now starts lower to leave ceiling room)
             // Added +0.1 padding to depth to prevent Z-fighting at the bottom boundary
             tag("remove") position(TOP) down(ceiling_thick)
-            cuboid([base_w-2*wall-0.4, base_l-2*wall-0.4, lid_thick - ceiling_thick + wall + 0.1], rounding=2, edges="Z", anchor=TOP);
+            cuboid([base_w-2*wall-0.4-3, base_l-2*wall-0.4-3, lid_thick - ceiling_thick + wall + 0.1], rounding=2, edges="Z", anchor=TOP);
 
-            // Pogo Pin Holes
-            // Wrapped in if(false) to prevent empty linear_extrude which causes 2D/3D mixing errors
-            if(false) {
-                tag("remove")
-                position(BOTTOM) down(lid_thick/2)
-                linear_extrude(lid_thick*3)PogoPinHoles();
-            }
+
+          
 
             // Neck Transition & Thread (On Top)
             attach(TOP, overlap=5) // Embed into plate
@@ -112,7 +111,13 @@ module Housing_Lid_Reader() {
                  threaded_rod(d=luer_thread_d, l=30, pitch=luer_thread_pitch, anchor=BOTTOM);
                  translate([side_x_right, -20, port_z]) rotate([0,-90,0])
                  threaded_rod(d=luer_thread_d, l=30, pitch=luer_thread_pitch, anchor=BOTTOM);
+                 translate([side_x_left, 20, port_z]) rotate([0,90,0])
+                 threaded_rod(d=luer_thread_d, l=30, pitch=luer_thread_pitch, anchor=BOTTOM);
+                 translate([side_x_right, 20, port_z]) rotate([0,-90,0])
+                 threaded_rod(d=luer_thread_d, l=30, pitch=luer_thread_pitch, anchor=BOTTOM);
 
+               }
+/*
                  // Path 1: Left Side Y=-20 -> Out Top (t1)
                  // Direct path, Left to Left
                  hull() {
@@ -129,7 +134,7 @@ module Housing_Lid_Reader() {
                      translate([side_x_right, -20, port_z]) sphere(d=cd);
                      translate([t2_x, t2_y, port_z]) sphere(d=cd);
                  }
-                 #hull() {
+                 hull() {
                      translate([t2_x, t2_y, port_z]) sphere(d=cd);
                      translate([t2_x, t2_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
@@ -146,9 +151,7 @@ module Housing_Lid_Reader() {
                      translate([t3_x, t3_y, port_z]) sphere(d=cd);
                      translate([t3_x, t3_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x_right, 20, port_z]) rotate([0,-90,0])
-                 threaded_rod(d=luer_thread_d, l=30, pitch=luer_thread_pitch, anchor=BOTTOM);
-
+                 
 
                  // Path 4: Left Side Y=20 -> Out Bot (t4)
                  // Direct path, Left to Left
@@ -160,25 +163,24 @@ module Housing_Lid_Reader() {
                      translate([t4_x, t4_y, port_z]) sphere(d=cd);
                      translate([t4_x, t4_y, 0.1]) cylinder(h=0.1, d=cd);
                  }
-                 translate([side_x_left, 20, port_z]) rotate([0,90,0])
-                 threaded_rod(d=luer_thread_d, l=30, pitch=luer_thread_pitch, anchor=BOTTOM);
-               }
-                 
+                   */  
+
+             
                
                  // Port Pass-throughs
             tag("remove") {
-                for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
+                for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
             
                     rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=100, d=6, center=true);
                 }
             }
             // Electrode Ports
-             tag("remove")
-             position(CENTER) {
-                for(a = [angle_elec_cis, angle_elec_trans]) {
-                    zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
-                }
-             }
+           //  tag("remove")
+           //  position(CENTER) {
+           //     for(a = [angle_elec_cis, angle_elec_trans]) {
+           //         zrot(a) right(port_radius) cyl(h=lid_thick*3, d=4, center=true);
+           //     }
+           //  }
 
              // Connectivity (Back Side) - Moved to Positive Y Axis
              attach(BACK) {
