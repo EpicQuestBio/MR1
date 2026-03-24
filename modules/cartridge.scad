@@ -375,7 +375,8 @@ module Gasket_Low_Dead_Volume(type="bottom") {
         circle(d=hex_diam, $fn=6);
 
         // Cable Slot
-        Cable_Slot_2D();
+        tag("remove") Cable_Slot();
+
 
         // Pass-throughs (Inactive Ports)
         for(a = pass_angles) {
