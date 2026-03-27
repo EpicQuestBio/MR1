@@ -9,3 +9,4 @@
 | M3x10mm Socket Head Cap Screw | Generic | 8 | Case assembly screws |
 | Silicone O-Ring (CS 1.78mm) | Generic | 4 | Fits into 1/8" NPT adapters/fluid ports |
 | 12V Peristaltic Pump (Diitao Style) | Generic | 2 | Fits into `Housing_Pump_Case` |
+| 1/8" Hose Barb x Female Threaded Natural Polypropylene Bulkhead Luer | Item 96550 / Ark-Plas LJX39-PP0 | - | Engineered to ISO standards, precision-molded luer fittings |
