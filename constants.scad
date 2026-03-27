@@ -26,8 +26,8 @@ Sealed_Top_Mode = false; // [true, false]
 /* [Stack Dimensions & Modularity] */
 // Define component thicknesses for dynamic calculation
 pp_h = 3;           // Bottom Pusher Plate (TPU/Seal)
-plate_thick = 4;    // Plate 1 (Base) & Plate 3 (Top)
-gasket_thick = 0.8; // Gaskets
+plate_thick = 6.35; // Plate 1 (Base) & Plate 3 (Top), 1/4" PP Sheet
+gasket_thick = 1.5875; // Gaskets (1/16")
 carrier_thick = 2.6;// PCB + Carrier assembly
 puck_h = 6;         // Pressure Puck height
 
