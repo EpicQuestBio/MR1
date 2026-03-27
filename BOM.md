@@ -9,3 +9,7 @@
 | M3x10mm Socket Head Cap Screw | Generic | 8 | Case assembly screws |
 | Silicone O-Ring (CS 1.78mm) | Generic | 4 | Fits into 1/8" NPT adapters/fluid ports |
 | 12V Peristaltic Pump (Diitao Style) | Generic | 2 | Fits into `Housing_Pump_Case` |
+| 1/8" Hose Barb x Female Threaded Natural Polypropylene Bulkhead Luer | Item 96550 / Ark-Plas LJX39-PP0 | 8 | Engineered to ISO standards, precision-molded luer fittings. QTY 4 for reader and 4 for pump |
+| Female Luer Fitting Panel Mount 1/4-28 UNF to Barb, 1/8" (3.2 mm) ID Tubing, White Nylon | [FTLLB230-1](https://www.fluidcontrol24.com/ftllb230-1-female-luer-fitting-female-luer-thread-style-panel-mount-1-4-28-unf-to-barb-1-8-3-2-mm-id-tubing-white-nylon.html) | - | Luer female, clear. 1/4-28 UNF |
+| Hose connector plastic, L-piece, for hose connections Ø 3mm | kentSystems | - | Nylon, 1/8" (3.2mm) |
+| 1/8" Hose Barb x Female Lug Natural Polypropylene Bulkhead Luer | Item 96547 | - | |
