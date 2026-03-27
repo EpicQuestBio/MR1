@@ -77,6 +77,10 @@ port_radius = 20; // Expanded for Luer Lock (1/4-28 UNF) fittings
 luer_thread_pitch = 0.907; // 1/4-28 UNF Pitch
 luer_thread_d = 6.35;      // 1/4-28 UNF Major Diameter
 
+npt_1_8_thread_pitch = 0.9407; // 27 TPI
+npt_1_8_thread_d = 10.287; // 1/8" NPT Major Diameter
+npt_1_8_tap_d = 8.7; // Tap drill size
+
 angle_fluid_in_bot = -30;
 angle_fluid_in_top = 210;
 angle_fluid_out_bot = 150;
