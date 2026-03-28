@@ -29,13 +29,18 @@ async function main() {
         const items = fs.readdirSync(localPath);
         for (const item of items) {
             const loc = path.join(localPath, item);
-            const virt = path.join(virtualPath, item);
+            const virt = virtualPath === '/' ? `/${item}` : `${virtualPath}/${item}`;
             const stat = fs.statSync(loc);
-            if (stat.isDirectory()) loadDir(loc, virt);
-            else instance.FS.writeFile(virt, fs.readFileSync(loc));
+            if (stat.isDirectory()) {
+                loadDir(loc, virt);
+            } else {
+                instance.FS.writeFile(virt, fs.readFileSync(loc));
+            }
         }
     }
-    loadDir(LIB_DIR, '/BOSL2');
+
+    // Mount 'libraries' to '/libraries' so 'include <libraries/BOSL2/std.scad>' works
+    loadDir('libraries', '/libraries');
     loadDir('modules', '/modules');
 
     const mode = 'Housing_Reader_Lid_STL';
