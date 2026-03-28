@@ -171,7 +171,7 @@ module Housing_Lid_Reader() {
             tag("remove") {
                 for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
             
-                    rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=100, d=6, center=true);
+                    rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=100, d=10, center=true);
                 }
             }
             // Electrode Ports
