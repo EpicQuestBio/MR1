@@ -97,8 +97,12 @@ module Torque_Cap_Outer(access_hole=true, flex_style="ratchet") {
                     rotate([0,0,r]) {
                         // Cutout slot for flex (wider)
                         tag("remove")
-                        translate([neck_od/2 + 6, 0, cap_h/2])
-                        cube([6, 18, cap_h+2], center=true);
+                        // Center Z = half of flex arm window
+                        // We want to leave a continuous ring at bottom and top.
+                        // window_bottom = cap_retention_h + 1, window_top = cap_h - 2
+                        translate([neck_od/2 + 6, 0, (cap_h + cap_retention_h - 1)/2])
+                        // Width needs to penetrate both sides of the wall (radially)
+                        cube([20, 18, cap_h - cap_retention_h - 3], center=true);
                     }
                 }
             } else if (flex_style == "vertical") {
@@ -125,16 +129,23 @@ module Torque_Cap_Outer(access_hole=true, flex_style="ratchet") {
             for(r=[0:60:360]) {
                 rotate([0,0,r]) {
                     // Arm Body
+                    // Position inside the cutout slot
                     translate([neck_od/2 + 6, 0, cap_retention_h + 1]) {
                          // Arm Base - shift up by retention + 1mm clearance
-                         // Height is remainder
-                         up((cap_h - (cap_retention_h+1))/2)
-                         cube([4, 15, cap_h - (cap_retention_h+1)], center=true); // Arm
+                         // Make the arm shorter than the cutout to leave top and bottom gaps
+                         // Cutout height is cap_h - cap_retention_h - 3
+                         // Arm height will be cap_h - cap_retention_h - 7 (2mm gap top and bottom)
+                         up((cap_h - cap_retention_h - 3)/2)
+                         // Overlap with the wall at y = -9 (start of arm)
+                         translate([0, -2, 0]) // Shift back slightly so end embeds
+                         // tag("keep") ensures it isn't erased by the diff("remove") block around it.
+                         // But diff("remove") is around the main body up top. The Spring arms are added outside the diff("remove") block, so they won't be removed by it.
+                         cube([4, 14, cap_h - cap_retention_h - 7], center=true); // Arm
 
-                         // Pawl - shift up
-                         up((cap_h - (cap_retention_h+1))/2)
-                         translate([-3, 6, 0])
-                         cylinder(h=cap_h - (cap_retention_h+1), d=3, center=true); // Pawl
+                         // Pawl - attached to the free end
+                         up((cap_h - cap_retention_h - 3)/2)
+                         translate([-3, 4, 0]) // Position Pawl to stick out and attach to arm
+                         cylinder(h=cap_h - cap_retention_h - 7, d=3, center=true); // Pawl
                     }
                 }
             }
