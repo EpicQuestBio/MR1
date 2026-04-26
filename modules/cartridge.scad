@@ -90,10 +90,10 @@ module FR4_Interposer_Production() {
 
         // Fluid Ports (Drill Hits)
       // Pass-throughs
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=fluid_Port_d);
 
 
     }
@@ -118,10 +118,10 @@ module PCB_Rigid_Active() {
         Cable_Slot();
 
         // Pass-throughs (To allow fluid flow through the stack)
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
 
         // Finger Grip Cutouts
         Finger_Grip_Cutout(height=20);
@@ -285,11 +285,26 @@ module Plate_1_Base_Hex_3D() {
             tag("remove") Cable_Slot();
 
             // Pass-throughs - Simple Cylinders
-            tag("remove") {
-                rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-                rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-                rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
-                rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0, -1]) cylinder(h=10, d=4);
+
+            
+            // Fluid Ports (4x)
+            tag("remove")
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, 0]) {
+
+                // 1. Threaded Hole for 1/8" NPT
+                //npt_1_8_tapped_hole(h=pp_h + 1);
+                cylinder(h=10, d=4);
+               
+                }
+            }
+            
+            // Add visual 1/8" NPT adapters attaching to the bottom
+            if (!Cross_Section) {
+                for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                    attach(BOTTOM) zrot(a) translate([port_radius, 0, 0])
+                    npt_1_8_adapter_visual();
+                }
             }
             
             // Finger Grip Cutouts
@@ -321,13 +336,12 @@ module Plate_1_Base() {
         translate([plate_diam/2 - 3, 0]) circle(d=2); // Keying pin
         // Cable Slot Pass-through
         tag("remove") Cable_Slot();
-        // Pogo Pin Access
-        PogoPinHoles();
+
     }
 }
 
 // G1:  Gasket with or without pogo pins
-module Gasket_Main(pogo= false) {
+module Gasket_Main() {
     difference() {
         circle(d=plate_diam);
        // BoltHoles();
@@ -338,16 +352,16 @@ module Gasket_Main(pogo= false) {
         square([4.2, 4.2], center=true);
 
         // Pass-throughs
-        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_bot]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_bot]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=fluid_Port_d);
 
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
 
         // Pogo Pin Penetration Holes
-        if(pogo) PogoPinHoles();
+ 
 
     }
 }
@@ -425,12 +439,16 @@ module Gasket_Low_Dead_Volume_3D(type="bottom") {
         cyl(h=gasket_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
             tag("remove")
             position(BOTTOM)
+            translate([0,0,-0.1])
             linear_extrude(gasket_thick+0.2) // Extrude slightly more for cut
             difference() {
                 square([hex_diam*2, hex_diam*2], center=true); // Inverse mask
                 Gasket_Low_Dead_Volume(type=type); // The actual gasket shape
             }
+            // Cable Slot
+            tag("remove") Cable_Slot();
         }
+  
         children();
     }
 }
@@ -476,8 +494,8 @@ module Plate_2_Channel() {
         }
 
         // Top Flush Ports (Pass-through to Plate 3)
-        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=4);
-        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
+        rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0]) circle(d=fluid_Port_d);
+        rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=fluid_Port_d);
 
         rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
         translate([plate_diam/2 - 3, 0]) circle(d=2);
@@ -497,19 +515,19 @@ module Plate_3_Top_Hex() {
 
                 // Sample Well / Pipette Access
                 if (!Sealed_Top_Mode) {
-                    cylinder(h=plate_thick*3, d=6, center=true);
+                    cylinder(h=plate_thick*3, d=pipette_access_d, center=true);
                 }
 
                 // Fluid Ports (Top In/Out) - Ensure connectivity
-                for(a=[angle_fluid_in_top, angle_fluid_out_top])
-                    rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=plate_thick*3, d=4, center=true);
+               // for(a=[angle_fluid_in_top, angle_fluid_out_top])
+               //     rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=plate_thick*3, d=fluid_Port_d, center=true);
 
                 // COMPONENT CUTOUTS (Frame Mode)
                 // Updated to avoid cutting the central seal area (d ~ 10mm)
                 linear_extrude(plate_thick*3, center=true)
                 union() {
                     // Top Wing (OpAmp 1)
-                    translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
+                  // # translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
 
                     // Bottom Wing (JST, OpAmp 2, Filters, Cable Slot)
                     // JST/ESD/CableSlot Area (X[-7, 7], Y[-29, -15])
@@ -521,10 +539,10 @@ module Plate_3_Top_Hex() {
                 }
 
                 // Electrode Access
-                rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) cylinder(h=20, d=2, center=true);
+              //  rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) cylinder(h=20, d=2, center=true);
 
                 // Keying Pin
-                translate([plate_diam/2 - 3, 0]) cylinder(h=20, d=2, center=true);
+               // translate([plate_diam/2 - 3, 0]) cylinder(h=20, d=2, center=true);
 
                 // Finger Grip Cutouts
                 Finger_Grip_Cutout(height=plate_thick*3);
@@ -538,14 +556,14 @@ module Plate_3_Top_Hex() {
 module Plate_3_Top() {
     difference() {
         circle(d=plate_diam);
-      //  BoltHoles();
+        //BoltHoles();
 
         // Sample Well / Pipette Access
         // If Sealed_Top_Mode is true, we remove this hole to seal the chamber.
         if (!Sealed_Top_Mode) {
-             circle(d=6);
+             circle(d=pipette_access_d);
         }
-
+/*
         // Top Flush Channels (Connect Top Ports to Sample Well)
         // Even if sealed, we need the fluid path to the center.
         hull() {
@@ -556,9 +574,9 @@ module Plate_3_Top() {
              rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0]) circle(d=4);
              translate([-3, 0]) circle(d=3); // Connect to well
         }
-
+*/
         // Cis-Electrode Termination
-        hull() {
+       # hull() {
             rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
             translate([0, 5]) circle(d=2);
         }
@@ -609,12 +627,12 @@ module Cartridge_Stack_3D() {
 module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
     // Dimensions
     pp_h = 3;
-    port_d = 6;
+    port_d = 10;
 
     // O-Ring Dimensions (Port Seals)
     // Seat: d_maj=8, d_min=1.5 (CS)
     or_cs = 1.5;
-    or_maj = 8.0;
+    or_maj = 10.0;
 
     // Converted to BOSL2 cyl root
     // We wrap in attachable to separate the geometry color from the children attachments
@@ -623,14 +641,18 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
         diff("remove")
         cyl(h=pp_h, d=hex_diam, $fn=6, anchor=BOTTOM) { // Fits in HEX neck
 
+        
+        // Cable Slot Pass-through
+        tag("remove") Cable_Slot();
+            
             // Fluid Ports (4x)
         tag("remove")
         for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
             zrot(a) translate([port_radius, 0, 0]) {
 
                 // 1. Threaded Hole for 1/8" NPT
-                npt_1_8_tapped_hole(h=pp_h + 1);
-
+                //npt_1_8_tapped_hole(h=pp_h + 1);
+                cylinder(h=10, d=4);
                 // 2. O-Ring Seats (Subtractive)
                 position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
                 // Removed bottom O-ring seat as adapter attaches from the bottom
@@ -638,7 +660,7 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
         }
 
             // Pogo Pin Clearance
-            tag("remove") linear_extrude(10, center= true) PogoPinHoles();
+            //tag("remove") linear_extrude(10, center= true) PogoPinHoles();
 
             // Finger Grip Cutouts
             tag("remove") Finger_Grip_Cutout(height=pp_h*3);
@@ -653,13 +675,7 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
                 }
             }
 
-            // Add visual 1/8" NPT adapters attaching to the bottom
-            if (!Cross_Section) {
-                for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                    attach(BOTTOM) zrot(a) translate([port_radius, 0, 0])
-                    npt_1_8_adapter_visual();
-                }
-            }
+
         }
         children(); // Allow attachments
     }

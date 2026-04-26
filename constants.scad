@@ -86,6 +86,9 @@ angle_fluid_in_top = 210;
 angle_fluid_out_bot = 150;
 angle_fluid_out_top = 30;
 
+fluid_Port_d = 4;
+pipette_access_d = 6;
+
 angle_elec_cis = 90;  // Top electrode (via)
 angle_elec_trans = 270; // Bottom electrode (direct)
 

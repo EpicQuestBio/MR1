@@ -57,7 +57,7 @@ if (Output_Mode == "Assembly") {
     if (Explode_Factor > 0) {
         color("Black") {
             translate([0, -base_l/2 - 20, 0]) text("Rev 12: Modular Split", halign="center");
-            translate([0, 0, pump_h + reader_h + neck_h + Explode_Factor*3.5 + 30]) text("Torque-Lock Cap", halign="center");
+            translate([150, 0, pump_h + reader_h + neck_h + Explode_Factor*3.5 + 30]) text("Torque-Lock Cap", halign="center");
         }
     }
 
