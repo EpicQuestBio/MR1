@@ -576,7 +576,7 @@ module Plate_3_Top() {
         }
 */
         // Cis-Electrode Termination
-       # hull() {
+        hull() {
             rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) circle(d=2);
             translate([0, 5]) circle(d=2);
         }
