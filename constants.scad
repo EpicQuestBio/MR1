@@ -25,22 +25,66 @@ Sealed_Top_Mode = false; // [true, false]
 
 /* [Stack Dimensions & Modularity] */
 // Define component thicknesses for dynamic calculation
-pp_h = 3;           // Bottom Pusher Plate (TPU/Seal)
-plate_thick = 6.35; // Plate 1 (Base) & Plate 3 (Top), 1/4" PP Sheet
+pp_h = 4.0;           // Bottom Pusher Plate (TPU/Seal)
+plate_thick = 4.0;    // Plate 1 (Base) & Plate 3 (Top), 4mm PP Sheet
 gasket_thick = 1.5875; // Gaskets (1/16")
-carrier_thick = 2.6;// PCB + Carrier assembly
-puck_h = 6;         // Pressure Puck height
+ptfe_thick = 1.6;     // PCB/PTFE assembly thickness
+carrier_thick = ptfe_thick;// PCB + Carrier assembly
+puck_h = 6;           // Pressure Puck height
 
-// Calculate Total Stack Height (Active Components)
-// Pusher + Plate1 + Gasket + Carrier + Gasket + Plate3
-total_stack_height = pp_h + plate_thick + gasket_thick + carrier_thick + gasket_thick + plate_thick;
+/* [Compression & Sealing Physics] */
+torque_limit = 0.5; // Torque limit of the cap in Nm
+friction_k = 0.2;   // Friction coefficient (dry plastic threads)
+E_silicone = 1.5;   // Young's Modulus for Silicone (~40A) in MPa
+E_tpu = 25;         // Young's Modulus for TPU (~85A) in MPa
+
+// Calculate Contact Area (A)
+// Area of 60mm hex (corner-to-corner) minus central holes.
+// Hex area: (3 * sqrt(3) / 2) * (hex_diam/2)^2
+// Assuming hex_diam is corner-to-corner, side length a = hex_diam/2.
+// Area = (3 * sqrt(3) / 2) * (30^2) = 2338.26 mm^2
+hex_side = 60 / 2;
+A_hex_gross = (3 * sqrt(3) / 2) * (hex_side * hex_side);
+// Subtract area of 4 port holes (d=4) and central carrier (d=20)
+A_ports = 4 * PI * (2 * 2);
+A_center = PI * (10 * 10);
+A_stack = A_hex_gross - A_ports - A_center; // Effective surface area in mm^2
+
+// Calculate Axial Clamping Force (F)
+// F = T / (k * d). thread diameter in meters is neck_od / 1000
+F_clamp = torque_limit / (friction_k * (75 / 1000)); // Newtons
+
+// Calculate Deflection (delta_h = F * h_0 / (E * A))
+// F is in N, E is in MPa (N/mm^2), A is in mm^2. delta_h will be in mm.
+delta_h_silicone = (F_clamp * gasket_thick) / (E_silicone * A_stack);
+delta_h_tpu_bottom = (F_clamp * pp_h) / (E_tpu * A_stack);
+delta_h_tpu_top = (F_clamp * puck_h) / (E_tpu * A_stack);
+
+// Calculate Heights
+// Uncompressed height
+total_stack_height_uncompressed = pp_h + plate_thick + gasket_thick + ptfe_thick + gasket_thick + plate_thick + puck_h;
+total_stack_height = total_stack_height_uncompressed;
+
+// Compressed height (Gap G)
+total_stack_height_compressed = total_stack_height_uncompressed - (2 * delta_h_silicone) - delta_h_tpu_bottom - delta_h_tpu_top;
+
+// Output to console
+echo(str("--- Compression & Sealing Physics ---"));
+echo(str("Effective Area (A): ", A_stack, " mm^2"));
+echo(str("Axial Clamping Force (F): ", F_clamp, " N"));
+echo(str("Silicone Deflection (per layer): ", delta_h_silicone, " mm (", (delta_h_silicone/gasket_thick)*100, "%)"));
+echo(str("Bottom TPU Deflection: ", delta_h_tpu_bottom, " mm"));
+echo(str("Top TPU Deflection: ", delta_h_tpu_top, " mm"));
+echo(str("Total Uncompressed Stack Height: ", total_stack_height_uncompressed, " mm"));
+echo(str("Total Compressed Stack Height (Gap G): ", total_stack_height_compressed, " mm"));
+echo(str("---------------------------------------"));
 
 // Neck Height: Dynamic to fit stack
 // Stack sits on Lid Surface. Neck surrounds it.
 // Neck needs to be tall enough to contain the stack + thread engagement.
 // We add clearance.
 neck_clearance = 10;
-neck_h = total_stack_height + neck_clearance;
+neck_h = total_stack_height_uncompressed + neck_clearance;
 cap_h = neck_h + 5; // Tall enough to handle threads
 
 cap_top_thick = 5;
