@@ -18,8 +18,8 @@ module Housing_Case_Reader() {
                  // Truncated sphere pointing down (3.5mm depth)
                  // Added +0.1 to height and Z-offset to prevent boolean artifacts when joining
                  down(0) intersection() {
-                     sphere(d=13);
-                     translate([0, 0, -3.5/2 + 0.1/2]) cube([15, 15, 3.5 + 0.1], center=true);
+                     sphere(d=13, $fn=64);
+                     translate([0, 0, -3.5/2 + 0.1/2]) cylinder(h=3.5 + 0.1, d=15, center=true, $fn=32);
                  }
             }
         }
