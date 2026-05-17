@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/LokiMetaSmith/daemon-pore#readme",
   "dependencies": {
-    "openscad-wasm": "^0.0.4"
+    "openscad-wasm": "git+https://github.com/LokiMetaSmith/Corkscrew-Filter.git"
   }
 }
