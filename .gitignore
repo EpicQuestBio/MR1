@@ -1,6 +1,7 @@
 node_modules/
 output/
 libraries/*
+scripts/libraries/*
 clone_retry.log
 
 # KiCad
@@ -9,6 +10,7 @@ clone_retry.log
 *.kicad_pcb-bak
 *.kicad_sch-bak
 fp-info-cache
+*.lck
 
 # Backups
 *-backups
