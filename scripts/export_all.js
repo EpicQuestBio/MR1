@@ -1,5 +1,13 @@
+
 const fs = require('fs');
 const path = require('path');
+
+// Change working directory to project root if executed from scripts folder
+const projectRoot = path.resolve(__dirname, '..');
+if (process.cwd() !== projectRoot && fs.existsSync(path.join(projectRoot, 'package.json'))) {
+    process.chdir(projectRoot);
+}
+
 const { ensureBOSL2 } = require('./lib_setup');
 
 const importOpenSCAD = async () => {
