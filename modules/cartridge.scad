@@ -293,8 +293,7 @@ module Plate_1_Base_Hex_3D() {
                 zrot(a) translate([port_radius, 0, 0]) {
 
                 // 1. Threaded Hole for 1/8" NPT
-                //npt_1_8_tapped_hole(h=pp_h + 1);
-                cylinder(h=10, d=4);
+                npt_1_8_tapped_hole(h=plate_thick + 1);
                
                 }
             }
@@ -302,7 +301,7 @@ module Plate_1_Base_Hex_3D() {
             // Add visual 1/8" NPT adapters attaching to the bottom
             if (!Cross_Section) {
                 for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                    attach(BOTTOM) zrot(a) translate([port_radius, 0, 0])
+                    attach(BOTTOM) zrot(a) translate([port_radius, 0, 0]) xrot(180)
                     npt_1_8_adapter_visual();
                 }
             }
@@ -651,8 +650,7 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
             zrot(a) translate([port_radius, 0, 0]) {
 
                 // 1. Threaded Hole for 1/8" NPT
-                //npt_1_8_tapped_hole(h=pp_h + 1);
-                cylinder(h=10, d=4);
+                npt_1_8_tapped_hole(h=pp_h + 1);
                 // 2. O-Ring Seats (Subtractive)
                 position(TOP) torus(d_maj=or_maj, d_min=or_cs, anchor=CENTER, $fn=g_fn);
                 // Removed bottom O-ring seat as adapter attaches from the bottom
