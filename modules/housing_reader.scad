@@ -303,5 +303,10 @@ module PCB_Main_Reader_2D() {
         translate([-25, 25]) square([18, 10.1], center=true); // DIN 5
         translate([0, 25]) square([14, 10.1], center=true);   // USB-C
         translate([25, 25]) square([14, 10.1], center=true);  // Barrel Jack
+
+        // Fluid Port Clearance Holes
+        for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
+            rotate([0, 0, a]) translate([port_radius, 0]) circle(d=6);
+        }
     }
 }
