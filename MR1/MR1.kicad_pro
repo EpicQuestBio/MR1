@@ -483,6 +483,9 @@
       "+3.3V": [
         "VCC"
       ],
+      "+3V3": [
+        "VCC"
+      ],
       "/Microcontroller/VCC_3V3": [
         "VCC"
       ],
@@ -746,7 +749,7 @@
     },
     "net_format_name": "",
     "page_layout_descr_file": "",
-    "plot_directory": "",
+    "plot_directory": "PDF/",
     "space_save_all_events": true,
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
