@@ -750,16 +750,95 @@
 			)
 			(embedded_fonts no)
 		)
-	)
-	(text "Look at Insturmentation amplifiers"
-		(exclude_from_sim no)
-		(at 50.8 176.53 0)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(symbol "temp-sensor-rescue:GND-power-temp-sensor-rescue"
+			(power)
+			(pin_names
+				(offset 0)
 			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND-power-temp-sensor-rescue"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND-power-temp-sensor-rescue_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND-power-temp-sensor-rescue_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
 		)
-		(uuid "23e84a8f-a3fe-4fb1-80ae-a228f26ed0ce")
 	)
 	(text "Stability in ultra-low noise regulators is dictated by the **Output Capacitance ()** and the **Noise Reduction Capacitance ()**. \nIf these ratios are wrong, the LDO will oscillate, turning your \"clean\" power supply into a radio transmitter.\n\n\n### 1. The LDO Component Values (The Critical Stage)\n\nThese regulators do not use standard voltage dividers. They use a precision current source architecture. You must use these specific values to minimize noise density.\n\n#### **Positive Rail: TPS7A94**\n\n* ** (Set Resistor):** **5.0 kΩ** (0.1% tolerance).\n* *Math:* . The internal  is 1mA. .\n\n\n* ** (Output Capacitor):** **2x 22µF** (or 1x 47µF) Ceramic X7R.\n* *Stability:* Must be . Larger is better for lower output impedance.\n* *Part:* Murata GRM32ER71E226KE15 (1210 size avoids DC bias capacitance loss).\n\n\n* ** (Noise Reduction / Soft Start):** **10 µF**.\n* *Function:* Filters the internal reference noise.\n* *Warning:* Do not exceed 22µF, or the startup time becomes excessively slow, potentially causing latch-up issues with the negative rail.\n\n\n\n#### **Negative Rail: LT3094**\n\n* ** (Set Resistor):** **49.9 kΩ** (0.1% tolerance).\n* *Math:* The internal precision current source is 100µA. .\n\n\n* ** (Output Capacitor):** **2x 22µF** (Ceramic X7R).\n* *Stability:* Requires low ESR. Do not use Tantalum here.\n\n\n* ** (Reference Capacitor):** **4.7 µF**.\n* *Function:* This capacitor is parallel to . It kills the thermal noise of the resistor and the reference current shot noise.\n\n\n* ** (Current Limit):** **Left Open** (unless you need to limit current below max).\n\n---\n\n### 2. The Input \"Capacitance Multiplier\" Values (Active Pre-Filter)\n\nThis circuit goes *between* your raw supply (TPS65131) and the LDOs. It smooths the high-frequency switching ripple so the LDO doesn't have to work as hard.\n\n**Constraint:** This circuit drops approx **0.7V to 1.0V**.\n\n* **Required Raw Input:** +/- 6.2V to +/- 6.5V.\n* **Output to LDO:** +/- 5.3V to +/- 5.5V.\n\n#### **Positive Side (NPN Transistor)**\n\n* **Transistor ():** **ZXTN2010A** or generic **BCP56**.\n* *Why:* Medium power, reasonable gain ().\n\n\n* **Base Resistor ():** **1.0 kΩ**.\n* *Function:* Sets the base current and forms the RC filter with .\n\n\n* **Base Capacitor ():** **100 µF** (Electrolytic or Tantalum is fine here).\n* **Protection Diode:** **1N4148** across Base-Emitter (Reverse biased).\n* *Why:* Protects the transistor during power-down if the input collapses faster than the capacitor discharges.\n\n\n\n**The Stability Math:**\n\n* **Cutoff Frequency:** .\n* **Result:** This crushes the 1MHz ripple from your switching regulator by >100dB before it even hits the LDO.\n\n#### **Negative Side (PNP Transistor)**\n\n* **Transistor ():** **ZXTP2012A** or generic **BCP53**.\n* **Base Resistor:** **1.0 kΩ**.\n* **Base Capacitor:** **100 µF**.\n* **Protection Diode:** **1N4148**.\n\n---\n\n### 3. Critical Layout & Stability Rules\n\nAt sub-1µV levels, component placement is as important as component value.\n\n1. **NO Ferrite Beads on LDO Outputs:**\n* Never place a ferrite bead directly after the TPS7A94 or LT3094. The inductive reactance will interact with  and cause ringing (oscillation) at 100kHz–1MHz.\n* *Correct placement:* Place ferrite beads **before** the Input Capacitance Multiplier.\n\n\n2. **The \"Star\" Ground:**\n* The \"Ground\" pin of the  resistor and the \"Ground\" pin of the  capacitor must connect to the **Load Ground** (where your op-amp is), *not* the LDO's thermal pad ground.\n* This is called a \"Kelvin Connection.\" If you ground them at the LDO, the current flowing through the PCB trace will create a voltage drop that looks like noise to the regulator.\n\n\n3. **DC Bias Effect:**\n* You are using 5V. If you buy a \"6.3V rated\" 22µF ceramic capacitor, at 5V it will actually only be **~8µF**. This loss of capacitance can destabilize the LDO.\n* **Rule:** Use **25V or 35V rated** capacitors for your 5V rails to ensure they retain their capacitance.\n\n\n\n### Summary Checklist for Ordering\n\n| Component | Value | Dielectric / Type | Rating | Note |\n| --- | --- | --- | --- | --- |\n| **LDO Output Caps** | 22µF (x2) | X7R Ceramic | **25V+** | Critical for stability |\n| **TPS7A94 ** | 5.0 kΩ | Thin Film | 0.1% | Low Temp Coefficient |\n| **LT3094 ** | 49.9 kΩ | Thin Film | 0.1% | Low Temp Coefficient |\n| **Cap Multiplier Base** | 100 µF | Electrolytic | 16V+ | Lowers ripple freq |\n| **Pass Transistor** | BCP56/53 | SOT-223 | 80V | Handles heat dissipation |\n\nIf you build this specific chain (TPS65131  Cap Multiplier  LDO  Hybrid Op-Amp Rail), you will likely hit the noise floor of your test equipment before you see the noise of the power supply."
 		(exclude_from_sim yes)
@@ -783,9 +862,9 @@
 		)
 		(uuid "73e10ea0-52ab-4952-801b-a93dc09552ee")
 	)
-	(text "TODO:\nupdate ADC with correct library part and footprint\nadd voltage reference, "
+	(text "TODO List :\n\nDone:\nupdate ADC with correct library part and footprint\nadd voltage reference, \nLook at Insturmentation amplifiers\nRemaining:\nflip board around, route tubing on the underside of the board.\npunch through the back side with a via to the sensitized silver chloride pad, which reduces a potential liquid contact point over solder mask/conformal. \n"
 		(exclude_from_sim no)
-		(at 50.8 168.91 0)
+		(at 95.25 151.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -804,16 +883,6 @@
 		)
 		(uuid "bc1fef7a-9f17-4cc6-bd4f-69f601179e6c")
 	)
-	(text "Add precision low noise ADC\n"
-		(exclude_from_sim no)
-		(at 50.8 173.99 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "fe98b9f4-542c-425d-8907-bb06d33a715f")
-	)
 	(junction
 		(at 220.98 113.03)
 		(diameter 0)
@@ -827,6 +896,30 @@
 		(uuid "4ac32e34-46a3-420b-a0bc-a0e4641d643e")
 	)
 	(junction
+		(at 222.25 140.97)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "62b159fb-687b-4ce4-8b38-06cea7419970")
+	)
+	(junction
+		(at 212.09 140.97)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8e12029b-603c-4856-9c8e-2f983a5fa884")
+	)
+	(junction
+		(at 214.63 140.97)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8e138256-07ae-47b6-9663-b19b8f14dc2e")
+	)
+	(junction
+		(at 226.06 140.97)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b398c94a-ae4e-4c4a-81f8-e1424eb10ae7")
+	)
+	(junction
 		(at 224.79 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -837,6 +930,26 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d9a747d6-165a-461d-9776-620f3df85912")
+	)
+	(wire
+		(pts
+			(xy 214.63 140.97) (xy 212.09 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "018368da-ceb1-49c9-a8b2-c82958dd61fe")
+	)
+	(wire
+		(pts
+			(xy 212.09 140.97) (xy 205.74 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f7935da-729d-47ae-86ce-ca06b11fef00")
 	)
 	(wire
 		(pts
@@ -857,6 +970,16 @@
 			(type default)
 		)
 		(uuid "10e56f3e-d9a1-4735-b0c8-cd72e084e23e")
+	)
+	(wire
+		(pts
+			(xy 212.09 152.4) (xy 213.36 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d256502-f896-4cf3-8ce0-eefaa32719c0")
 	)
 	(wire
 		(pts
@@ -887,6 +1010,16 @@
 			(type default)
 		)
 		(uuid "2ecfcbc6-ea38-4153-8fbf-19d55f19998d")
+	)
+	(wire
+		(pts
+			(xy 223.52 152.4) (xy 226.06 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3074af00-328c-4bfe-9f51-08ac19d0b159")
 	)
 	(wire
 		(pts
@@ -927,6 +1060,16 @@
 			(type default)
 		)
 		(uuid "61ffbfaf-d6ab-4c70-a102-e45725056883")
+	)
+	(wire
+		(pts
+			(xy 222.25 140.97) (xy 226.06 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ccb8cd4-e811-4fc7-bc65-4169468b2361")
 	)
 	(wire
 		(pts
@@ -1040,6 +1183,16 @@
 	)
 	(wire
 		(pts
+			(xy 212.09 140.97) (xy 212.09 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a65785e2-e503-4271-8de3-5b44e28bdc13")
+	)
+	(wire
+		(pts
 			(xy 213.36 113.03) (xy 210.82 113.03)
 		)
 		(stroke
@@ -1070,6 +1223,16 @@
 	)
 	(wire
 		(pts
+			(xy 226.06 140.97) (xy 232.41 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6c732f0-4adf-4b0b-a0bb-8b383a9f0840")
+	)
+	(wire
+		(pts
 			(xy 222.25 124.46) (xy 224.79 124.46)
 		)
 		(stroke
@@ -1090,6 +1253,16 @@
 	)
 	(wire
 		(pts
+			(xy 226.06 152.4) (xy 226.06 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d995e275-dca5-434f-9862-1a649d816dc3")
+	)
+	(wire
+		(pts
 			(xy 210.82 113.03) (xy 210.82 124.46)
 		)
 		(stroke
@@ -1097,6 +1270,26 @@
 			(type default)
 		)
 		(uuid "db88440e-db6b-4a1c-b9fb-6a10115962db")
+	)
+	(wire
+		(pts
+			(xy 214.63 135.89) (xy 214.63 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8443d75-a70b-4c44-8966-d6b4e58953fb")
+	)
+	(wire
+		(pts
+			(xy 222.25 140.97) (xy 222.25 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe5fe535-5b6e-4751-ae1d-e0714f0a5247")
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
@@ -1431,6 +1624,81 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 218.44 135.89 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2c334763-8073-481c-b2df-00ec64695552")
+		(property "Reference" "C36"
+			(at 214.63 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "2pF"
+			(at 222.25 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 214.63 136.8552 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 218.44 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 218.44 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser PN" ""
+			(at 218.44 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "70250625-5462-47aa-827b-3c541feab92f")
+		)
+		(pin "2"
+			(uuid "02da28c4-ffd9-48d9-af88-da28630956c0")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "C36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 217.17 113.03 270)
 		(unit 1)
@@ -1500,6 +1768,81 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 218.44 140.97 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4033091e-e254-4d9e-8d3b-f3c20bbcde37")
+		(property "Reference" "R47"
+			(at 214.63 143.51 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1M"
+			(at 220.98 143.51 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 218.44 139.192 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 218.44 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 218.44 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser PN" ""
+			(at 218.44 140.97 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "a5c96cb0-6c41-4ae9-bece-c0cdc240a9ca")
+		)
+		(pin "1"
+			(uuid "827546cc-44bb-4773-9d42-227fe081cea9")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R47")
 					(unit 1)
 				)
 			)
@@ -2040,6 +2383,70 @@
 		)
 	)
 	(symbol
+		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
+		(at 232.41 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9ebe1aea-3565-4835-bd18-aca9b807c9c8")
+		(property "Reference" "#PWR0115"
+			(at 232.41 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 232.537 145.3642 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 232.41 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 232.41 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 232.41 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ff7b4cbd-7647-486e-8ef9-bac6ddc21c57")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0115")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GNDA")
 		(at 228.6 35.56 0)
 		(unit 1)
@@ -2166,6 +2573,74 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR092")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:SparkGap")
+		(at 218.44 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bdc1bedc-0b51-424f-aba3-2890d7c0047b")
+		(property "Reference" "E2"
+			(at 218.44 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SparkGap"
+			(at 218.44 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 218.44 154.178 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 218.44 152.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Spark gap"
+			(at 218.44 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "51dd3b3f-f949-4e77-a9d8-77d1911ad1e3")
+		)
+		(pin "2"
+			(uuid "e31dcd99-374c-45ae-82a8-f8ed19e652ce")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "E2")
 					(unit 1)
 				)
 			)
@@ -2375,6 +2850,72 @@
 			(project ""
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:Earth")
+		(at 205.74 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "de1f7545-903f-4759-aa24-88943bc72398")
+		(property "Reference" "#PWR0114"
+			(at 205.74 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "Earth"
+			(at 205.74 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 205.74 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 205.74 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"Earth\""
+			(at 205.74 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5355c4ca-2aad-4b7e-a27c-49203aca64e0")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0114")
 					(unit 1)
 				)
 			)
