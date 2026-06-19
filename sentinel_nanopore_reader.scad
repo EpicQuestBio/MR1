@@ -75,6 +75,10 @@ if (Output_Mode == "Assembly") {
     Gasket_Low_Dead_Volume(type="top");
 } else if (Output_Mode == "Gasket_Bottom_DXF") {
     Gasket_Low_Dead_Volume(type="bottom");
+} else if (Output_Mode == "Gasket_Mold_Top_STL") {
+    Gasket_Mold_3D(type="top");
+} else if (Output_Mode == "Gasket_Mold_Bottom_STL") {
+    Gasket_Mold_3D(type="bottom");
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
 } else if (Output_Mode == "Housing_Pump_Lid_STL") {

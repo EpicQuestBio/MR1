@@ -388,7 +388,7 @@ module Gasket_Low_Dead_Volume(type="bottom") {
         circle(d=hex_diam, $fn=6);
 
         // Cable Slot
-        tag("remove") Cable_Slot();
+        tag("remove") Cable_Slot_2D();
 
 
         // Pass-throughs (Inactive Ports)
@@ -424,6 +424,30 @@ module Gasket_Low_Dead_Volume(type="bottom") {
 
         // Finger Grip Cutouts (Subtractive in 2D)
         Finger_Grip_Cutout_2D();
+    }
+}
+
+module Gasket_Mold_3D(type="bottom") {
+    // A mold for pouring PDMS to cast the gasket.
+    // The mold needs to have the same dimensions as the gasket, but negative.
+    // It should be a block that the gasket is cut out of.
+    // The mold depth should be exactly gasket_thick for a pour-and-scrape method.
+    // We add some extra margin around the gasket for structural integrity of the mold.
+    mold_margin = 10;
+    mold_w = hex_diam + mold_margin;
+    mold_l = hex_diam + mold_margin;
+    base_thick = 5; // Base thickness below the gasket
+
+    difference() {
+        // Main mold block
+        translate([0, 0, (base_thick + gasket_thick)/2])
+            cube([mold_w, mold_l, base_thick + gasket_thick], center=true);
+
+        // Gasket cavity
+        translate([0, 0, base_thick]) {
+            linear_extrude(gasket_thick + 0.1) // Slightly deeper for clean cut
+            Gasket_Low_Dead_Volume(type=type);
+        }
     }
 }
 
