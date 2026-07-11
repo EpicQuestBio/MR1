@@ -3,8 +3,8 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const importOpenSCAD = async () => {
-    const mod = await import('openscad-wasm');
-    return mod.createOpenSCAD;
+    const mod = await import('openscad-wasm/lib/openscad-wasm/openscad.js');
+    return mod.default || mod.createOpenSCAD || mod;
 };
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
@@ -62,7 +62,7 @@ PCB_Active_Stack_3D();
 
   try {
       const wrapper = await createOpenSCAD({ noInitialRun: true });
-      const instance = wrapper.getInstance();
+      const instance = wrapper.getInstance ? wrapper.getInstance() : wrapper;
 
       // Load files
       instance.FS.writeFile('/test.scad', testScadContent);
@@ -79,7 +79,7 @@ PCB_Active_Stack_3D();
           const items = fs.readdirSync(localPath);
           for (const item of items) {
               const loc = path.join(localPath, item);
-              const virt = path.join(virtualPath, item);
+              const virt = virtualPath === '/' ? `/${item}` : `${virtualPath}/${item}`;
               const stat = fs.statSync(loc);
               if (stat.isDirectory()) {
                   loadDir(loc, virt);
@@ -88,7 +88,7 @@ PCB_Active_Stack_3D();
               }
           }
       }
-      loadDir(LIB_DIR, '/BOSL2');
+      loadDir('libraries', '/libraries');
       loadDir('modules', '/modules');
 
       const args = [
