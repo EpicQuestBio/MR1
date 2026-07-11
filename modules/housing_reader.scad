@@ -58,8 +58,8 @@ module Housing_Lid_Reader() {
         diff("remove")
         cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
 
-            // Cable Slot through the Lid
-            tag("remove") Cable_Slot();
+            // New Clearance channel for vertical downward JST cable (instead of old Cable Slot)
+            tag("remove") translate([0, -19, 0]) cube([14, 10, 200], center=true);
 
             // Internal Bucket (Now starts lower to leave ceiling room)
             // Added +0.1 padding to depth to prevent Z-fighting at the bottom boundary
@@ -308,5 +308,8 @@ module PCB_Main_Reader_2D() {
         for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
             rotate([0, 0, a]) translate([port_radius, 0]) circle(d=6);
         }
+
+        // JST vertical connector clearance cutout (centered at [0, -19])
+        translate([0, -19]) square([14, 10], center=true);
     }
 }

@@ -68,7 +68,7 @@ if (Output_Mode == "Assembly") {
     // Legacy name for Carrier Frame
     Carrier_Frame_Hex();
 } else if (Output_Mode == "Plate_3_Top_DXF") {
-    projection(cut=false) Plate_3_Top_Hex();
+    Plate_3_Top_Hex_2D();
 } else if (Output_Mode == "Gasket_Main_DXF") {
     Gasket_Low_Dead_Volume(type="top");
 } else if (Output_Mode == "Gasket_Top_DXF") {
