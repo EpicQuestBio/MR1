@@ -3,7 +3,8 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const importOpenSCAD = async () => {
-    const mod = await import('openscad-wasm/lib/openscad-wasm/openscad.js');
+    const filePath = path.resolve(__dirname, '../node_modules/openscad-wasm/lib/openscad-wasm/openscad.js');
+    const mod = await import('file://' + filePath);
     return mod.default || mod.createOpenSCAD || mod;
 };
 
@@ -25,11 +26,9 @@ async function main() {
   // Read SCAD file
   let scadContent = fs.readFileSync(SCAD_FILE, 'utf8');
 
-  // Apply the same patch as render_test.js
-  scadContent = scadContent.replace(/projection\(cut=false\)\s*/g, '');
 
   const wrapper = await createOpenSCAD({ noInitialRun: true });
-  const instance = wrapper.getInstance ? wrapper.getInstance() : wrapper;
+  const instance = typeof wrapper.getInstance === 'function' ? wrapper.getInstance() : wrapper;
 
   instance.FS.writeFile('/' + SCAD_FILE, scadContent);
   if (fs.existsSync(CONSTANTS_FILE)) {
