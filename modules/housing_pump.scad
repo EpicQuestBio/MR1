@@ -131,17 +131,13 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
 
         // Connectivity (Back Wall)
         attach(BACK, overlap=0.1) {
-            // DIN 5 MIDI (Panel Mount)
-            tag("remove") translate([-25, 0, 0])
-            cyl(h=wall*10, d=16, anchor=CENTER, $fn=32) ;
-
-            // USB-C (Panel Mount Cutout)
-            tag("remove") translate([0, 0, 0])
+            // USB-C 1 (Panel Mount Cutout)
+            tag("remove") translate([-15, 0, 0])
             cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
 
-            // Barrel Jack (Panel Mount)
-            tag("remove") translate([25, 0, 0])
-            cyl(h=wall*10, d=12, anchor=CENTER, $fn=32) ;
+            // USB-C 2 (Panel Mount Cutout)
+            tag("remove") translate([15, 0, 0])
+            cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
         }
 
         // Lid Mounts (In Wall Corners)

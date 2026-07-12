@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const importOpenSCAD = async () => {
-    const mod = await import('openscad-wasm');
-    return mod.createOpenSCAD;
+    const mod = await import('openscad-wasm/lib/openscad-wasm/openscad.js');
+    return mod.default || mod.createOpenSCAD || mod;
 };
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
@@ -15,7 +15,7 @@ const OUTPUT_DIR = 'output';
 async function main() {
     const createOpenSCAD = await importOpenSCAD();
     const wrapper = await createOpenSCAD({ noInitialRun: true });
-    const instance = wrapper.getInstance();
+    const instance = wrapper.getInstance ? wrapper.getInstance() : wrapper;
 
     let scadContent = fs.readFileSync(SCAD_FILE, 'utf8');
     scadContent = scadContent.replace(/projection\(cut=false\)\s*/g, '');
