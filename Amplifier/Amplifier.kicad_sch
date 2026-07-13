@@ -5,7 +5,10 @@
 	(uuid "0fac162c-ca5e-4358-934a-30718aa12176")
 	(paper "USLetter")
 	(lib_symbols
-		(symbol "Connector:Conn_01x01_Pin"
+		(symbol "Connector:Conn_Coaxial_Small"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -16,7 +19,7 @@
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "J"
-				(at 0 2.54 0)
+				(at 0.254 3.048 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -25,8 +28,8 @@
 					)
 				)
 			)
-			(property "Value" "Conn_01x01_Pin"
-				(at 0 -2.54 0)
+			(property "Value" "Conn_Coaxial_Small"
+				(at 0 -3.81 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -57,7 +60,7 @@
 					)
 				)
 			)
-			(property "Description" "Generic connector, single row, 01x01, script generated"
+			(property "Description" "small coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -68,17 +71,7 @@
 					)
 				)
 			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "connector"
+			(property "ki_keywords" "BNC SMA SMB SMC LEMO coaxial connector CINCH RCA MCX MMCX U.FL UMRF"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -89,7 +82,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
+			(property "ki_fp_filters" "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -100,24 +93,50 @@
 					)
 				)
 			)
-			(symbol "Conn_01x01_Pin_1_1"
-				(rectangle
-					(start 0.8636 0.127)
-					(end 0 -0.127)
+			(symbol "Conn_Coaxial_Small_0_1"
+				(polyline
+					(pts
+						(xy -2.54 0) (xy -0.508 0)
+					)
 					(stroke
-						(width 0.1524)
+						(width 0)
 						(type default)
 					)
 					(fill
-						(type outline)
+						(type none)
 					)
 				)
-				(polyline
-					(pts
-						(xy 1.27 0) (xy 0.8636 0)
-					)
+				(circle
+					(center 0 0)
+					(radius 0.508)
 					(stroke
-						(width 0.1524)
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Conn_Coaxial_Small_1_1"
+				(arc
+					(start 1.3484 0.0039)
+					(mid 0.327 -1.308)
+					(end -1.1916 -0.6311)
+					(stroke
+						(width 0.3048)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -1.1916 0.6311)
+					(mid 0.327 1.3081)
+					(end 1.3484 -0.0039)
+					(stroke
+						(width 0.3048)
 						(type default)
 					)
 					(fill
@@ -125,9 +144,9 @@
 					)
 				)
 				(pin passive line
-					(at 5.08 0 180)
-					(length 3.81)
-					(name "Pin_1"
+					(at -2.54 0 0)
+					(length 1.27)
+					(name "In"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -135,6 +154,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 1.27)
+					(name "Ext"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2970,6 +3007,16 @@
 	)
 	(wire
 		(pts
+			(xy 31.75 52.07) (xy 38.1 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00867fb2-7b9a-4363-812e-f9d27f727f53")
+	)
+	(wire
+		(pts
 			(xy 64.77 52.07) (xy 67.31 52.07)
 		)
 		(stroke
@@ -5345,6 +5392,16 @@
 		)
 		(uuid "57d5ce48-62e7-4639-bc20-c2127a78a282")
 	)
+	(label "GUARD"
+		(at 31.75 52.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5f37fb11-e1a3-423d-b2b4-a1308dd4da30")
+	)
 	(label ">PORE_AMP"
 		(at 44.45 123.19 180)
 		(effects
@@ -7571,8 +7628,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 38.1 59.69 0)
+		(lib_id "Connector:Conn_Coaxial_Small")
+		(at 40.64 59.69 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7582,7 +7639,7 @@
 		(dnp no)
 		(uuid "1158c0d0-4131-421e-bddf-b486d30e1122")
 		(property "Reference" "J11"
-			(at 38.735 55.88 0)
+			(at 40.005 63.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7592,7 +7649,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 31.75 58.166 0)
+			(at 46.99 61.214 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7601,8 +7658,8 @@
 				)
 			)
 		)
-		(property "Footprint" "footprints:Electrode_Guard"
-			(at 38.1 59.69 0)
+		(property "Footprint" "footprints:Electrode_Guard_Shield"
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7613,7 +7670,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7623,8 +7680,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 38.1 59.69 0)
+		(property "Description" "small coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7635,7 +7692,7 @@
 			)
 		)
 		(property "Alternate Part Number 1" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7646,7 +7703,7 @@
 			)
 		)
 		(property "AssemblyType" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7657,7 +7714,7 @@
 			)
 		)
 		(property "Configuration" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7668,7 +7725,7 @@
 			)
 		)
 		(property "Distributor 2 PN" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7679,7 +7736,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7690,7 +7747,7 @@
 			)
 		)
 		(property "Manufacturer" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7701,7 +7758,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7712,7 +7769,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7723,7 +7780,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7734,7 +7791,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7745,7 +7802,7 @@
 			)
 		)
 		(property "price" ""
-			(at 38.1 59.69 0)
+			(at 40.64 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7757,6 +7814,9 @@
 		)
 		(pin "1"
 			(uuid "5ba55b5b-7a44-46e1-bd20-645a9e1e2705")
+		)
+		(pin "2"
+			(uuid "76460991-9287-4801-9310-5400b4c0b92d")
 		)
 		(instances
 			(project "amplifier"
@@ -7918,6 +7978,85 @@
 			(project "amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR041")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at 38.1 59.69 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1eba9afb-55ce-49ad-adb4-04836f60950d")
+		(property "Reference" "#PWR04"
+			(at 31.75 59.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 34.29 59.6899 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 59.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 59.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
+			(at 38.1 59.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "dbabb2f2-40f3-4d2f-abd3-255d249898ce")
+		)
+		(instances
+			(project "amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -8314,8 +8453,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 38.1 52.07 0)
+		(lib_id "Connector:Conn_Coaxial_Small")
+		(at 40.64 52.07 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8325,7 +8464,7 @@
 		(dnp no)
 		(uuid "3d613bba-fd68-464d-b31e-b8c08df5038e")
 		(property "Reference" "J1"
-			(at 38.735 48.26 0)
+			(at 40.005 55.88 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8335,7 +8474,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 31.75 50.292 0)
+			(at 46.99 53.848 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8344,8 +8483,8 @@
 				)
 			)
 		)
-		(property "Footprint" "footprints:Electrode_Guard"
-			(at 38.1 52.07 0)
+		(property "Footprint" "footprints:Electrode_Guard_Shield"
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8356,7 +8495,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8366,8 +8505,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 38.1 52.07 0)
+		(property "Description" "small coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8378,7 +8517,7 @@
 			)
 		)
 		(property "Alternate Part Number 1" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8389,7 +8528,7 @@
 			)
 		)
 		(property "AssemblyType" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8400,7 +8539,7 @@
 			)
 		)
 		(property "Configuration" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8411,7 +8550,7 @@
 			)
 		)
 		(property "Distributor 2 PN" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8422,7 +8561,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8433,7 +8572,7 @@
 			)
 		)
 		(property "Manufacturer" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8444,7 +8583,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8455,7 +8594,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8466,7 +8605,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8477,7 +8616,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8488,7 +8627,7 @@
 			)
 		)
 		(property "price" ""
-			(at 38.1 52.07 0)
+			(at 40.64 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8500,6 +8639,9 @@
 		)
 		(pin "1"
 			(uuid "ab5e7eaf-2490-4120-9aa8-181d7b4dfd73")
+		)
+		(pin "2"
+			(uuid "c3a73c7a-32a2-407b-9a1e-71d8bf53a6f8")
 		)
 		(instances
 			(project "amplifier"
@@ -9522,8 +9664,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 36.83 41.91 0)
+		(lib_id "Connector:Conn_Coaxial_Small")
+		(at 39.37 41.91 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9533,7 +9675,7 @@
 		(dnp no)
 		(uuid "61164166-9a18-4752-a614-bf90b11ee3e8")
 		(property "Reference" "J2"
-			(at 37.465 38.1 0)
+			(at 38.735 45.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9543,7 +9685,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 31.75 40.386 0)
+			(at 44.45 43.434 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9552,8 +9694,8 @@
 				)
 			)
 		)
-		(property "Footprint" "footprints:Electrode_Guard"
-			(at 36.83 41.91 0)
+		(property "Footprint" "footprints:Electrode_Guard_Shield"
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9564,7 +9706,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9574,8 +9716,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 36.83 41.91 0)
+		(property "Description" "small coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9586,7 +9728,7 @@
 			)
 		)
 		(property "Alternate Part Number 1" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9597,7 +9739,7 @@
 			)
 		)
 		(property "AssemblyType" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9608,7 +9750,7 @@
 			)
 		)
 		(property "Configuration" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9619,7 +9761,7 @@
 			)
 		)
 		(property "Distributor 2 PN" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9630,7 +9772,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9641,7 +9783,7 @@
 			)
 		)
 		(property "Manufacturer" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9652,7 +9794,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9663,7 +9805,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9674,7 +9816,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9685,7 +9827,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9696,7 +9838,7 @@
 			)
 		)
 		(property "price" ""
-			(at 36.83 41.91 0)
+			(at 39.37 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9708,6 +9850,9 @@
 		)
 		(pin "1"
 			(uuid "aa3e682f-1eb4-455e-9752-eb82f40387ea")
+		)
+		(pin "2"
+			(uuid "a08878e8-ea28-4403-885f-851348c73797")
 		)
 		(instances
 			(project "amplifier"
@@ -11023,6 +11168,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 36.83 41.91 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "97214357-2fc7-40b2-addc-3470361e9720")
+		(property "Reference" "#PWR06"
+			(at 30.48 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 33.4823 41.9099 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
+			(at 36.83 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d22299c8-14aa-48ef-8664-7567c8b7f238")
+		)
+		(instances
+			(project "amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR06")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Transistor_FET:JFE2140D")
 		(at 194.31 67.31 90)
 		(unit 1)
@@ -11631,6 +11855,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 38.1 74.93 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bed32067-4131-49b0-b3e9-0466b7847461")
+		(property "Reference" "#PWR05"
+			(at 31.75 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 34.29 74.9299 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
+			(at 38.1 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5f65b128-2759-427d-ac2a-43079a90a40f")
+		)
+		(instances
+			(project "amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:VDDA")
 		(at 72.39 62.23 180)
 		(unit 1)
@@ -12099,8 +12402,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 38.1 74.93 0)
+		(lib_id "Connector:Conn_Coaxial_Small")
+		(at 40.64 74.93 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12110,7 +12413,7 @@
 		(dnp no)
 		(uuid "e1a07856-8837-4195-b986-f5c23f1c63b4")
 		(property "Reference" "J10"
-			(at 38.735 71.12 0)
+			(at 40.005 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12120,7 +12423,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 31.75 73.66 0)
+			(at 46.99 76.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12129,8 +12432,8 @@
 				)
 			)
 		)
-		(property "Footprint" "footprints:Electrode_Guard"
-			(at 38.1 74.93 0)
+		(property "Footprint" "footprints:Electrode_Guard_Shield"
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12141,7 +12444,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12151,8 +12454,8 @@
 				)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 38.1 74.93 0)
+		(property "Description" "small coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12163,7 +12466,7 @@
 			)
 		)
 		(property "Alternate Part Number 1" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12174,7 +12477,7 @@
 			)
 		)
 		(property "AssemblyType" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12185,7 +12488,7 @@
 			)
 		)
 		(property "Configuration" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12196,7 +12499,7 @@
 			)
 		)
 		(property "Distributor 2 PN" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12207,7 +12510,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12218,7 +12521,7 @@
 			)
 		)
 		(property "Manufacturer" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12229,7 +12532,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12240,7 +12543,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12251,7 +12554,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12262,7 +12565,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12273,7 +12576,7 @@
 			)
 		)
 		(property "price" ""
-			(at 38.1 74.93 0)
+			(at 40.64 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12285,6 +12588,9 @@
 		)
 		(pin "1"
 			(uuid "702b0a96-816c-41bc-96f8-3705f3ecd705")
+		)
+		(pin "2"
+			(uuid "1409a56e-c3a3-41d6-939c-78144b4f6f75")
 		)
 		(instances
 			(project "amplifier"
