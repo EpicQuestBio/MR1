@@ -645,12 +645,12 @@ module Cartridge_Stack_3D() {
     // Stack using BOSL2 Attachments for robust relative positioning
 
     // 0. Bottom Pusher Plate (Base)
-    Bottom_Pusher_Plate(show_orings=true)
+    Bottom_Pusher_Plate(show_orings=true) {
 
         // 1. Attach Plate 1 Base (Acrylic)
         attach(TOP)
         up(Explode_Factor/5) // Visual gap
-        Plate_1_Base_Hex_3D()
+        Plate_1_Base_Hex_3D() {
 
             // 2. Integrated Cast Gasket containing top/bottom gaskets and central plug with embedded carrier
             attach(TOP)
@@ -693,12 +693,15 @@ module Cartridge_Stack_3D() {
             // 4. Attach Top Plate
             attach(TOP)
             up(gasket_thick*2 + carrier_thick + Explode_Factor)
-            Plate_3_Top_Hex()
+            Plate_3_Top_Hex() {
 
                 // 5. Attach Puck
                 attach(TOP)
                 up(Explode_Factor/5)
                 Pressure_Puck_3D();
+            }
+        }
+    }
 }
 
 // ==============================================================================
