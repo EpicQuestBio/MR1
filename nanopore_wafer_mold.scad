@@ -1,59 +1,75 @@
 // ==============================================================================
-// SENTINEL NANOPORE READER - 2-PART SILICONE MOLD FOR NANOPORE WAFER
-// Generates a 3D printable compression mold to cast the hexagonal gasket
-// with an embedded silicon square nanopore wafer.
+// SENTINEL NANOPORE READER - 2-PART VERTICALLY-SPLIT SILICONE MOLD
+// Generates a 3D printable vertically split compression mold to cast the
+// hexagonal gasket with an embedded silicon square nanopore wafer.
+//
+// DESIGN FEATURES:
+// 1. Vertically split along the X=0 plane. The seam is on the bottom resting surface.
+// 2. Large open top reservoir to contain expanded foaming silicone during degassing.
+// 3. Tapered injection sprue from the reservoir into the center-top of the cavity.
+// 4. Proper air bleed/vent channels running from the upper corners of the hex cavity.
+// 5. Symmetric round plugs clamping the wafer to protect the nanopore.
 // ==============================================================================
 
 include <constants.scad>
 include <modules/common.scad>
 
 // Mold Plate Dimensions
-mold_margin = 10;
-mold_w = hex_diam + mold_margin * 2; // ~80mm
-mold_l = hex_diam + mold_margin * 2; // ~80mm
-mold_thick = 8.0;                    // Thickness of each mold half plate
+mold_w = hex_diam + 20;  // ~80mm (Y direction)
+mold_h = hex_diam + 30;  // ~90mm (Z direction)
+mold_t = 15.0;           // Thickness of each mold half (X direction)
+
+// Cavity position
+cavity_z = mold_h / 2 - 10; // Positioned in lower-middle section
 
 // Alignment Bolt/Pin Settings
-bolt_d = 3.2;         // M3 bolt/pin clearance
-bolt_head_d = 6.0;    // M3 cap head diameter
-bolt_head_depth = 3.0; // Recess depth for flush bolt heads
-bolt_offset = mold_w/2 - 5; // Near the 4 corners
+bolt_d = 4.5;         // M4 clamp bolt clearance
+bolt_head_d = 8.0;    // M4 cap head diameter
+bolt_head_depth = 4.0; // Recess depth for clamp bolts
+bolt_y_offset = mold_w/2 - 6;
+bolt_z_offset = mold_h/2 - 6;
 
-// Squeeze-out (overflow) channel dimensions
-overflow_w = 2.0;
-overflow_depth = 1.0;
+// Alignment Pins (Interlocks)
+pin_d = 4.0;
+pin_h = 5.0;
+
+// Reservoir Dimensions
+res_w = hex_diam - 10; // 50mm
+res_d = 15.0;          // Depth of the reservoir (Z-axis cut from top)
+res_t = mold_t - 3.0;  // Thickness of the reservoir cut in each half (X direction)
 
 module Wafer_Visual() {
     color("Dimgrey") {
         difference() {
-            // Square wafer substrate
-            cube([wafer_size, wafer_size, wafer_thick], center=true);
+            // Square wafer substrate (oriented in Y-Z plane at X=0)
+            cube([wafer_thick, wafer_size, wafer_size], center=true);
 
-            // Central nanopore aperture (visual drill)
-            cylinder(h=wafer_thick+1, d=0.5, center=true, $fn=16);
+            // Central nanopore aperture
+            rotate([0, 90, 0])
+                cylinder(h=wafer_thick+1, d=0.5, center=true, $fn=16);
         }
     }
-    // Nanopore itself (tiny black dot at the center)
+    // Nanopore itself
     color("Black") sphere(d=0.2, $fn=8);
 }
 
-module Corner_Guides(wafer_s=wafer_size, guide_w=1.5, height) {
+module Corner_Guides_Vertical_Seam(wafer_s=wafer_size, guide_w=1.2, height) {
+    // 4 Corner guides in Y-Z plane, extending in X direction
     difference() {
-        // 4 outer blocks at the corners
         union() {
             for(s = [-1, 1], t = [-1, 1]) {
-                translate([s * (wafer_s/2 + guide_w/2), t * (wafer_s/2 + guide_w/2), height/2])
-                    cube([guide_w, guide_w, height], center=true);
+                translate([height/2, s * wafer_s/2, t * wafer_s/2])
+                    cube([height, guide_w, guide_w], center=true);
             }
         }
-        // Subtract the wafer space to make clean L-brackets
-        translate([0, 0, height/2])
-            cube([wafer_s, wafer_s, height + 1], center=true);
+        // Subtract wafer space
+        translate([height/2, 0, 0])
+            cube([height + 1, wafer_s, wafer_s], center=true);
     }
 }
 
-// 1. BOTTOM MOLD HALF
-module Nanopore_Wafer_Mold_Bottom(type="top") {
+// 1. LEFT MOLD HALF (X < 0)
+module Nanopore_Wafer_Mold_Left(type="top") {
     h_plug = (gasket_thick - wafer_thick) / 2;
     h_guide = (gasket_thick + wafer_thick) / 2;
 
@@ -66,57 +82,82 @@ module Nanopore_Wafer_Mold_Bottom(type="top") {
 
     color("CadetBlue")
     difference() {
-        // Main block
-        translate([0, 0, mold_thick/2])
-            cube([mold_w, mold_l, mold_thick], center=true);
+        // Main block (rests on Z=0, split face at X=0)
+        translate([-mold_t/2, 0, mold_h/2])
+            cube([mold_t, mold_w, mold_h], center=true);
 
-        // A: Hexagonal Gasket Cavity
-        translate([0, 0, mold_thick - gasket_thick]) {
-            linear_extrude(gasket_thick + 1.0)
-                circle(d=hex_diam, $fn=6);
-        }
-
-        // B: Finger Grip Cutout clearances (so the gasket finger tabs fit in the mold)
-        translate([0, 0, mold_thick - gasket_thick]) {
-            linear_extrude(gasket_thick + 1.0)
-                Finger_Grip_Cutout_2D();
-        }
-
-        // C: Overflow/Squeeze-out Groove around the hex gasket cavity
-        translate([0, 0, mold_thick - overflow_depth]) {
-            difference() {
-                linear_extrude(overflow_depth + 0.1)
-                    circle(d=hex_diam + overflow_w*2, $fn=6);
-                linear_extrude(overflow_depth + 0.2)
+        // A: Hexagonal Gasket Cavity (Left half, depth gasket_thick/2)
+        translate([-gasket_thick/2, 0, cavity_z]) {
+            rotate([0, 90, 0])
+                linear_extrude(gasket_thick/2 + 0.1)
                     circle(d=hex_diam, $fn=6);
+        }
+
+        // B: Finger Grip Cutout clearances
+        translate([-gasket_thick/2, 0, cavity_z]) {
+            rotate([0, 90, 0])
+                linear_extrude(gasket_thick/2 + 0.1)
+                    Finger_Grip_Cutout_2D();
+        }
+
+        // C: Large Top Reservoir (Foam expansion chamber)
+        translate([-res_t + 0.01, 0, mold_h - res_d/2 + 0.1])
+            cube([res_t, res_w, res_d + 0.2], center=true);
+
+        // D: Tapered Injection sprue (half-cone cut)
+        // From bottom of reservoir (Z = mold_h - res_d) down to top edge of hexagon (Z = cavity_z + 26.0)
+        // Semi-cone tapering from d=6.0 at Z = mold_h - res_d down to d=3.0 at Z = cavity_z + 26.0
+        translate([0, 0, 0]) {
+            hull() {
+                translate([0, 0, mold_h - res_d])
+                    rotate([0, 90, 0]) cylinder(h=2.0, d=6.0, center=true, $fn=32);
+                translate([0, 0, cavity_z + 26.0])
+                    rotate([0, 90, 0]) cylinder(h=2.0, d=3.0, center=true, $fn=32);
             }
         }
 
-        // D: Alignment screw/bolt clearance holes in 4 corners
-        for(x = [-bolt_offset, bolt_offset], y = [-bolt_offset, bolt_offset]) {
-            translate([x, y, -0.5])
-                cylinder(h=mold_thick + 1, d=bolt_d, $fn=32);
-            // Nut / bolt head recess on bottom
-            translate([x, y, -0.1])
-                cylinder(h=bolt_head_depth, d=bolt_head_d, $fn=32);
+        // E: Air Bleed / Vent Vents (Y = +/- 15, from Z = cavity_z + 26.0 up to mold_h)
+        for(y_vent = [-15, 15]) {
+            translate([-0.75, y_vent, (mold_h + cavity_z + 26.0)/2])
+                cube([1.5, 1.5, mold_h - (cavity_z + 26.0) + 0.2], center=true);
+        }
+
+        // F: Horizontal Clamping bolt holes
+        for(y = [-bolt_y_offset, bolt_y_offset], z = [cavity_z - bolt_z_offset, cavity_z + bolt_z_offset]) {
+            translate([-mold_t - 0.5, y, z])
+                rotate([0, 90, 0]) cylinder(h=mold_t + 1.0, d=bolt_d, $fn=32);
+            // Cap screw head counterbore
+            translate([-mold_t - 0.1, y, z])
+                rotate([0, 90, 0]) cylinder(h=bolt_head_depth, d=bolt_head_d, $fn=32);
+        }
+
+        // G: Alignment Sockets (female)
+        for(y = [-bolt_y_offset, bolt_y_offset]) {
+            translate([-pin_h/2 + 0.1, y, cavity_z])
+                rotate([0, 90, 0]) cylinder(h=pin_h, d=pin_d + 0.2, center=true, $fn=32);
         }
     }
 
-    // Additive Features (Inside the hex cavity of the bottom mold)
-    translate([0, 0, mold_thick - gasket_thick]) {
-        // 1. Central cylindrical plug (protects nanopore underside)
-        color("Gold")
-        cylinder(h=h_plug, d=plug_diameter, $fn=32);
+    // Additive Features (Inside Left half cavity)
+    translate([0, 0, cavity_z]) {
+        // 1. Central cylindrical plug (protects nanopore left side)
+        // Extends from left cavity floor (X = -gasket_thick/2) up to wafer left face (X = -wafer_thick/2)
+        translate([-gasket_thick/2, 0, 0]) {
+            rotate([0, 90, 0])
+                color("Gold") cylinder(h=gasket_thick/2 - wafer_thick/2, d=plug_diameter, $fn=32);
+        }
 
         // 2. Corner registration L-brackets to position the wafer
-        color("DarkGoldenrod")
-        Corner_Guides(wafer_s=wafer_size, guide_w=1.5, height=h_guide);
+        // Centered at X = 0, guides the wafer in Y-Z plane
+        translate([-gasket_thick/2, 0, 0])
+            Corner_Guides_Vertical_Seam(wafer_s=wafer_size, guide_w=1.2, height=h_guide);
 
-        // 3. Passive fluid port pins (through-holes in the cast silicone)
+        // 3. Passive fluid port pins (generate holes in cast piece)
         color("Gold") {
             for(a = pass_angles) {
                 rotate([0, 0, a]) translate([port_radius, 0, 0])
-                    cylinder(h=gasket_thick, d=2.0, $fn=32);
+                    rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                        cylinder(h=gasket_thick/2, d=2.0, $fn=32);
             }
         }
 
@@ -125,112 +166,197 @@ module Nanopore_Wafer_Mold_Bottom(type="top") {
             // Inlet port pin + channel boss
             rotate([0, 0, active_in]) {
                 translate([port_radius, 0, 0])
-                    cylinder(h=gasket_thick, d=2.0, $fn=32);
-                // Active flow channel boss (leads from port to center plug)
+                    rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                        cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+
+                // Active channel boss (recessed in left mold to form channel in cast gasket)
                 hull() {
-                    translate([port_radius, 0, gasket_thick/2])
-                        cylinder(h=gasket_thick, d=1.2, center=true, $fn=16);
-                    translate([0, 0, gasket_thick/2])
-                        cylinder(h=gasket_thick, d=1.2, center=true, $fn=16);
+                    translate([port_radius, 0, 0])
+                        rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                    translate([0, 0, 0])
+                        rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
                 }
             }
 
             // Outlet port pin + channel boss
             rotate([0, 0, active_out]) {
                 translate([port_radius, 0, 0])
-                    cylinder(h=gasket_thick, d=2.0, $fn=32);
-                // Active flow channel boss
+                    rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                        cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+
+                // Active channel boss
                 hull() {
-                    translate([port_radius, 0, gasket_thick/2])
-                        cylinder(h=gasket_thick, d=1.2, center=true, $fn=16);
-                    translate([0, 0, gasket_thick/2])
-                        cylinder(h=gasket_thick, d=1.2, center=true, $fn=16);
+                    translate([port_radius, 0, 0])
+                        rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                    translate([0, 0, 0])
+                        rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
                 }
             }
         }
     }
 }
 
-// 2. TOP MOLD HALF
-module Nanopore_Wafer_Mold_Top(type="top") {
+// 2. RIGHT MOLD HALF (X > 0)
+module Nanopore_Wafer_Mold_Right(type="top") {
     h_plug = (gasket_thick - wafer_thick) / 2;
+
+    // Determine active and passive ports based on gasket type
+    active_in = (type=="bottom") ? angle_fluid_in_bot : angle_fluid_in_top;
+    active_out = (type=="bottom") ? angle_fluid_out_bot : angle_fluid_out_top;
+    pass_angles = (type=="bottom")
+        ? [angle_fluid_in_top, angle_fluid_out_top]
+        : [angle_fluid_in_bot, angle_fluid_out_bot];
 
     color("SteelBlue")
     difference() {
-        // Main block (inverted orientation for assembly/printing)
-        translate([0, 0, mold_thick/2])
-            cube([mold_w, mold_l, mold_thick], center=true);
+        // Main block
+        translate([mold_t/2, 0, mold_h/2])
+            cube([mold_t, mold_w, mold_h], center=true);
 
-        // Alignment bolt/pin clearance holes
-        for(x = [-bolt_offset, bolt_offset], y = [-bolt_offset, bolt_offset]) {
-            translate([x, y, -0.5])
-                cylinder(h=mold_thick + 1, d=bolt_d, $fn=32);
-            // Nut / bolt head recess on top side
-            translate([x, y, mold_thick - bolt_head_depth + 0.1])
-                cylinder(h=bolt_head_depth, d=bolt_head_d, $fn=32);
+        // A: Hexagonal Gasket Cavity (Right half, depth gasket_thick/2)
+        translate([0, 0, cavity_z]) {
+            rotate([0, 90, 0])
+                linear_extrude(gasket_thick/2 + 0.1)
+                    circle(d=hex_diam, $fn=6);
+        }
+
+        // B: Finger Grip Cutout clearances
+        translate([0, 0, cavity_z]) {
+            rotate([0, 90, 0])
+                linear_extrude(gasket_thick/2 + 0.1)
+                    Finger_Grip_Cutout_2D();
+        }
+
+        // C: Large Top Reservoir
+        translate([0.01, 0, mold_h - res_d/2 + 0.1])
+            cube([res_t, res_w, res_d + 0.2], center=true);
+
+        // D: Tapered Injection sprue (half-cone cut)
+        translate([0, 0, 0]) {
+            hull() {
+                translate([0, 0, mold_h - res_d])
+                    rotate([0, 90, 0]) cylinder(h=2.0, d=6.0, center=true, $fn=32);
+                translate([0, 0, cavity_z + 26.0])
+                    rotate([0, 90, 0]) cylinder(h=2.0, d=3.0, center=true, $fn=32);
+            }
+        }
+
+        // E: Air Bleed / Vent Vents
+        for(y_vent = [-15, 15]) {
+            translate([0.75, y_vent, (mold_h + cavity_z + 26.0)/2])
+                cube([1.5, 1.5, mold_h - (cavity_z + 26.0) + 0.2], center=true);
+        }
+
+        // F: Horizontal Clamping bolt holes
+        for(y = [-bolt_y_offset, bolt_y_offset], z = [cavity_z - bolt_z_offset, cavity_z + bolt_z_offset]) {
+            translate([-0.5, y, z])
+                rotate([0, 90, 0]) cylinder(h=mold_t + 1.0, d=bolt_d, $fn=32);
+            // Cap screw head counterbore / nut recess
+            translate([mold_t - bolt_head_depth + 0.1, y, z])
+                rotate([0, 90, 0]) cylinder(h=bolt_head_depth, d=bolt_head_d, $fn=32);
         }
     }
 
-    // Additive Features (Facing downwards relative to the mating surface at Z=0)
-    // 1. Central cylindrical plug (protects nanopore top side)
-    translate([0, 0, 0]) {
-        color("Gold")
-        mirror([0, 0, 1]) // Extends downwards into cavity
-            cylinder(h=h_plug, d=plug_diameter, $fn=32);
+    // Additive Features (Inside Right half cavity)
+    translate([0, 0, cavity_z]) {
+        // 1. Central cylindrical plug (protects nanopore right side)
+        // Extends from right cavity floor (X = gasket_thick/2) down to wafer right face (X = wafer_thick/2)
+        translate([wafer_thick/2, 0, 0]) {
+            rotate([0, 90, 0])
+                color("Gold") cylinder(h=gasket_thick/2 - wafer_thick/2, d=plug_diameter, $fn=32);
+        }
+
+        // 2. Passive fluid port pins
+        color("Gold") {
+            for(a = pass_angles) {
+                rotate([0, 0, a]) translate([port_radius, 0, 0])
+                    rotate([0, 90, 0])
+                        cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+            }
+        }
+
+        // 3. Active fluid port pins and raised flow channel bosses
+        color("Gold") {
+            // Inlet port pin + channel boss
+            rotate([0, 0, active_in]) {
+                translate([port_radius, 0, 0])
+                    rotate([0, 90, 0])
+                        cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+
+                // Active channel boss
+                hull() {
+                    translate([port_radius, 0, 0])
+                        rotate([0, 90, 0])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                    translate([0, 0, 0])
+                        rotate([0, 90, 0])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                }
+            }
+
+            // Outlet port pin + channel boss
+            rotate([0, 0, active_out]) {
+                translate([port_radius, 0, 0])
+                    rotate([0, 90, 0])
+                        cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+
+                // Active channel boss
+                hull() {
+                    translate([port_radius, 0, 0])
+                        rotate([0, 90, 0])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                    translate([0, 0, 0])
+                        rotate([0, 90, 0])
+                            cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                }
+            }
+        }
+
+        // 4. Alignment Pins (male) protruding from meeting surface (X = 0)
+        for(y = [-bolt_y_offset, bolt_y_offset]) {
+            translate([0, y, 0])
+                rotate([0, -90, 0])
+                    color("Gold") cylinder(h=pin_h - 0.2, d=pin_d, $fn=32);
+        }
     }
 }
 
 // 3. MOLD ASSEMBLY VISUALIZATION
 module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true) {
-    h_plug = (gasket_thick - wafer_thick) / 2;
+    // Left Mold Half
+    translate([-explode, 0, 0])
+        Nanopore_Wafer_Mold_Left(type="top");
 
-    // Bottom Mold sits at its default coordinate system
-    Nanopore_Wafer_Mold_Bottom(type="top");
-
-    // The Silicon Nanopore Wafer sits inside the cavity
-    // Centered vertically relative to the gasket:
-    // gasket bottom is at Z = mold_thick
-    // wafer center is at Z = mold_thick + gasket_thick/2
-    translate([0, 0, mold_thick + gasket_thick/2 + explode * 0.5])
+    // Silicon Square Wafer sits exactly in the center (X = 0)
+    translate([0, 0, cavity_z])
         Wafer_Visual();
 
-    // The cured silicone gasket itself (visualized in transparent red)
+    // The cured silicone gasket itself
     if (show_gasket) {
-        translate([0, 0, mold_thick + explode * 0.25]) {
+        translate([0, 0, cavity_z]) {
             color("Red", 0.5) {
-                difference() {
-                    // Main gasket shape
-                    linear_extrude(gasket_thick)
-                        circle(d=hex_diam, $fn=6);
+                rotate([0, 90, 0]) {
+                    difference() {
+                        // Main gasket shape
+                        cylinder(h=gasket_thick, d=hex_diam, center=true, $fn=6);
 
-                    // Subtract finger grip cutouts
-                    linear_extrude(gasket_thick + 1.0)
-                        Finger_Grip_Cutout_2D();
+                        // Finger grip cutouts
+                        Finger_Grip_Cutout(height=gasket_thick + 1.0);
 
-                    // Subtract the embedded wafer pocket
-                    translate([0, 0, (gasket_thick - wafer_thick)/2 - 0.05])
-                        cube([wafer_size + 0.1, wafer_size + 0.1, wafer_thick + 0.1], center=true);
+                        // Wafer pocket cutout
+                        cube([wafer_thick + 0.1, wafer_size + 0.1, wafer_size + 0.1], center=true);
 
-                    // Central protected nanopore opening
-                    translate([0, 0, -0.5])
-                        cylinder(h=gasket_thick + 1.0, d=plug_diameter, $fn=32);
+                        // Central protected round aperture
+                        cylinder(h=gasket_thick + 2.0, d=plug_diameter, center=true, $fn=32);
 
-                    // Port holes and channel paths molded into the silicone
-                    // (They are formed by the raised bosses, so we subtract them here for visualization)
-                    for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
-                        rotate([0, 0, a]) translate([port_radius, 0, -0.5])
-                            cylinder(h=gasket_thick + 1.0, d=2.0, $fn=32);
-                    }
-
-                    // Channel paths (subtracted to show flow path in cast piece)
-                    for(a = [angle_fluid_in_top, angle_fluid_out_top]) {
-                        rotate([0, 0, a]) {
-                            hull() {
-                                translate([port_radius, 0, gasket_thick/2])
-                                    cylinder(h=gasket_thick+0.1, d=1.2, center=true, $fn=16);
-                                translate([0, 0, gasket_thick/2])
-                                    cylinder(h=gasket_thick+0.1, d=1.2, center=true, $fn=16);
-                            }
+                        // Ports
+                        for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                            rotate([0, 0, a]) translate([port_radius, 0, 0])
+                                cylinder(h=gasket_thick + 2.0, d=2.0, center=true, $fn=32);
                         }
                     }
                 }
@@ -238,23 +364,20 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true) {
         }
     }
 
-    // Top Mold sits on top of the bottom mold, meeting at the mating plane
-    // Bottom mold top face is at Z = mold_thick
-    // We translate top mold by mold_thick, flip it, and add explode offset.
-    translate([0, 0, mold_thick + gasket_thick + explode])
-        rotate([180, 0, 0])
-            Nanopore_Wafer_Mold_Top(type="top");
+    // Right Mold Half
+    translate([explode, 0, 0])
+        Nanopore_Wafer_Mold_Right(type="top");
 }
 
 // Default Rendering
 if (Output_Mode == "Assembly" && !is_undef($preview)) {
-    // Standard visualization
+    // Stand-alone rendering
     Nanopore_Wafer_Mold_Assembly(explode=Explode_Factor * 0.4, show_gasket=true);
 } else {
     // Support exporting individual components
     if (Output_Mode == "Gasket_Mold_Bottom_STL") {
-        Nanopore_Wafer_Mold_Bottom(type="top");
+        Nanopore_Wafer_Mold_Left(type="top");
     } else if (Output_Mode == "Gasket_Mold_Top_STL") {
-        Nanopore_Wafer_Mold_Top(type="top");
+        Nanopore_Wafer_Mold_Right(type="top");
     }
 }
