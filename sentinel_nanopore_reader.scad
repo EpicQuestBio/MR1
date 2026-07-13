@@ -9,6 +9,7 @@ include <modules/cartridge.scad>
 include <modules/housing_pump.scad>
 include <modules/torque_cap.scad>
 include <modules/housing_reader.scad>
+include <nanopore_wafer_mold.scad>
 
 
 // ==============================================================================
@@ -26,6 +27,13 @@ if (Output_Mode == "Assembly") {
             // Sits on top of Pump Module (Height pump_h + pump_lid_thick)
             translate([0,0, pump_h + pump_lid_thick + Explode_Factor]) {
                 Reader_Module_Assembly();
+            }
+
+            // Optional 2-Part Silicone Mold for Nanopore Wafer
+            if (Show_Mold) {
+                translate([-130, 0, 0]) {
+                    Nanopore_Wafer_Mold_Assembly(explode = Explode_Factor * 0.4, show_gasket = true);
+                }
             }
 
             // External Tubing Loops (Visual)

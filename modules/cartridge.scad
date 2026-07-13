@@ -11,8 +11,12 @@ module PCB_2D() {
     difference() {
         circle(d=hex_diam, $fn=6); // Hexagonal shape
 
-        // Central Hole for Nanopore Carrier
-        circle(d=carrier_diam);
+        // Central Hole
+        if (Use_Nanopore_Wafer_Gasket) {
+            square([wafer_hole_size, wafer_hole_size], center=true);
+        } else {
+            circle(d=carrier_diam);
+        }
 
         // Cable Slot (2D projection)
         translate([0, -26]) square([12, 5], center=true);
@@ -25,11 +29,98 @@ module PCB_2D() {
 
     // Protruding Tabs (Into the hole)
     // Union-ed back in for the profile
-    intersection() {
-        circle(d=carrier_diam);
-        union() {
-             for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0])
-                square([5, 4], center=true);
+    if (!Use_Nanopore_Wafer_Gasket) {
+        intersection() {
+            circle(d=carrier_diam);
+            union() {
+                 for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0])
+                    square([5, 4], center=true);
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------
+// NEW NANOPORE WAFER GASKETS & VISUALIZATIONS
+// ------------------------------------------------------------------------------
+
+module Nanopore_Wafer_Visual_3D() {
+    color("Dimgrey") {
+        difference() {
+            cube([wafer_size, wafer_size, wafer_thick], center=true);
+            cylinder(h=wafer_thick+1, d=0.5, center=true, $fn=16);
+        }
+    }
+    color("Black") sphere(d=0.2, $fn=8);
+}
+
+module Cast_Nanopore_Wafer_Gasket_3D() {
+    color("Red", 0.8) {
+        difference() {
+            // Main gasket body
+            cylinder(h=gasket_thick, d=hex_diam, $fn=6);
+
+            // Finger grip cutouts
+            Finger_Grip_Cutout(height=gasket_thick * 3);
+
+            // Embed the square wafer (recess for visualization)
+            translate([0, 0, (gasket_thick - wafer_thick)/2 - 0.05])
+                cube([wafer_size + 0.1, wafer_size + 0.1, wafer_thick + 0.1], center=true);
+
+            // Central protected round aperture
+            translate([0, 0, -0.5])
+                cylinder(h=gasket_thick + 1.0, d=plug_diameter, $fn=32);
+
+            // Passive fluid ports
+            for(a = [angle_fluid_in_bot, angle_fluid_out_bot]) {
+                rotate([0, 0, a]) translate([port_radius, 0, -0.5])
+                    cylinder(h=gasket_thick + 1.0, d=2.0, $fn=32);
+            }
+
+            // Active fluid ports & molded flow channels
+            for (a = [angle_fluid_in_top, angle_fluid_out_top]) {
+                rotate([0, 0, a]) {
+                    // Port hole
+                    translate([port_radius, 0, -0.5])
+                        cylinder(h=gasket_thick + 1.0, d=2.0, $fn=32);
+                    // Flow channel
+                    hull() {
+                        translate([port_radius, 0, gasket_thick/2])
+                            cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                        translate([0, 0, gasket_thick/2])
+                            cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                    }
+                }
+            }
+        }
+    }
+
+    // Embed the square wafer
+    translate([0, 0, gasket_thick/2])
+        Nanopore_Wafer_Visual_3D();
+}
+
+module Fitted_Amplifier_Gasket_3D() {
+    color("Red", 0.8) {
+        difference() {
+            // Main Gasket shape
+            cylinder(h=gasket_thick, d=hex_diam, $fn=6);
+
+            // Square wafer hole (or central chamber)
+            translate([0, 0, -0.5])
+                cube([wafer_hole_size, wafer_hole_size, gasket_thick + 1.0], center=true);
+
+            // Pass-through ports
+            for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
+                rotate([0, 0, a]) translate([port_radius, 0, -0.5])
+                    cylinder(h=gasket_thick + 1.0, d=2.0, $fn=32);
+            }
+
+            // Circuitry cutouts on the bottom side of the PCB
+            Circuitry_Cutouts(height=gasket_thick * 3);
+
+            // Finger grip cutouts
+            Finger_Grip_Cutout(height=gasket_thick * 3);
         }
     }
 }
@@ -111,8 +202,14 @@ module PCB_Rigid_Active() {
         color("ForestGreen")
         cylinder(h=pcb_thin, d=hex_diam, $fn=6);
 
-        // Central Hole for Carrier
-        translate([0,0,-1]) cylinder(h=10, d=carrier_diam);
+        // Central Hole
+        if (Use_Nanopore_Wafer_Gasket) {
+            translate([0, 0, -1])
+                cube([wafer_hole_size, wafer_hole_size, 10], center=true);
+        } else {
+            // Central Hole for Carrier
+            translate([0,0,-1]) cylinder(h=10, d=carrier_diam);
+        }
 
         // Pass-throughs (To allow fluid flow through the stack)
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
@@ -126,12 +223,14 @@ module PCB_Rigid_Active() {
 
     // Protruding Tabs (Into the hole)
     // Modeled as intersection with the hole area, attached to main body
-    color("ForestGreen")
-    intersection() {
-        cylinder(h=pcb_thin, d=carrier_diam);
-        union() {
-             for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0, pcb_thin/2])
-                cube([5, 4, pcb_thin], center=true);
+    if (!Use_Nanopore_Wafer_Gasket) {
+        color("ForestGreen")
+        intersection() {
+            cylinder(h=pcb_thin, d=carrier_diam);
+            union() {
+                 for(a=[angle_fluid_in_top, angle_fluid_in_bot]) rotate([0,0,a]) translate([carrier_diam/2, 0, pcb_thin/2])
+                    cube([5, 4, pcb_thin], center=true);
+            }
         }
     }
 
@@ -206,9 +305,11 @@ module PCB_Rigid_Active() {
 
     // --- ELECTRODES (Silver Ribbons - Flipped Z) ---
     // On the Tabs
-    color("Silver") {
-        for(a=[[angle_fluid_in_top, angle_fluid_in_bot],[-1,1]]) rotate([0,0,a[0]]) translate([carrier_diam/2 - 1, 0, a[1]*pcb_thin])
-             cube([3, 2, 0.2], center=true);
+    if (!Use_Nanopore_Wafer_Gasket) {
+        color("Silver") {
+            for(a=[[angle_fluid_in_top, angle_fluid_in_bot],[-1,1]]) rotate([0,0,a[0]]) translate([carrier_diam/2 - 1, 0, a[1]*pcb_thin])
+                 cube([3, 2, 0.2], center=true);
+        }
     }
 }
 
@@ -652,53 +753,92 @@ module Cartridge_Stack_3D() {
         up(Explode_Factor/5) // Visual gap
         Plate_1_Base_Hex_3D() {
 
-            // 2. Integrated Cast Gasket containing top/bottom gaskets and central plug with embedded carrier
-            attach(TOP)
-            up(Explode_Factor/5)
-            attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick*2 + carrier_thick, $fn=6) {
-                if (Explode_Factor > 0) {
-                    // Exploded View representation
-                    // Bottom Gasket Layer
-                    color("Red", 0.8) linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
+            if (Use_Nanopore_Wafer_Gasket) {
+                // NEW STACK DESIGN: Wafer Gasket & Fitted Gasket over the Amplifier
 
-                    // Central cylinder plug with carrier, floated up
-                    translate([0, 0, gasket_thick + Explode_Factor/3]) {
-                        color("Red", 0.8) difference() {
-                            cylinder(h=carrier_thick, d=carrier_diam);
-                            translate([0,0,-0.05]) cylinder(h=pcb_thin+0.1, d=carrier_diam);
-                        }
-                        translate([0, 0, (carrier_thick - pcb_thin)/2]) Nanopore_Carrier();
-                    }
-
-                    // Top Gasket Layer, floated further up
-                    translate([0, 0, gasket_thick + carrier_thick + Explode_Factor*2/3])
-                        color("Red", 0.8) linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
-                } else {
-                    // Non-exploded integrated single piece representation
-                    Integrated_Cast_Gasket_3D();
-                }
-                children();
-            }
-
-            // 3. PCB (which surrounds the central cylinder of the integrated gasket)
-            // Sits at Z = gasket_thick relative to Plate 1 TOP
-            // Transposed up in exploded view to separate it visually
-            attach(TOP)
-            up(gasket_thick + Explode_Factor*0.4)
-            attachable(anchor=BOTTOM, d=hex_diam, l=pcb_thin, $fn=6) {
-                PCB_Rigid_Active();
-                children();
-            }
-
-            // 4. Attach Top Plate
-            attach(TOP)
-            up(gasket_thick*2 + carrier_thick + Explode_Factor)
-            Plate_3_Top_Hex() {
-
-                // 5. Attach Puck
+                // 2. Gasket Bottom (Fitted piece over the amplifier board)
                 attach(TOP)
                 up(Explode_Factor/5)
-                Pressure_Puck_3D();
+                attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick, $fn=6) {
+                    Fitted_Amplifier_Gasket_3D();
+
+                    // 3. Amplifier PCB sits on top of Gasket Bottom
+                    attach(TOP)
+                    up(Explode_Factor/5)
+                    attachable(anchor=BOTTOM, d=hex_diam, l=pcb_thin, $fn=6) {
+                        PCB_Rigid_Active();
+
+                        // 4. Gasket Top (Cast Gasket with embedded nanopore wafer) sits on top of PCB
+                        attach(TOP)
+                        up(Explode_Factor/5)
+                        attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick, $fn=6) {
+                            Cast_Nanopore_Wafer_Gasket_3D();
+
+                            // 5. Plate 3 Top Hex on top of Gasket Top
+                            attach(TOP)
+                            up(Explode_Factor/5)
+                            Plate_3_Top_Hex() {
+
+                                // 6. Attach Puck
+                                attach(TOP)
+                                up(Explode_Factor/5)
+                                Pressure_Puck_3D();
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                // LEGACY INTEGRATED CAST GASKET STACK DESIGN
+
+                // 2. Integrated Cast Gasket containing top/bottom gaskets and central plug with embedded carrier
+                attach(TOP)
+                up(Explode_Factor/5)
+                attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick*2 + carrier_thick, $fn=6) {
+                    if (Explode_Factor > 0) {
+                        // Exploded View representation
+                        // Bottom Gasket Layer
+                        color("Red", 0.8) linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
+
+                        // Central cylinder plug with carrier, floated up
+                        translate([0, 0, gasket_thick + Explode_Factor/3]) {
+                            color("Red", 0.8) difference() {
+                                cylinder(h=carrier_thick, d=carrier_diam);
+                                translate([0,0,-0.05]) cylinder(h=pcb_thin+0.1, d=carrier_diam);
+                            }
+                            translate([0, 0, (carrier_thick - pcb_thin)/2]) Nanopore_Carrier();
+                        }
+
+                        // Top Gasket Layer, floated further up
+                        translate([0, 0, gasket_thick + carrier_thick + Explode_Factor*2/3])
+                            color("Red", 0.8) linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
+                    } else {
+                        // Non-exploded integrated single piece representation
+                        Integrated_Cast_Gasket_3D();
+                    }
+                    children();
+                }
+
+                // 3. PCB (which surrounds the central cylinder of the integrated gasket)
+                // Sits at Z = gasket_thick relative to Plate 1 TOP
+                // Transposed up in exploded view to separate it visually
+                attach(TOP)
+                up(gasket_thick + Explode_Factor*0.4)
+                attachable(anchor=BOTTOM, d=hex_diam, l=pcb_thin, $fn=6) {
+                    PCB_Rigid_Active();
+                    children();
+                }
+
+                // 4. Attach Top Plate
+                attach(TOP)
+                up(gasket_thick*2 + carrier_thick + Explode_Factor)
+                Plate_3_Top_Hex() {
+
+                    // 5. Attach Puck
+                    attach(TOP)
+                    up(Explode_Factor/5)
+                    Pressure_Puck_3D();
+                }
             }
         }
     }
