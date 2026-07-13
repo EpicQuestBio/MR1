@@ -78,6 +78,14 @@ async function main() {
         if (fs.existsSync(CONSTANTS_FILE)) {
              instance.FS.writeFile('/' + CONSTANTS_FILE, fs.readFileSync(CONSTANTS_FILE));
         }
+
+        // Load other root .scad files (like nanopore_wafer_mold.scad) to the root of the virtual filesystem
+        const rootFiles = fs.readdirSync(path.resolve(__dirname, '..'));
+        for (const file of rootFiles) {
+            if (file.endsWith('.scad') && file !== SCAD_FILE && file !== CONSTANTS_FILE) {
+                instance.FS.writeFile('/' + file, fs.readFileSync(path.resolve(__dirname, '..', file)));
+            }
+        }
         
         // Load BOSL2 & Modules
         function loadDir(localPath, virtualPath) {

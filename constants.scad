@@ -110,6 +110,14 @@ opamp_h = 1.75;       // SOIC-8 Height
 Show_Components = true;
 carrier_diam = 20;    // Diameter of the inner round Nanopore Carrier
 
+/* [Nanopore Wafer / Mold Settings] */
+Use_Nanopore_Wafer_Gasket = true; // Use the cast gasket with embedded nanopore wafer
+Show_Mold = false;                // Show 2-part mold for visual reference
+wafer_size = 4.0;                 // 4x4mm square wafer
+wafer_thick = 0.5;                // 0.5mm thickness of the silicon wafer
+wafer_hole_size = 3.0;            // Square hole size in the amplifier board (for overlap & sealing)
+plug_diameter = 3.0;              // Round plugs in the mold to protect the nanopore
+
 /* [Internal Sealing & Potting] */
 oring_id = 10;
 oring_cs = 1.78;
