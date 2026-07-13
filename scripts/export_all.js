@@ -12,8 +12,9 @@ const { ensureBOSL2 } = require('./lib_setup');
 
 const importOpenSCAD = async () => {
     // Dynamic import is needed for ESM modules in CommonJS
-    const mod = await import('openscad-wasm');
-    return mod.createOpenSCAD;
+    const filePath = path.resolve(projectRoot, 'node_modules/openscad-wasm/lib/openscad-wasm/openscad.js');
+    const mod = await import('file://' + filePath);
+    return mod.default || mod.createOpenSCAD || mod;
 };
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
@@ -69,7 +70,7 @@ async function main() {
     console.log(`Exporting ${mode}...`);
     try {
         const wrapper = await createOpenSCAD({ noInitialRun: true });
-        const instance = wrapper.getInstance();
+        const instance = typeof wrapper.getInstance === 'function' ? wrapper.getInstance() : wrapper;
 
         // Workaround for "[OpenSCAD]: Could not initialize localization" warning
         try {

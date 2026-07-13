@@ -2,9 +2,10 @@
 // MODULE: READER MODULE (Top Unit)
 // ==============================================================================
 module Housing_Case_Reader() {
+    inset_depth = 2.5;
     color("WhiteSmoke")
     diff("remove")
-    cuboid([base_w+2*wall, base_l+2*wall, reader_lid_thick], rounding=wall, edges="Z", anchor=BOTTOM) {
+    cuboid([base_w+2*(wall-inset_depth), base_l+2*(wall-inset_depth), reader_lid_thick], rounding=wall-inset_depth, edges="Z", anchor=BOTTOM) {
     
         // Internal Bucket
         tag("remove") position(BOTTOM) up(wall)
@@ -29,7 +30,7 @@ module Housing_Case_Reader() {
          // With thicker wall, we put holes in the corners.
          tag("remove") {
              for(x = [-1, 1], y = [-1, 1]) {
-                 translate([x * (base_w/2), y * (base_l/2), 0])
+                 translate([x * (base_w/2 - 2), y * (base_l/2 - 2), 0])
                  cylinder(h=wall*3, d=3.2, center=true);
              }
         }
@@ -51,6 +52,8 @@ module Housing_Case_Reader() {
 module Housing_Lid_Reader() {
     lid_thick = 25; // Increased thickness for horizontal ports
     ceiling_thick = 10; // Thickness of the top solid section for channels
+    inset_depth = 2.5; // Thins the wall by 2.5mm
+    inset_height = 15; // Inset height from bottom of lid
 
     color("Gainsboro")
     union() {
@@ -58,8 +61,8 @@ module Housing_Lid_Reader() {
         diff("remove")
         cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
 
-            // Cable Slot through the Lid
-            tag("remove") Cable_Slot();
+            // New Clearance channel for vertical downward JST cable (instead of old Cable Slot)
+            tag("remove") translate([0, -19, 0]) cube([14, 10, 200], center=true);
 
             // Internal Bucket (Now starts lower to leave ceiling room)
             // Added +0.1 padding to depth to prevent Z-fighting at the bottom boundary
@@ -184,17 +187,13 @@ module Housing_Lid_Reader() {
 
              // Connectivity (Back Side) - Moved to Positive Y Axis
              attach(BACK) {
-                // DIN 5 MIDI (Panel Mount)
-                tag("remove") translate([-25, 0, 0])
-                cyl(h=wall*10, d=16, anchor=CENTER) ;
-
-                // USB-C (Panel Mount Cutout)
-                tag("remove") translate([0, 0, 0])
+                // USB-C 1 (Panel Mount Cutout)
+                tag("remove") translate([-15, 0, 0])
                 cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
 
-                // Barrel Jack (Panel Mount)
-                tag("remove") translate([25, 0, 0])
-                cyl(h=wall*10, d=12, anchor=CENTER) ;
+                // USB-C 2 (Panel Mount Cutout)
+                tag("remove") translate([15, 0, 0])
+                cuboid([12, 6, wall*10], rounding=2, edges="Z", anchor=CENTER);
              }
 
              // O-Ring Groove
@@ -207,12 +206,19 @@ module Housing_Lid_Reader() {
              // Lid Mounting Holes (Through Holes + Counterbore)
              tag("remove") {
                  for(x = [-1, 1], y = [-1, 1]) {
-                     translate([x * (base_w/2), y * (base_l/2), 0])
+                     translate([x * (base_w/2 - 2), y * (base_l/2 - 2), 0])
                      cylinder(h=lid_thick*3, d=3.5, center=true);
 
-                     translate([x * (base_w/2), y * (base_l/2), 0])
+                     translate([x * (base_w/2 - 2), y * (base_l/2 - 2), 0])
                      position(TOP) down(5) cylinder(h=10, d=6, anchor=BOTTOM);
                  }
+             }
+
+             // Outer inset (makes lower wall thinner and creates an overhang)
+             tag("remove") position(BOTTOM)
+             difference() {
+                 cuboid([base_w+2*wall+1, base_l+2*wall+1, inset_height+0.1], rounding=wall, edges="Z", anchor=BOTTOM);
+                 cuboid([base_w+2*wall - 2*inset_depth, base_l+2*wall - 2*inset_depth, inset_height+0.2], rounding=wall - inset_depth, edges="Z", anchor=BOTTOM);
              }
         }
 
@@ -224,12 +230,12 @@ module Housing_Lid_Reader() {
         // Added 0.1 overlap
         translate([0,0,-ceiling_thick+0.1]) {
             translate([0,0,0]) {
-                // 1mm Standoffs for PCB (80x60 centered)
+                // 5mm Standoffs for PCB (80x60 centered)
                 for(mx = [-pcb_w/2 + 2, pcb_w/2 - 2], my = [-pcb_l/2 + 2, pcb_l/2 - 2]) {
                     translate([mx, my, 0])
                     diff("remove") // Ensure local screw hole removal
-                    cyl(h=1, d=6, anchor=TOP) {
-                        attach(BOTTOM) tag("remove") cyl(h=5, d=2.5, anchor=BOTTOM); // Mounting screw hole
+                    cyl(h=5, d=6, anchor=TOP) {
+                        attach(BOTTOM) tag("remove") cyl(h=8, d=2.5, anchor=BOTTOM); // Mounting screw hole
                     }
                 }
             }
@@ -278,11 +284,11 @@ module Reader_Module_Assembly() {
 
     // PCB (Attached to Lid Underside)
     // Lid bottom is at z = top_z - lid_thick = wall.
-    // Standoffs at -10 (ceiling) - 1 (standoff) = -11 relative to Lid Top.
-    // PCB Top should be at top_z - 11.
+    // Standoffs at -10 (ceiling) - 5 (standoff) = -15 relative to Lid Top.
+    // PCB Top should be at top_z - 15.
     // PCB is 1.6 thick.
-    // So PCB bottom at top_z - 11 - 1.6 = top_z - 12.6.
-    translate([0,0, top_z - 12.6 + Explode_Factor*0.4]) {
+    // So PCB bottom at top_z - 15 - 1.6 = top_z - 16.6.
+    translate([0,0, top_z - 16.6 + Explode_Factor*0.4]) {
         color("Green") linear_extrude(1.6)PCB_Main_Reader_2D();
     }
 }
@@ -300,13 +306,15 @@ module PCB_Main_Reader_2D() {
         // Connectivity Cutouts (Back Edge)
         // To clear panel mount connectors
         // Cut 10mm deep from the back edge (Y=30 -> Y=20)
-        translate([-25, 25]) square([18, 10.1], center=true); // DIN 5
-        translate([0, 25]) square([14, 10.1], center=true);   // USB-C
-        translate([25, 25]) square([14, 10.1], center=true);  // Barrel Jack
+        translate([-15, 25]) square([14, 10.1], center=true);   // USB-C 1
+        translate([15, 25]) square([14, 10.1], center=true);    // USB-C 2
 
         // Fluid Port Clearance Holes
         for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
             rotate([0, 0, a]) translate([port_radius, 0]) circle(d=6);
         }
+
+        // JST vertical connector clearance cutout (centered at [0, -19])
+        translate([0, -19]) square([14, 10], center=true);
     }
 }

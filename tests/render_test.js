@@ -3,8 +3,9 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const importOpenSCAD = async () => {
-    const mod = await import('openscad-wasm');
-    return mod.createOpenSCAD; 
+    const filePath = path.resolve(__dirname, '../node_modules/openscad-wasm/lib/openscad-wasm/openscad.js');
+    const mod = await import('file://' + filePath);
+    return mod.default || mod.createOpenSCAD || mod;
 };
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
@@ -46,16 +47,6 @@ async function main() {
   // Read SCAD file
   let scadContent = fs.readFileSync(SCAD_FILE, 'utf8');
   
-  // WORKAROUND: openscad-wasm (via manifold/cgal) seems to crash or error when `projection(cut=false)` 
-  // is called on already-2D objects (like PCB_2D or Plate_1_Base).
-  // We strip `projection(cut=false)` from the code *in memory* for the test runner only.
-  // This preserves the original source file but allows the test to pass in this specific environment.
-  console.log('Applying in-memory patch for WASM compatibility...');
-  const originalLength = scadContent.length;
-  scadContent = scadContent.replace(/projection\(cut=false\)\s*/g, '');
-  if (scadContent.length !== originalLength) {
-      console.log('  Removed projection(cut=false) calls.');
-  }
 
   // Parse modes
   let modeMatch = scadContent.match(/Output_Mode\s*=\s*"[^"]*";\s*\/\/\s*\[(.*?)\]/);
@@ -80,7 +71,7 @@ async function main() {
     console.log(`Rendering ${mode}...`);
     try {
         const wrapper = await createOpenSCAD({ noInitialRun: true });
-        const instance = wrapper.getInstance();
+        const instance = typeof wrapper.getInstance === 'function' ? wrapper.getInstance() : wrapper;
 
         // Load files
         instance.FS.writeFile('/' + SCAD_FILE, scadContent);
@@ -95,7 +86,7 @@ async function main() {
             const items = fs.readdirSync(localPath);
             for (const item of items) {
                 const loc = path.join(localPath, item);
-                const virt = path.join(virtualPath, item); 
+                const virt = virtualPath === '/' ? `/${item}` : `${virtualPath}/${item}`;
                 const stat = fs.statSync(loc);
                 if (stat.isDirectory()) {
                     loadDir(loc, virt);
@@ -104,7 +95,7 @@ async function main() {
                 }
             }
         }
-        loadDir(LIB_DIR, '/BOSL2');
+        loadDir('libraries', '/libraries');
         loadDir('modules', '/modules');
 
         let ext = 'stl';

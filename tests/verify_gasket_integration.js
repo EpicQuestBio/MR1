@@ -3,8 +3,9 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const importOpenSCAD = async () => {
-    const mod = await import('openscad-wasm');
-    return mod.createOpenSCAD;
+    const filePath = path.resolve(__dirname, '../node_modules/openscad-wasm/lib/openscad-wasm/openscad.js');
+    const mod = await import('file://' + filePath);
+    return mod.default || mod.createOpenSCAD || mod;
 };
 
 const SCAD_FILE = 'sentinel_nanopore_reader.scad';
@@ -25,11 +26,9 @@ async function main() {
   // Read SCAD file
   let scadContent = fs.readFileSync(SCAD_FILE, 'utf8');
 
-  // Apply the same patch as render_test.js
-  scadContent = scadContent.replace(/projection\(cut=false\)\s*/g, '');
 
   const wrapper = await createOpenSCAD({ noInitialRun: true });
-  const instance = wrapper.getInstance();
+  const instance = typeof wrapper.getInstance === 'function' ? wrapper.getInstance() : wrapper;
 
   instance.FS.writeFile('/' + SCAD_FILE, scadContent);
   if (fs.existsSync(CONSTANTS_FILE)) {
@@ -42,7 +41,7 @@ async function main() {
       const items = fs.readdirSync(localPath);
       for (const item of items) {
           const loc = path.join(localPath, item);
-          const virt = path.join(virtualPath, item);
+          const virt = virtualPath === '/' ? `/${item}` : `${virtualPath}/${item}`;
           const stat = fs.statSync(loc);
           if (stat.isDirectory()) {
               loadDir(loc, virt);
@@ -51,7 +50,7 @@ async function main() {
           }
       }
   }
-  loadDir(LIB_DIR, '/BOSL2');
+  loadDir('libraries', '/libraries');
   loadDir('modules', '/modules');
 
   const outFile = `${TARGET_MODE}.dxf`;

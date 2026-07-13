@@ -114,9 +114,6 @@ module PCB_Rigid_Active() {
         // Central Hole for Carrier
         translate([0,0,-1]) cylinder(h=10, d=carrier_diam);
 
-        // Cable Slot
-        Cable_Slot();
-
         // Pass-throughs (To allow fluid flow through the stack)
         rotate([0,0,angle_fluid_in_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
         rotate([0,0,angle_fluid_out_top]) translate([port_radius, 0, -1]) cylinder(h=10, d=fluid_Port_d);
@@ -138,30 +135,18 @@ module PCB_Rigid_Active() {
         }
     }
 
-    // --- ACTIVE COMPONENTS (Top Side) ---
+    // --- ACTIVE COMPONENTS (Bottom Side - Flipped) ---
     if(Show_Components) {
 
-        // --- NEW PADS (Top and Bottom) ---
+        // --- NEW PADS (Top and Bottom - Flipped) ---
         // Aligned with Liquid Ports closest to Amplifier (-30 and 210)
         // 2 Pads Top, 2 Pads Bottom
 
         pad_dist_inner = 12;
         pad_dist_outer = 17;
 
-        // Top Pads (Gold + Silver Ribbon) - Aligned with Top In 
+        // Top Pads (now at Z = 0, pointing downwards)
         rotate([0,0,angle_fluid_in_top]) {
-            color("Gold") {
-                translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
-                translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
-            }
-            color("Silver") {
-                translate([pad_dist_inner, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
-                translate([pad_dist_outer, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
-            }
-        }
-
-        // Bottom Pads (Gold + Silver Ribbon) - Aligned with Bot In 
-        rotate([0,0,angle_fluid_in_bot]) {
             color("Gold") {
                 translate([pad_dist_inner, 0, 0]) cube([2, 2, 0.1], center=true);
                 translate([pad_dist_outer, 0, 0]) cube([2, 2, 0.1], center=true);
@@ -172,45 +157,57 @@ module PCB_Rigid_Active() {
             }
         }
 
-        // JST Connector (Surface Mount, Right Angle)
-        // Moved Z to sit flush on TOP of PCB (pcb_thin + height/2)
-        translate([0, -19, pcb_thin + 2.5]) {
+        // Bottom Pads (now at Z = pcb_thin, pointing upwards)
+        rotate([0,0,angle_fluid_in_bot]) {
+            color("Gold") {
+                translate([pad_dist_inner, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+                translate([pad_dist_outer, 0, pcb_thin]) cube([2, 2, 0.1], center=true);
+            }
+            color("Silver") {
+                translate([pad_dist_inner, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
+                translate([pad_dist_outer, 0, pcb_thin + 0.06]) cube([2, 0.8, 0.1], center=true);
+            }
+        }
+
+        // JST Connector (Surface Mount, Vertical, facing DOWN)
+        // Sitting flush on BOTTOM of PCB (Z extending downwards from 0 to -5)
+        translate([0, -19, -2.5]) {
             color("White") cube([12, 6, 5], center=true); // Body
-            color("Silver") translate([0, -3.5, -2]) cube([12, 2, 1], center=true); // Pads
+            color("Silver") translate([0, 0, 2.5]) cube([12, 6, 0.1], center=true); // Solder pads
         }
         
-        // --- COMPONENT PLACEMENT ---
+        // --- COMPONENT PLACEMENT (Bottom Side - Flipped) ---
         // Spaced out on the connector side (-Y)
 
         // LMP7721 OpAmp (Near Carrier)
-        // Centered X/Y, Bottom at pcb_thin
-        translate([0, -13, pcb_thin + opamp_h/2]) {
+        // Centered X/Y, Top at 0, extending down
+        translate([0, -13, -opamp_h/2]) {
             color("#333333") cube([5, 6, opamp_h], center=true);
         }
 
         // V+ Rail Filtering (Left Side)
-        translate([-10, -18, pcb_thin]) {
+        translate([-10, -18, -1.5]) {
             color("Yellow") cube([3.2, 1.6, 1.5]);
-            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]);
+            translate([0, 2, 1.5 - 0.6]) color("Brown") cube([1.6, 0.8, 0.6]);
         }
 
         // V- Rail Filtering (Right Side)
-        translate([6, -18, pcb_thin]) {
+        translate([6, -18, -1.5]) {
             color("Yellow") cube([3.2, 1.6, 1.5]);
-            translate([0, 2, 0]) color("Brown") cube([1.6, 0.8, 0.6]);
+            translate([0, 2, 1.5 - 0.6]) color("Brown") cube([1.6, 0.8, 0.6]);
         }
 
         // Feedback Network
-        translate([8, -24, pcb_thin]) color("Blue") cube([3.2, 1.6, 0.6]);
+        translate([8, -24, -0.6]) color("Blue") cube([3.2, 1.6, 0.6]);
         
         // ESD Protection
-        translate([-8, -24, pcb_thin]) color("Gold") cube([2,2,0.05]);
+        translate([-8, -24, -0.05]) color("Gold") cube([2,2,0.05]);
     }
 
-    // --- ELECTRODES (Silver Ribbons) ---
+    // --- ELECTRODES (Silver Ribbons - Flipped Z) ---
     // On the Tabs
     color("Silver") {
-        for(a=[[angle_fluid_in_top, angle_fluid_in_bot],[1,-1]]) rotate([0,0,a[0]]) translate([carrier_diam/2 - 1, 0, a[1]*pcb_thin])
+        for(a=[[angle_fluid_in_top, angle_fluid_in_bot],[-1,1]]) rotate([0,0,a[0]]) translate([carrier_diam/2 - 1, 0, a[1]*pcb_thin])
              cube([3, 2, 0.2], center=true);
     }
 }
@@ -281,8 +278,8 @@ module Plate_1_Base_Hex_3D() {
         diff("remove")
         cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
-            // Cable Slot Pass-through
-            tag("remove") Cable_Slot();
+            // Circuitry Cutouts
+            tag("remove") Circuitry_Cutouts(height=plate_thick*3);
 
             // Pass-throughs - Simple Cylinders
 
@@ -387,9 +384,6 @@ module Gasket_Low_Dead_Volume(type="bottom") {
     difference() {
         circle(d=hex_diam, $fn=6);
 
-        // Cable Slot
-        tag("remove") Cable_Slot();
-
 
         // Pass-throughs (Inactive Ports)
         for(a = pass_angles) {
@@ -427,6 +421,30 @@ module Gasket_Low_Dead_Volume(type="bottom") {
     }
 }
 
+module Gasket_Mold_3D(type="bottom") {
+    // A mold for pouring PDMS to cast the gasket.
+    // The mold needs to have the same dimensions as the gasket, but negative.
+    // It should be a block that the gasket is cut out of.
+    // The mold depth should be exactly gasket_thick for a pour-and-scrape method.
+    // We add some extra margin around the gasket for structural integrity of the mold.
+    mold_margin = 10;
+    mold_w = hex_diam + mold_margin;
+    mold_l = hex_diam + mold_margin;
+    base_thick = 5; // Base thickness below the gasket
+
+    difference() {
+        // Main mold block
+        translate([0, 0, (base_thick + gasket_thick)/2])
+            cube([mold_w, mold_l, base_thick + gasket_thick], center=true);
+
+        // Gasket cavity
+        translate([0, 0, base_thick]) {
+            linear_extrude(gasket_thick + 0.1) // Slightly deeper for clean cut
+            Gasket_Low_Dead_Volume(type=type);
+        }
+    }
+}
+
 // BOSL2 3D Gasket Wrapper
 module Gasket_Low_Dead_Volume_3D(type="bottom") {
     // Wrapper using attachable directly
@@ -450,6 +468,71 @@ module Gasket_Low_Dead_Volume_3D(type="bottom") {
   
         children();
     }
+}
+
+module Circuitry_Cutouts(height=10) {
+    // 3D shapes representing active circuitry components to be subtracted for clearance
+    union() {
+        // LMP7721 OpAmp (X=0, Y=-13, dX=6, dY=7 for clearance)
+        translate([0, -13, 0])
+            cube([6, 7, height], center=true);
+
+        // JST Connector (X=0, Y=-19, dX=13, dY=7 for clearance)
+        translate([0, -19, 0])
+            cube([13, 7, height], center=true);
+
+        // V+ Rail Filtering (Left Side) (X=-10, Y=-18, dX=4, dY=4)
+        translate([-10, -18, 0])
+            cube([4, 4, height], center=true);
+
+        // V- Rail Filtering (Right Side) (X=6, Y=-18, dX=4, dY=4)
+        translate([6, -18, 0])
+            cube([4, 4, height], center=true);
+
+        // Feedback Network (X=8, Y=-24, dX=4, dY=3)
+        translate([8, -24, 0])
+            cube([4, 3, height], center=true);
+
+        // ESD Protection (X=-8, Y=-24, dX=3, dY=3)
+        translate([-8, -24, 0])
+            cube([3, 3, height], center=true);
+    }
+}
+
+module Integrated_Cast_Gasket_3D() {
+    // Single continuous cast gasket containing top gasket, central cylinder, bottom gasket, and embedding the Nanopore Carrier
+    color("Red", 0.8) {
+        difference() {
+            union() {
+                // Bottom Gasket Layer
+                linear_extrude(gasket_thick)
+                    Gasket_Low_Dead_Volume(type="bottom");
+
+                // Central Cylinder/Plug (Centers the nanopore carrier in the 20mm hole)
+                translate([0, 0, gasket_thick])
+                    cylinder(h=carrier_thick, d=carrier_diam);
+
+                // Top Gasket Layer
+                translate([0, 0, gasket_thick + carrier_thick])
+                    linear_extrude(gasket_thick)
+                        Gasket_Low_Dead_Volume(type="top");
+            }
+
+            // Subtraction for the Nanopore Carrier insert pocket/embedding
+            // Centered vertically inside the central cylinder
+            translate([0, 0, gasket_thick + (carrier_thick - pcb_thin)/2 - 0.05])
+                cylinder(h=pcb_thin + 0.1, d=carrier_diam + 0.1);
+
+            // Subtraction for active circuitry components on the bottom side of the PCB
+            // These face downwards and pocket into the bottom gasket layer
+            translate([0, 0, gasket_thick/2])
+                Circuitry_Cutouts(height=gasket_thick + 0.1);
+        }
+    }
+
+    // Add the embedded Nanopore Carrier inside the assembly
+    translate([0, 0, gasket_thick + (carrier_thick - pcb_thin)/2])
+        Nanopore_Carrier();
 }
 
 // Wrapper for PCB Layer to support BOSL2 attachments
@@ -501,6 +584,10 @@ module Plate_2_Channel() {
     }
 }
 
+module Plate_3_Top_Hex_2D() {
+    projection(cut=false) Plate_3_Top_Hex();
+}
+
 // L3_Hex: Top Cap (Hexagonal) - 3D BOSL2 Native
 module Plate_3_Top_Hex() {
     attachable(anchor=BOTTOM, d=hex_diam, l=plate_thick, $fn=6) {
@@ -509,39 +596,10 @@ module Plate_3_Top_Hex() {
         cyl(h=plate_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
 
             tag("remove") union() {
-                // Cable Slot (Clearance for connector body)
-                Cable_Slot();
-
                 // Sample Well / Pipette Access
                 if (!Sealed_Top_Mode) {
                     cylinder(h=plate_thick*3, d=pipette_access_d, center=true);
                 }
-
-                // Fluid Ports (Top In/Out) - Ensure connectivity
-               // for(a=[angle_fluid_in_top, angle_fluid_out_top])
-               //     rotate([0,0,a]) translate([port_radius, 0]) cylinder(h=plate_thick*3, d=fluid_Port_d, center=true);
-
-                // COMPONENT CUTOUTS (Frame Mode)
-                // Updated to avoid cutting the central seal area (d ~ 10mm)
-                linear_extrude(plate_thick*3, center=true)
-                union() {
-                    // Top Wing (OpAmp 1)
-                  // # translate([14, 4]) square([7, 8]); // OpAmp 1 with clearance
-
-                    // Bottom Wing (JST, OpAmp 2, Filters, Cable Slot)
-                    // JST/ESD/CableSlot Area (X[-7, 7], Y[-29, -15])
-                    translate([-7, -29]) square([14, 14]);
-                    // OpAmp 2 Area (X[4, 11], Y[-21, -13])
-                    translate([4, -21]) square([7, 8]);
-                    // Filters Area (X[-1, 14.2], Y[-28, -22])
-                    translate([-1, -28]) square([15.2, 6]);
-                }
-
-                // Electrode Access
-              //  rotate([0,0,angle_elec_cis]) translate([port_radius, 0]) cylinder(h=20, d=2, center=true);
-
-                // Keying Pin
-               // translate([plate_diam/2 - 3, 0]) cylinder(h=20, d=2, center=true);
 
                 // Finger Grip Cutouts
                 Finger_Grip_Cutout(height=plate_thick*3);
@@ -594,30 +652,53 @@ module Cartridge_Stack_3D() {
         up(Explode_Factor/5) // Visual gap
         Plate_1_Base_Hex_3D()
 
-            // 2. Attach Bottom Gasket
+            // 2. Integrated Cast Gasket containing top/bottom gaskets and central plug with embedded carrier
             attach(TOP)
             up(Explode_Factor/5)
-            Gasket_Low_Dead_Volume_3D(type="bottom")
+            attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick*2 + carrier_thick, $fn=6) {
+                if (Explode_Factor > 0) {
+                    // Exploded View representation
+                    // Bottom Gasket Layer
+                    color("Red", 0.8) linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="bottom");
 
-                // 3. Attach PCB + Carrier
+                    // Central cylinder plug with carrier, floated up
+                    translate([0, 0, gasket_thick + Explode_Factor/3]) {
+                        color("Red", 0.8) difference() {
+                            cylinder(h=carrier_thick, d=carrier_diam);
+                            translate([0,0,-0.05]) cylinder(h=pcb_thin+0.1, d=carrier_diam);
+                        }
+                        translate([0, 0, (carrier_thick - pcb_thin)/2]) Nanopore_Carrier();
+                    }
+
+                    // Top Gasket Layer, floated further up
+                    translate([0, 0, gasket_thick + carrier_thick + Explode_Factor*2/3])
+                        color("Red", 0.8) linear_extrude(gasket_thick) Gasket_Low_Dead_Volume(type="top");
+                } else {
+                    // Non-exploded integrated single piece representation
+                    Integrated_Cast_Gasket_3D();
+                }
+                children();
+            }
+
+            // 3. PCB (which surrounds the central cylinder of the integrated gasket)
+            // Sits at Z = gasket_thick relative to Plate 1 TOP
+            // Transposed up in exploded view to separate it visually
+            attach(TOP)
+            up(gasket_thick + Explode_Factor*0.4)
+            attachable(anchor=BOTTOM, d=hex_diam, l=pcb_thin, $fn=6) {
+                PCB_Rigid_Active();
+                children();
+            }
+
+            // 4. Attach Top Plate
+            attach(TOP)
+            up(gasket_thick*2 + carrier_thick + Explode_Factor)
+            Plate_3_Top_Hex()
+
+                // 5. Attach Puck
                 attach(TOP)
                 up(Explode_Factor/5)
-                PCB_Active_Stack_3D()
-
-                    // 4. Attach Top Gasket
-                    attach(TOP)
-                    up(Explode_Factor/5)
-                    Gasket_Low_Dead_Volume_3D(type="top")
-
-                        // 5. Attach Top Plate
-                        attach(TOP)
-                        up(Explode_Factor/5)
-                        Plate_3_Top_Hex()
-
-                            // 6. Attach Puck
-                            attach(TOP)
-                            up(Explode_Factor/5)
-                            Pressure_Puck_3D();
+                Pressure_Puck_3D();
 }
 
 // ==============================================================================
@@ -641,8 +722,8 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
         cyl(h=pp_h, d=hex_diam, $fn=6, anchor=BOTTOM) { // Fits in HEX neck
 
         
-        // Cable Slot Pass-through
-        tag("remove") Cable_Slot();
+        // Circuitry Cutouts
+        tag("remove") Circuitry_Cutouts(height=pp_h*3);
             
             // Fluid Ports (4x)
         tag("remove")
@@ -727,9 +808,6 @@ module PCB_Solid_Hex() {
 
         // Central Hole for Nanopore Carrier
         circle(d=carrier_diam);
-
-        // Cable Slot (2D projection)
-        translate([0, -26]) square([12, 5], center=true);
     }
 
     // Protruding Tabs (Into the hole)
