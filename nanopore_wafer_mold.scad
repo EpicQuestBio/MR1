@@ -169,20 +169,20 @@ module Nanopore_Wafer_Mold_Left(type="top") {
 
     // Additive Features (Inside Left half cavity)
     translate([0, 0, cavity_z]) {
-        // 1. Central cylindrical plug (protects nanopore left side, flush with the wafer shelf)
+        // 1. Central cylindrical plug (protects nanopore left side, forming the channel leading to the recessed wafer)
         translate([-gasket_thick/2 - PCB_Thickness, 0, 0]) {
             rotate([0, 90, 0])
-                color("Gold") cylinder(h=wafer_thick, d=plug_diameter, $fn=32);
+                color("Gold") cylinder(h=wafer_recess, d=plug_diameter, $fn=32);
         }
 
         // 1b. Wafer Pocket forming block (additive)
-        translate([-gasket_thick/2 - PCB_Thickness + wafer_thick/2, 0, 0]) {
+        translate([-gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick/2, 0, 0]) {
             color("Gold") cube([wafer_thick, wafer_size, wafer_size], center=true);
         }
 
         // 2. Corner registration L-brackets to position the wafer
-        // Centered at X = -gasket_thick/2 - PCB_Thickness
-        translate([-gasket_thick/2 - PCB_Thickness, 0, 0])
+        // Centered at X = -gasket_thick/2 - PCB_Thickness + wafer_recess
+        translate([-gasket_thick/2 - PCB_Thickness + wafer_recess, 0, 0])
             Corner_Guides_Vertical_Seam(wafer_s=wafer_size, guide_w=1.2, height=h_guide);
 
         // 3. Passive fluid port pins (generate holes in cast piece)
@@ -297,10 +297,10 @@ module Nanopore_Wafer_Mold_Right(type="top") {
     // Additive Features (Inside Right half cavity)
     translate([0, 0, cavity_z]) {
         // 1. Central cylindrical plug (protects nanopore right side)
-        // Extends from right cavity floor (X = gasket_thick/2) down to wafer right face (X = -gasket_thick/2 - PCB_Thickness + wafer_thick)
-        translate([-gasket_thick/2 - PCB_Thickness + wafer_thick, 0, 0]) {
+        // Extends from right cavity floor (X = gasket_thick/2) down to wafer right face (X = -gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick)
+        translate([-gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick, 0, 0]) {
             rotate([0, 90, 0])
-                color("Gold") cylinder(h=gasket_thick + PCB_Thickness - wafer_thick, d=plug_diameter, $fn=32);
+                color("Gold") cylinder(h=gasket_thick + PCB_Thickness - wafer_recess - wafer_thick, d=plug_diameter, $fn=32);
         }
 
         // 2. Passive fluid port pins
@@ -365,7 +365,7 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true) {
         Nanopore_Wafer_Mold_Left(type="top");
 
     // Silicon Square Wafer sits at its new offset position
-    translate([-gasket_thick/2 - PCB_Thickness + wafer_thick/2, 0, cavity_z])
+    translate([-gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick/2, 0, cavity_z])
         Wafer_Visual();
 
     // The cured silicone gasket itself
@@ -387,7 +387,7 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true) {
                         Finger_Grip_Cutout(height=gasket_thick + 1.0);
 
                         // Wafer pocket cutout
-                        translate([0, 0, -gasket_thick/2 - PCB_Thickness + wafer_thick/2])
+                        translate([0, 0, -gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick/2])
                             cube([wafer_size + 0.1, wafer_size + 0.1, wafer_thick + 0.1], center=true);
 
                         // Central protected round aperture
