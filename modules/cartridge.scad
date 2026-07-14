@@ -64,7 +64,7 @@ module Cast_Nanopore_Wafer_Gasket_3D() {
             Finger_Grip_Cutout(height=gasket_thick * 3);
 
             // Embed the square wafer (recess for visualization)
-            translate([0, 0, (gasket_thick - wafer_thick)/2 - 0.05])
+            translate([0, 0, gasket_thick/2])
                 cube([wafer_size + 0.1, wafer_size + 0.1, wafer_thick + 0.1], center=true);
 
             // Central protected round aperture
