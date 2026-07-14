@@ -114,7 +114,12 @@ module Nanopore_Wafer_Mold_Left(type="top") {
         translate([-gasket_thick/2, 0, cavity_z]) {
             rotate([0, 90, 0])
                 linear_extrude(gasket_thick/2 + 0.1)
-                    circle(d=hex_diam, $fn=6);
+                    circle(d=primary_gasket_diam, $fn=6);
+        }
+
+        // Protrusion Pocket (depth PCB_Thickness, subtracted from X = -gasket_thick/2)
+        translate([-gasket_thick/2 - PCB_Thickness/2, 0, cavity_z]) {
+            cube([PCB_Thickness + 0.1, protrusion_size, protrusion_size], center=true);
         }
 
         // B: Finger Grip Cutout clearances
@@ -164,16 +169,20 @@ module Nanopore_Wafer_Mold_Left(type="top") {
 
     // Additive Features (Inside Left half cavity)
     translate([0, 0, cavity_z]) {
-        // 1. Central cylindrical plug (protects nanopore left side)
-        // Extends from left cavity floor (X = -gasket_thick/2) up to wafer left face (X = -wafer_thick/2)
-        translate([-gasket_thick/2, 0, 0]) {
+        // 1. Central cylindrical plug (protects nanopore left side, flush with the wafer shelf)
+        translate([-gasket_thick/2 - PCB_Thickness, 0, 0]) {
             rotate([0, 90, 0])
-                color("Gold") cylinder(h=gasket_thick/2 - wafer_thick/2, d=plug_diameter, $fn=32);
+                color("Gold") cylinder(h=wafer_thick, d=plug_diameter, $fn=32);
+        }
+
+        // 1b. Wafer Pocket forming block (additive)
+        translate([-gasket_thick/2 - PCB_Thickness + wafer_thick/2, 0, 0]) {
+            color("Gold") cube([wafer_thick, wafer_size, wafer_size], center=true);
         }
 
         // 2. Corner registration L-brackets to position the wafer
-        // Centered at X = 0, guides the wafer in Y-Z plane
-        translate([-gasket_thick/2, 0, 0])
+        // Centered at X = -gasket_thick/2 - PCB_Thickness
+        translate([-gasket_thick/2 - PCB_Thickness, 0, 0])
             Corner_Guides_Vertical_Seam(wafer_s=wafer_size, guide_w=1.2, height=h_guide);
 
         // 3. Passive fluid port pins (generate holes in cast piece)
@@ -245,7 +254,7 @@ module Nanopore_Wafer_Mold_Right(type="top") {
         translate([0, 0, cavity_z]) {
             rotate([0, 90, 0])
                 linear_extrude(gasket_thick/2 + 0.1)
-                    circle(d=hex_diam, $fn=6);
+                    circle(d=primary_gasket_diam, $fn=6);
         }
 
         // B: Finger Grip Cutout clearances
@@ -288,10 +297,10 @@ module Nanopore_Wafer_Mold_Right(type="top") {
     // Additive Features (Inside Right half cavity)
     translate([0, 0, cavity_z]) {
         // 1. Central cylindrical plug (protects nanopore right side)
-        // Extends from right cavity floor (X = gasket_thick/2) down to wafer right face (X = wafer_thick/2)
-        translate([wafer_thick/2, 0, 0]) {
+        // Extends from right cavity floor (X = gasket_thick/2) down to wafer right face (X = -gasket_thick/2 - PCB_Thickness + wafer_thick)
+        translate([-gasket_thick/2 - PCB_Thickness + wafer_thick, 0, 0]) {
             rotate([0, 90, 0])
-                color("Gold") cylinder(h=gasket_thick/2 - wafer_thick/2, d=plug_diameter, $fn=32);
+                color("Gold") cylinder(h=gasket_thick + PCB_Thickness - wafer_thick, d=plug_diameter, $fn=32);
         }
 
         // 2. Passive fluid port pins
@@ -355,8 +364,8 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true) {
     translate([-explode, 0, 0])
         Nanopore_Wafer_Mold_Left(type="top");
 
-    // Silicon Square Wafer sits exactly in the center (X = 0)
-    translate([0, 0, cavity_z])
+    // Silicon Square Wafer sits at its new offset position
+    translate([-gasket_thick/2 - PCB_Thickness + wafer_thick/2, 0, cavity_z])
         Wafer_Visual();
 
     // The cured silicone gasket itself
@@ -365,17 +374,24 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true) {
             color("Red", 0.5) {
                 rotate([0, 90, 0]) {
                     difference() {
-                        // Main gasket shape
-                        cylinder(h=gasket_thick, d=hex_diam, center=true, $fn=6);
+                        union() {
+                            // Main gasket shape
+                            cylinder(h=gasket_thick, d=primary_gasket_diam, center=true, $fn=6);
+
+                            // Protrusion
+                            translate([0, 0, -gasket_thick/2 - PCB_Thickness/2])
+                                cube([protrusion_size, protrusion_size, PCB_Thickness], center=true);
+                        }
 
                         // Finger grip cutouts
                         Finger_Grip_Cutout(height=gasket_thick + 1.0);
 
                         // Wafer pocket cutout
-                        cube([wafer_thick + 0.1, wafer_size + 0.1, wafer_size + 0.1], center=true);
+                        translate([0, 0, -gasket_thick/2 - PCB_Thickness + wafer_thick/2])
+                            cube([wafer_size + 0.1, wafer_size + 0.1, wafer_thick + 0.1], center=true);
 
                         // Central protected round aperture
-                        cylinder(h=gasket_thick + 2.0, d=plug_diameter, center=true, $fn=32);
+                        cylinder(h=gasket_thick + PCB_Thickness * 2 + 2.0, d=plug_diameter, center=true, $fn=32);
 
                         // Ports
                         for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {

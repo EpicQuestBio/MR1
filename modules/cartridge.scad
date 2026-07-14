@@ -57,19 +57,25 @@ module Nanopore_Wafer_Visual_3D() {
 module Cast_Nanopore_Wafer_Gasket_3D() {
     color("Red", 0.8) {
         difference() {
-            // Main gasket body
-            cylinder(h=gasket_thick, d=hex_diam, $fn=6);
+            union() {
+                // Main gasket body
+                cylinder(h=gasket_thick, d=primary_gasket_diam, $fn=6);
+
+                // Protruded silicone layer around the wafer seat (on PCB-facing bottom side)
+                translate([0, 0, -PCB_Thickness/2])
+                    cube([protrusion_size, protrusion_size, PCB_Thickness], center=true);
+            }
 
             // Finger grip cutouts
             Finger_Grip_Cutout(height=gasket_thick * 3);
 
             // Embed the square wafer (recess for visualization)
-            translate([0, 0, gasket_thick/2])
+            translate([0, 0, -PCB_Thickness + wafer_thick/2])
                 cube([wafer_size + 0.1, wafer_size + 0.1, wafer_thick + 0.1], center=true);
 
-            // Central protected round aperture
-            translate([0, 0, -0.5])
-                cylinder(h=gasket_thick + 1.0, d=plug_diameter, $fn=32);
+            // Central protected round aperture (extended through protrusion)
+            translate([0, 0, -PCB_Thickness - 0.5])
+                cylinder(h=gasket_thick + PCB_Thickness + 1.0, d=plug_diameter, $fn=32);
 
             // Passive fluid ports
             for(a = [angle_fluid_in_bot, angle_fluid_out_bot]) {
@@ -96,7 +102,7 @@ module Cast_Nanopore_Wafer_Gasket_3D() {
     }
 
     // Embed the square wafer
-    translate([0, 0, gasket_thick/2])
+    translate([0, 0, -PCB_Thickness + wafer_thick/2])
         Nanopore_Wafer_Visual_3D();
 }
 
@@ -104,7 +110,7 @@ module Fitted_Amplifier_Gasket_3D() {
     color("Red", 0.8) {
         difference() {
             // Main Gasket shape
-            cylinder(h=gasket_thick, d=hex_diam, $fn=6);
+            cylinder(h=gasket_thick, d=primary_gasket_diam, $fn=6);
 
             // Square wafer hole (or central chamber)
             translate([0, 0, -0.5])
@@ -483,7 +489,7 @@ module Gasket_Low_Dead_Volume(type="bottom") {
         : [angle_fluid_in_bot, angle_fluid_out_bot];
 
     difference() {
-        circle(d=hex_diam, $fn=6);
+        circle(d=primary_gasket_diam, $fn=6);
 
 
         // Pass-throughs (Inactive Ports)
@@ -551,16 +557,16 @@ module Gasket_Low_Dead_Volume_3D(type="bottom") {
     // Wrapper using attachable directly
     // This separates the attachment logic from the geometry generation (diff)
     // and prevents children() from being processed multiple times by diff().
-    attachable(anchor=BOTTOM, d=hex_diam, l=gasket_thick, $fn=6) {
+    attachable(anchor=BOTTOM, d=primary_gasket_diam, l=gasket_thick, $fn=6) {
         color("Red")
         diff("remove")
-        cyl(h=gasket_thick, d=hex_diam, $fn=6, anchor=BOTTOM) {
+        cyl(h=gasket_thick, d=primary_gasket_diam, $fn=6, anchor=BOTTOM) {
             tag("remove")
             position(BOTTOM)
             translate([0,0,-0.1])
             linear_extrude(gasket_thick+0.2) // Extrude slightly more for cut
             difference() {
-                square([hex_diam*2, hex_diam*2], center=true); // Inverse mask
+                square([primary_gasket_diam*2, primary_gasket_diam*2], center=true); // Inverse mask
                 Gasket_Low_Dead_Volume(type=type); // The actual gasket shape
             }
             // Cable Slot

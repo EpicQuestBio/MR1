@@ -117,6 +117,9 @@ wafer_size = 4.0;                 // 4x4mm square wafer
 wafer_thick = 0.5;                // 0.5mm thickness of the silicon wafer
 wafer_hole_size = 3.0;            // Square hole size in the amplifier board (for overlap & sealing)
 plug_diameter = 3.0;              // Round plugs in the mold to protect the nanopore
+primary_gasket_diam = 50.0;       // Primary gasket body diameter, sitting inside the clamping interface
+PCB_Thickness = 0.8;              // Z-height (thickness) of the active PCB (matching pcb_thin)
+protrusion_size = 6.0;            // Square size of the silicone protrusion around the wafer seat
 
 /* [Internal Sealing & Potting] */
 oring_id = 10;
