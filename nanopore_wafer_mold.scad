@@ -33,6 +33,30 @@ bolt_z_offset = mold_h/2 - 6;
 pin_d = 4.0;
 pin_h = 5.0;
 
+module Rounded_Mold_Block(t, w, h, r=4) {
+    hull() {
+        for(y = [-w/2 + r, w/2 - r]) {
+            for(z = [-h/2 + r, h/2 - r]) {
+                translate([0, y, z])
+                    rotate([0, 90, 0])
+                        cylinder(h=t, r=r, center=true, $fn=32);
+            }
+        }
+    }
+}
+
+module Rounded_Reservoir_Block(t, w, h, r=2) {
+    hull() {
+        for(y = [-w/2 + r, w/2 - r]) {
+            for(z = [-h/2 + r, h/2 - r]) {
+                translate([0, y, z])
+                    rotate([0, 90, 0])
+                        cylinder(h=t, r=r, center=true, $fn=32);
+            }
+        }
+    }
+}
+
 // Reservoir Dimensions
 res_w = hex_diam - 10; // 50mm
 res_d = 15.0;          // Depth of the reservoir (Z-axis cut from top)
@@ -84,7 +108,7 @@ module Nanopore_Wafer_Mold_Left(type="top") {
     difference() {
         // Main block (rests on Z=0, split face at X=0)
         translate([-mold_t/2, 0, mold_h/2])
-            cube([mold_t, mold_w, mold_h], center=true);
+            Rounded_Mold_Block(mold_t, mold_w, mold_h, r=4);
 
         // A: Hexagonal Gasket Cavity (Left half, depth gasket_thick/2)
         translate([-gasket_thick/2, 0, cavity_z]) {
@@ -102,7 +126,7 @@ module Nanopore_Wafer_Mold_Left(type="top") {
 
         // C: Large Top Reservoir (Foam expansion chamber)
         translate([-res_t + 0.01, 0, mold_h - res_d/2 + 0.1])
-            cube([res_t, res_w, res_d + 0.2], center=true);
+            Rounded_Reservoir_Block(res_t, res_w, res_d + 0.2, r=2);
 
         // D: Tapered Injection sprue (half-cone cut)
         // From bottom of reservoir (Z = mold_h - res_d) down to top edge of hexagon (Z = cavity_z + 26.0)
@@ -155,7 +179,7 @@ module Nanopore_Wafer_Mold_Left(type="top") {
         // 3. Passive fluid port pins (generate holes in cast piece)
         color("Gold") {
             for(a = pass_angles) {
-                rotate([0, 0, a]) translate([port_radius, 0, 0])
+                rotate([a, 0, 0]) translate([0, port_radius, 0])
                     rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                         cylinder(h=gasket_thick/2, d=2.0, $fn=32);
             }
@@ -164,14 +188,14 @@ module Nanopore_Wafer_Mold_Left(type="top") {
         // 4. Active fluid port pins and raised flow channel bosses
         color("Gold") {
             // Inlet port pin + channel boss
-            rotate([0, 0, active_in]) {
-                translate([port_radius, 0, 0])
+            rotate([active_in, 0, 0]) {
+                translate([0, port_radius, 0])
                     rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                         cylinder(h=gasket_thick/2, d=2.0, $fn=32);
 
                 // Active channel boss (recessed in left mold to form channel in cast gasket)
                 hull() {
-                    translate([port_radius, 0, 0])
+                    translate([0, port_radius, 0])
                         rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                             cylinder(h=gasket_thick/2, d=1.2, $fn=16);
                     translate([0, 0, 0])
@@ -181,14 +205,14 @@ module Nanopore_Wafer_Mold_Left(type="top") {
             }
 
             // Outlet port pin + channel boss
-            rotate([0, 0, active_out]) {
-                translate([port_radius, 0, 0])
+            rotate([active_out, 0, 0]) {
+                translate([0, port_radius, 0])
                     rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                         cylinder(h=gasket_thick/2, d=2.0, $fn=32);
 
                 // Active channel boss
                 hull() {
-                    translate([port_radius, 0, 0])
+                    translate([0, port_radius, 0])
                         rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                             cylinder(h=gasket_thick/2, d=1.2, $fn=16);
                     translate([0, 0, 0])
@@ -215,7 +239,7 @@ module Nanopore_Wafer_Mold_Right(type="top") {
     difference() {
         // Main block
         translate([mold_t/2, 0, mold_h/2])
-            cube([mold_t, mold_w, mold_h], center=true);
+            Rounded_Mold_Block(mold_t, mold_w, mold_h, r=4);
 
         // A: Hexagonal Gasket Cavity (Right half, depth gasket_thick/2)
         translate([0, 0, cavity_z]) {
@@ -233,7 +257,7 @@ module Nanopore_Wafer_Mold_Right(type="top") {
 
         // C: Large Top Reservoir
         translate([0.01, 0, mold_h - res_d/2 + 0.1])
-            cube([res_t, res_w, res_d + 0.2], center=true);
+            Rounded_Reservoir_Block(res_t, res_w, res_d + 0.2, r=2);
 
         // D: Tapered Injection sprue (half-cone cut)
         translate([0, 0, 0]) {
@@ -273,7 +297,7 @@ module Nanopore_Wafer_Mold_Right(type="top") {
         // 2. Passive fluid port pins
         color("Gold") {
             for(a = pass_angles) {
-                rotate([0, 0, a]) translate([port_radius, 0, 0])
+                rotate([a, 0, 0]) translate([0, port_radius, 0])
                     rotate([0, 90, 0])
                         cylinder(h=gasket_thick/2, d=2.0, $fn=32);
             }
@@ -282,14 +306,14 @@ module Nanopore_Wafer_Mold_Right(type="top") {
         // 3. Active fluid port pins and raised flow channel bosses
         color("Gold") {
             // Inlet port pin + channel boss
-            rotate([0, 0, active_in]) {
-                translate([port_radius, 0, 0])
+            rotate([active_in, 0, 0]) {
+                translate([0, port_radius, 0])
                     rotate([0, 90, 0])
                         cylinder(h=gasket_thick/2, d=2.0, $fn=32);
 
                 // Active channel boss
                 hull() {
-                    translate([port_radius, 0, 0])
+                    translate([0, port_radius, 0])
                         rotate([0, 90, 0])
                             cylinder(h=gasket_thick/2, d=1.2, $fn=16);
                     translate([0, 0, 0])
@@ -299,14 +323,14 @@ module Nanopore_Wafer_Mold_Right(type="top") {
             }
 
             // Outlet port pin + channel boss
-            rotate([0, 0, active_out]) {
-                translate([port_radius, 0, 0])
+            rotate([active_out, 0, 0]) {
+                translate([0, port_radius, 0])
                     rotate([0, 90, 0])
                         cylinder(h=gasket_thick/2, d=2.0, $fn=32);
 
                 // Active channel boss
                 hull() {
-                    translate([port_radius, 0, 0])
+                    translate([0, port_radius, 0])
                         rotate([0, 90, 0])
                             cylinder(h=gasket_thick/2, d=1.2, $fn=16);
                     translate([0, 0, 0])
