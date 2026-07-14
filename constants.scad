@@ -115,6 +115,7 @@ Use_Nanopore_Wafer_Gasket = true; // Use the cast gasket with embedded nanopore 
 Show_Mold = false;                // Show 2-part mold for visual reference
 wafer_size = 4.0;                 // 4x4mm square wafer
 wafer_thick = 0.5;                // 0.5mm thickness of the silicon wafer
+wafer_recess = 0.5;               // 0.5mm sealing lip thickness over the front face (PCB side)
 wafer_hole_size = 3.0;            // Square hole size in the amplifier board (for overlap & sealing)
 plug_diameter = 3.0;              // Round plugs in the mold to protect the nanopore
 primary_gasket_diam = 50.0;       // Primary gasket body diameter, sitting inside the clamping interface
