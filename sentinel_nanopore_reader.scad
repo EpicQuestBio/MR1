@@ -29,10 +29,10 @@ if (Output_Mode == "Assembly") {
                 Reader_Module_Assembly();
             }
 
-            // Optional 2-Part Silicone Mold for Nanopore Wafer
+            // Optional 2-Part Silicone Mold Assemblies and Gaskets
             if (Show_Mold) {
                 translate([-130, 0, 0]) {
-                    Nanopore_Wafer_Mold_Assembly(explode = Explode_Factor * 0.4, show_gasket = true);
+                    Multi_Mold_Visualizer();
                 }
             }
 
@@ -87,6 +87,10 @@ if (Output_Mode == "Assembly") {
     Gasket_Mold_3D(type="top");
 } else if (Output_Mode == "Gasket_Mold_Bottom_STL") {
     Gasket_Mold_3D(type="bottom");
+} else if (Output_Mode == "Amplifier_Gasket_Mold_Left_STL") {
+    Nanopore_Wafer_Mold_Left(type="top", is_nanopore=false);
+} else if (Output_Mode == "Amplifier_Gasket_Mold_Right_STL") {
+    Nanopore_Wafer_Mold_Right(type="top", is_nanopore=false);
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
 } else if (Output_Mode == "Housing_Pump_Lid_STL") {
