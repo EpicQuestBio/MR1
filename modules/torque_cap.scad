@@ -102,7 +102,7 @@ module Torque_Cap_Outer(access_hole=true, flex_style="ratchet") {
                         // window_bottom = cap_retention_h + 1, window_top = cap_h - 2
                         translate([neck_od/2 + 6, 0, (cap_h + cap_retention_h - 1)/2])
                         // Width needs to penetrate both sides of the wall (radially)
-                        cube([20, 18, cap_h - cap_retention_h - 3], center=true);
+                        cube([30, 20, cap_h - cap_retention_h - 2], center=true);
                     }
                 }
             } else if (flex_style == "vertical") {
@@ -115,7 +115,7 @@ module Torque_Cap_Outer(access_hole=true, flex_style="ratchet") {
                     rotate([0,0,r]) {
                         tag("remove")
                         translate([neck_od/2 + 6, 0, slot_z])
-                        cube([10, 12, slot_height], center=true);
+                        cube([30, 14, slot_height + 1], center=true);
                     }
                 }
             }
@@ -133,19 +133,20 @@ module Torque_Cap_Outer(access_hole=true, flex_style="ratchet") {
                     translate([neck_od/2 + 6, 0, cap_retention_h + 1]) {
                          // Arm Base - shift up by retention + 1mm clearance
                          // Make the arm shorter than the cutout to leave top and bottom gaps
-                         // Cutout height is cap_h - cap_retention_h - 3
-                         // Arm height will be cap_h - cap_retention_h - 7 (2mm gap top and bottom)
+                         // Cutout height is cap_h - cap_retention_h - 2
+                         // Arm height will be cap_h - cap_retention_h - 6 (2mm gap top and bottom)
                          up((cap_h - cap_retention_h - 3)/2)
-                         // Overlap with the wall at y = -9 (start of arm)
-                         translate([0, -2, 0]) // Shift back slightly so end embeds
+                         // Overlap with the wall at y = -10 (start of arm)
+                         // Shift by -3 so it spans from Y = -11 (embedded) to Y = 5
+                         translate([0, -3, 0])
                          // tag("keep") ensures it isn't erased by the diff("remove") block around it.
                          // But diff("remove") is around the main body up top. The Spring arms are added outside the diff("remove") block, so they won't be removed by it.
-                         cube([4, 14, cap_h - cap_retention_h - 7], center=true); // Arm
+                         cube([4, 16, cap_h - cap_retention_h - 6], center=true); // Arm
 
                          // Pawl - attached to the free end
                          up((cap_h - cap_retention_h - 3)/2)
                          translate([-3, 4, 0]) // Position Pawl to stick out and attach to arm
-                         cylinder(h=cap_h - cap_retention_h - 7, d=3, center=true); // Pawl
+                         cylinder(h=cap_h - cap_retention_h - 6, d=3, center=true); // Pawl
                     }
                 }
             }

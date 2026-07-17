@@ -88,9 +88,9 @@ if (Output_Mode == "Assembly") {
 } else if (Output_Mode == "Gasket_Mold_Bottom_STL") {
     Gasket_Mold_3D(type="bottom");
 } else if (Output_Mode == "Amplifier_Gasket_Mold_Left_STL") {
-    Nanopore_Wafer_Mold_Left(type="top", is_nanopore=false);
+    Nanopore_Wafer_Mold_Left(type="bottom", is_nanopore=false);
 } else if (Output_Mode == "Amplifier_Gasket_Mold_Right_STL") {
-    Nanopore_Wafer_Mold_Right(type="top", is_nanopore=false);
+    Nanopore_Wafer_Mold_Right(type="bottom", is_nanopore=false);
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
 } else if (Output_Mode == "Housing_Pump_Lid_STL") {

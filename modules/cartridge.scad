@@ -116,10 +116,26 @@ module Fitted_Amplifier_Gasket_3D() {
             translate([0, 0, -0.5])
                 cube([wafer_hole_size, wafer_hole_size, gasket_thick + 1.0], center=true);
 
-            // Pass-through ports
-            for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
+            // Passive pass-through ports (top ports)
+            for(a = [angle_fluid_in_top, angle_fluid_out_top]) {
                 rotate([0, 0, a]) translate([port_radius, 0, -0.5])
                     cylinder(h=gasket_thick + 1.0, d=2.0, $fn=32);
+            }
+
+            // Active fluid ports & molded flow channels (bottom ports)
+            for (a = [angle_fluid_in_bot, angle_fluid_out_bot]) {
+                rotate([0, 0, a]) {
+                    // Port hole
+                    translate([port_radius, 0, -0.5])
+                        cylinder(h=gasket_thick + 1.0, d=2.0, $fn=32);
+                    // Flow channel
+                    hull() {
+                        translate([port_radius, 0, gasket_thick/2])
+                            cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                        translate([0, 0, gasket_thick/2])
+                            cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                    }
+                }
             }
 
             // Circuitry cutouts on the bottom side of the PCB
