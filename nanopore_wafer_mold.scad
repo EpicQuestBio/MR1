@@ -81,10 +81,15 @@ module Wafer_Visual() {
 }
 
 module Corner_Guides_Vertical_Seam(wafer_s=wafer_size, guide_w=1.2, height) {
-    // 4 Corner guides in Y-Z plane, extending in X direction
+    // 2 Corner guides in Y-Z plane (top-left and bottom-right), extending in X direction.
+    // This avoids overlapping with the active fluid channels at 30 and 210 degrees
+    // while still fully registering the square wafer.
     difference() {
         union() {
-            for(s = [-1, 1], t = [-1, 1]) {
+            // Keep Quadrant II (s=-1, t=1) and Quadrant IV (s=1, t=-1)
+            for(pair = [[-1, 1], [1, -1]]) {
+                s = pair[0];
+                t = pair[1];
                 translate([height/2, s * wafer_s/2, t * wafer_s/2])
                     cube([height, guide_w, guide_w], center=true);
             }
