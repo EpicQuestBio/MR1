@@ -242,12 +242,34 @@ module Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true) {
                 color("Gold") cube([gasket_thick/2, wafer_hole_size, wafer_hole_size], center=true);
             }
 
-            // 4 Fluid Ports are simple 2mm cylindrical passive pins
+            // Passive fluid port pins for pass-through top ports
             color("Gold") {
-                for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
+                for(a = pass_angles) {
                     rotate([a, 0, 0]) translate([0, port_radius, 0])
                         rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                             cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+                }
+            }
+
+            // Active fluid port pins and raised flow channel bosses for bottom ports
+            color("Gold") {
+                for (a = [active_in, active_out]) {
+                    rotate([a, 0, 0]) {
+                        // Port hole pin
+                        translate([0, port_radius, 0])
+                            rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                                cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+
+                        // Active channel boss (recessed in left mold to form channel in cast gasket)
+                        hull() {
+                            translate([0, port_radius, 0])
+                                rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                                    cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                            translate([0, 0, 0])
+                                rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
+                                    cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                        }
+                    }
                 }
             }
         }
@@ -377,12 +399,34 @@ module Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true) {
                 color("Gold") cube([gasket_thick/2, wafer_hole_size, wafer_hole_size], center=true);
             }
 
-            // 4 Fluid Ports are simple 2mm cylindrical passive pins
+            // Passive fluid port pins for pass-through top ports
             color("Gold") {
-                for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot]) {
+                for(a = pass_angles) {
                     rotate([a, 0, 0]) translate([0, port_radius, 0])
                         rotate([0, 90, 0])
                             cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+                }
+            }
+
+            // Active fluid port pins and raised flow channel bosses for bottom ports
+            color("Gold") {
+                for (a = [active_in, active_out]) {
+                    rotate([a, 0, 0]) {
+                        // Port hole pin
+                        translate([0, port_radius, 0])
+                            rotate([0, 90, 0])
+                                cylinder(h=gasket_thick/2, d=2.0, $fn=32);
+
+                        // Active channel boss
+                        hull() {
+                            translate([0, port_radius, 0])
+                                rotate([0, 90, 0])
+                                    cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                            translate([0, 0, 0])
+                                rotate([0, 90, 0])
+                                    cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                        }
+                    }
                 }
             }
         }
@@ -398,9 +442,10 @@ module Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true) {
 
 // 3. MOLD ASSEMBLY VISUALIZATION
 module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true, is_nanopore=true) {
+    local_type = is_nanopore ? "top" : "bottom";
     // Left Mold Half
     translate([-explode, 0, 0])
-        Nanopore_Wafer_Mold_Left(type="top", is_nanopore=is_nanopore);
+        Nanopore_Wafer_Mold_Left(type=local_type, is_nanopore=is_nanopore);
 
     // Silicon Square Wafer sits at its new offset position
     if (is_nanopore) {
@@ -448,10 +493,26 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true, is_nanopore=tru
                             // Central square hole
                             cube([wafer_hole_size, wafer_hole_size, gasket_thick + 2.0], center=true);
 
-                            // Ports (all simple pass-throughs)
-                            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                            // Passive ports (simple pass-throughs)
+                            for(a = [angle_fluid_in_top, angle_fluid_out_top]) {
                                 rotate([0, 0, a]) translate([port_radius, 0, 0])
                                     cylinder(h=gasket_thick + 2.0, d=2.0, center=true, $fn=32);
+                            }
+
+                            // Active ports & molded flow channels
+                            for (a = [angle_fluid_in_bot, angle_fluid_out_bot]) {
+                                rotate([0, 0, a]) {
+                                    // Port hole
+                                    translate([port_radius, 0, 0])
+                                        cylinder(h=gasket_thick + 2.0, d=2.0, center=true, $fn=32);
+                                    // Flow channel
+                                    hull() {
+                                        translate([port_radius, 0, 0])
+                                            cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                                        translate([0, 0, 0])
+                                            cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                                    }
+                                }
                             }
                         }
                     }
@@ -462,7 +523,7 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true, is_nanopore=tru
 
     // Right Mold Half
     translate([explode, 0, 0])
-        Nanopore_Wafer_Mold_Right(type="top", is_nanopore=is_nanopore);
+        Nanopore_Wafer_Mold_Right(type=local_type, is_nanopore=is_nanopore);
 }
 
 // 4. MULTI-MOLD ASSEMBLY VISUALIZATION FOR ENHANCED TESTING & DOCUMENTATION
@@ -509,9 +570,25 @@ module Multi_Mold_Visualizer() {
                         cylinder(h=gasket_thick, d=primary_gasket_diam, center=true, $fn=6);
                         Finger_Grip_Cutout(height=gasket_thick + 10.0);
                         cube([wafer_hole_size, wafer_hole_size, gasket_thick + 2.0], center=true);
-                        for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+
+                        // Passive ports
+                        for(a = [angle_fluid_in_top, angle_fluid_out_top]) {
                             rotate([0, 0, a]) translate([port_radius, 0, 0])
                                 cylinder(h=gasket_thick + 2.0, d=2.0, center=true, $fn=32);
+                        }
+
+                        // Active ports & molded flow channels
+                        for (a = [angle_fluid_in_bot, angle_fluid_out_bot]) {
+                            rotate([0, 0, a]) {
+                                translate([port_radius, 0, 0])
+                                    cylinder(h=gasket_thick + 2.0, d=2.0, center=true, $fn=32);
+                                hull() {
+                                    translate([port_radius, 0, 0])
+                                        cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                                    translate([0, 0, 0])
+                                        cylinder(h=gasket_thick + 0.1, d=1.2, center=true, $fn=16);
+                                }
+                            }
                         }
                     }
                 }
@@ -539,8 +616,8 @@ if (Output_Mode == "Assembly" && !is_undef($preview)) {
     } else if (Output_Mode == "Gasket_Mold_Top_STL") {
         Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true);
     } else if (Output_Mode == "Amplifier_Gasket_Mold_Left_STL") {
-        Nanopore_Wafer_Mold_Left(type="top", is_nanopore=false);
+        Nanopore_Wafer_Mold_Left(type="bottom", is_nanopore=false);
     } else if (Output_Mode == "Amplifier_Gasket_Mold_Right_STL") {
-        Nanopore_Wafer_Mold_Right(type="top", is_nanopore=false);
+        Nanopore_Wafer_Mold_Right(type="bottom", is_nanopore=false);
     }
 }
