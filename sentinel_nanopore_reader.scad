@@ -10,6 +10,8 @@ include <modules/housing_pump.scad>
 include <modules/torque_cap.scad>
 include <modules/housing_reader.scad>
 include <nanopore_wafer_mold.scad>
+include <modules/elbow_adapter.scad>
+include <modules/threaded_adapter.scad>
 
 
 // ==============================================================================
