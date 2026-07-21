@@ -769,6 +769,24 @@ module Cartridge_Stack_3D() {
 
     // 0. Bottom Pusher Plate (Base)
     Bottom_Pusher_Plate(show_orings=true) {
+        // --- Attach Adapters to the Bottom Pusher Plate Ports ---
+        if (Output_Mode == "Assembly") {
+            for(a = [angle_fluid_in_bot, angle_fluid_in_top, angle_fluid_out_bot, angle_fluid_out_top]) {
+                zrot(a) translate([port_radius, 0, -Explode_Factor]) {
+                    // Threaded adapter screwed into the bottom plate
+                    color("LightGray")
+                        xrot(180) Threaded_Luer_Adapter(render_threads=false);
+
+                    // Elbow adapter fitted onto the Threaded Luer Adapter
+                    // The Luer collar is at height ~20mm.
+                    // Elbow adapter base fits into Luer cone.
+                    translate([0, 0, -20.2 - Explode_Factor/3])
+                        color("DeepSkyBlue")
+                            xrot(180) yrot((a > 180) ? 90 : -90) Elbow_Adapter();
+                }
+            }
+        }
+
 
         // 1. Attach Plate 1 Base (Acrylic)
         attach(TOP)
