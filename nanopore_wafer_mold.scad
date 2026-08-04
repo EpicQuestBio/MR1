@@ -642,12 +642,16 @@ if (Output_Mode == "Assembly" && !is_undef($preview)) {
 } else {
     // Support exporting individual components
     if (Output_Mode == "Gasket_Mold_Bottom_STL") {
+        translate([0, 0, mold_t/2]) rotate([0, -90, 0])
         Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true);
     } else if (Output_Mode == "Gasket_Mold_Top_STL") {
+        translate([0, 0, mold_t/2]) rotate([0, 90, 0])
         Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true);
     } else if (Output_Mode == "Amplifier_Gasket_Mold_Left_STL") {
+        translate([0, 0, mold_t/2]) rotate([0, -90, 0])
         Nanopore_Wafer_Mold_Left(type="bottom", is_nanopore=false);
     } else if (Output_Mode == "Amplifier_Gasket_Mold_Right_STL") {
+        translate([0, 0, mold_t/2]) rotate([0, 90, 0])
         Nanopore_Wafer_Mold_Right(type="bottom", is_nanopore=false);
     }
 }
