@@ -17,6 +17,7 @@ fp-info-cache
 _autosave-*
 \#*#
 .#*
+Amplifier/_restore_backup*
 
 # Compressed files
 *.zip
@@ -31,5 +32,6 @@ _autosave-*
 *.rpt
 *.g?
 *.pho
+*.stl
 exports/
 BOSL2/
