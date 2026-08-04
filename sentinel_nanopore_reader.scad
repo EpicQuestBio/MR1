@@ -86,12 +86,24 @@ if (Output_Mode == "Assembly") {
 } else if (Output_Mode == "Gasket_Bottom_DXF") {
     Gasket_Low_Dead_Volume(type="bottom");
 } else if (Output_Mode == "Gasket_Mold_Top_STL") {
-    Gasket_Mold_3D(type="top");
+    if (Use_Nanopore_Wafer_Gasket) {
+        translate([0, 0, mold_t/2]) rotate([0, 90, 0])
+        Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true);
+    } else {
+        Gasket_Mold_3D(type="top");
+    }
 } else if (Output_Mode == "Gasket_Mold_Bottom_STL") {
-    Gasket_Mold_3D(type="bottom");
+    if (Use_Nanopore_Wafer_Gasket) {
+        translate([0, 0, mold_t/2]) rotate([0, -90, 0])
+        Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true);
+    } else {
+        Gasket_Mold_3D(type="bottom");
+    }
 } else if (Output_Mode == "Amplifier_Gasket_Mold_Left_STL") {
+    translate([0, 0, mold_t/2]) rotate([0, -90, 0])
     Nanopore_Wafer_Mold_Left(type="bottom", is_nanopore=false);
 } else if (Output_Mode == "Amplifier_Gasket_Mold_Right_STL") {
+    translate([0, 0, mold_t/2]) rotate([0, 90, 0])
     Nanopore_Wafer_Mold_Right(type="bottom", is_nanopore=false);
 } else if (Output_Mode == "Housing_Pump_Case_STL") {
     Housing_Pump_Case();
