@@ -587,7 +587,7 @@ module Multi_Mold_Visualizer() {
                     }
                 }
                 // Embed the wafer
-                translate([0, 0, -gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick/2])
+                translate([0, 0, -gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick/2])rotate([0,90,0])
                     Wafer_Visual();
             }
         }
