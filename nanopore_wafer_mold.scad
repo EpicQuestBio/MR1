@@ -80,6 +80,7 @@ module Wafer_Visual() {
     color("Black") sphere(d=0.2, $fn=8);
 }
 
+
 module Corner_Guides_Vertical_Seam(wafer_s=wafer_size, guide_w=1.2, height) {
     // 2 Corner guides in Y-Z plane (top-left and bottom-right), extending in X direction.
     // This avoids overlapping with the active fluid channels at 30 and 210 degrees
@@ -175,6 +176,21 @@ module Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true) {
             translate([-pin_h/2 + 0.1, y, cavity_z])
                 rotate([0, 90, 0]) cylinder(h=pin_h, d=pin_d + 0.2, center=true, $fn=32);
         }
+          // H: 1.2mm Alignment Pin Through-Holes for Nanopore Wafer
+        if (is_nanopore) {
+            translate([0, 0, cavity_z]) {
+                for(y_sign = [-1, 1], z_sign = [-1, 1]) {
+                    // Position pins outside the corners of the wafer so they don't intrude on the square
+                    // The pin radius is 0.6mm. To make the cylinder touch the corner diagonally, 
+                    // offset by 0.6 / sqrt(2) = 0.424mm.
+                    translate([-mold_t/2, y_sign * (wafer_size/2 + 0.424), z_sign * (wafer_size/2 + 0.424)])
+                        rotate([0, 90, 0])
+                            cylinder(h=mold_t + 2.0, d=1.2, center=true, $fn=16);
+                }
+            }
+        }
+    
+        
     }
 
     // Additive Features (Inside Left half cavity)
@@ -198,9 +214,10 @@ module Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true) {
                     }
                     
                      // 4. Active fluid port pins and raised flow channel bosses
-                    color("Gold") {
-                        // Inlet port pin + channel boss
-                        rotate([active_in, 0, 0]) {
+                     difference(){
+                    color("Gold") union(){
+                        // Inlet port pin + channel boss - 
+                         rotate([active_in, 0, 0]) {
                             translate([0, port_radius, 0])
                                 rotate([0, 90, 0]) translate([0, 0, -gasket_thick/2])
                                     cylinder(h=gasket_thick/2, d=2.0, $fn=32);
@@ -234,12 +251,20 @@ module Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true) {
                         }
                     }
                 }
+}
+            // Protrusion Pocket (depth PCB_Thickness, subtracted from X = -gasket_thick/2)
+            translate([-gasket_thick/2 - PCB_Thickness/2, 0, 0]) {
+                cube([PCB_Thickness + 0.1+gasket_thick, protrusion_size, protrusion_size], center=true);
+            }
+        
                 
+                
+                }
                 
                 // 1b. Wafer Pocket forming block (additive)
                # translate([-gasket_thick/2 - PCB_Thickness + wafer_recess + wafer_thick/2, 0, 0]) {
                     color("Gold") cube([wafer_thick, wafer_size, wafer_size], center=true);
-                }
+                
 
                 // 2. Corner registration L-brackets to position the wafer
                 // Centered at X = -gasket_thick/2 - PCB_Thickness + wafer_recess
@@ -359,7 +384,21 @@ module Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true) {
                 rotate([0, 90, 0])
                     color("Gold") cylinder(h=gasket_thick + PCB_Thickness - wafer_recess - wafer_thick, d=plug_diameter, $fn=32);
             }
-
+            // Protrusion Pocket (depth PCB_Thickness, subtracted from X = -gasket_thick/2)
+            intersection(){
+            translate([-gasket_thick/2 +0.1, 0, 0]) {
+                cube([PCB_Thickness + 0.1+gasket_thick- wafer_recess - wafer_thick, protrusion_size, protrusion_size], center=true);
+            }
+               // Active channel boss
+                    translate([-gasket_thick/2,0,0])rotate([30,0,0])hull() {
+                        translate([0, port_radius/2, 0])
+                            rotate([0, 90, 0])
+                                cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                        translate([0, -port_radius/2, 0])
+                            rotate([0, 90, 0])
+                                cylinder(h=gasket_thick/2, d=1.2, $fn=16);
+                    }
+            }
             // 2. Passive fluid port pins
             color("Gold") {
                 for(a = pass_angles) {
@@ -469,7 +508,7 @@ module Nanopore_Wafer_Mold_Assembly(explode=0, show_gasket=true, is_nanopore=tru
     if (show_gasket) {
         translate([0, 0, cavity_z]) {
             color("Red", 0.5) {
-                rotate([0, 90, 0]) {
+                rotate([90, 0, 90]) {
                     difference() {
                         if (is_nanopore) {
                             union() {
