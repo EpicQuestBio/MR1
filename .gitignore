@@ -35,3 +35,6 @@ Amplifier/_restore_backup*
 *.stl
 exports/
 BOSL2/
+.step
+.stl
+__pycache__/
