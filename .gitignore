@@ -38,3 +38,5 @@ BOSL2/
 .step
 .stl
 __pycache__/
+*.step
+*.stl
