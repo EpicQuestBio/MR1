@@ -102,6 +102,17 @@ def Housing_Case_Reader():
                         Sphere(radius=13.0/2.0, mode=Mode.ADD)
                         Box(15.0, 15.0, 10.0, mode=Mode.SUBTRACT) # Flatten top half
 
+        # PCB Standoffs (Now on the Floor / Bottom Lid)
+        # Positioned securely at Z=0 inside the bucket (which starts at Z=-READER_LID_THICK/2.0 + WALL)
+        # We need a clear 20mm gap below for tubing. Total standoff height = 20mm.
+        standoff_h = 20.0
+        with Locations((0, 0, -READER_LID_THICK/2.0 + WALL + standoff_h/2.0)):
+            for mx in [-PCB_W/2.0 + 2.0, PCB_W/2.0 - 2.0]:
+                for my in [-PCB_L/2.0 + 2.0, PCB_L/2.0 - 2.0]:
+                    with Locations((mx, my, 0)):
+                        Cylinder(radius=6.0/2.0, height=standoff_h, mode=Mode.ADD)
+                        Cylinder(radius=(2.5 - TOLERANCE)/2.0, height=standoff_h + 2.0, mode=Mode.SUBTRACT)
+
     return p.part
 
 def Housing_Lid_Reader():
@@ -129,12 +140,13 @@ def Housing_Lid_Reader():
         with Locations((0, 0, lid_thick/2.0)):
             Cone(bottom_radius=(BASE_W-10)/2.0, top_radius=NECK_OD/2.0, height=10.0)
             with Locations((0, 0, 10.0)):
-                Cylinder(radius=NECK_OD/2.0, height=NECK_H) # Neck Thread Body
+                # Adjust for tolerance so the Torque Cap screws on freely
+                Cylinder(radius=(NECK_OD - TOLERANCE)/2.0, height=NECK_H)
 
         # Hex Socket Cutout
         with Locations((0, 0, lid_thick/2.0)):
             with BuildSketch():
-                RegularPolygon(radius=(HEX_DIAM + 1.0)/2.0, side_count=6)
+                RegularPolygon(radius=(HEX_DIAM + 1.0 + TOLERANCE)/2.0, side_count=6)
             extrude(amount=NECK_H + 20.0, mode=Mode.SUBTRACT)
 
         # Back Wall Connectivity
@@ -146,14 +158,8 @@ def Housing_Lid_Reader():
         for x_sign in [-1, 1]:
             for y_sign in [-1, 1]:
                 with Locations((x_sign * (BASE_W/2.0 - 2.0), y_sign * (BASE_L/2.0 - 2.0), 0)):
-                    Cylinder(radius=3.5/2.0, height=lid_thick*3.0, mode=Mode.SUBTRACT)
+                    Cylinder(radius=(3.5 + TOLERANCE)/2.0, height=lid_thick*3.0, mode=Mode.SUBTRACT)
 
-        # PCB Standoffs (Underside of Ceiling)
-        with Locations((0, 0, lid_thick/2.0 - ceiling_thick)):
-            for mx in [-PCB_W/2.0 + 2.0, PCB_W/2.0 - 2.0]:
-                for my in [-PCB_L/2.0 + 2.0, PCB_L/2.0 - 2.0]:
-                    with Locations((mx, my, -5.0/2.0)):
-                        Cylinder(radius=6.0/2.0, height=5.0)
-                        Cylinder(radius=2.5/2.0, height=8.0, mode=Mode.SUBTRACT)
+        # Removed PCB Standoffs from the ceiling to fix tubing clearance requirements.
 
     return p.part

@@ -169,3 +169,15 @@ RES_T = MOLD_T - 3.0
 BOLT_D = 4.2
 BOLT_HEAD_D = 7.5
 BOLT_HEAD_DEPTH = 3.5
+
+
+# [Printer Tolerances]
+# Adjust these values based on the manufacturing method.
+# For FDM printing, 0.2mm to 0.3mm is typical for moving parts/threads.
+# For SLA/Resin printing, 0.05mm to 0.1mm is more typical.
+PRINTER_TYPE = "FDM" # ["FDM", "Resin"]
+
+if PRINTER_TYPE == "FDM":
+    TOLERANCE = 0.2
+else:
+    TOLERANCE = 0.05

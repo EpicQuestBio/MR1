@@ -63,13 +63,13 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
             for z_sign in [1, -1]:
                 y = y_sign * BOLT_Y_OFFSET
                 z = MOLD_H / 2.0 + z_sign * BOLT_Z_OFFSET
-                # Bolt shaft
+                # Bolt shaft - apply tolerance for smooth bolt insertion
                 with Locations(( -MOLD_T - 0.5, y, z )):
-                    Cylinder(radius=BOLT_D/2.0, height=MOLD_T * 2.0 + 1.0,
+                    Cylinder(radius=(BOLT_D + TOLERANCE)/2.0, height=MOLD_T * 2.0 + 1.0,
                              rotation=(0, 90, 0), mode=Mode.SUBTRACT)
                 # Bolt head recess
                 with Locations(( -MOLD_T - 0.1, y, z )):
-                    Cylinder(radius=BOLT_HEAD_D/2.0, height=BOLT_HEAD_DEPTH * 2.0,
+                    Cylinder(radius=(BOLT_HEAD_D + TOLERANCE)/2.0, height=BOLT_HEAD_DEPTH * 2.0,
                              rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
         # 6. Gasket Cavity Cutout (Hexagonal)
@@ -88,7 +88,7 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
                     pin_y = y_sign * (WAFER_SIZE/2.0 + 0.424)
                     pin_z = CAVITY_Z + z_sign * (WAFER_SIZE/2.0 + 0.424)
                     with Locations(( -MOLD_T/2.0, pin_y, pin_z )):
-                        Cylinder(radius=1.2/2.0, height=MOLD_T + 2.0,
+                        Cylinder(radius=(1.2 + TOLERANCE)/2.0, height=MOLD_T + 2.0,
                                  rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
             # Top passive ports (pass-through holes)
@@ -185,10 +185,10 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
                 y = y_sign * BOLT_Y_OFFSET
                 z = MOLD_H / 2.0 + z_sign * BOLT_Z_OFFSET
                 with Locations(( MOLD_T + 0.5, y, z )):
-                    Cylinder(radius=BOLT_D/2.0, height=MOLD_T * 2.0 + 1.0,
+                    Cylinder(radius=(BOLT_D + TOLERANCE)/2.0, height=MOLD_T * 2.0 + 1.0,
                              rotation=(0, 90, 0), mode=Mode.SUBTRACT)
                 with Locations(( MOLD_T - BOLT_HEAD_DEPTH + 0.1, y, z )):
-                    Cylinder(radius=BOLT_HEAD_D/2.0, height=BOLT_HEAD_DEPTH * 2.0,
+                    Cylinder(radius=(BOLT_HEAD_D + TOLERANCE)/2.0, height=BOLT_HEAD_DEPTH * 2.0,
                              rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
         # 6. Gasket Cavity Cutout
@@ -218,7 +218,7 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
                     pin_y = y_sign * (WAFER_SIZE/2.0 + 0.424)
                     pin_z = CAVITY_Z + z_sign * (WAFER_SIZE/2.0 + 0.424)
                     with Locations(( MOLD_T/2.0, pin_y, pin_z )):
-                        Cylinder(radius=1.2/2.0, height=MOLD_T + 2.0,
+                        Cylinder(radius=(1.2 + TOLERANCE)/2.0, height=MOLD_T + 2.0,
                                  rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
             # Top Active ports (Bosses)
