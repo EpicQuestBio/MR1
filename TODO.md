@@ -43,3 +43,20 @@ This document outlines the step-by-step strategy for porting the Sentinel Nanopo
 - [x] Create the full 3D assembly combining all components.
 - [x] Replicate the visual rendering offsets / exploded views.
 - [x] Replace `scripts/export_all.js` with a Python script to iterate through the assembly tree and dump `.step` or `.stl` files.
+
+## 7. Advanced Routing: Flexible Tubing, Wiring, and Connectors
+- [ ] Define physical routing parameters in `constants.py`:
+    - `TUBE_OD` and `TUBE_ID` (e.g., 1/8" ID, 1/4" OD).
+    - `MIN_BEND_RADIUS_TUBE` for flexible silicone/polyurethane tubing.
+    - `WIRE_GAUGE` and `MIN_BEND_RADIUS_WIRE`.
+- [ ] Model missing hardware and connector bodies in a new `connectors.py`:
+    - JST XH 2.54mm pitch downward-facing header and mating plug.
+    - Panel mount USB-C breakout boards/connectors.
+    - Ditao pump internal motor terminals / wiring posts.
+    - 1/8" Hose Barb x Female Luer panel mount bulkheads (reference `BOM.md`).
+- [ ] Implement flexible routing sweeps in `assembly.py`:
+    - Use `build123d` splines (`Spline`) to sweep tubular profiles connecting the Pump module's Luer bulkheads to the Reader module's side inlet/outlet ports.
+    - Model the internal wiring harness connecting the USB-C panel mounts to the Pump motor and the PCB active circuitry.
+- [ ] Add collision checks for flexible routes in `collision_check.py`:
+    - Ensure tubing doesn't clip through the baseplates, housing walls, or PCB standoffs.
+    - Validate that bend radii do not exceed the minimum thresholds.
