@@ -28,18 +28,18 @@ This document outlines the step-by-step strategy for porting the Sentinel Nanopo
 - [x] Port `Pressure_Puck` (pipette access and finger grip recesses).
 
 ## 4. Housings (`housing.py`)
-- [ ] Port `Housing_Pump_Case` (base, walls, handles, feet).
-- [ ] Port `Housing_Pump_Lid`.
-- [ ] Port `Housing_Case_Reader` (base with 2.5mm inset/overhang profile).
-- [ ] Port `Housing_Lid_Reader` (fluid pass-throughs, USB-C cutouts, internal stack clamping mechanics).
+- [x] Port `Housing_Pump_Case` (base, walls, handles, feet).
+- [x] Port `Housing_Pump_Lid`.
+- [x] Port `Housing_Case_Reader` (base with 2.5mm inset/overhang profile).
+- [x] Port `Housing_Lid_Reader` (fluid pass-throughs, USB-C cutouts, internal stack clamping mechanics).
 
 ## 5. Adapters and Cap (`adapters.py`, `torque_cap.py`)
-- [ ] Port `Threaded_Luer_Adapter`.
-- [ ] Port `Elbow_Adapter`.
-- [ ] Port `Torque_Cap_Inner` and `Torque_Cap_Outer`.
-- [ ] Implement torque ratchet springs using `build123d` sweeps or extrusions.
+- [x] Port `Threaded_Luer_Adapter`.
+- [x] Port `Elbow_Adapter`.
+- [x] Port `Torque_Cap_Inner` and `Torque_Cap_Outer`.
+- [x] Implement torque ratchet springs using `build123d` sweeps or extrusions.
 
 ## 6. Main Assembly (`main.py`)
-- [ ] Create the full 3D assembly combining all components.
-- [ ] Replicate the visual rendering offsets / exploded views.
-- [ ] Replace `scripts/export_all.js` with a Python script to iterate through the assembly tree and dump `.step` or `.stl` files.
+- [x] Create the full 3D assembly combining all components.
+- [x] Replicate the visual rendering offsets / exploded views.
+- [x] Replace `scripts/export_all.js` with a Python script to iterate through the assembly tree and dump `.step` or `.stl` files.
