@@ -6,6 +6,7 @@ from src.cartridge import PCB_Rigid_Active, Cast_Nanopore_Wafer_Gasket, Fitted_A
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
+from src.collision_check import run_cartridge_stack_clearance_check, run_housing_clearance_check
 
 class TestGeometryGeneration(unittest.TestCase):
     def check_part_validity(self, part, name):
@@ -39,6 +40,13 @@ class TestGeometryGeneration(unittest.TestCase):
         self.check_part_validity(Elbow_Adapter(), "Elbow Adapter")
         self.check_part_validity(Torque_Cap_Outer(), "Torque Cap Outer")
         self.check_part_validity(Torque_Cap_Inner(), "Torque Cap Inner")
+
+    def test_assembly_collisions(self):
+        c1 = run_cartridge_stack_clearance_check()
+        self.assertEqual(c1, 0, "Collisions detected in Cartridge Stack!")
+
+        c2 = run_housing_clearance_check()
+        self.assertEqual(c2, 0, "Collisions detected in Housing & Caps!")
 
 if __name__ == "__main__":
     unittest.main()
