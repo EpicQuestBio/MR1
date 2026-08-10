@@ -9,6 +9,7 @@ from src.cartridge import (
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
+from src.connectors import JST_XH_2_Pin_Header, USB_C_Panel_Mount, Luer_Bulkhead_Panel_Mount
 
 def export_all():
     print("Generating Parts...")
@@ -31,6 +32,9 @@ def export_all():
         "Housing_Pump_Lid": Housing_Pump_Lid(),
         "Housing_Case_Reader": Housing_Case_Reader(),
         "Housing_Lid_Reader": Housing_Lid_Reader(),
+        "JST_XH_2_Pin_Header": JST_XH_2_Pin_Header(),
+        "USB_C_Panel_Mount": USB_C_Panel_Mount(),
+        "Luer_Bulkhead_Panel_Mount": Luer_Bulkhead_Panel_Mount(),
     }
 
     # Optional arguments to filter parts

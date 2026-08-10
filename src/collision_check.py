@@ -115,3 +115,43 @@ if __name__ == "__main__":
         print("\nSUCCESS: All components mate perfectly with 0 physical overlap!")
     else:
         print(f"\nWARNING: {c1 + c2} overlapping interfaces found. Adjust tolerances or positioning.")
+
+
+def run_routing_clearance_check():
+    """
+    Validates that the flexible tubing and wiring doesn't clip through the housings.
+    """
+    print("\n--- Running Flexible Routing Collision Check ---")
+    collisions_found = 0
+
+    print("Generating Modules and Routes...")
+    from src.assembly import Reader_Module_Assembly, Pump_Module_Assembly, route_tubing, route_wiring
+
+    reader = Reader_Module_Assembly().move(Location((0, 0, PUMP_H + PUMP_LID_THICK + 5.0)))
+    pump = Pump_Module_Assembly()
+    tubes = route_tubing()
+    wires = route_wiring()
+
+    # Check tubes against reader
+    has_overlap, vol = check_overlap(tubes, reader, "Flexible_Tubing", "Reader_Assembly")
+    if has_overlap: collisions_found += 1
+
+    # Check tubes against pump
+    has_overlap, vol = check_overlap(tubes, pump, "Flexible_Tubing", "Pump_Assembly")
+    if has_overlap: collisions_found += 1
+
+    # Check wires against reader
+    has_overlap, vol = check_overlap(wires, reader, "Wiring_Harness", "Reader_Assembly")
+    if has_overlap: collisions_found += 1
+
+    print(f"Routing Check Complete. Collisions found: {collisions_found}")
+    return collisions_found
+
+if __name__ == "__main__":
+    c1 = run_cartridge_stack_clearance_check()
+    c2 = run_housing_clearance_check()
+    c3 = run_routing_clearance_check()
+    if c1 + c2 + c3 == 0:
+        print("\nSUCCESS: All components mate perfectly with 0 physical overlap!")
+    else:
+        print(f"\nWARNING: {c1 + c2 + c3} overlapping interfaces found. Adjust tolerances or positioning.")
