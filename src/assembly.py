@@ -4,6 +4,61 @@ from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader
 from src.cartridge import Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket, PCB_Rigid_Active, Pressure_Puck
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
 
+def route_spline(pts, radius, color_rgb=(0,0,0)):
+    """Creates a swept tube/wire along a set of points."""
+    with BuildPart() as p:
+        with BuildLine():
+            Spline(pts)
+        with BuildSketch(Plane.XZ.moved(Location(pts[0]))): # approximate starting plane
+            Circle(radius)
+        sweep()
+    return p.part
+
+def route_tubing():
+    """Generates the flexible tubing routes between the pump and reader modules."""
+    # Port radius offset
+    r = PORT_RADIUS
+
+    # 1. Pump Out (Right Side, lower module) -> Reader In (Right Side, upper module)
+    # Pump out ports are roughly at X=20, Z=0 in pump space. Reader in are at roughly X=17.3, Z=READER_Z
+    # We will approximate this with a smooth spline
+
+    # Pump Z offset
+    pump_z = PUMP_H/2.0
+    # Reader Z offset
+    reader_z = PUMP_H + PUMP_LID_THICK + 5.0 + READER_LID_THICK/2.0
+
+    p1 = (BASE_W/2.0 + 5.0, 20.0, pump_z) # Exit right side of pump
+    p2 = (BASE_W/2.0 + 20.0, 20.0, pump_z) # Loop outwards
+    p3 = (BASE_W/2.0 + 20.0, 20.0, reader_z - 10.0) # Travel up
+    p4 = (BASE_W/2.0 + 5.0, 20.0, reader_z - 10.0) # Enter right side of reader
+
+    tube1 = route_spline([p1, p2, p3, p4], TUBE_OD/2.0)
+
+    # 2. Pump In (Left Side) -> Reader Out (Left Side)
+    p5 = (-BASE_W/2.0 - 5.0, 20.0, pump_z)
+    p6 = (-BASE_W/2.0 - 20.0, 20.0, pump_z)
+    p7 = (-BASE_W/2.0 - 20.0, 20.0, reader_z - 10.0)
+    p8 = (-BASE_W/2.0 - 5.0, 20.0, reader_z - 10.0)
+
+    tube2 = route_spline([p5, p6, p7, p8], TUBE_OD/2.0)
+
+    return Compound(children=[tube1, tube2])
+
+def route_wiring():
+    """Generates the internal wire routing."""
+    # USB-C at back of reader: (15, BASE_L/2, READER_Z)
+    # To PCB inside reader: (0, -19, READER_Z)
+    reader_z = PUMP_H + PUMP_LID_THICK + 5.0 + READER_LID_THICK/2.0
+
+    w1 = (15.0, BASE_L/2.0 - 5.0, reader_z)
+    w2 = (15.0, 0.0, reader_z - 5.0)
+    w3 = (0.0, -19.0, reader_z - 5.0)
+
+    wire1 = route_spline([w1, w2, w3], WIRE_OD/2.0)
+    return wire1
+
+
 def Reader_Module_Assembly():
     """Assembles the full Reader Module (Housings + Cartridge Stack + Cap)."""
     parts = []
@@ -48,11 +103,15 @@ if __name__ == "__main__":
         from ocp_vscode import show
         reader = Reader_Module_Assembly()
         pump = Pump_Module_Assembly()
+        tubes = route_tubing()
+        wires = route_wiring()
 
         # Display Pump below Reader
         full_assembly = Compound(children=[
             pump.move(Location((0, 0, 0))),
-            reader.move(Location((0, 0, PUMP_H + PUMP_LID_THICK + 5.0)))
+            reader.move(Location((0, 0, PUMP_H + PUMP_LID_THICK + 5.0))),
+            tubes,
+            wires
         ])
         show(full_assembly, transparent=True)
     except ImportError:

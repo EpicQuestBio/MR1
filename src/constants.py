@@ -181,3 +181,12 @@ if PRINTER_TYPE == "FDM":
     TOLERANCE = 0.2
 else:
     TOLERANCE = 0.05
+
+# [Routing Parameters]
+TUBE_ID = 3.2 # 1/8" ID
+TUBE_OD = 6.35 # 1/4" OD
+MIN_BEND_RADIUS_TUBE = 10.0
+
+WIRE_GAUGE = 0.64 # 22 AWG diameter approx 0.64mm
+WIRE_OD = 1.6 # Wire with insulation approx
+MIN_BEND_RADIUS_WIRE = 10.0
