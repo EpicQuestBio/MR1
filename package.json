@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "export": "node scripts/export_all.js",
-    "install-lib": "node scripts/install_libraries.js"
+    "install-lib": "node scripts/install_libraries.js",
+    "render:flythrough": "xvfb-run python3 scripts/render_flythrough.py"
   },
   "repository": {
     "type": "git",

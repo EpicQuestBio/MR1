@@ -9,7 +9,9 @@ def route_spline(pts, radius, color_rgb=(0,0,0)):
     with BuildPart() as p:
         with BuildLine():
             Spline(pts)
-        with BuildSketch(Plane.XZ.moved(Location(pts[0]))): # approximate starting plane
+        v0 = Vector(pts[1]) - Vector(pts[0])
+        plane = Plane(origin=pts[0], z_dir=v0)
+        with BuildSketch(plane):
             Circle(radius)
         sweep()
     return p.part
