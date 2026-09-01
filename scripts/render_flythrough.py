@@ -30,11 +30,7 @@ def shape_to_pv_mesh(shape, linear_deflection=0.1, angular_deflection=0.2):
     triangles = []
     v_offset = 0
 
-    solids = []
-    if isinstance(shape, Compound):
-        for child in shape.children:
-            solids.extend(child.solids() if hasattr(child, 'solids') else [])
-    elif hasattr(shape, 'solids'):
+    if hasattr(shape, 'solids'):
         solids = shape.solids()
     else:
         solids = [shape]
