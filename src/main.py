@@ -4,7 +4,8 @@ from src.constants import *
 from src.nanopore_wafer_mold import Nanopore_Wafer_Mold_Left, Nanopore_Wafer_Mold_Right
 from src.cartridge import (
     PCB_Rigid_Active, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket,
-    Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck
+    Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck,
+    Nanopore_Wafer_Silicon
 )
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
@@ -18,6 +19,7 @@ def export_all():
         "Nanopore_Wafer_Mold_Left": Nanopore_Wafer_Mold_Left(),
         "Nanopore_Wafer_Mold_Right": Nanopore_Wafer_Mold_Right(),
         "PCB_Rigid_Active": PCB_Rigid_Active(),
+        "Nanopore_Wafer_Silicon": Nanopore_Wafer_Silicon(),
         "Cast_Nanopore_Wafer_Gasket": Cast_Nanopore_Wafer_Gasket(),
         "Fitted_Amplifier_Gasket": Fitted_Amplifier_Gasket(),
         "Bottom_Pusher_Plate": Bottom_Pusher_Plate(),

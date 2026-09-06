@@ -45,3 +45,16 @@ def Finger_Grip_Cutout(height=10.0):
         with Locations((30, 0, 0), (-30, 0, 0)):
             Cylinder(radius=5.0, height=height)
     return p.part
+
+def Hex_Base_Sketch(diam=HEX_DIAM, notch_r=5.0):
+    """
+    Returns a BuildSketch for the 60mm Hex with R=5mm finger notches at X = +/- 30.
+    Produces exact bounds matching KiCad amplifier.kicad_pcb:
+    Width = 55.0mm, Height = 51.9615mm.
+    """
+    with BuildSketch(mode=Mode.PRIVATE) as s:
+        RegularPolygon(radius=diam / 2.0, side_count=6)
+        with Locations((diam / 2.0, 0), (-diam / 2.0, 0)):
+            Circle(radius=notch_r, mode=Mode.SUBTRACT)
+    return s.sketch
+

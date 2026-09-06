@@ -79,12 +79,34 @@ USE_NANOPORE_WAFER_GASKET = True
 SHOW_MOLD = False
 WAFER_SIZE = 4.0
 WAFER_THICK = 0.5
-WAFER_RECESS = 0.5
+WAFER_RECESS = 0.15
+WAFER_ROTATION = 45.0
 WAFER_HOLE_SIZE = 3.0
-PLUG_DIAMETER = 3.0
-PRIMARY_GASKET_DIAM = 50.0
+PCB_WAFER_HOLE_SIZE = 6.20  # Opened 45-deg square hole matching KiCad Edge.Cuts (6.20 x 6.20 mm diamond)
+PLUG_DIAMETER = 2.0         # Central nanopore sensing aperture
+PRIMARY_GASKET_DIAM = 60.0  # Full 60mm corner-to-corner hex matching PCB & DXF
 PCB_THICKNESS = 0.8
-PROTRUSION_SIZE = 6.0
+PROTRUSION_SIZE = 6.0       # 6.0 x 6.0 mm silicone encapsulation protrusion
+PROTRUSION_ROTATION = 45.0  # 45 degrees rotated matching PCB cutout
+
+# [KiCad PCB Source of Truth Dimensions]
+PCB_WIDTH = 55.0034   # Flat-to-flat width with finger grip notches
+PCB_HEIGHT = 51.9616  # Vertical height (30 * sqrt(3))
+HEX_CORNER_RADIUS = 30.0 # Outer corner radius (60mm hex diameter)
+FINGER_GRIP_NOTCH_X = 25.0
+FINGER_GRIP_NOTCH_R = 5.0
+FLUID_CHANNEL_W = 1.4 # Microfluidic channel width (1.2 - 1.6 mm)
+CHAMBER_DIAM = 4.5    # Central nanopore chamber diameter
+
+# [Golden STL Envelope Dimensions]
+INNER_CAP_OD = 81.4
+INNER_CAP_H = 20.2
+OUTER_CAP_OD = 95.0
+OUTER_CAP_H = 30.2
+READER_LID_SIZE = 100.0
+READER_LID_TOTAL_H = 57.7
+THREAD_DEPTH = 2.0
+PIPETTE_HOLE_D = 25.0
 
 # [Internal Sealing & Potting]
 ORING_ID = 10.0

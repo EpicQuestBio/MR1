@@ -2,7 +2,7 @@ import unittest
 from build123d import *
 from src.constants import *
 from src.nanopore_wafer_mold import Nanopore_Wafer_Mold_Left, Nanopore_Wafer_Mold_Right
-from src.cartridge import PCB_Rigid_Active, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket, Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck
+from src.cartridge import PCB_Rigid_Active, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket, Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck, Nanopore_Wafer_Silicon
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
@@ -22,6 +22,7 @@ class TestGeometryGeneration(unittest.TestCase):
 
     def test_cartridge_stack(self):
         self.check_part_validity(PCB_Rigid_Active(), "PCB Active")
+        self.check_part_validity(Nanopore_Wafer_Silicon(), "Silicon Nanopore Wafer")
         self.check_part_validity(Cast_Nanopore_Wafer_Gasket(), "Top Gasket")
         self.check_part_validity(Fitted_Amplifier_Gasket(), "Bottom Gasket")
         self.check_part_validity(Bottom_Pusher_Plate(), "Bottom Plate")

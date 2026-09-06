@@ -677,7 +677,9 @@ module Multi_Mold_Visualizer() {
 // Default Rendering
 if (Output_Mode == "Assembly" && !is_undef($preview)) {
     // Stand-alone rendering of both molds / gaskets
-    Multi_Mold_Visualizer();
+    if (Show_Mold) {
+        //Multi_Mold_Visualizer();
+    }
 } else {
     // Support exporting individual components
     if (Output_Mode == "Gasket_Mold_Bottom_STL") {

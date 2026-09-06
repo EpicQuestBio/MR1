@@ -115,7 +115,7 @@ carrier_diam = 20;    // Diameter of the inner round Nanopore Carrier
 
 /* [Nanopore Wafer / Mold Settings] */
 Use_Nanopore_Wafer_Gasket = true; // Use the cast gasket with embedded nanopore wafer
-Show_Mold = false;                // Show 2-part mold for visual reference
+Show_Mold = true;                // Show 2-part mold for visual reference
 wafer_size = 4.0;                 // 4x4mm square wafer
 wafer_thick = 0.5;                // 0.5mm thickness of the silicon wafer
 wafer_recess = 0.5;               // 0.5mm sealing lip thickness over the front face (PCB side)

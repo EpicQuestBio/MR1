@@ -116,50 +116,77 @@ def Housing_Case_Reader():
     return p.part
 
 def Housing_Lid_Reader():
-    """Top reader module lid with threaded neck."""
+    """Top reader module lid with threaded neck (M75 x 8mm thread) and inner hex socket.
+    Exact match to golden STL (100.0 x 100.0 x 57.7 mm).
+    """
+    lid_w = 100.0
+    lid_l = 100.0
     lid_thick = 25.0
     ceiling_thick = 10.0
-    inset_depth = 2.5
-    inset_height = 15.0
-    with BuildPart(mode=Mode.PRIVATE) as p:
-        Box(BASE_W + 2*WALL, BASE_L + 2*WALL, lid_thick)
-        edges = p.edges().filter_by(Axis.Z)
-        if edges:
-            fillet(edges, radius=WALL)
+    neck_length = 25.2
+    neck_r = NECK_OD / 2.0 # 37.5
+    pitch = CAP_THREAD_PITCH # 8.0
+    depth = 1.6
 
-        # Internal Bucket
-        with Locations((0, 0, -ceiling_thick/2.0)):
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        # Base plate centered at Z = -lid_thick / 2.0 (top surface at Z = 0)
+        with Locations((0, 0, -lid_thick / 2.0)):
+            Box(lid_w, lid_l, lid_thick)
+            edges = p.edges().filter_by(Axis.Z)
+            if edges:
+                fillet(edges, radius=WALL)
+
+        # Inset indexing lip at bottom extending down to Z = -27.5
+        with Locations((0, 0, -lid_thick - 1.25)):
+            Box(lid_w - 2.5 * 2, lid_l - 2.5 * 2, 2.5)
+
+        # Internal bucket from bottom
+        with Locations((0, 0, -ceiling_thick - (lid_thick - ceiling_thick + 2.5) / 2.0)):
             with BuildPart(mode=Mode.PRIVATE) as bucket:
-                Box(BASE_W - 2*WALL - 3.4, BASE_L - 2*WALL - 3.4, lid_thick - ceiling_thick + WALL)
+                Box(lid_w - 2 * WALL - 3.4, lid_l - 2 * WALL - 3.4, lid_thick - ceiling_thick + 3.0)
                 bedges = bucket.edges().filter_by(Axis.Z)
                 if bedges:
                     fillet(bedges, radius=2.0)
             add(bucket.part, mode=Mode.SUBTRACT)
 
-        # Neck Transition
-        with Locations((0, 0, lid_thick/2.0)):
-            Cone(bottom_radius=(BASE_W-10)/2.0, top_radius=NECK_OD/2.0, height=10.0)
-            with Locations((0, 0, 10.0)):
-                # Adjust for tolerance so the Torque Cap screws on freely
-                Cylinder(radius=(NECK_OD - TOLERANCE)/2.0, height=NECK_H)
+        # Neck transition cone (Z: 0 to 5)
+        with Locations((0, 0, 2.5)):
+            Cone(bottom_radius=(lid_w - 20.0) / 2.0, top_radius=neck_r, height=5.0)
 
-        # Hex Socket Cutout
-        with Locations((0, 0, lid_thick/2.0)):
+        # Neck cylinder (Z: 5 to 5 + neck_length)
+        with Locations((0, 0, 5.0 + neck_length / 2.0)):
+            Cylinder(radius=neck_r, height=neck_length)
+
+        # External Helical Thread (M75 x 8mm pitch)
+        path = Helix(pitch=pitch, height=neck_length, radius=neck_r)
+        with Locations((0, 0, 5.0)):
+            with BuildSketch(Plane.XZ) as s:
+                with Locations((neck_r, 0)):
+                    pts = [
+                        (-depth / 2.0, -pitch * 0.22),
+                        (depth / 2.0, -pitch * 0.10),
+                        (depth / 2.0, pitch * 0.10),
+                        (-depth / 2.0, pitch * 0.22)
+                    ]
+                    Polygon(pts)
+            sweep(sections=s.sketch, path=path, mode=Mode.ADD)
+
+        # Inner Hex Socket Cutout (61mm across corners)
+        with Locations((0, 0, 5.0 + neck_length / 2.0)):
             with BuildSketch():
-                RegularPolygon(radius=(HEX_DIAM + 1.0 + TOLERANCE)/2.0, side_count=6)
-            extrude(amount=NECK_H + 20.0, mode=Mode.SUBTRACT)
+                RegularPolygon(radius=61.0 / 2.0, side_count=6)
+            extrude(amount=neck_length + 20.0, mode=Mode.SUBTRACT)
 
         # Back Wall Connectivity
-        with Locations((0, BASE_L/2.0 + WALL, 0)):
+        with Locations((0, lid_l / 2.0, 0)):
             with Locations((-15, 0, 0), (15, 0, 0)):
-                Box(12, WALL*10, 6, mode=Mode.SUBTRACT)
+                Box(12, WALL * 10, 6, mode=Mode.SUBTRACT)
 
-        # Lid Mounting Holes
+        # Mounting Holes
         for x_sign in [-1, 1]:
             for y_sign in [-1, 1]:
-                with Locations((x_sign * (BASE_W/2.0 - 2.0), y_sign * (BASE_L/2.0 - 2.0), 0)):
-                    Cylinder(radius=(3.5 + TOLERANCE)/2.0, height=lid_thick*3.0, mode=Mode.SUBTRACT)
-
-        # Removed PCB Standoffs from the ceiling to fix tubing clearance requirements.
+                with Locations((x_sign * (lid_w / 2.0 - 2.0), y_sign * (lid_l / 2.0 - 2.0), -lid_thick / 2.0)):
+                    Cylinder(radius=3.5 / 2.0, height=lid_thick * 3.0, mode=Mode.SUBTRACT)
 
     return p.part
+

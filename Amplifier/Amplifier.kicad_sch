@@ -2685,7 +2685,7 @@
 	)
 	(text "Stage 2 Voltage Amplifier"
 		(exclude_from_sim no)
-		(at 104.14 33.02 0)
+		(at 104.14 33.528 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2952,6 +2952,12 @@
 		(uuid "2ecf0fdd-e520-4850-a483-e334fb26caee")
 	)
 	(junction
+		(at 55.88 59.69)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "49a9f6a4-c6df-410b-90ec-eb15800024cd")
+	)
+	(junction
 		(at 64.77 52.07)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2980,12 +2986,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "aac5eca8-f799-4a25-aa91-25a071d1ac62")
-	)
-	(junction
-		(at 58.42 59.69)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b09e19cd-b841-4457-b78f-5fa1ded84af5")
 	)
 	(junction
 		(at 194.31 54.61)
@@ -3057,7 +3057,7 @@
 	)
 	(polyline
 		(pts
-			(xy 31.75 54.61) (xy 44.45 54.61)
+			(xy 26.67 54.61) (xy 39.37 54.61)
 		)
 		(stroke
 			(width 0)
@@ -3167,16 +3167,6 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 59.69) (xy 64.77 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3e00131b-c28b-4994-a2b2-2a31b1c9f620")
-	)
-	(wire
-		(pts
 			(xy 189.23 54.61) (xy 194.31 54.61)
 		)
 		(stroke
@@ -3197,7 +3187,7 @@
 	)
 	(wire
 		(pts
-			(xy 53.34 59.69) (xy 58.42 59.69)
+			(xy 54.61 59.69) (xy 55.88 59.69)
 		)
 		(stroke
 			(width 0)
@@ -3217,7 +3207,7 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 68.58) (xy 58.42 68.58)
+			(xy 52.07 68.58) (xy 55.88 68.58)
 		)
 		(stroke
 			(width 0)
@@ -3247,7 +3237,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 59.69) (xy 45.72 59.69)
+			(xy 43.18 59.69) (xy 46.99 59.69)
 		)
 		(stroke
 			(width 0)
@@ -3277,7 +3267,7 @@
 	)
 	(polyline
 		(pts
-			(xy 99.06 20.32) (xy 99.06 31.75)
+			(xy 100.33 20.32) (xy 100.33 31.75)
 		)
 		(stroke
 			(width 0)
@@ -3287,7 +3277,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 57.15) (xy 153.67 57.15)
+			(xy 147.32 57.15) (xy 162.56 57.15)
 		)
 		(stroke
 			(width 0)
@@ -3417,6 +3407,16 @@
 	)
 	(wire
 		(pts
+			(xy 55.88 59.69) (xy 64.77 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b35c9806-1307-45b5-9418-8d761cf1992a")
+	)
+	(wire
+		(pts
 			(xy 44.45 123.19) (xy 44.45 121.92)
 		)
 		(stroke
@@ -3517,7 +3517,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 59.69) (xy 58.42 68.58)
+			(xy 55.88 59.69) (xy 55.88 68.58)
 		)
 		(stroke
 			(width 0)
@@ -3567,7 +3567,7 @@
 	)
 	(wire
 		(pts
-			(xy 41.91 41.91) (xy 57.15 41.91)
+			(xy 43.18 41.91) (xy 57.15 41.91)
 		)
 		(stroke
 			(width 0)
@@ -5443,7 +5443,7 @@
 		(uuid "911b6838-a0c5-4ca1-a7bf-dfe24a48f279")
 	)
 	(label "Signal_AMP"
-		(at 153.67 57.15 0)
+		(at 162.56 57.15 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7051,7 +7051,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 49.53 59.69 270)
+		(at 50.8 59.69 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7061,7 +7061,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005f28ee92")
 		(property "Reference" "R6"
-			(at 49.53 54.4322 90)
+			(at 50.8 54.4322 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7071,7 +7071,7 @@
 			)
 		)
 		(property "Value" "1K"
-			(at 49.53 56.7436 90)
+			(at 50.8 56.7436 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7081,7 +7081,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 49.53 57.912 90)
+			(at 50.8 57.912 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7092,7 +7092,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 59.69 0)
+			(at 50.8 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7103,7 +7103,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 49.53 59.69 0)
+			(at 50.8 59.69 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7113,7 +7113,7 @@
 			)
 		)
 		(property "Mouser PN" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7124,7 +7124,7 @@
 			)
 		)
 		(property "Alternate Part Number 1" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7135,7 +7135,7 @@
 			)
 		)
 		(property "AssemblyType" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7146,7 +7146,7 @@
 			)
 		)
 		(property "Configuration" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7157,7 +7157,7 @@
 			)
 		)
 		(property "Distributor 2 PN" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7168,7 +7168,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7179,7 +7179,7 @@
 			)
 		)
 		(property "Manufacturer" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7190,7 +7190,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7201,7 +7201,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7212,7 +7212,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7223,7 +7223,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7234,7 +7234,7 @@
 			)
 		)
 		(property "price" ""
-			(at 49.53 59.69 90)
+			(at 50.8 59.69 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7282,7 +7282,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 58.42 66.04 0)
+			(at 57.912 66.04 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7639,7 +7639,7 @@
 		(dnp no)
 		(uuid "1158c0d0-4131-421e-bddf-b486d30e1122")
 		(property "Reference" "J11"
-			(at 40.005 63.5 0)
+			(at 40.64 62.738 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7649,7 +7649,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 46.99 61.214 0)
+			(at 40.894 57.404 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8064,7 +8064,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 95.25 76.2 0)
+		(at 93.98 76.2 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8075,7 +8075,7 @@
 		(fields_autoplaced yes)
 		(uuid "25e8f179-cc1e-4b13-a93d-b30b476fb960")
 		(property "Reference" "#PWR069"
-			(at 95.25 82.55 0)
+			(at 93.98 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8086,7 +8086,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 95.25 81.915 0)
+			(at 93.98 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8096,7 +8096,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 95.25 76.2 0)
+			(at 93.98 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8107,7 +8107,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 76.2 0)
+			(at 93.98 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8118,7 +8118,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 95.25 76.2 0)
+			(at 93.98 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8464,7 +8464,7 @@
 		(dnp no)
 		(uuid "3d613bba-fd68-464d-b31e-b8c08df5038e")
 		(property "Reference" "J1"
-			(at 40.005 55.88 0)
+			(at 37.592 53.594 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8474,7 +8474,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 46.99 53.848 0)
+			(at 40.64 48.768 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9665,7 +9665,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_Coaxial_Small")
-		(at 39.37 41.91 180)
+		(at 40.64 41.91 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9675,7 +9675,7 @@
 		(dnp no)
 		(uuid "61164166-9a18-4752-a614-bf90b11ee3e8")
 		(property "Reference" "J2"
-			(at 38.735 45.72 0)
+			(at 38.1 44.704 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9685,7 +9685,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 44.45 43.434 0)
+			(at 40.64 38.354 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9695,7 +9695,7 @@
 			)
 		)
 		(property "Footprint" "footprints:Electrode_Guard_Shield"
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9706,7 +9706,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9717,7 +9717,7 @@
 			)
 		)
 		(property "Description" "small coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9728,7 +9728,7 @@
 			)
 		)
 		(property "Alternate Part Number 1" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9739,7 +9739,7 @@
 			)
 		)
 		(property "AssemblyType" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9750,7 +9750,7 @@
 			)
 		)
 		(property "Configuration" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9761,7 +9761,7 @@
 			)
 		)
 		(property "Distributor 2 PN" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9772,7 +9772,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9783,7 +9783,7 @@
 			)
 		)
 		(property "Manufacturer" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9794,7 +9794,7 @@
 			)
 		)
 		(property "Manufacturer_Name" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9805,7 +9805,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9816,7 +9816,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9827,7 +9827,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9838,7 +9838,7 @@
 			)
 		)
 		(property "price" ""
-			(at 39.37 41.91 0)
+			(at 40.64 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11078,7 +11078,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 95.25 72.39 0)
+		(at 93.98 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11088,7 +11088,7 @@
 		(dnp no)
 		(uuid "9581ce03-9eb5-4037-8c21-22ef541af645")
 		(property "Reference" "C19"
-			(at 98.171 71.2216 0)
+			(at 96.901 71.2216 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11099,7 +11099,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 98.171 73.533 0)
+			(at 96.901 73.533 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11110,7 +11110,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 96.2152 76.2 0)
+			(at 94.9452 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11121,7 +11121,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 72.39 0)
+			(at 93.98 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11132,7 +11132,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 95.25 72.39 0)
+			(at 93.98 72.39 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11142,7 +11142,7 @@
 			)
 		)
 		(property "Mouser PN" ""
-			(at 95.25 72.39 0)
+			(at 93.98 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11169,7 +11169,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 36.83 41.91 270)
+		(at 38.1 41.91 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11180,7 +11180,7 @@
 		(fields_autoplaced yes)
 		(uuid "97214357-2fc7-40b2-addc-3470361e9720")
 		(property "Reference" "#PWR06"
-			(at 30.48 41.91 0)
+			(at 31.75 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11191,7 +11191,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 33.4823 41.9099 90)
+			(at 34.7523 41.9099 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11202,7 +11202,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 36.83 41.91 0)
+			(at 38.1 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11213,7 +11213,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 36.83 41.91 0)
+			(at 38.1 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11224,7 +11224,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 36.83 41.91 0)
+			(at 38.1 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12423,7 +12423,7 @@
 			)
 		)
 		(property "Value" "Conn_01x01_Pin"
-			(at 46.99 76.2 0)
+			(at 40.64 72.136 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13337,7 +13337,7 @@
 	)
 	(symbol
 		(lib_id "power:VDDA")
-		(at 95.25 68.58 0)
+		(at 93.98 68.58 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -13348,7 +13348,7 @@
 		(fields_autoplaced yes)
 		(uuid "f2ef2b7e-693b-4fea-bb7e-fe27f03426ff")
 		(property "Reference" "#PWR067"
-			(at 95.25 72.39 0)
+			(at 93.98 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13359,7 +13359,7 @@
 			)
 		)
 		(property "Value" "VDDA"
-			(at 95.25 65.024 0)
+			(at 93.98 65.024 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13369,7 +13369,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 95.25 68.58 0)
+			(at 93.98 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13380,7 +13380,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 68.58 0)
+			(at 93.98 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13391,7 +13391,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VDDA\""
-			(at 95.25 68.58 0)
+			(at 93.98 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

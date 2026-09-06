@@ -1,0 +1,172 @@
+{
+  "project_id": "daemon-pore",
+  "name": "Daemon Pore Nanopore Sequencing Reader",
+  "version": "1.0.0",
+  "description": "High-throughput solid-state and biological nanopore sensing platform combining ultra-low noise analog front-end TIA, digital motherboard, and PDMS microfluidic flowcells.",
+  "root_path": ".",
+  "active_board": "amplifier",
+  "boards": {
+    "amplifier": {
+      "name": "LMP7721 Analog Frontend",
+      "path": "Amplifier/amplifier.kicad_pcb",
+      "schematic_path": "Amplifier/amplifier.kicad_sch",
+      "role": "Analog Transimpedance Amplifier (TIA)",
+      "substrate": {
+        "material": "PTFE / Rogers RO4350B",
+        "er": 2.1,
+        "loss_tangent": 0.001,
+        "thickness_mm": 0.8
+      },
+      "spice": {
+        "transimpedance_gain_ohms": 1e9,
+        "feedback_cap_pf": 0.15,
+        "bandwidth_khz": 100
+      },
+      "fluidic_coupling": {
+        "target_ref": "H1",
+        "type": "well_interface",
+        "pos": [0.0, 0.0, 3.8]
+      }
+    },
+    "mr1": {
+      "name": "MR1 Digital & Power Motherboard",
+      "path": "MR1/MR1.kicad_pcb",
+      "schematic_path": "MR1/MR1.kicad_sch",
+      "role": "Digital Signal Processing, MCU & Power Management",
+      "substrate": {
+        "material": "FR4 High-TG",
+        "er": 4.3,
+        "loss_tangent": 0.02,
+        "thickness_mm": 1.6
+      }
+    }
+  },
+  "mechanical": {
+    "cad_format": "Build123d / OpenSCAD / STL / DXF",
+    "src_dir": "src",
+    "exports_dir": "exports",
+    "parts": [
+      {
+        "id": "reader_case",
+        "name": "Housing Reader Base Case",
+        "path": "exports/Housing_Reader_Case_STL.stl",
+        "type": "enclosure",
+        "color": "#334155",
+        "opacity": 0.85
+      },
+      {
+        "id": "reader_lid",
+        "name": "Housing Reader Lid & Tower",
+        "path": "exports/Housing_Reader_Lid_STL.stl",
+        "type": "enclosure",
+        "color": "#475569",
+        "opacity": 0.75
+      },
+      {
+        "id": "torque_cap_outer",
+        "name": "Torque Cap Outer Grip",
+        "path": "exports/Torque_Cap_Outer_STL.stl",
+        "type": "cap",
+        "color": "#0ea5e9",
+        "opacity": 0.95
+      },
+      {
+        "id": "torque_cap_inner",
+        "name": "Torque Cap Inner Core",
+        "path": "exports/Torque_Cap_Inner_STL.stl",
+        "type": "cap",
+        "color": "#0284c7",
+        "opacity": 0.95
+      },
+      {
+        "id": "bottom_pusher_plate",
+        "name": "Cartridge Bottom Pusher Plate",
+        "path": "exports/Bottom_Pusher_Plate_STL.stl",
+        "type": "cartridge",
+        "color": "#8b5cf6",
+        "opacity": 0.9
+      },
+      {
+        "id": "pressure_puck",
+        "name": "Cartridge Pressure Puck",
+        "path": "exports/Pressure_Puck_STL.stl",
+        "type": "cartridge",
+        "color": "#ec4899",
+        "opacity": 0.9
+      },
+      {
+        "id": "plate_2_channel",
+        "name": "Microfluidic Channel Plate 2 (DXF)",
+        "path": "exports/Plate_2_Channel_DXF.dxf",
+        "type": "fluidics",
+        "color": "#00f0ff",
+        "thickness_mm": 4.0
+      },
+      {
+        "id": "plate_1_base",
+        "name": "Cartridge Base Plate 1 (DXF)",
+        "path": "exports/Plate_1_Base_DXF.dxf",
+        "type": "cartridge",
+        "color": "#10b981",
+        "thickness_mm": 4.0
+      },
+      {
+        "id": "plate_3_top",
+        "name": "Cartridge Top Well Plate 3 (DXF)",
+        "path": "exports/Plate_3_Top_DXF.dxf",
+        "type": "cartridge",
+        "color": "#34d399",
+        "thickness_mm": 8.0
+      },
+      {
+        "id": "gasket_main",
+        "name": "Microfluidic Seal Gasket (DXF)",
+        "path": "exports/Gasket_Main_DXF.dxf",
+        "type": "gasket",
+        "color": "#f97316",
+        "thickness_mm": 0.8
+      },
+      {
+        "id": "wafer_mold",
+        "name": "Nanopore PDMS Wafer Casting Mold",
+        "path": "nanopore_wafer_mold.stl",
+        "type": "mold",
+        "color": "#f59e0b",
+        "opacity": 0.9
+      },
+      {
+        "id": "pump_case",
+        "name": "Peristaltic Pump Enclosure",
+        "path": "exports/Housing_Pump_Case_STL.stl",
+        "type": "pump",
+        "color": "#1e293b",
+        "opacity": 0.9
+      },
+      {
+        "id": "pump_lid",
+        "name": "Peristaltic Pump Lid",
+        "path": "exports/Housing_Pump_Lid_STL.stl",
+        "type": "pump",
+        "color": "#334155",
+        "opacity": 0.9
+      }
+    ]
+  },
+  "fluidics": {
+    "channel_width_um": 50,
+    "channel_height_um": 25,
+    "chamber_volume_ul": 12.5,
+    "pore_diameter_nm": 4.0,
+    "flow_rate_ul_min": 10.0,
+    "buffer": "1M KCl, 10mM Tris-HCl, pH 8.0"
+  },
+  "cosimulation": {
+    "enabled": true,
+    "circuits": ["amplifier"],
+    "physics": ["fluidic_transport", "translocation_current"]
+  },
+  "harnesses": {
+    "electrical": "wiring/reader_wiring.yaml",
+    "fluidic": "wiring/reader_tubing.yaml"
+  }
+}

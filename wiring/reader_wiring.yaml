@@ -1,0 +1,94 @@
+metadata:
+  title: Daemon Pore Reader - Electrical Wiring Harness
+  description: Internal DC power, digital USB-C, peristaltic motor, and shielded analog pogo-pin interconnect
+  author: OpenAuto-CFD / Daemon Pore Team
+  version: 1.0.0
+
+options:
+  fontname: Arial
+  bgcolor: "#0b0f1a"
+  bgcolor_connector: "#1e293b"
+  bgcolor_cable: "#0f172a"
+  color_mode: SHORT
+
+connectors:
+  J_USBC:
+    type: USB-C Receptacle (24-Pin)
+    subtype: female
+    manufacturer: Molex
+    mpn: 105450-0101
+    notes: Enclosure rear panel power and data input
+    pinlabels: [GND, VBUS, CC1, DP, DN, SBU1, CC2, SBU2]
+
+  J_MR1_PWR:
+    type: JST-GH (1.25mm Pitch)
+    subtype: female
+    manufacturer: JST
+    mpn: GHR-04V-S
+    notes: MR1 Motherboard Power Input
+    pinlabels: [GND, VBUS, CC_SENSE, 3V3_DIGITAL]
+
+  J_MR1_MOTOR:
+    type: Molex PicoBlade (1.25mm Pitch)
+    subtype: female
+    manufacturer: Molex
+    mpn: 51021-0200
+    notes: MR1 Motherboard H-Bridge Motor Driver Output
+    pinlabels: [MOT_A, MOT_B]
+
+  M_PUMP:
+    type: DC Geared Coreless Motor
+    subtype: male
+    manufacturer: Pololu
+    mpn: 2364
+    notes: Peristaltic Pump Drive Motor (3V-6V DC, 600mA stall)
+    pinlabels: [M_PLUS, M_MINUS]
+
+  J_POGO_ARRAY:
+    type: Spring Loaded Pogo Pin Block (4-Pin)
+    subtype: male
+    manufacturer: Mill-Max
+    mpn: 824-22-004-00-001000
+    notes: Reader Lid to Amplifier PCB interface (Gold-plated, 0.8N contact force)
+    pinlabels: [VCC_3V3_A, AGND, TIA_VOUT, V_BIAS_REF]
+
+  TP_AMP_PCB:
+    type: Gold Target Test Pads (1.5mm Dia)
+    subtype: female
+    notes: Amplifier PCB Analog Front-End Interface (LMP7721)
+    pinlabels: [PAD_3V3, PAD_AGND, PAD_SIG_OUT, PAD_BIAS_REF]
+
+cables:
+  W_USB:
+    gauge: 28 AWG
+    length: 0.08 m
+    shield: true
+    colors: [BK, RD, BU, GN, WH, YE, OG, GY]
+    notes: High-speed USB-C internal routing harness
+
+  W_MOTOR:
+    gauge: 24 AWG
+    length: 0.12 m
+    colors: [RD, BK]
+    notes: Twisted pair motor drive power (shielded against EMI)
+
+  W_POGO_ANALOG:
+    gauge: 30 AWG
+    length: 0.09 m
+    shield: true
+    colors: [RD, BK, GN, WH]
+    notes: Ultra-low-noise analog signal harness from Lid Pogo array to MR1 ADC
+
+connections:
+  -
+    - J_USBC: [1, 2, 3, 4]
+    - W_USB: [1, 2, 3, 4]
+    - J_MR1_PWR: [1, 2, 3, 4]
+  -
+    - J_MR1_MOTOR: [1, 2]
+    - W_MOTOR: [1, 2]
+    - M_PUMP: [1, 2]
+  -
+    - J_POGO_ARRAY: [1, 2, 3, 4]
+    - W_POGO_ANALOG: [1, 2, 3, 4]
+    - TP_AMP_PCB: [1, 2, 3, 4]

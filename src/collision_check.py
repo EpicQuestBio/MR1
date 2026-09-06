@@ -41,34 +41,35 @@ def run_cartridge_stack_clearance_check():
     plate_3 = Plate_3_Top_Hex()
     puck = Pressure_Puck()
 
-    # 2. Position Parts (using Uncompressed Heights to ensure they don't clip at rest)
+    # 2. Position Parts (using physical face-to-face stackup where top gasket protrusion recesses into PCB and seals against bottom gasket)
     z = 0.0
-    placed_plate_bot = plate_bottom.move(Location((0, 0, z)))
+    placed_plate_bot = plate_bottom.move(Location((0, 0, z))) # Z: [0, 3]
 
-    z += PP_H + PLATE_THICK/2.0
+    z += PP_H # 3.0 -> Z: [3, 7]
     placed_plate_1 = plate_1.move(Location((0, 0, z)))
 
-    z += PLATE_THICK/2.0 + GASKET_THICK/2.0
+    z += PLATE_THICK # 4.0 -> Z: [7, 8.6]
     placed_gasket_bot = gasket_bot.move(Location((0, 0, z)))
 
-    z += GASKET_THICK/2.0 + PCB_THICKNESS/2.0
+    z += GASKET_THICK # 1.6 -> Z: [8.6, 9.4]
     placed_pcb = pcb.move(Location((0, 0, z)))
 
-    z += PCB_THICKNESS/2.0 + GASKET_THICK/2.0
+    z += PCB_THICKNESS # 0.8 -> Sheet: [9.4, 11.0], Protrusion: [8.6, 9.4] (recessed into PCB, touches gasket_bot at 8.6)
     placed_gasket_top = gasket_top.move(Location((0, 0, z)))
 
-    z += GASKET_THICK/2.0 + PLATE_THICK/2.0
+    z += GASKET_THICK # 1.6 -> Z: [11.0, 15.0]
     placed_plate_3 = plate_3.move(Location((0, 0, z)))
 
-    z += PLATE_THICK/2.0 + PUCK_H/2.0
+    z += PLATE_THICK + PUCK_H/2.0 # 15.0 + 3.0 = 18.0 (puck centered at 0, Z: [15, 21])
     placed_puck = puck.move(Location((0, 0, z)))
 
-    # 3. Check Adjacent Intersections
+    # 3. Check Adjacent Intersections & Gasket Seals
     checks = [
         (placed_plate_bot, placed_plate_1, "Bottom_Pusher_Plate", "Plate_1_Base_Hex"),
         (placed_plate_1, placed_gasket_bot, "Plate_1_Base_Hex", "Fitted_Amplifier_Gasket"),
         (placed_gasket_bot, placed_pcb, "Fitted_Amplifier_Gasket", "PCB_Rigid_Active"),
         (placed_pcb, placed_gasket_top, "PCB_Rigid_Active", "Cast_Nanopore_Wafer_Gasket"),
+        (placed_gasket_bot, placed_gasket_top, "Fitted_Amplifier_Gasket", "Cast_Nanopore_Wafer_Gasket"),
         (placed_gasket_top, placed_plate_3, "Cast_Nanopore_Wafer_Gasket", "Plate_3_Top_Hex"),
         (placed_plate_3, placed_puck, "Plate_3_Top_Hex", "Pressure_Puck")
     ]

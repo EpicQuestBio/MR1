@@ -1,0 +1,100 @@
+metadata:
+  title: Daemon Pore Reader - Microfluidic Tubing & Fittings Harness
+  description: Microbore fluidic interconnect between buffer reservoir, peristaltic pump, and dual-layer flowcell cartridge
+  author: OpenAuto-CFD / Daemon Pore Team
+  version: 1.0.0
+
+options:
+  fontname: Arial
+  bgcolor: "#06090f"
+  bgcolor_connector: "#1e293b"
+  bgcolor_cable: "#0f172a"
+  color_mode: SHORT
+
+connectors:
+  RES_BUFFER:
+    type: Fluid Reservoir (15 mL Falcon)
+    subtype: female
+    notes: Pure 1.0 M KCl buffer supply with 0.2 um sterile air vent filter
+    pinlabels: [LIQUID_DRAW, AIR_VENT]
+
+  PUMP_PERI:
+    type: Dual-Roller Peristaltic Pump Head
+    subtype: inline
+    manufacturer: Takasago
+    mpn: RP-Q1.2
+    notes: Positive displacement micro-peristaltic pump (1-50 uL/min)
+    pinlabels: [SUCTION_IN, DISCHARGE_OUT]
+
+  CARTRIDGE_CIS:
+    type: Flowcell Top Plate In/Out Ports (1/4-28 Flat-Bottom)
+    subtype: female
+    notes: Top Cis microchannel layer (Inlet 210 deg, Outlet 30 deg)
+    pinlabels: [PORT_IN_210, PORT_OUT_30]
+
+  CARTRIDGE_TRANS:
+    type: Flowcell Bottom Plate Ports (1/4-28 Flat-Bottom)
+    subtype: female
+    notes: Bottom Trans microchannel layer (Inlet 330 deg, Outlet 150 deg)
+    pinlabels: [PORT_IN_330, PORT_OUT_150]
+
+  RES_WASTE:
+    type: Effluent Collection Vessel (50 mL Falcon)
+    subtype: female
+    notes: Closed waste collection bottle with carbon vent filter
+    pinlabels: [CIS_WASTE_IN, TRANS_WASTE_IN]
+
+cables:
+  TUBE_PUMP:
+    category: bundle
+    type: PharMed BPT (0.51mm ID x 2.11mm OD)
+    gauge: 0.51 mm
+    length: 0.12 m
+    colors: [YE]
+    notes: Peristaltic pump segment (biocompatible, 1000+ hrs life)
+
+  TUBE_FEED:
+    category: bundle
+    type: FEP Microbore (1/16 OD x 0.020 ID)
+    gauge: 0.5 mm
+    length: 0.22 m
+    colors: [CY]
+    notes: High-purity microbore tubing from pump outlet to cartridge top inlet
+
+  TUBE_TRANS_LINE:
+    category: bundle
+    type: PEEK Microbore (1/16 OD x 0.020 ID)
+    gauge: 0.5 mm
+    length: 0.18 m
+    colors: [GN]
+    notes: PEEK chromatography line for bottom Trans electrode flush
+
+  TUBE_WASTE_LINES:
+    category: bundle
+    type: Silicone Drain Tubing (1/16 OD x 1/32 ID)
+    gauge: 0.8 mm
+    length: 0.25 m
+    colors: [BU, OG]
+    notes: Flexible drain lines to sealed waste reservoir
+
+connections:
+  -
+    - RES_BUFFER: 1
+    - TUBE_PUMP: 1
+    - PUMP_PERI: 1
+  -
+    - PUMP_PERI: 2
+    - TUBE_FEED: 1
+    - CARTRIDGE_CIS: 1
+  -
+    - CARTRIDGE_CIS: 2
+    - TUBE_WASTE_LINES: 1
+    - RES_WASTE: 1
+  -
+    - RES_BUFFER: 2
+    - TUBE_TRANS_LINE: 1
+    - CARTRIDGE_TRANS: 1
+  -
+    - CARTRIDGE_TRANS: 2
+    - TUBE_WASTE_LINES: 2
+    - RES_WASTE: 2
