@@ -1,7 +1,7 @@
 from build123d import *
 import math
 from src.constants import *
-from src.common import Circuitry_Cutouts, Finger_Grip_Cutout
+from src.common import Circuitry_Cutouts, Finger_Grip_Cutout, Weep_Duct_Holes, Weep_Trench_Cutout
 
 def PogoPinHoles():
     """Returns a sketch containing the pogo pin holes."""
@@ -52,6 +52,11 @@ def PCB_Rigid_Active():
             add(PogoPinHoles(), mode=Mode.SUBTRACT)
 
         extrude(amount=PCB_THIN)
+
+        # Weep duct pass-through
+        with Locations((0, 0, PCB_THIN/2.0)):
+            add(Weep_Duct_Holes(height=PCB_THIN + 2.0), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Cast_Nanopore_Wafer_Gasket():
@@ -88,6 +93,14 @@ def Cast_Nanopore_Wafer_Gasket():
                         Circle(0.6)
                     make_hull()
                 extrude(amount=GASKET_THICK + 0.1, mode=Mode.SUBTRACT)
+
+        # Weep system cutouts
+        with Locations((0, 0, GASKET_THICK/2.0)):
+            add(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
+        # Molded wick trench on the top face
+        with Locations((0, 0, GASKET_THICK - WEEP_MOAT_DEPTH/2.0)):
+            add(Weep_Trench_Cutout(), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Fitted_Amplifier_Gasket():
@@ -117,6 +130,11 @@ def Fitted_Amplifier_Gasket():
                         Circle(0.6)
                     make_hull()
                 extrude(amount=GASKET_THICK + 0.1, mode=Mode.SUBTRACT)
+
+        # Weep duct pass-through
+        with Locations((0, 0, GASKET_THICK/2.0)):
+            add(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Bottom_Pusher_Plate():
@@ -134,6 +152,11 @@ def Bottom_Pusher_Plate():
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
             with Locations(Location((0, 0, PP_H/2.0)) * Rotation(0, 0, a) * Location((PORT_RADIUS, 0, 0))):
                 Cylinder(radius=NPT_1_8_TAP_D/2.0, height=PP_H + 1.0, mode=Mode.SUBTRACT)
+
+        # Weep duct pass-through
+        with Locations((0, 0, PP_H/2.0)):
+            add(Weep_Duct_Holes(height=PP_H + 2.0), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Plate_1_Base_Hex():
@@ -149,6 +172,11 @@ def Plate_1_Base_Hex():
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
             with Locations(Location((0, 0, PLATE_THICK/2.0)) * Rotation(0, 0, a) * Location((PORT_RADIUS, 0, 0))):
                 Cylinder(radius=NPT_1_8_TAP_D/2.0, height=PLATE_THICK + 1.0, mode=Mode.SUBTRACT)
+
+        # Weep duct pass-through
+        with Locations((0, 0, PLATE_THICK/2.0)):
+            add(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Plate_3_Top_Hex():
@@ -166,6 +194,11 @@ def Plate_3_Top_Hex():
         for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP]:
             with Locations(Location((0, 0, PLATE_THICK/2.0)) * Rotation(0, 0, a) * Location((PORT_RADIUS, 0, 0))):
                 Cylinder(radius=FLUID_PORT_D/2.0, height=PLATE_THICK + 1.0, mode=Mode.SUBTRACT)
+
+        # Weep duct pass-through
+        with Locations((0, 0, PLATE_THICK/2.0)):
+            add(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Pressure_Puck():

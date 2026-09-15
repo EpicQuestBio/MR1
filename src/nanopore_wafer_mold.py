@@ -1,7 +1,7 @@
 from build123d import *
 import math
 from src.constants import *
-from src.common import Circuitry_Cutouts
+from src.common import Circuitry_Cutouts, Weep_Duct_Holes, Weep_Trench_Cutout
 
 def Rounded_Mold_Block(t, w, h, r=4.0):
     """Creates a basic mold block with rounded Y-Z corners."""
@@ -113,6 +113,10 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
                         make_hull()
                     extrude(amount=-GASKET_THICK/2.0, mode=Mode.ADD)
 
+            # Weep Duct Pins
+            with Locations((0, 0, CAVITY_Z)):
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((-GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
+
         else:
             # 7. Apply Circuitry_Cutouts to the gasket cavity ONLY for amplifier gasket (without nanopore)
             # as requested in the bug fix instructions.
@@ -142,6 +146,10 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
                             Circle(0.6)
                         make_hull()
                     extrude(amount=-GASKET_THICK/2.0, mode=Mode.ADD)
+
+            # Weep Duct Pins
+            with Locations((0, 0, CAVITY_Z)):
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((-GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
 
     return p.part
 
@@ -233,6 +241,13 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
                         make_hull()
                     extrude(amount=GASKET_THICK/2.0, mode=Mode.ADD)
 
+            # Weep Duct Pins and Trench Boss
+            with Locations((0, 0, CAVITY_Z)):
+                # Core pin for duct
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
+                # Raised boss for the trench (molded into top face)
+                add(Weep_Trench_Cutout().move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0 - WEEP_MOAT_DEPTH/2.0, 0, 0))), mode=Mode.ADD)
+
             # Bottom Passive ports
             for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
                 port_loc = Location((0, 0, CAVITY_Z)) * Rotation(a, 0, 0) * Location((0, PORT_RADIUS, 0))
@@ -265,6 +280,13 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
                             Circle(0.6)
                         make_hull()
                     extrude(amount=GASKET_THICK/2.0, mode=Mode.ADD)
+
+            # Weep Duct Pins and Trench Boss
+            with Locations((0, 0, CAVITY_Z)):
+                # Core pin for duct
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
+                # Raised boss for the trench (molded into top face)
+                add(Weep_Trench_Cutout().move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0 - WEEP_MOAT_DEPTH/2.0, 0, 0))), mode=Mode.ADD)
 
     return p.part
 
