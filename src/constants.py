@@ -13,6 +13,14 @@ TORQUE_TEETH_COUNT = 24
 TOOTH_HEIGHT = 1.0
 CAP_THREAD_PITCH = 8.0
 
+# [Weep Relief & Isolation Moat Settings]
+WEEP_DUCT_D = 1.8           # Diameter of vertical relief vent
+WEEP_MOAT_W = 2.0           # Radial width of the intermediate air-gap moat
+WEEP_MOAT_R = 11.0          # Radius of moat (between primary seal and pogo zone)
+WEEP_MOAT_DEPTH = 0.8       # Depth of moat relief cut
+WEEP_DROP_R = 27.0          # Radius of the vertical weep drop channels (near outer hex edge)
+WEEP_ANGLES = [0]           # Angles at which to place vertical weep drops (0 is right side)
+
 # [Sealed Top Option]
 SEALED_TOP_MODE = False
 

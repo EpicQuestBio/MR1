@@ -1,7 +1,7 @@
 import math
 from build123d import *
 from src.constants import *
-from src.common import Circuitry_Cutouts
+from src.common import Circuitry_Cutouts, Weep_Duct_Holes, Weep_Trench_Cutout
 
 # Port coordinates on mold YZ plane (mapped with rotate(Axis.Y, 90) around CAVITY_Z):
 # Cartridge XY: p_in (210 deg), p_out (30 deg), q_in (330 deg), q_out (150 deg)
@@ -159,6 +159,10 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
                 with Locations((-GASKET_THICK / 4.0, port[0], port[1])):
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
+            # Weep Duct Pins
+            with Locations((0, 0, CAVITY_Z)):
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((-GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
+
         else:
             # Amplifier mold (is_nanopore=False)
             cutouts = Circuitry_Cutouts(height=GASKET_THICK * 2.0)
@@ -173,6 +177,10 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
             for port in [P_CIS_IN, P_CIS_OUT]:
                 with Locations((-GASKET_THICK / 4.0, port[0], port[1])):
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
+
+            # Weep Duct Pins
+            with Locations((0, 0, CAVITY_Z)):
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((-GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
 
     return p.part
 
@@ -191,6 +199,7 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
     with BuildPart(mode=Mode.PRIVATE) as p:
         add(base)
         if is_nanopore:
+        """
             # 1. Opposing Central Clamping Plug (D=2.0mm from X = +0.8 down to X = 0)
             with Locations((GASKET_THICK / 4.0, 0, CAVITY_Z)):
                 Cylinder(radius=PLUG_DIAMETER / 2.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
@@ -205,10 +214,53 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
             with BuildSketch(Plane.YZ.offset(0)):
                 with Locations(P_CIS_IN, (0, CAVITY_Z), P_CIS_OUT):
                     Circle(FLUID_CHANNEL_W / 2.0)
+        """
+            # Central Protective Plug
+            with Locations((GASKET_THICK/2.0, 0, CAVITY_Z)):
+                # From meeting surface to wafer
+                Cylinder(radius=PLUG_DIAMETER/2.0, height=GASKET_THICK + PCB_THICKNESS*2,
+                         rotation=(0, 90, 0), mode=Mode.ADD)
+
+            # Wafer seating lip / recess in the plug
+            # Subtracted from the plug
+            with Locations(( GASKET_THICK/2.0 + PCB_THICKNESS - WAFER_RECESS, 0, CAVITY_Z )):
+                Box(WAFER_RECESS * 2.0, WAFER_SIZE, WAFER_SIZE, mode=Mode.SUBTRACT)
+
+            # Alignment pins
+            for y_sign in [1, -1]:
+                for z_sign in [1, -1]:
+                    pin_y = y_sign * (WAFER_SIZE/2.0 + 0.424)
+                    pin_z = CAVITY_Z + z_sign * (WAFER_SIZE/2.0 + 0.424)
+                    with Locations(( MOLD_T/2.0, pin_y, pin_z )):
+                        Cylinder(radius=(1.2 + TOLERANCE)/2.0, height=MOLD_T + 2.0,
+                                 rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+
+            # Top Active ports (Bosses)
+            for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP]:
+                port_loc = Location((0, 0, CAVITY_Z)) * Rotation(a, 0, 0)
+                with Locations(port_loc * Location((0, PORT_RADIUS, 0))):
+                    Cylinder(radius=1.0, height=MOLD_T + 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
+                with Locations(port_loc):
+                    with BuildSketch(Plane.YZ):
+                        with Locations((PORT_RADIUS, 0), (0, 0)):
+                            Circle(0.6)
                 make_hull()
-                with Locations((0, CAVITY_Z)):
-                    Circle(CHAMBER_DIAM / 2.0)
+               # with Locations((0, CAVITY_Z)):
+               #     Circle(CHAMBER_DIAM / 2.0)
             extrude(amount=GASKET_THICK / 2.0, mode=Mode.ADD)
+
+            # Weep Duct Pins and Trench Boss
+            with Locations((0, 0, CAVITY_Z)):
+                # Core pin for duct
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
+                # Raised boss for the trench (molded into top face)
+                add(Weep_Trench_Cutout().move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0 - WEEP_MOAT_DEPTH/2.0, 0, 0))), mode=Mode.ADD)
+
+            # Bottom Passive ports
+            for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
+                port_loc = Location((0, 0, CAVITY_Z)) * Rotation(a, 0, 0) * Location((0, PORT_RADIUS, 0))
+                with Locations(port_loc):
+                    Cylinder(radius=1.0, height=MOLD_T + 2.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
         else:
             # Amplifier mold (is_nanopore=False)
@@ -229,6 +281,13 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
             for port in ALL_PORTS:
                 with Locations((GASKET_THICK / 4.0, port[0], port[1])):
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
+
+            # Weep Duct Pins and Trench Boss
+            with Locations((0, 0, CAVITY_Z)):
+                # Core pin for duct
+                add(Weep_Duct_Holes(height=GASKET_THICK).move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0, 0, 0))), mode=Mode.ADD)
+                # Raised boss for the trench (molded into top face)
+                add(Weep_Trench_Cutout().move(Rotation(90, 0, 90)).move(Location((GASKET_THICK/2.0 - WEEP_MOAT_DEPTH/2.0, 0, 0))), mode=Mode.ADD)
 
     return p.part
 
