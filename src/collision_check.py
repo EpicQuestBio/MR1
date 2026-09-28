@@ -1,3 +1,4 @@
+import math
 from build123d import *
 from src.constants import *
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
@@ -109,14 +110,63 @@ def run_housing_clearance_check():
     print(f"Housing Check Complete. Collisions found: {collisions_found}")
     return collisions_found
 
-if __name__ == "__main__":
-    c1 = run_cartridge_stack_clearance_check()
-    c2 = run_housing_clearance_check()
-    if c1 + c2 == 0:
-        print("\nSUCCESS: All components mate perfectly with 0 physical overlap!")
-    else:
-        print(f"\nWARNING: {c1 + c2} overlapping interfaces found. Adjust tolerances or positioning.")
+def run_thread_engagement_check():
+    """
+    Checks the M75x8mm external thread on Housing_Lid_Reader against
+    the M76x8mm internal thread on Torque_Cap_Inner.
+    """
+    print("\n--- Running Thread Engagement Check ---")
+    collisions_found = 0
 
+    print("Generating Parts...")
+    lid_reader = Housing_Lid_Reader()
+    cap_inner = Torque_Cap_Inner()
+
+    placed_lid = lid_reader.move(Location((0, 0, 0)))
+    placed_cap = cap_inner.move(Location((0, 0, 0)))
+
+    has_overlap, vol = check_overlap(placed_lid, placed_cap, "Housing_Lid_Reader", "Torque_Cap_Inner")
+    if has_overlap:
+        collisions_found += 1
+
+    print(f"Thread Engagement Check Complete. Collisions found: {collisions_found}")
+    return collisions_found
+
+def validate_bend_radii(spline_points, min_radius):
+    """
+    Validates that the minimum bend radius is not violated for a sequence of 3D points.
+    Returns a list of (index, radius) tuples where the radius < min_radius.
+    """
+    violations = []
+    for i in range(1, len(spline_points) - 1):
+        p0 = spline_points[i-1]
+        p1 = spline_points[i]
+        p2 = spline_points[i+1]
+
+        a = (p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2])
+        b = (p2[0]-p1[0], p2[1]-p1[1], p2[2]-p1[2])
+        c = (p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2])
+
+        len_a = math.sqrt(a[0]**2 + a[1]**2 + a[2]**2)
+        len_b = math.sqrt(b[0]**2 + b[1]**2 + b[2]**2)
+        len_c = math.sqrt(c[0]**2 + c[1]**2 + c[2]**2)
+
+        # Cross product of a and c
+        cross_ac = (
+            a[1]*c[2] - a[2]*c[1],
+            a[2]*c[0] - a[0]*c[2],
+            a[0]*c[1] - a[1]*c[0]
+        )
+        area = math.sqrt(cross_ac[0]**2 + cross_ac[1]**2 + cross_ac[2]**2) / 2.0
+
+        if area == 0:
+            continue
+
+        radius = (len_a * len_b * len_c) / (4.0 * area)
+        if radius < min_radius:
+            violations.append((i, radius))
+
+    return violations
 
 def run_routing_clearance_check():
     """
@@ -126,7 +176,14 @@ def run_routing_clearance_check():
     collisions_found = 0
 
     print("Generating Modules and Routes...")
-    from src.assembly import Reader_Module_Assembly, Pump_Module_Assembly, route_tubing, route_wiring
+    from src.assembly import (
+        Reader_Module_Assembly,
+        Pump_Module_Assembly,
+        route_tubing,
+        route_wiring,
+        get_tubing_routes,
+        get_wiring_routes,
+    )
 
     reader = Reader_Module_Assembly().move(Location((0, 0, PUMP_H + PUMP_LID_THICK + 5.0)))
     pump = Pump_Module_Assembly()
@@ -145,14 +202,127 @@ def run_routing_clearance_check():
     has_overlap, vol = check_overlap(wires, reader, "Wiring_Harness", "Reader_Assembly")
     if has_overlap: collisions_found += 1
 
+    # Dynamically validate bend radii for all 5 fluid lines
+    tubing_routes = get_tubing_routes()
+    for name, pts in tubing_routes.items():
+        vols = validate_bend_radii(pts, MIN_BEND_RADIUS_TUBE)
+        if vols:
+            print(f"[!] BEND RADIUS VIOLATION in {name}:")
+            for idx, r in vols:
+                print(f"    Point {idx} radius {r:.2f} < {MIN_BEND_RADIUS_TUBE}")
+            collisions_found += len(vols)
+
+    # Dynamically validate bend radii for all 3 wiring harnesses
+    wiring_routes = get_wiring_routes()
+    for name, (pts, radius) in wiring_routes.items():
+        vols = validate_bend_radii(pts, MIN_BEND_RADIUS_WIRE)
+        if vols:
+            print(f"[!] BEND RADIUS VIOLATION in {name}:")
+            for idx, r in vols:
+                print(f"    Point {idx} radius {r:.2f} < {MIN_BEND_RADIUS_WIRE}")
+            collisions_found += len(vols)
+
     print(f"Routing Check Complete. Collisions found: {collisions_found}")
+    return collisions_found
+
+def run_standoff_clearance_check():
+    """
+    Checks tubing envelopes against the 4 internal PCB standoff bosses
+    in Housing_Case_Reader.
+    """
+    print("\n--- Running PCB Standoff Clearance Check ---")
+    collisions_found = 0
+
+    print("Generating Standoffs and Tubing...")
+    from src.assembly import route_tubing
+
+    # Recreate the 4 standoff cylinders at their assembly positions
+    # From housing.py: standoff_h=20, radius=3.0, at corners of PCB_W x PCB_L inset 2mm
+    # Housing_Case_Reader is placed at Z = PUMP_H + PUMP_LID_THICK + 5.0 in full assembly
+    reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
+    standoff_h = 20.0
+    standoff_r = 6.0 / 2.0
+    # Z origin in Housing_Case_Reader: base at -READER_LID_THICK/2.0 + WALL
+    standoff_z = reader_z_base + (-READER_LID_THICK / 2.0 + WALL + standoff_h / 2.0)
+
+    standoff_positions = []
+    for mx in [-PCB_W / 2.0 + 2.0, PCB_W / 2.0 - 2.0]:
+        for my in [-PCB_L / 2.0 + 2.0, PCB_L / 2.0 - 2.0]:
+            standoff_positions.append((mx, my, standoff_z))
+
+    # Build isolated standoff solids
+    standoff_parts = []
+    for pos in standoff_positions:
+        with BuildPart(mode=Mode.PRIVATE) as s:
+            with Locations(pos):
+                Cylinder(radius=standoff_r, height=standoff_h)
+        standoff_parts.append(s.part)
+
+    standoffs = Compound(children=standoff_parts)
+
+    tubes = route_tubing()
+
+    has_overlap, vol = check_overlap(tubes, standoffs, "Flexible_Tubing", "PCB_Standoffs")
+    if has_overlap:
+        collisions_found += 1
+
+    print(f"Standoff Check Complete. Collisions found: {collisions_found}")
+    return collisions_found
+
+def run_internal_clearance_check():
+    """
+    Checks wiring routes against the cartridge stack solids inside the Reader module,
+    and tubing against Plate_1_Base_Hex NPT adapter protrusions.
+    """
+    print("\n--- Running Internal Component Clearance Check ---")
+    collisions_found = 0
+
+    print("Generating Internal Components and Routes...")
+    from src.assembly import route_tubing, route_wiring
+
+    # Position the cartridge stack at its assembly location inside the reader
+    reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
+    z_lid = 30.0  # From assembly.py: lid top surface
+    z_stack = reader_z_base + z_lid
+
+    # Build the cartridge stack at assembly position
+    stack_parts = [
+        Bottom_Pusher_Plate().move(Location((0, 0, z_stack))),
+        Plate_1_Base_Hex().move(Location((0, 0, z_stack + PP_H))),
+        Fitted_Amplifier_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK))),
+        PCB_Rigid_Active().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK))),
+        Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS))),
+        Plate_3_Top_Hex().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK))),
+        Pressure_Puck().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK + PUCK_H / 2.0)))
+    ]
+    cartridge_stack = Compound(children=stack_parts)
+
+    wires = route_wiring()
+    tubes = route_tubing()
+
+    # Check wiring against cartridge stack
+    has_overlap, vol = check_overlap(wires, cartridge_stack, "Wiring_Harness", "Cartridge_Stack")
+    if has_overlap:
+        collisions_found += 1
+
+    # Check tubing against Plate_1 (NPT adapter protrusions extend below the plate)
+    plate_1_at_pos = Plate_1_Base_Hex().move(Location((0, 0, z_stack + PP_H)))
+    has_overlap, vol = check_overlap(tubes, plate_1_at_pos, "Flexible_Tubing", "Plate_1_NPT_Protrusions")
+    if has_overlap:
+        collisions_found += 1
+
+    print(f"Internal Check Complete. Collisions found: {collisions_found}")
     return collisions_found
 
 if __name__ == "__main__":
     c1 = run_cartridge_stack_clearance_check()
     c2 = run_housing_clearance_check()
-    c3 = run_routing_clearance_check()
-    if c1 + c2 + c3 == 0:
+    c3 = run_thread_engagement_check()
+    c4 = run_routing_clearance_check()
+    c5 = run_standoff_clearance_check()
+    c6 = run_internal_clearance_check()
+    total = c1 + c2 + c3 + c4 + c5 + c6
+    if total == 0:
         print("\nSUCCESS: All components mate perfectly with 0 physical overlap!")
     else:
-        print(f"\nWARNING: {c1 + c2 + c3} overlapping interfaces found. Adjust tolerances or positioning.")
+        print(f"\nWARNING: {total} overlapping interfaces found. Adjust tolerances or positioning.")

@@ -141,13 +141,10 @@ MATERIALS = {
 }
 
 def create_nanopore_wafer_mesh():
-    """Generates the 4x4x0.8mm silicon wafer block with central nanopore feature."""
-    with BuildPart() as wafer:
-        Box(4.0, 4.0, 0.8)
-        with BuildSketch(Plane.XY):
-            Circle(0.2)
-        extrude(amount=-0.8, mode=Mode.SUBTRACT)
-    return shape_to_pv_mesh(wafer.part)
+    """Generates the nanopore wafer silicon mesh from the canonical source model."""
+    from src.cartridge import Nanopore_Wafer_Silicon
+    wafer = Nanopore_Wafer_Silicon()
+    return shape_to_pv_mesh(wafer)
 
 def build_exploded_cartridge_components():
     """Builds exploded cartridge components along Z axis for Shot 1."""

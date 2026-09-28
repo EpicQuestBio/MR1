@@ -25,6 +25,9 @@ if __name__ == '__main__':
     t2 = load_module('test_geometry', os.path.join(REPO_ROOT, 'tests', 'test_geometry.py'))
     suite.addTests(loader.loadTestsFromModule(t2))
 
+    t3 = load_module('test_connector_bounds', os.path.join(REPO_ROOT, 'tests', 'test_connector_bounds.py'))
+    suite.addTests(loader.loadTestsFromModule(t3))
+
     print(f"Loaded {suite.countTestCases()} unit tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

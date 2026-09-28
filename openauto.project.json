@@ -127,9 +127,17 @@
         "thickness_mm": 0.8
       },
       {
-        "id": "wafer_mold",
-        "name": "Nanopore PDMS Wafer Casting Mold",
-        "path": "nanopore_wafer_mold.stl",
+        "id": "wafer_mold_left",
+        "name": "Nanopore Wafer Mold Left",
+        "path": "exports/Nanopore_Wafer_Mold_Left.stl",
+        "type": "mold",
+        "color": "#f59e0b",
+        "opacity": 0.9
+      },
+      {
+        "id": "wafer_mold_right",
+        "name": "Nanopore Wafer Mold Right",
+        "path": "exports/Nanopore_Wafer_Mold_Right.stl",
         "type": "mold",
         "color": "#f59e0b",
         "opacity": 0.9

@@ -17,7 +17,7 @@ CAP_THREAD_PITCH = 8.0
 SEALED_TOP_MODE = False
 
 # [Stack Dimensions & Modularity]
-PP_H = 4.0           # Bottom Pusher Plate (TPU/Seal)
+PP_H = 3.0           # Bottom Pusher Plate (TPU/Seal) - matches golden STL bounds
 PLATE_THICK = 4.0    # Plate 1 (Base) & Plate 3 (Top), 4mm PP Sheet
 GASKET_THICK = 1.5875 # Gaskets (1/16")
 PTFE_THICK = 1.6     # PCB/PTFE assembly thickness
@@ -212,3 +212,8 @@ MIN_BEND_RADIUS_TUBE = 10.0
 WIRE_GAUGE = 0.64 # 22 AWG diameter approx 0.64mm
 WIRE_OD = 1.6 # Wire with insulation approx
 MIN_BEND_RADIUS_WIRE = 10.0
+
+# Per-harness wire outer diameters with insulation (mm)
+WIRE_USB_OD = 1.6       # 28 AWG shielded
+WIRE_MOTOR_OD = 2.4     # 24 AWG shielded twisted pair
+WIRE_POGO_OD = 1.2      # 30 AWG shielded

@@ -7,8 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "python run_tests.py",
     "export": "node scripts/export_all.js",
+    "export:python": "python src/main.py",
     "install-lib": "node scripts/install_libraries.js",
     "render:flythrough": "xvfb-run python3 scripts/render_flythrough.py"
   },

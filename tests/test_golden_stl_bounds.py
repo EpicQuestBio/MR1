@@ -30,6 +30,10 @@ from src.torque_cap import (
     Torque_Cap_Outer,
     Torque_Cap_Inner
 )
+from src.nanopore_wafer_mold import (
+    Nanopore_Wafer_Mold_Left,
+    Nanopore_Wafer_Mold_Right
+)
 from src.common import Hex_Base_Sketch
 
 class TestGoldenSTLAndPCBBounds(unittest.TestCase):
@@ -170,6 +174,43 @@ class TestGoldenSTLAndPCBBounds(unittest.TestCase):
         self.assertAlmostEqual(cis_in[1], -10.0000, delta=0.01)
         self.assertAlmostEqual(trans_in[0], 17.3205, delta=0.01)
         self.assertAlmostEqual(trans_in[1], -10.0000, delta=0.01)
+
+    def test_mold_geometry_and_interlocks(self):
+        """Verify Left and Right mold halves match OpenSCAD block dimensions,
+        and mate at X=0 with 0 collision and exact alignment dowel pin engagement."""
+        left = Nanopore_Wafer_Mold_Left(is_nanopore=True)
+        right = Nanopore_Wafer_Mold_Right(is_nanopore=True)
+
+        self.assertTrue(left.is_valid)
+        self.assertTrue(right.is_valid)
+
+        bb_l = left.bounding_box()
+        bb_r = right.bounding_box()
+
+        # Both mold blocks must be 80.0mm wide (Y) and 90.0mm high (Z)
+        self.assertAlmostEqual(bb_l.size.Y, 80.0, delta=0.1)
+        self.assertAlmostEqual(bb_l.size.Z, 90.0, delta=0.1)
+        self.assertAlmostEqual(bb_r.size.Y, 80.0, delta=0.1)
+        self.assertAlmostEqual(bb_r.size.Z, 90.0, delta=0.1)
+
+        # Left mold thickness spans X in [-15.0, 0.0]
+        self.assertAlmostEqual(bb_l.min.X, -15.0, delta=0.1)
+        self.assertAlmostEqual(bb_l.max.X, 0.0, delta=0.05)
+
+        # Right mold thickness spans X in [-4.8, 15.0] (4.8mm male dowel pins protrude past X=0)
+        self.assertAlmostEqual(bb_r.min.X, -4.8, delta=0.1)
+        self.assertAlmostEqual(bb_r.max.X, 15.0, delta=0.1)
+
+        # Zero collision when mated at X=0
+        inter = left.intersect(right)
+        if inter is None:
+            vol = 0.0
+        elif hasattr(inter, "volume"):
+            vol = inter.volume
+        else:
+            vol = sum(s.volume for s in inter)
+        self.assertAlmostEqual(vol, 0.0, delta=0.001,
+                               msg=f"Mated mold halves have collision volume: {vol} mm^3")
 
 if __name__ == '__main__':
     unittest.main()

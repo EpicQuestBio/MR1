@@ -16,78 +16,133 @@ def route_spline(pts, radius, color_rgb=(0,0,0)):
         sweep()
     return p.part
 
+def get_tubing_routes():
+    """Defines the 5 production microfluidic tubing routes matching reader_tubing.yaml.
+    All lines use standardized 1/8" barb fittings (uniform 1/8" ID x 1/4" OD).
+    """
+    pump_z = PUMP_H / 2.0
+    reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
+    reader_z = reader_z_base + READER_LID_THICK / 2.0
+
+    return {
+        # 1. TUBE_PUMP: Buffer reservoir -> Peristaltic pump intake (PharMed BPT, 0.12 m)
+        "TUBE_PUMP": [
+            (-BASE_W / 2.0 - 8.0, -25.0, pump_z),
+            (-BASE_W / 2.0 - 24.0, -25.0, pump_z),
+            (-BASE_W / 2.0 - 24.0, 5.0, pump_z),
+            (-BASE_W / 2.0 - 8.0, 5.0, pump_z),
+        ],
+        # 2. TUBE_FEED: Pump discharge -> Cartridge Cis inlet (210 deg) (FEP microbore, 0.22 m)
+        "TUBE_FEED": [
+            (BASE_W / 2.0 + 8.0, -10.0, pump_z),
+            (BASE_W / 2.0 + 26.0, -10.0, pump_z),
+            (BASE_W / 2.0 + 26.0, -10.0, reader_z - 5.0),
+            (BASE_W / 2.0 + 8.0, -10.0, reader_z - 5.0),
+        ],
+        # 3. TUBE_TRANS_LINE: Buffer reservoir -> Cartridge Trans inlet (330 deg) (PEEK microbore, 0.18 m)
+        "TUBE_TRANS_LINE": [
+            (-BASE_W / 2.0 - 8.0, -10.0, pump_z + 10.0),
+            (-BASE_W / 2.0 - 26.0, -10.0, pump_z + 10.0),
+            (-BASE_W / 2.0 - 26.0, -10.0, reader_z - 5.0),
+            (-BASE_W / 2.0 - 8.0, -10.0, reader_z - 5.0),
+        ],
+        # 4. TUBE_WASTE_1: Cis outlet (30 deg) -> Waste vessel (Silicone drain, 0.25 m)
+        "TUBE_WASTE_1": [
+            (BASE_W / 2.0 + 8.0, 20.0, reader_z - 5.0),
+            (BASE_W / 2.0 + 26.0, 20.0, reader_z - 5.0),
+            (BASE_W / 2.0 + 26.0, 20.0, pump_z),
+            (BASE_W / 2.0 + 8.0, 20.0, pump_z),
+        ],
+        # 5. TUBE_WASTE_2: Trans outlet (150 deg) -> Waste vessel (Silicone drain, 0.25 m)
+        "TUBE_WASTE_2": [
+            (-BASE_W / 2.0 - 8.0, 20.0, reader_z - 5.0),
+            (-BASE_W / 2.0 - 26.0, 20.0, reader_z - 5.0),
+            (-BASE_W / 2.0 - 26.0, 20.0, pump_z),
+            (-BASE_W / 2.0 - 8.0, 20.0, pump_z),
+        ],
+    }
+
+def get_wiring_routes():
+    """Defines the 3 production electrical wiring harnesses matching reader_wiring.yaml:
+    - W_USB: 28 AWG shielded (USB-C panel mount -> MR1 motherboard)
+    - W_MOTOR: 24 AWG shielded twisted pair (MR1 driver -> Pump motor)
+    - W_POGO_ANALOG: 30 AWG ultra-low-noise (Mill-Max pogo block -> LMP7721 PCB pads)
+    """
+    pump_z = PUMP_H / 2.0
+    reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
+    reader_z = reader_z_base + READER_LID_THICK / 2.0
+
+    return {
+        "W_USB": (
+            [
+                (15.0, BASE_L / 2.0 - 5.0, reader_z),
+                (15.0, 0.0, reader_z - 5.0),
+                (0.0, -19.0, reader_z - 5.0),
+            ],
+            WIRE_USB_OD / 2.0,
+        ),
+        "W_MOTOR": (
+            [
+                (-5.0, 0.0, reader_z - 5.0),
+                (-5.0, 0.0, pump_z + 10.0),
+                (-5.0, -15.0, pump_z),
+            ],
+            WIRE_MOTOR_OD / 2.0,
+        ),
+        "W_POGO_ANALOG": (
+            [
+                (POGO_X_SPACING, POGO_Y, reader_z - 5.0),
+                (-15.0, POGO_Y, reader_z - 5.0),
+                (-15.0, 10.0, reader_z - 5.0),
+            ],
+            WIRE_POGO_OD / 2.0,
+        ),
+    }
+
 def route_tubing():
-    """Generates the flexible tubing routes between the pump and reader modules."""
-    # Port radius offset
-    r = PORT_RADIUS
-
-    # 1. Pump Out (Right Side, lower module) -> Reader In (Right Side, upper module)
-    # Pump out ports are roughly at X=20, Z=0 in pump space. Reader in are at roughly X=17.3, Z=READER_Z
-    # We will approximate this with a smooth spline
-
-    # Pump Z offset
-    pump_z = PUMP_H/2.0
-    # Reader Z offset
-    reader_z = PUMP_H + PUMP_LID_THICK + 5.0 + READER_LID_THICK/2.0
-
-    p1 = (BASE_W/2.0 + 5.0, 20.0, pump_z) # Exit right side of pump
-    p2 = (BASE_W/2.0 + 20.0, 20.0, pump_z) # Loop outwards
-    p3 = (BASE_W/2.0 + 20.0, 20.0, reader_z - 10.0) # Travel up
-    p4 = (BASE_W/2.0 + 5.0, 20.0, reader_z - 10.0) # Enter right side of reader
-
-    tube1 = route_spline([p1, p2, p3, p4], TUBE_OD/2.0)
-
-    # 2. Pump In (Left Side) -> Reader Out (Left Side)
-    p5 = (-BASE_W/2.0 - 5.0, 20.0, pump_z)
-    p6 = (-BASE_W/2.0 - 20.0, 20.0, pump_z)
-    p7 = (-BASE_W/2.0 - 20.0, 20.0, reader_z - 10.0)
-    p8 = (-BASE_W/2.0 - 5.0, 20.0, reader_z - 10.0)
-
-    tube2 = route_spline([p5, p6, p7, p8], TUBE_OD/2.0)
-
-    return Compound(children=[tube1, tube2])
+    """Generates the 5 flexible tubing routes between the pump, reservoirs, and reader flowcell."""
+    routes = get_tubing_routes()
+    tube_solids = [route_spline(pts, TUBE_OD / 2.0) for pts in routes.values()]
+    return Compound(children=tube_solids)
 
 def route_wiring():
-    """Generates the internal wire routing."""
-    # USB-C at back of reader: (15, BASE_L/2, READER_Z)
-    # To PCB inside reader: (0, -19, READER_Z)
-    reader_z = PUMP_H + PUMP_LID_THICK + 5.0 + READER_LID_THICK/2.0
-
-    w1 = (15.0, BASE_L/2.0 - 5.0, reader_z)
-    w2 = (15.0, 0.0, reader_z - 5.0)
-    w3 = (0.0, -19.0, reader_z - 5.0)
-
-    wire1 = route_spline([w1, w2, w3], WIRE_OD/2.0)
-    return wire1
+    """Generates the 3 internal electrical wiring harnesses."""
+    routes = get_wiring_routes()
+    wire_solids = [route_spline(pts, r) for pts, r in routes.values()]
+    return Compound(children=wire_solids)
 
 
 def Reader_Module_Assembly():
-    """Assembles the full Reader Module (Housings + Cartridge Stack + Cap)."""
+    """Assembles the full Reader Module (Housings + Cartridge Stack + Cap) matching OpenSCAD truth.
+    Housing_Lid_Reader sits on Housing_Case_Reader, with its top plate surface at z=30.0.
+    The cartridge stack rests directly on the lid ceiling inside the M75 neck socket,
+    with the Torque-Lock Cap threaded onto the neck.
+    """
     parts = []
 
-    # Base Case
+    # Base Case (height 25mm, centered at Z=0)
     parts.append(Housing_Case_Reader())
 
-    # Internal Stack (positioned atop the Lid ceiling in legacy logic, now inside)
-    # Z coordinate relative to Base Case floor
-    z_stack = READER_LID_THICK/2.0 + 10.0 # Approximate
+    # Lid sits on Base Case (top plate surface at Z = 30.0, neck extending to 60.2mm)
+    z_lid = 30.0
+    parts.append(Housing_Lid_Reader().move(Location((0, 0, z_lid))))
+
+    # Cartridge stack sits directly on top surface of Lid inside the neck socket
+    z_stack = z_lid
 
     stack_parts = [
         Bottom_Pusher_Plate().move(Location((0, 0, z_stack))),
-        Plate_1_Base_Hex().move(Location((0, 0, z_stack + PP_H + PLATE_THICK/2.0))),
-        Fitted_Amplifier_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK/2.0))),
-        PCB_Rigid_Active().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS/2.0))),
-        Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK/2.0))),
-        Plate_3_Top_Hex().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK/2.0))),
+        Plate_1_Base_Hex().move(Location((0, 0, z_stack + PP_H))),
+        Fitted_Amplifier_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK))),
+        PCB_Rigid_Active().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK))),
+        Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS))),
+        Plate_3_Top_Hex().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK))),
         Pressure_Puck().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK + PUCK_H/2.0)))
     ]
     parts.extend(stack_parts)
 
-    # Lid
-    parts.append(Housing_Lid_Reader().move(Location((0, 0, READER_LID_THICK))))
-
-    # Cap Assembly
-    z_cap = READER_LID_THICK + READER_LID_THICK/2.0 + NECK_H - 10.0
+    # Torque-Lock Cap Assembly (engaging onto neck thread above puck)
+    z_cap = z_lid + NECK_H - 10.0
     parts.append(Torque_Cap_Inner().move(Location((0, 0, z_cap))))
     parts.append(Torque_Cap_Outer().move(Location((0, 0, z_cap))))
 

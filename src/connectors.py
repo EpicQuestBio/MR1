@@ -14,13 +14,16 @@ def JST_XH_2_Pin_Header():
     return p.part
 
 def USB_C_Panel_Mount():
-    """Simplified USB-C Panel Mount Connector Breakout"""
+    """Simplified USB-C Panel Mount Connector Breakout with M2 mounting holes"""
     with BuildPart(mode=Mode.PRIVATE) as p:
         # Main PCB Breakout Board
         Box(14.0, 15.0, 1.6)
         # USB-C Receptacle
         with Locations((0, 7.5, 1.6)):
             Box(9.0, 7.0, 3.2, mode=Mode.ADD)
+        # M2 mounting screw holes (2.2mm diameter, 10mm hole spacing)
+        with Locations((-5.0, -4.0, 0), (5.0, -4.0, 0)):
+            Cylinder(radius=2.2 / 2.0, height=5.0, mode=Mode.SUBTRACT)
     return p.part
 
 def Luer_Bulkhead_Panel_Mount():

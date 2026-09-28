@@ -1,0 +1,91 @@
+{
+  "project_id": "daemon-pore",
+  "name": "Daemon Pore Nanopore Sequencing Reader",
+  "version": "1.0.0",
+  "description": "High-throughput solid-state and biological nanopore sensing platform combining ultra-low noise analog front-end TIA, digital motherboard, and PDMS microfluidic flowcells.",
+  "root_path": ".",
+  "active_board": "amplifier",
+  "boards": {
+    "amplifier": {
+      "name": "LMP7721 Analog Frontend",
+      "path": "Amplifier/amplifier.kicad_pcb",
+      "schematic_path": "Amplifier/amplifier.kicad_sch",
+      "role": "Analog Transimpedance Amplifier (TIA)",
+      "substrate": {
+        "material": "PTFE / Rogers RO4350B",
+        "er": 2.1,
+        "loss_tangent": 0.001,
+        "thickness_mm": 0.8
+      },
+      "spice": {
+        "transimpedance_gain_ohms": 1e9,
+        "feedback_cap_pf": 0.15,
+        "bandwidth_khz": 100
+      },
+      "fluidic_coupling": {
+        "target_ref": "H1",
+        "type": "well_interface",
+        "pos": [0.0, 0.0, 3.8]
+      }
+    },
+    "mr1": {
+      "name": "MR1 Digital & Power Motherboard",
+      "path": "MR1/MR1.kicad_pcb",
+      "schematic_path": "MR1/MR1.kicad_sch",
+      "role": "Digital Signal Processing, MCU & Power Management",
+      "substrate": {
+        "material": "FR4 High-TG",
+        "er": 4.3,
+        "loss_tangent": 0.02,
+        "thickness_mm": 1.6
+      }
+    }
+  },
+  "mechanical": {
+    "cad_format": "Build123d / STEP / STL",
+    "exports_dir": "exports",
+    "parts": [
+      {
+        "id": "wafer_mold_left",
+        "name": "Nanopore Wafer Mold Left",
+        "path": "exports/Nanopore_Wafer_Mold_Left.stl",
+        "type": "mold",
+        "color": "#38bdf8"
+      },
+      {
+        "id": "wafer_mold_right",
+        "name": "Nanopore Wafer Mold Right",
+        "path": "exports/Nanopore_Wafer_Mold_Right.stl",
+        "type": "mold",
+        "color": "#38bdf8"
+      },
+      {
+        "id": "reader_case",
+        "name": "Housing Reader Base Case",
+        "path": "exports/Housing_Case_Reader.stl",
+        "type": "enclosure",
+        "color": "#94a3b8"
+      },
+      {
+        "id": "reader_lid",
+        "name": "Housing Reader Lid & Tower",
+        "path": "exports/Housing_Lid_Reader.stl",
+        "type": "enclosure",
+        "color": "#64748b"
+      }
+    ]
+  },
+  "fluidics": {
+    "channel_width_um": 50,
+    "channel_height_um": 25,
+    "chamber_volume_ul": 12.5,
+    "pore_diameter_nm": 4.0,
+    "flow_rate_ul_min": 10.0,
+    "buffer": "1M KCl, 10mM Tris-HCl, pH 8.0"
+  },
+  "cosimulation": {
+    "enabled": true,
+    "circuits": ["amplifier"],
+    "physics": ["fluidic_transport", "translocation_current"]
+  }
+}
