@@ -10,7 +10,7 @@
       "name": "LMP7721 Analog Frontend",
       "path": "Amplifier/amplifier.kicad_pcb",
       "schematic_path": "Amplifier/amplifier.kicad_sch",
-      "role": "Analog Transimpedance Amplifier (TIA)",
+      "role": "Analog Transimpedance Amplifier (TIA) & Flow Cell Interposer",
       "substrate": {
         "material": "PTFE / Rogers RO4350B",
         "er": 2.1,

@@ -8,9 +8,13 @@
   },
   "scripts": {
     "test": "python run_tests.py",
-    "export": "node scripts/export_all.js",
-    "export:python": "python src/main.py",
-    "install-lib": "node scripts/install_libraries.js",
+    "test:e2e": "python tests/test_exports_e2e.py",
+    "export": "python scripts/export_manager.py --all",
+    "export:cad": "python src/main.py all",
+    "export:kicad": "python scripts/export_manager.py --kicad",
+    "export:wiring": "python scripts/export_manager.py --wiring",
+    "export:firmware": "python scripts/export_manager.py --firmware",
+    "export:check": "python scripts/export_manager.py --check",
     "render:flythrough": "xvfb-run python3 scripts/render_flythrough.py"
   },
   "repository": {

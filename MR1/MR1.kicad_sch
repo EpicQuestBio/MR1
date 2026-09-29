@@ -1087,6 +1087,16 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 44.45) (xy 109.22 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ffde0da-5868-4825-8778-3377ad584624")
+	)
+	(wire
+		(pts
 			(xy 220.98 113.03) (xy 220.98 107.95)
 		)
 		(stroke
@@ -1334,6 +1344,16 @@
 			(type default)
 		)
 		(uuid "b6c732f0-4adf-4b0b-a0bb-8b383a9f0840")
+	)
+	(wire
+		(pts
+			(xy 81.28 46.99) (xy 109.22 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c83eb332-8155-4418-9196-b4587f94199b")
 	)
 	(wire
 		(pts
@@ -3621,6 +3641,26 @@
 				(justify right)
 			)
 		)
+		(pin "USB_SCL" input
+			(at 81.28 44.45 0)
+			(uuid "ce24cde7-5c4e-4da5-9b40-063958deae3b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_SDA" input
+			(at 81.28 46.99 0)
+			(uuid "aad33093-355e-4d02-abaa-1f6c4470e69e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
@@ -3866,6 +3906,26 @@
 		(pin "DAC_EN" input
 			(at 109.22 71.12 180)
 			(uuid "87d24f6f-9577-45ed-9fd2-d665c91e6794")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_SCL" input
+			(at 109.22 44.45 180)
+			(uuid "dac5a047-2e74-40aa-b3f8-27645725becd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_SDA" input
+			(at 109.22 46.99 180)
+			(uuid "f04f369b-f38e-47c3-890e-0b56b4f1793a")
 			(effects
 				(font
 					(size 1.27 1.27)

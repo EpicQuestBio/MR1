@@ -1,42 +1,95 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# =============================================================================
+# Sentinel Nanopore Reader ? Development Environment Setup & Diagnostics
+# =============================================================================
+
 set -e
 
-# Helper function for manual install
-install_manual() {
-    echo "Attempting to install BOSL2 manually..."
-    mkdir -p libraries
-    if [ -d "libraries/BOSL2" ]; then
-        echo "libraries/BOSL2 already exists. Skipping."
-        return
-    fi
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="${SCRIPT_DIR}"
 
-    if command -v git >/dev/null 2>&1; then
-        echo "Using git..."
-        if git clone --depth 1 https://github.com/BOSL2/BOSL2.git libraries/BOSL2; then
-            return
-        fi
-        echo "Git clone failed. Trying curl..."
-    fi
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
 
-    echo "Using curl..."
-    curl -L -o bosl2.zip https://github.com/BelfrySCAD/BOSL2/archive/refs/heads/master.zip
-    unzip -q bosl2.zip -d libraries/
-    if [ -d "libraries/BOSL2-master" ]; then
-        mv libraries/BOSL2-master libraries/BOSL2
-    fi
-    rm -f bosl2.zip
-}
+echo -e "${BLUE}=================================================================${NC}"
+echo -e "${BLUE}  Sentinel Nanopore Reader ? Environment Setup & Tool Verification${NC}"
+echo -e "${BLUE}=================================================================${NC}"
 
-echo "Starting Installation..."
-
-if command -v npm >/dev/null 2>&1; then
-    echo "Node.js/npm detected. Installing dependencies..."
-    npm install
-    echo "Running library setup..."
-    node scripts/install_libraries.js
-else
-    echo "WARNING: Node.js/npm not found. Export scripts will not work."
-    install_manual
+# 1. Virtual Environment & Python Check
+echo -e "${YELLOW}>> Ensuring Python virtual environment (.venv)...${NC}"
+if [ -f "${REPO_ROOT}/setup_env.sh" ]; then
+    bash "${REPO_ROOT}/setup_env.sh" --check >/dev/null 2>&1 || bash "${REPO_ROOT}/setup_env.sh"
 fi
 
-echo "Installation complete!"
+if [ -f "${REPO_ROOT}/.venv/Scripts/python.exe" ]; then
+    PYTHON_CMD="${REPO_ROOT}/.venv/Scripts/python.exe"
+elif [ -f "${REPO_ROOT}/.venv/bin/python" ]; then
+    PYTHON_CMD="${REPO_ROOT}/.venv/bin/python"
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_CMD="python3"
+elif command -v python >/dev/null 2>&1; then
+    PYTHON_CMD="python"
+else
+    echo -e "${RED}[MISSING]${NC} Python 3 is required."
+    exit 1
+fi
+PY_VER=$(${PYTHON_CMD} -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')")
+echo -e "${GREEN}[OK]${NC} (${PYTHON_CMD} v${PY_VER})"
+
+# 2. Python Packages Verification (build123d, wireviz)
+echo -n "Checking build123d in environment... "
+if ${PYTHON_CMD} -c "import build123d" >/dev/null 2>&1; then
+    echo -e "${GREEN}[OK]${NC}"
+else
+    echo -e "${YELLOW}[NOT FOUND]${NC} Installing via requirements.txt..."
+    ${PYTHON_CMD} -m pip install -q -r "${REPO_ROOT}/requirements.txt"
+fi
+
+echo -n "Checking WireViz & Graphviz... "
+if ${PYTHON_CMD} -c "import wireviz" >/dev/null 2>&1; then
+    echo -e "${GREEN}[OK]${NC}"
+else
+    echo -e "${YELLOW}[MISSING]${NC} Installing wireviz..."
+    ${PYTHON_CMD} -m pip install -q wireviz
+fi
+
+# 3. KiCad CLI Check
+echo -n "Checking KiCad CLI (kicad-cli)... "
+KICAD_FOUND="no"
+if command -v kicad-cli >/dev/null 2>&1 || command -v kicad-cli.exe >/dev/null 2>&1; then
+    KICAD_FOUND="yes"
+elif [ -f "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe" ] || [ -f "C:/Program Files/KiCad/9.0/bin/kicad-cli.exe" ]; then
+    KICAD_FOUND="yes"
+fi
+
+if [ "${KICAD_FOUND}" = "yes" ]; then
+    echo -e "${GREEN}[OK]${NC}"
+else
+    echo -e "${YELLOW}[WARNING]${NC} kicad-cli not found. KiCad Gerber/BOM exports will be skipped unless installed."
+fi
+
+# 4. PlatformIO Core Check
+echo -n "Checking PlatformIO (pio)... "
+if command -v pio >/dev/null 2>&1 || command -v pio.exe >/dev/null 2>&1; then
+    echo -e "${GREEN}[OK]${NC}"
+else
+    echo -e "${YELLOW}[WARNING]${NC} PlatformIO not found. Firmware compilation will be skipped."
+fi
+
+# 5. Node.js Check
+echo -n "Checking Node.js & npm... "
+if command -v npm >/dev/null 2>&1; then
+    echo -e "${GREEN}[OK]${NC}"
+    if [ ! -d "${REPO_ROOT}/node_modules" ]; then
+        echo "Installing npm dependencies..."
+        npm install --silent
+    fi
+else
+    echo -e "${YELLOW}[OPTIONAL]${NC} Node.js not detected."
+fi
+
+echo -e "\n${GREEN}Environment verification completed successfully.${NC}"
+echo "You can now run: ./scripts/export_all.sh --all"

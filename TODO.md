@@ -135,3 +135,136 @@ This document outlines the step-by-step strategy for porting the Sentinel Nanopo
     - Asserts all routed splines pass bend radius validation across all 5 fluid lines and 3 wiring harnesses.
 - [x] Add production routing collision test:
     - Tests all 5 tubing lines + 3 wiring harnesses against housing/stack solids.
+
+## 15. ESP32-S3 Firmware Architecture & Subsystems (`firmware/`)
+- [x] Configure PlatformIO build environment (`platformio.ini`):
+    - Target `esp32-s3-devkitc-1` / `esp32s3` with 8MB flash and native USB CDC-ACM on boot.
+- [x] Map hardware pinout from KiCad MR1 schematics (`include/pinout.h`):
+    - ADC AD40xx SPI bus: CNV (GPIO11), SCK (GPIO10), SDO (GPIO9).
+    - DAC MCP4822 SPI bus: CS_ (GPIO6), SCK (GPIO7), SDI (GPIO8), LDAC_ (GPIO5).
+    - Native USB CDC: D- (GPIO19), D+ (GPIO20).
+    - Pump module UART: TX (GPIO17), RX (GPIO47).
+    - Leak detection sensor / weep moat: GPIO1 (ADC1_CH0 / digital pull-up).
+- [x] Implement MCP4822 DAC Driver & Pulse Generator (`src/hal/dac_mcp4822.cpp`):
+    - Bipolar pore bias voltage setting (-1.587V to +1.587V).
+    - Pulse injection logic for pore wetting, unblocking, and translocation tests.
+- [x] Implement AD40xx High-Speed ADC Driver (`src/hal/adc_ad40xx.cpp`):
+    - Hardware timer + SPI DMA double-buffering for uniform 100 kHz continuous sampling.
+    - Decimation engine for low-bandwidth visualization while streaming full rate over USB.
+- [x] Implement Native USB CDC High-Speed Streaming & Command Parser (`src/comm/usb_cdc_stream.cpp`):
+    - High-throughput binary framing (64 samples/frame, timestamp, CRC-16).
+    - Bidirectional ASCII/JSON control channel (bias, sample rate, pump, telemetry).
+- [x] Implement External Pump Control & Emergency Safety Protocol (`src/comm/pump_uart.cpp`, `src/hal/leak_detector.cpp`):
+    - Bidirectional UART protocol to external pump module over J22.
+    - Weep moat / leak sensor monitoring with sub-millisecond pump cutoff and DAC zeroing.
+- [x] Implement Web Portal & Embedded Oscilloscope (`src/web/web_portal.cpp`):
+    - Wi-Fi AP and station mode with embedded async web server and WebSocket stream.
+    - Canvas oscilloscope graticule, voltage slider (-1.587V to +1.587V), pulse buttons, pump controls.
+- [x] Dual-Core Task Management & Wi-Fi Contention Handling:
+    - Pin high-speed ADC sampling + USB streaming to Core 1.
+    - Pin Wi-Fi, Web Server, pump supervision to Core 0.
+    - Gracefully throttle or pause Wi-Fi radio during 100 kHz continuous acquisition.
+
+## 16. Universal Project Export System & E2E Deliverables Testing (`exports/`)
+- [x] Create Unified Cross-Platform Export Orchestrator (`scripts/export_manager.py`):
+    - Auto-detects `build123d`, `kicad-cli`, `wireviz`, Graphviz `dot`, and PlatformIO `pio`.
+    - Supports modular domain flags (`--cad`, `--kicad`, `--wiring`, `--firmware`, `--manifest`, `--check`).
+- [x] Implement KiCad Manufacturing & Ordering Deliverables:
+    - Gerbers, NC drill, Pick-and-Place (POS), BOM CSV, and PDF schematics for MR1 and Amplifier.
+    - Automated creation of fab-ready zip bundles (`MR1_Gerbers.zip`, `Amplifier_Gerbers.zip`).
+- [x] Implement WireViz Harness & Fluidic Documentation:
+    - Automated rendering of `reader_wiring.yaml` and `reader_tubing.yaml` to PNG, SVG, HTML, TSV.
+- [x] Implement ESP32-S3 Firmware Build & Artifact Staging:
+    - Automatically builds firmware via PlatformIO and stages `firmware.bin`, `bootloader.bin`, `partitions.bin`.
+- [x] Implement Project Makefile (`Makefile`):
+    - Standard targets: `export`, `export-cad`, `export-kicad`, `export-wiring`, `export-firmware`, `manifest`, `check`, `test`, `test-e2e`.
+- [x] Update Universal Bash Scripts:
+    - `install.sh`: Environment diagnostics, tool detection, and dependency installation.
+    - `scripts/export_all.sh`: POSIX bash export runner with colorized output and flag support.
+    - `scripts/run_e2e_tests.sh`: End-to-end regression and verification test runner.
+- [x] Implement E2E Deliverables Test Suite (`tests/test_exports_e2e.py`):
+    - 9 comprehensive tests validating STL meshes, STEP BREP headers, 2D DXF sections, KiCad Gerbers/drill, fab zip integrity, BOM/PDF headers, WireViz docs, firmware ESP32 magic byte (0xE9), and manifest SHA-256 hashes.
+- [x] Document Export Architecture (`EXPORTS.md`):
+    - Complete guide for human engineers and AI agents covering commands, inventory, breaking change detection, fab ordering, and 3D printing specs.
+- [x] Integrate E2E Deliverables Validation into `run_tests.py` and `package.json`.
+
+## 17. Python Virtual Environment Management (`setup_env.sh`, `setup_env.ps1`)
+- [x] Create project `requirements.txt` with locked minimum dependency versions:
+    - `build123d>=0.5.0`, `wireviz>=0.4.1`, `graphviz>=0.20`, `platformio>=6.1.0`.
+- [x] Create POSIX Bash Virtual Environment Manager (`setup_env.sh`):
+    - Automates `.venv` creation, pip upgrading, dependency installation, and health checks (`--check`, `--recreate`).
+- [x] Create Windows PowerShell Virtual Environment Manager (`setup_env.ps1`):
+    - Robust Windows-native environment setup with automated execution policy handling and diagnostic checks.
+- [x] Integrate `.venv` Auto-Detection into Project Tooling:
+    - Updated `Makefile` to detect and use `.venv/Scripts/python.exe` (Windows) or `.venv/bin/python` (POSIX).
+    - Updated `scripts/export_all.sh` and `scripts/run_e2e_tests.sh` to prioritize `.venv` over global Python.
+    - Updated `install.sh` to delegate environment configuration to `setup_env.sh` rather than modifying global site-packages.
+- [x] Fix Build123d 0.12+ `Helix` compatibility:
+    - Wrapped `Helix` curve generation in `with BuildLine():` contexts across `src/housing.py`, `src/torque_cap.py`, and `src/adapters.py`.
+- [x] Verify Full Test Suite & Manifest inside `.venv`:
+    - All 35 unit/E2E tests pass cleanly (100% green).
+    - 0 collisions detected across all 6 physical clearance checking suites.
+
+## 18. Legacy OpenSCAD Feature Parity & Export Deliverable Restoration
+- [x] Create automated legacy parity unit test suite (`tests/test_legacy_feature_parity.py`):
+    - Assert all critical mechanical and electrical interface features from `openscad-legacy/` that were missing in early build123d exports.
+- [x] Restore `PCB_Main_Reader_2D` and `PCB_Main_Reader` in `src/cartridge.py`:
+    - 80.0 x 60.0 mm rectangular motherboard (replacing invalid 55mm hex sketch).
+    - 4x corner standoff mounting holes at `(±38.0, ±28.0)`.
+    - 2x USB-C back edge cutouts at `(±15.0, 25.0)`.
+    - 1x JST vertical connector cutout at `(0.0, -19.0)`.
+    - 4x fluid port clearance holes (D=6.0 mm at `PORT_RADIUS = 20.0 mm`).
+- [x] Restore `Carrier_Frame_Hex` (`Plate_2_Channel_DXF`) and `Nanopore_Carrier` (`PCB_Nanopore_Carrier_DXF`):
+    - 60mm hexagonal frame with 28.5 x 38.5 mm central pocket and 4 fluid pass-throughs.
+    - 20.0 mm circular carrier PCB with 1.5mm central chip aperture and side tab slots.
+- [x] Restore `Amplifier_Gasket_Mold_Left` / `Right` exports:
+    - Added `is_nanopore=False` mold exports to produce flat gaskets for the amplifier chamber.
+- [x] Restore full legacy features on `Housing_Lid_Reader`:
+    - 4x vertical fluid pass-through holes (d=10.0 mm at `PORT_RADIUS = 20.0 mm`).
+    - Downward JST connector clearance cutout at `(0.0, -19.0)`.
+    - 4x horizontal side fluid ports (d=6.35 mm at `Y = ±20.0 mm`).
+    - 2.5 mm lower outer wall inset / splash overhang profile.
+    - Underside O-ring seal groove and corner screw counterbores.
+- [x] Restore full legacy features on `Housing_Pump_Case`:
+    - 4x side fluid port bosses (D=20.0 mm, length = 15.0 mm matching OpenSCAD `wall*3`) and through-bores (d=6.35 mm) at `Y = ±20.0 mm`.
+    - Internal pump mounting floor plate with dual peristaltic pump cutouts and standoffs.
+    - Top knife-edge seal ridge.
+- [x] Restore sealing ridges and indexing lips:
+    - Added top knife-edge seal ridge to `Housing_Case_Reader`.
+    - Added bottom indexing lip (5mm height) and corner counterbores to `Housing_Pump_Lid`.
+- [x] Update Export Inventories (`src/main.py` & `scripts/export_manager.py`):
+    - Added `Carrier_Frame_Hex`, `Nanopore_Carrier`, `PCB_Main_Reader`, `Amplifier_Gasket_Mold_Left`, and `Amplifier_Gasket_Mold_Right` to 3D parts list.
+    - Corrected DXF profile mapping: `PCB_Main_Reader_DXF` and `PCB_DXF` now map to rectangular motherboard; `Plate_2_Channel_DXF` and `PCB_Nanopore_Carrier_DXF` included.
+- [x] Update E2E Deliverables Test Suite (`tests/test_exports_e2e.py`):
+    - Expanded STL checks from 22 to 27 required solid files.
+    - Added `Plate_2_Channel_DXF.dxf` and `PCB_Nanopore_Carrier_DXF.dxf` to DXF verification list.
+- [x] Full Verification:
+    - All 42 unit and E2E tests pass (100% green).
+    - 0 physical collisions across cartridge stack, housing, threading, routing, standoffs, and internals.
+    - All 151 export files generated and verified in `exports/manifest.json`.
+
+## 19. PTFE Interposer Architecture & Dual-Sided Ag/AgCl Electrode Synchronization
+- [x] Formally define `PTFE_Interposer()` in `src/cartridge.py`:
+    - 55.0 x 51.962 x 0.8 mm hexagonal PTFE substrate (Rogers RO4350B / PTFE natural).
+    - Central opened 6.20 x 6.20 mm diamond cutout (45 deg) for silicone gasket protrusion.
+    - 4 fluid pass-through holes ($d = 2.0\text{ mm}$ clearance) at `PORT_RADIUS = 20.0 mm`.
+    - Pogo pin landing array (6 gold pads at $Y = 2.5\text{ mm}$, $X = \pm 1.5, \pm 6.5, \pm 11.5\text{ mm}$).
+    - Dual-sided silver chloride (Ag/AgCl) ribbon electrode pads:
+        * Top surface (Cis chamber): 2 pads along 30 deg at $r = 12\text{ mm}$ and $r = 17\text{ mm}$.
+        * Bottom surface (Trans chamber): 2 pads along 210 deg at $r = 12\text{ mm}$ and $r = 17\text{ mm}$.
+    - Weep duct moisture pass-throughs for early leak detection.
+    - Established `PCB_Rigid_Active` and `Interposer` as functional aliases of `PTFE_Interposer`.
+- [x] Model standalone `Silver_Chloride_Ribbon_Pads` for CAD visualization and assembly:
+    - Top ($30^\circ$) and Bottom ($210^\circ$) electrode ribbon strips fitting inside open microfluidic channels.
+- [x] Update Export Pipeline (`src/main.py` & `scripts/export_manager.py`):
+    - Added `PTFE_Interposer`, `Silver_Chloride_Ribbon_Pads_Top`, and `Silver_Chloride_Ribbon_Pads_Bottom` to 3D STLs and STEPs.
+    - Added `Interposer_DXF` and `PCB_Interposer_DXF` to 2D DXF profiles.
+    - Regenerated exports manifest: 159 deliverables indexed and verified.
+- [x] Expand Test Suites (`tests/test_legacy_feature_parity.py` & `tests/test_exports_e2e.py`):
+    - Added `test_ptfe_interposer_features` verifying dimensions, pogo pins, Ag/AgCl pads, and zero collision with top & bottom gaskets.
+    - Expanded STL checks to 30 required STL models and 13 DXF profiles.
+- [x] Full Verification:
+    - 43 / 43 tests pass (100% green).
+    - 0 collisions across all 6 physical clearance suites.
+
+

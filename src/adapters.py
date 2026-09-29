@@ -15,7 +15,8 @@ def Threaded_Luer_Adapter(render_threads=False):
             h = 5.0
             r = 9.4 / 2.0
             depth = 0.5
-            path = Helix(pitch=pitch, height=h, radius=r)
+            with BuildLine():
+                path = Helix(pitch=pitch, height=h, radius=r)
             with Locations((0, 0, 0.5)):
                 with BuildSketch(Plane.XZ) as s:
                     with Locations((r, 0)):

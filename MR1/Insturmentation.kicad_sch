@@ -4079,10 +4079,6 @@
 		(color 0 0 0 0)
 		(uuid "fe1d337e-8794-40a9-b49e-eb3ee8e3b836")
 	)
-	(no_connect
-		(at 267.97 63.5)
-		(uuid "6ab28ab1-3e27-43b3-a615-507436ac319d")
-	)
 	(wire
 		(pts
 			(xy 135.89 62.23) (xy 120.65 62.23)
@@ -6794,12 +6790,12 @@
 	)
 	(hierarchical_label "DAC_EN"
 		(shape input)
-		(at 245.11 57.15 0)
+		(at 267.97 38.1 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "5df24d74-a5d6-4058-834b-1468b68b8a19")
 	)
@@ -6849,7 +6845,7 @@
 	)
 	(hierarchical_label "DAC_CLK"
 		(shape input)
-		(at 267.97 45.72 180)
+		(at 267.97 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8596,7 +8592,7 @@
 	)
 	(symbol
 		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
-		(at 267.97 43.18 270)
+		(at 267.97 45.72 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8606,7 +8602,7 @@
 		(dnp no)
 		(uuid "11d39604-53bd-40a5-9f38-e1f148bfe2c4")
 		(property "Reference" "#PWR0136"
-			(at 261.62 43.18 0)
+			(at 261.62 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8617,7 +8613,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 263.5758 43.307 0)
+			(at 262.128 45.72 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8627,7 +8623,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 267.97 43.18 0)
+			(at 267.97 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8638,7 +8634,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 267.97 43.18 0)
+			(at 267.97 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8649,7 +8645,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 267.97 43.18 0)
+			(at 267.97 45.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14679,6 +14675,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 267.97 63.5 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "dbe76cee-ca20-43d9-9797-276c1f7ea855")
+		(property "Reference" "#PWR0137"
+			(at 261.62 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 264.795 63.4999 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 267.97 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 267.97 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
+			(at 267.97 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3670063a-62e1-43e7-936f-bf5bfe065926")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176/38d1a3ed-811f-4f3b-80a2-5ae77b649a51"
+					(reference "#PWR0137")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 113.03 64.77 0)
 		(unit 1)
@@ -14771,7 +14846,7 @@
 	)
 	(symbol
 		(lib_id "MR1:Conn_01x11_MP")
-		(at 358.14 33.02 0)
+		(at 302.26 52.07 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -14782,7 +14857,7 @@
 		(fields_autoplaced yes)
 		(uuid "dddbeb5e-28d2-43e7-a7a8-b11396b3c133")
 		(property "Reference" "J13"
-			(at 360.68 31.7499 0)
+			(at 304.8 50.7999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14793,7 +14868,7 @@
 			)
 		)
 		(property "Value" "Conn_01x10"
-			(at 360.68 34.2899 0)
+			(at 304.8 53.3399 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14804,7 +14879,7 @@
 			)
 		)
 		(property "Footprint" "Connector_JST:JST_SH_SM10B-SRSS-TB_1x10-1MP_P1.00mm_Horizontal"
-			(at 358.14 33.02 0)
+			(at 302.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14815,7 +14890,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 358.14 33.02 0)
+			(at 302.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14826,7 +14901,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x11, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 358.14 33.02 0)
+			(at 302.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

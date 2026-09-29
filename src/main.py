@@ -11,7 +11,9 @@ from src.nanopore_wafer_mold import Nanopore_Wafer_Mold_Left, Nanopore_Wafer_Mol
 from src.cartridge import (
     PCB_Rigid_Active, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket,
     Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck,
-    Nanopore_Wafer_Silicon
+    Nanopore_Wafer_Silicon, PCB_Main_Reader_2D, PCB_Main_Reader,
+    Carrier_Frame_Hex, Nanopore_Carrier, PTFE_Interposer, Interposer,
+    Silver_Chloride_Ribbon_Pads
 )
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
@@ -28,7 +30,15 @@ def export_all():
     parts_3d = {
         "Nanopore_Wafer_Mold_Left": Nanopore_Wafer_Mold_Left(),
         "Nanopore_Wafer_Mold_Right": Nanopore_Wafer_Mold_Right(),
+        "Amplifier_Gasket_Mold_Left": Nanopore_Wafer_Mold_Left(is_nanopore=False),
+        "Amplifier_Gasket_Mold_Right": Nanopore_Wafer_Mold_Right(is_nanopore=False),
         "PCB_Rigid_Active": PCB_Rigid_Active(),
+        "PTFE_Interposer": PTFE_Interposer(render_electrodes=True),
+        "Silver_Chloride_Ribbon_Pads_Top": Silver_Chloride_Ribbon_Pads(top=True),
+        "Silver_Chloride_Ribbon_Pads_Bottom": Silver_Chloride_Ribbon_Pads(top=False),
+        "PCB_Main_Reader": PCB_Main_Reader(),
+        "Carrier_Frame_Hex": Carrier_Frame_Hex(),
+        "Nanopore_Carrier": Nanopore_Carrier(),
         "Nanopore_Wafer_Silicon": Nanopore_Wafer_Silicon(),
         "Cast_Nanopore_Wafer_Gasket": Cast_Nanopore_Wafer_Gasket(),
         "Fitted_Amplifier_Gasket": Fitted_Amplifier_Gasket(),
@@ -52,11 +62,15 @@ def export_all():
 
     # 2. 2D DXF Profiles (for KiCad PCB Edge.Cuts & keepout synchronization)
     parts_dxf = {
-        "PCB_DXF": parts_3d["PCB_Rigid_Active"],
+        "PCB_DXF": PCB_Main_Reader_2D(),
         "PCB_Amplifier_DXF": parts_3d["PCB_Rigid_Active"],
-        "PCB_Main_Reader_DXF": parts_3d["PCB_Rigid_Active"],
+        "Interposer_DXF": parts_3d["PTFE_Interposer"],
+        "PCB_Interposer_DXF": parts_3d["PTFE_Interposer"],
+        "PCB_Main_Reader_DXF": PCB_Main_Reader_2D(),
         "Plate_1_Base_DXF": parts_3d["Plate_1_Base_Hex"],
+        "Plate_2_Channel_DXF": parts_3d["Carrier_Frame_Hex"],
         "Plate_3_Top_DXF": parts_3d["Plate_3_Top_Hex"],
+        "PCB_Nanopore_Carrier_DXF": parts_3d["Nanopore_Carrier"],
         "Bottom_Pusher_Plate_DXF": parts_3d["Bottom_Pusher_Plate"],
         "Gasket_Top_DXF": parts_3d["Cast_Nanopore_Wafer_Gasket"],
         "Gasket_Bottom_DXF": parts_3d["Fitted_Amplifier_Gasket"],
@@ -83,10 +97,15 @@ def export_all():
         if target in ("all", name, "dxf"):
             print(f"Exporting DXF: {name}...")
             try:
-                with BuildSketch() as s:
-                    add(part.faces().sort_by(Axis.Z)[0])
                 exporter = ExportDXF(unit=Unit.MM)
-                exporter.add_shape(s.sketch)
+                if isinstance(part, Sketch):
+                    exporter.add_shape(part)
+                elif hasattr(part, "faces"):
+                    with BuildSketch() as s:
+                        add(part.faces().sort_by(Axis.Z)[0])
+                    exporter.add_shape(s.sketch)
+                else:
+                    exporter.add_shape(part)
                 dxf_path = os.path.join(exports_dir, f"{name}.dxf")
                 exporter.write(dxf_path)
             except Exception as e:

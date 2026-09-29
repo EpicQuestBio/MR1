@@ -1,61 +1,251 @@
-# daemon-pore
+# Sentinel Nanopore Reader (Daemon Pore)
 
-## Exporting Files
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
+[![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
+[![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
+[![Tests](https://img.shields.io/badge/Tests-43%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
-This project includes a script to automatically export all defined parts (STLs and DXFs) from the OpenSCAD source.
+The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state / biological nanopore sequencer flow cell, low-current amplifier, and fluidic control system. It integrates high-precision parametric CAD models, low-noise front-end analog electronics, an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
-### Setup
+---
 
-Run the installation script to set up dependencies and the BOSL2 library:
-```bash
-./install.sh
+## Table of Contents
+
+- [System Architecture](#system-architecture)
+- [Project Structure](#project-structure)
+- [Quick Start & Environment Setup](#quick-start--environment-setup)
+- [Deliverables & Export System](#deliverables--export-system)
+- [Testing & Verification](#testing--verification)
+- [Hardware & Electronics](#hardware--electronics)
+- [ESP32-S3 Firmware](#esp32-s3-firmware)
+- [Fluidic Routing & Mold Casting](#fluidic-routing--mold-casting)
+- [Documentation Index](#documentation-index)
+
+---
+
+## System Architecture
+
 ```
-This script handles:
-- Checking for Node.js (required for exports).
-- Installing NPM dependencies.
-- Installing the BOSL2 library (as a git submodule or local download) into `libraries/`.
-
-If you do not have Node.js, the script will still attempt to download the BOSL2 library so you can open the SCAD files in the OpenSCAD GUI.
-
-### Usage
-
-**Export all parts:**
-```bash
-npm run export
+                       +---------------------------------------+
+                       |           Host PC / Laptop            |
+                       |  (High-Throughput Binary Telemetry)   |
+                       +-------------------+-------------------+
+                                           | Native USB CDC (100 kHz continuous)
+                                           v
+                       +---------------------------------------+
+                       |         ESP32-S3 MCU (MR1)            |
+                       |  Core 1: ADC SPI DMA & USB CDC Stream |
+                       |  Core 0: Web Server, Leak & Pump Ctrl |
+                       +---------+-------------------+---------+
+                                 |                   |
+            SPI Bus (100 kHz)    |                   | UART (J22)
+                                 v                   v
+     +-----------------------------+        +--------------------------+
+     |     AD40xx 16/18-Bit ADC    |        |  External Pump Module    |
+     |   LMP7721 Ultra-Low-Noise   |        |  (Dual Peristaltic Ditao)|
+     |     Cartridge Amplifier     |        +--------------------------+
+     +--------------+--------------+
+                    | Gold Pogo Pins (Ultra-low noise shielded)
+                    v
+     +---------------------------------------------------------+
+     |              Hexagonal Cartridge Flow Cell              |
+     |  - Cis & Trans Fluidic Chambers ('X' microfluidic)      |
+     |  - Cast Silicone Gasket with Nanopore Silicon Wafer     |
+     |  - M75x8mm Clamping Torque Cap & Pressure Puck          |
+     |  - Conductive Weep Moat / Leak Detection Sensor         |
+     +---------------------------------------------------------+
 ```
-This will generate all files defined in the `Output_Mode` list in `constants.scad` and save them to the `exports/` directory.
 
-**Export specific part:**
-You can pass the name of the `Output_Mode` as an argument:
-```bash
-npm run export -- Plate_1_Base_DXF
+---
+
+## Project Structure
+
+```
+daemon-pore/
+├── src/                          # Parametric CAD models (build123d / Python)
+│   ├── cartridge.py              # Flow cell cartridge stack & PCB models
+│   ├── housing.py                # Reader and Pump housings, lids, mounting
+│   ├── nanopore_wafer_mold.py    # Interlocking two-part resin casting mold
+│   ├── torque_cap.py             # M75/M76 ratcheting torque limiter cap
+│   ├── adapters.py               # Luer-lock and threaded NPT fluidic adapters
+│   ├── connectors.py             # USB-C, JST XH, and bulkhead panel mounts
+│   ├── assembly.py               # Full 3D assembly & 3D spline routing sweeps
+│   ├── collision_check.py        # Automated 3D BREP collision & clearance checker
+│   └── constants.py              # Central engineering & physical parameters
+├── MR1/                          # KiCad 10.0 project for Main Reader Board (6-Layer)
+├── Amplifier/                    # KiCad 10.0 project for Cartridge Transimpedance Amp (2-Layer)
+├── firmware/                     # ESP32-S3 C++ firmware (PlatformIO)
+│   ├── include/                  # Pinout mapping, binary protocol framing, web portal
+│   ├── src/hal/                  # AD40xx SPI DMA ADC, MCP4822 DAC, Leak Detector
+│   ├── src/comm/                 # High-speed USB CDC streaming & UART Pump protocol
+│   └── src/web/                  # Embedded Web Portal with WebSocket Oscilloscope
+├── wiring/                       # WireViz electrical and fluidic harness specs
+│   ├── reader_wiring.yaml        # USB-C, motor, and analog pogo wiring harnesses
+│   └── reader_tubing.yaml        # FEP, PharMed BPT, and silicone fluidic tubing specs
+├── tests/                        # Automated unit, CAD bounds, firmware, and E2E tests
+│   ├── test_geometry.py          # Geometric validity and collision regression
+│   ├── test_golden_stl_bounds.py # Dimensional assertions against golden models
+│   ├── test_connector_bounds.py  # Connector mounting dimensional checks
+│   ├── test_firmware_protocol.py # Binary framing, CRC-16, and DAC mapping tests
+│   └── test_exports_e2e.py       # Full deliverables validation (141 files)
+├── scripts/                      # Build, export, and testing automation
+│   ├── export_manager.py         # Universal multi-domain export orchestrator
+│   ├── export_all.sh             # POSIX bash export runner
+│   └── run_e2e_tests.sh          # POSIX bash end-to-end test runner
+├── exports/                      # Generated release deliverables & manifest
+├── requirements.txt              # Pinned Python virtual environment dependencies
+├── setup_env.sh                  # Virtual environment manager (Linux/macOS/Bash)
+├── setup_env.ps1                 # Virtual environment manager (Windows PowerShell)
+├── Makefile                      # Standard project build and export targets
+├── EXPORTS.md                    # Detailed deliverables and ordering documentation
+├── BOM.md                        # Mechanical bill of materials & sourcing links
+└── CASTING.md                    # PDMS/Silicone flow cell casting guidelines
 ```
 
+---
 
-BOM
-Female Luer Fitting Female Luer Thread Style Panel Mount 1/4-28 UNF to Barb, 1/8" (3.2 mm) ID Tubing, White Nylon
-https://www.fluidcontrol24.com/ftllb230-1-female-luer-fitting-female-luer-thread-style-panel-mount-1-4-28-unf-to-barb-1-8-3-2-mm-id-tubing-white-nylon.html?q=Female+Luer+panel+mount&noindex=true
-Article no FTLLB230-1
-	1/4-28 UNF
-	Luer female
-    Colour	Clear
-Tubing size	1/8" (3.2mm)
+## Quick Start & Environment Setup
 
-QTY, 4 for reader and 4 for pump
+### 1. Initialize Python Virtual Environment
 
-Hose connector plastic, L-piece, for hose connections Ø 3mm
-Material 
-Nylon
- Tubing size 
-1/8" (3.2mm)
-The primary benefits of kentSystems L-piece fittings are their robust construction. They offer a cost-effective variant for connecting two hoses at a 90 ° angle.
+The project uses a local virtual environment (`.venv`) for all Python CAD generation, export pipelines, and test suites.
 
-1/8" Hose Barb x Female Lug Natural Polypropylene Bulkhead Luer
-Item 96547
-Out of Stock (On Order)
-$0.54/Each
+**On Windows (PowerShell):**
+```powershell
+.\setup_env.ps1
+```
 
-1/8" Hose Barb x Female Threaded Natural Polypropylene Bulkhead Luer
-Item 96550
-In Stock
-$0.54/Each
+**On Linux / macOS / Git Bash:**
+```bash
+chmod +x setup_env.sh install.sh
+./setup_env.sh
+```
+
+To verify environment health at any time:
+```bash
+./setup_env.sh --check        # or powershell -File .\setup_env.ps1 -Check
+```
+
+### 2. Required External Tools (Optional for specific export domains)
+- **KiCad 10.0 CLI** (`kicad-cli`): Required to generate Gerbers, Drill files, Pick & Place CSVs, BOMs, and PDF schematics.
+- **Graphviz** (`dot`): Required by WireViz for rendering graphical wiring and tubing diagrams.
+- **PlatformIO Core** (`pio`): Required to compile ESP32-S3 firmware binaries.
+
+---
+
+## Deliverables & Export System
+
+The repository features an automated multi-domain export orchestrator (`scripts/export_manager.py`) managed via GNU Make, shell scripts, or npm:
+
+### Common Commands
+
+```bash
+# Export all project deliverables (CAD, KiCad, Wiring, Firmware, and Manifest)
+make export
+
+# Or export specific domains
+make export-cad        # 3D Solids (STEP/STL) & 2D CNC Profiles (DXF)
+make export-kicad      # Gerbers, Drill, POS, BOM, and PDF schematics
+make export-wiring     # WireViz wiring harness and fluidic diagrams
+make export-firmware   # Compile and stage ESP32-S3 firmware binaries
+
+# Verify manifest and deliverables
+make check             # Verify all 141 indexed deliverables exist on disk
+make test              # Run unit tests and CAD collision clearance checks
+make test-e2e          # Run end-to-end deliverables validation test
+```
+
+### Generated Deliverables Inventory (`exports/`)
+- **30 STL Meshes**: Ready for 3D printing (SLA resin molds, TPU pusher plates, PETG housings, and PTFE interposer models).
+- **22 STEP Models**: Parametric BREP solids for mechanical assembly and CAD exchange.
+- **13 DXF Profiles**: 2D profiles for CNC milling polypropylene sheet stock and synchronizing KiCad PCB `Edge.Cuts` (including `Interposer_DXF.dxf` and `Plate_2_Channel_DXF.dxf`).
+- **Fab-Ready PCB Archives**: `MR1_Gerbers.zip` (6-layer main board) and `Amplifier_Gerbers.zip` (2-layer amplifier).
+- **Manufacturing Documentation**: Pick-and-Place (POS) coordinates, BOM CSVs, and multi-sheet schematic PDFs.
+- **Harness Documentation**: WireViz diagrams for internal wiring and 1/8" barb fluidic tubing.
+- **ESP32-S3 Firmware**: Staged `firmware.bin`, `bootloader.bin`, and `partitions.bin`.
+- **SHA-256 Manifest**: `exports/manifest.json` tracks file sizes and cryptographic hashes for all 159 files for drift detection.
+
+See [EXPORTS.md](EXPORTS.md) for full details and PCB fabrication recommendations.
+
+---
+
+## Testing & Verification
+
+The project enforces zero physical interference and strict dimensional fidelity across all hardware interfaces:
+
+```bash
+# Run the complete test suite (Unit Tests, Collision Checks, Firmware Protocol, Parity, and E2E)
+python run_tests.py
+```
+
+### Automated Validation Includes:
+1. **Golden STL & PCB Bounds**: Asserts dimensions of all generated CAD models against benchmark constraints.
+2. **BREP Collision Clearance (6 Independent Suites)**:
+   - Cartridge stack component alignment.
+   - Housing and lid clearances.
+   - M75×8mm external / M76×8mm internal helical thread engagement (0 interference volume).
+   - PCB standoff clearances against fluidic lines.
+   - Internal component clearance (wiring vs. cartridge solids).
+   - Flexible routing collision sweeps against module envelopes.
+3. **Spline Bend Radius Validation**: Computes instantaneous curvature along swept routes and verifies compliance with minimum bend radii (Silicone/FEP tubing $\ge 10\text{ mm}$, Wiring $\ge 10\text{ mm}$).
+4. **Legacy OpenSCAD Parity Suite**: Validates 80x60mm rectangular motherboard, hexagonal carrier frame, circular nanopore carrier, mold modes, lid cutouts, and pump case bosses.
+5. **Firmware Protocol Tests**: CRC-16 integrity, binary packet serialization (`StreamFrame`), pump packet XOR checksums, and DAC voltage-to-code mapping.
+6. **E2E Deliverables Tests**: Validates headers, non-zero file sizes, and SHA-256 hashes of all 159 export deliverables.
+
+---
+
+## Hardware & Electronics
+
+- **MR1 Main Controller Board** (`MR1/`):
+  - 6-Layer stackup with dedicated ground and power planes.
+  - ESP32-S3-WROOM-1 MCU with native high-speed USB CDC.
+  - Dedicated SPI bus for high-speed ADC sampling.
+  - Dual MCP4822 12-bit DACs providing bipolar pore bias voltages (-1.587V to +1.587V) and unblocking pulses.
+  - Conductive weep-hole leak detection sensing on GPIO1.
+- **PTFE Interposer Circuit Board** (`Amplifier/` & `src/cartridge.py`):
+  - 55.0 × 51.962 × 0.8 mm hexagonal substrate fabricated on ultra-low-loss PTFE / Rogers RO4350B.
+  - Physical and electrical barrier dividing Cis (top) and Trans (bottom) microfluidic chambers.
+  - Dual-sided silver chloride (Ag/AgCl) ribbon electrode pads positioned inside the Cis ($30^\circ$) and Trans ($210^\circ$) flow channels.
+  - Central 6.20 × 6.20 mm diamond cutout ($45^\circ$) allowing the silicone gasket protrusion to seal directly around the silicon nanopore wafer.
+  - 6 gold landing pads at $Y = 2.5\text{ mm}$ for gold-plated pogo pin connectivity to the reader instrumentation.
+  - Hermetically clamped between `Cast_Nanopore_Wafer_Gasket` (top) and `Fitted_Amplifier_Gasket` (bottom).
+- **Cartridge Transimpedance Amplifier** (`Amplifier/`):
+  - 2-Layer 0.8 mm ultra-thin board designed for direct insertion into the flow cell stack.
+  - LMP7721 ultra-low input bias current amplifier (sub-femtoampere leakage).
+  - Low-leakage guard rings and driven shields guarding the high-impedance nanopore input node.
+  - Direct connection to flow cell via gold-plated Mill-Max pogo pins.
+
+---
+
+## ESP32-S3 Firmware
+
+Located in `firmware/`, the firmware provides:
+- **Dual-Core Architecture**:
+  - **Core 1**: Dedicated to continuous 100 kHz SPI DMA ADC sampling and high-throughput USB CDC streaming.
+  - **Core 0**: Handles Wi-Fi AP/station management, AsyncWebServer, WebSocket oscilloscope telemetry, and pump control.
+- **High-Throughput Binary Protocol**: Frames of 64 decimated/raw samples packed with sequence IDs, 64-bit microsecond timestamps, and CRC-16 checksums.
+- **Emergency Safety Interlock**: Sub-millisecond interrupt response to weep-moat fluid detection, immediately shutting down peristaltic pumps and zeroing pore bias voltages.
+- **Embedded Web Oscilloscope**: Live HTML5 Canvas visualization accessible via browser over Wi-Fi without needing host drivers.
+
+---
+
+## Fluidic Routing & Mold Casting
+
+- **Standardized Tubing**: All microfluidic connections standardize on **1/8" ID $\times$ 1/4" OD** tubing and 1/8" hose barb panel-mount fittings.
+- **Fluid Lines**:
+  - `TUBE_PUMP`: PharMed BPT (0.12 m) — Buffer reservoir $\to$ Peristaltic pump.
+  - `TUBE_FEED`: FEP (0.22 m) — Pump $\to$ Cis chamber inlet ($210^\circ$).
+  - `TUBE_TRANS_LINE`: PEEK (0.18 m) — Trans chamber outlet ($150^\circ$) $\to$ Waste.
+  - `TUBE_WASTE_LINES` ($\times 2$): Silicone (0.25 m) — Cis outlet ($30^\circ$) and Trans inlet ($330^\circ$).
+- **Gasket Fabrication**: Two-part resin casting mold (`Nanopore_Wafer_Mold_Left` and `Right`) designed for casting degassed PDMS (Sylgard 184) or high-compliance silicone around the silicon nanopore wafer. See [CASTING.md](CASTING.md) for detailed surface preparation, degassing, and curing procedures.
+
+---
+
+## Documentation Index
+
+- [EXPORTS.md](EXPORTS.md): Complete export deliverables catalog, fab ordering specifications, and drift tracking.
+- [TODO.md](TODO.md): Development roadmap, completed porting phases, and firmware architecture.
+- [BOM.md](BOM.md): Mechanical bill of materials, fasteners, fittings, and sheet stock sourcing links.
+- [CASTING.md](CASTING.md): Engineering guide for casting ultra-low-noise PDMS gaskets.
+- [Firmware Documentation](firmware/README.md): Detailed firmware subsystem architecture, pinout, and build instructions.

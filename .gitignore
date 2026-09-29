@@ -12,12 +12,20 @@ clone_retry.log
 fp-info-cache
 *.lck
 
-# Backups
+# Backups & Editor History
 *-backups
 _autosave-*
 \#*#
 .#*
+*.bak
+*.bak*
+*.bak_*
+.history/
+*/.history/
+artifacts/
+*/artifacts/
 Amplifier/_restore_backup*
+Interposer/
 
 # Compressed files
 *.zip
@@ -40,3 +48,13 @@ BOSL2/
 __pycache__/
 *.step
 *.stl
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+*.pyc
+
+# PlatformIO & Embedded Builds
+.pio/
+firmware/.pio/

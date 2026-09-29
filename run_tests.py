@@ -28,7 +28,16 @@ if __name__ == '__main__':
     t3 = load_module('test_connector_bounds', os.path.join(REPO_ROOT, 'tests', 'test_connector_bounds.py'))
     suite.addTests(loader.loadTestsFromModule(t3))
 
-    print(f"Loaded {suite.countTestCases()} unit tests from tests/.")
+    t4 = load_module('test_firmware_protocol', os.path.join(REPO_ROOT, 'tests', 'test_firmware_protocol.py'))
+    suite.addTests(loader.loadTestsFromModule(t4))
+
+    t5 = load_module('test_exports_e2e', os.path.join(REPO_ROOT, 'tests', 'test_exports_e2e.py'))
+    suite.addTests(loader.loadTestsFromModule(t5))
+
+    t6 = load_module('test_legacy_feature_parity', os.path.join(REPO_ROOT, 'tests', 'test_legacy_feature_parity.py'))
+    suite.addTests(loader.loadTestsFromModule(t6))
+
+    print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
     sys.exit(0 if result.wasSuccessful() else 1)

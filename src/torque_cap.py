@@ -40,7 +40,8 @@ def Torque_Cap_Inner():
             Cylinder(radius=thread_r, height=cap_h + 2.0, mode=Mode.SUBTRACT)
 
         # 5. Helical Internal Thread Ridge (swept inward)
-        path = Helix(pitch=pitch, height=cap_h, radius=thread_r)
+        with BuildLine():
+            path = Helix(pitch=pitch, height=cap_h, radius=thread_r)
         with BuildSketch(Plane.XZ) as s:
             with Locations((thread_r, 0)):
                 pts = [

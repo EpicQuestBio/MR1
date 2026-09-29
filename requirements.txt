@@ -1,0 +1,13 @@
+# =============================================================================
+# Sentinel Nanopore Reader (Daemon Pore) ? Python Requirements
+# =============================================================================
+
+# Parametric 3D CAD & 2D Profile Generation
+build123d>=0.5.0
+
+# Electrical Wiring Harness & Fluidic Tubing Documentation
+wireviz>=0.4.1
+graphviz>=0.20
+
+# Embedded Firmware Build & Deployment
+platformio>=6.1.0

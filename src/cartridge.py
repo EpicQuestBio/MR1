@@ -13,31 +13,108 @@ def PogoPinHoles():
     return p.sketch
 
 def PCB_Main_Reader_2D():
-    """Main Reader PCB profile."""
-    with BuildSketch(mode=Mode.PRIVATE) as p:
-        # Base Hexagon matching PCB source of truth
-        add(Hex_Base_Sketch())
+    """Main Reader PCB 2D profile (80 x 60 mm rectangular motherboard).
+    Matches OpenSCAD modules/housing_reader.scad:PCB_Main_Reader_2D.
+    Includes 4 standoff mounting holes, 2 USB-C rear cutouts,
+    1 JST connector clearance cutout, and 4 fluid pass-through holes.
+    """
+    with BuildSketch(mode=Mode.PRIVATE) as s:
+        Rectangle(PCB_W, PCB_L)
 
-        # Central Cutout
-        Circle(radius=CARRIER_DIAM/2.0, mode=Mode.SUBTRACT)
+        # Mounting holes matching lid standoffs (+/- (PCB_W/2 - 2), +/- (PCB_L/2 - 2))
+        for mx in [-PCB_W / 2.0 + 2.0, PCB_W / 2.0 - 2.0]:
+            for my in [-PCB_L / 2.0 + 2.0, PCB_L / 2.0 - 2.0]:
+                with Locations((mx, my)):
+                    Circle(radius=3.2 / 2.0, mode=Mode.SUBTRACT)
 
-        # Pogo Pins
-        add(PogoPinHoles(), mode=Mode.SUBTRACT)
+        # Dual USB-C back edge cutouts (at X = +/-15, Y = 25, size 14 x 10.1 mm)
+        with Locations((-15.0, 25.0), (15.0, 25.0)):
+            Rectangle(14.0, 10.1, mode=Mode.SUBTRACT)
 
-        # Fluid Port Clearances (6mm)
-        for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
-            with Locations(Location((PORT_RADIUS, 0)) * Rotation(a)):
+        # Fluid port clearance holes (D=6mm at PORT_RADIUS=20mm)
+        for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP, ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
+            ang_rad = math.radians(a)
+            with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad))):
                 Circle(radius=3.0, mode=Mode.SUBTRACT)
 
-        # Cutouts for Back Connectors
-        with Locations((0, HEX_DIAM/2.0)):
-            Rectangle(32, 10, mode=Mode.SUBTRACT)
-    return p.sketch
+        # JST vertical connector clearance cutout (centered at [0, -19], size 14 x 10 mm)
+        with Locations((0.0, -19.0)):
+            Rectangle(14.0, 10.0, mode=Mode.SUBTRACT)
 
-def PCB_Rigid_Active():
-    """The Amplifier PCB matching KiCad source of truth (55.0 x 51.962 mm).
-    Features an opened 6.20 x 6.20 mm diamond cutout (rotated 45 deg) matching KiCad Edge.Cuts,
-    providing clean 0.1mm clearance for the fully encapsulated silicone protrusion.
+    return s.sketch
+
+def PCB_Main_Reader():
+    """Main Reader PCB 3D solid (80 x 60 x 1.6 mm FR4 motherboard)."""
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        add(PCB_Main_Reader_2D())
+        extrude(amount=PCB_THICK)
+    return p.part
+
+def Carrier_Frame_Hex():
+    """Hexagonal Carrier Frame (Plate 2 Channel) holding the active PCB.
+    Matches OpenSCAD modules/cartridge.scad:Carrier_Frame_Hex.
+    Hex diameter 60mm with finger grip notches, 28.5 x 38.5 mm central pocket,
+    and 4 fluid pass-through holes (D=4mm).
+    Thickness = 2.6 mm (CARRIER_THICK).
+    """
+    ins_w = 28.0
+    ins_l = 38.0
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        with BuildSketch():
+            add(Hex_Base_Sketch())
+            # Central PCB through-pocket
+            Rectangle(ins_w + 0.5, ins_l + 0.5, mode=Mode.SUBTRACT)
+            # Fluid pass-throughs
+            for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP, ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
+                ang_rad = math.radians(a)
+                with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad))):
+                    Circle(radius=2.0, mode=Mode.SUBTRACT)
+        extrude(amount=CARRIER_THICK)
+    return p.part
+
+def Nanopore_Carrier():
+    """Round Nanopore Carrier PCB (20.0 mm diameter x 0.8 mm thickness).
+    Matches OpenSCAD modules/cartridge.scad:Nanopore_Carrier.
+    Features central 1.5mm chip aperture and lateral tab slots.
+    """
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        with BuildSketch():
+            Circle(radius=CARRIER_DIAM / 2.0)
+            Circle(radius=1.5 / 2.0, mode=Mode.SUBTRACT)
+            for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_IN_BOT]:
+                ang_rad = math.radians(a)
+                with Locations((CARRIER_DIAM / 2.0 * math.cos(ang_rad), CARRIER_DIAM / 2.0 * math.sin(ang_rad))):
+                    Rectangle(4.0, 6.0, rotation=a, mode=Mode.SUBTRACT)
+        extrude(amount=PCB_THIN)
+    return p.part
+
+def Silver_Chloride_Ribbon_Pads(top=True, length=2.0, width=0.8, thickness=0.1):
+    """Silver Chloride (Ag/AgCl) ribbon electrode pads for microfluidic channels.
+    top=True: Top Cis chamber pads along ANGLE_FLUID_IN_TOP (30 deg) at r=12mm and r=17mm.
+    top=False: Bottom Trans chamber pads along ANGLE_FLUID_IN_BOT (210 deg) at r=12mm and r=17mm.
+    """
+    angle = ANGLE_FLUID_IN_TOP if top else ANGLE_FLUID_IN_BOT
+    pad_inner_r = 12.0
+    pad_outer_r = 17.0
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        for r_dist in [pad_inner_r, pad_outer_r]:
+            with Locations(Location((0, 0, 0)) * Rotation(0, 0, angle)):
+                with Locations((r_dist, 0, 0)):
+                    Box(length, width, thickness)
+    return p.part
+
+def PTFE_Interposer(render_electrodes=False):
+    """The PTFE / Rogers RO4350B Interposer Circuit Board (55.0 x 51.962 x 0.8 mm).
+    Serves as the mechanical fluidic partition and low-noise electrical interface
+    between Cis and Trans chambers:
+    - Interfaces with pogo pin connector array on the reader unit
+    - Top surface interfaces with Cast_Nanopore_Wafer_Gasket (Cis fluid chamber)
+    - Bottom surface interfaces with Fitted_Amplifier_Gasket (Trans fluid chamber)
+    - Dual-sided silver chloride (Ag/AgCl) ribbon electrode pads positioned in flow paths
+    - Central opened 6.20 x 6.20 mm diamond cutout (45 deg) for silicone protrusion
+    - 4 fluid pass-through holes at PORT_RADIUS=20mm (d=2.0mm)
+    - Pogo pin landing array at Y=2.5mm (X = +/-1.5, +/-6.5, +/-11.5mm)
+    - Weep duct moisture pass-throughs for early leak detection
     """
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
@@ -49,7 +126,8 @@ def PCB_Rigid_Active():
 
             # Fluid port pass-throughs
             for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
-                with Locations(Location((PORT_RADIUS, 0)) * Rotation(a)):
+                ang_rad = math.radians(a)
+                with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad))):
                     Circle(radius=1.0, mode=Mode.SUBTRACT)
 
             add(PogoPinHoles(), mode=Mode.SUBTRACT)
@@ -60,7 +138,33 @@ def PCB_Rigid_Active():
         with Locations((0, 0, PCB_THIN/2.0)):
             add(Weep_Duct_Holes(height=PCB_THIN + 2.0), mode=Mode.SUBTRACT)
 
+        # Solder mask pad recesses for Ag/AgCl ribbon electrodes
+        # Top pads (Z = PCB_THIN) along 30 deg
+        for r_dist in [12.0, 17.0]:
+            with Locations(Location((0, 0, PCB_THIN)) * Rotation(0, 0, ANGLE_FLUID_IN_TOP)):
+                with Locations((r_dist, 0, 0)):
+                    Box(2.0, 2.0, 0.05, mode=Mode.SUBTRACT)
+                    Box(2.0, 0.8, 0.1, mode=Mode.SUBTRACT)
+
+        # Bottom pads (Z = 0) along 210 deg
+        for r_dist in [12.0, 17.0]:
+            with Locations(Location((0, 0, 0)) * Rotation(0, 0, ANGLE_FLUID_IN_BOT)):
+                with Locations((r_dist, 0, 0)):
+                    Box(2.0, 2.0, 0.05, mode=Mode.SUBTRACT)
+                    Box(2.0, 0.8, 0.1, mode=Mode.SUBTRACT)
+
+        if render_electrodes:
+            # Add Ag/AgCl ribbons
+            with Locations((0, 0, PCB_THIN)):
+                add(Silver_Chloride_Ribbon_Pads(top=True), mode=Mode.ADD)
+            with Locations((0, 0, 0)):
+                add(Silver_Chloride_Ribbon_Pads(top=False), mode=Mode.ADD)
+
     return p.part
+
+# Backward-compatible and functional aliases
+PCB_Rigid_Active = PTFE_Interposer
+Interposer = PTFE_Interposer
 
 def Nanopore_Wafer_Silicon():
     """Solid-state silicon nanopore chip (4.0 x 4.0 x 0.5 mm) rotated 45 degrees.
