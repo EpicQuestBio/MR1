@@ -4,7 +4,7 @@
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
-[![Tests](https://img.shields.io/badge/Tests-43%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-53%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
 The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state / biological nanopore sequencer flow cell, low-current amplifier, and fluidic control system. It integrates high-precision parametric CAD models, low-noise front-end analog electronics, an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
@@ -225,8 +225,28 @@ Located in `firmware/`, the firmware provides:
   - **Core 1**: Dedicated to continuous 100 kHz SPI DMA ADC sampling and high-throughput USB CDC streaming.
   - **Core 0**: Handles Wi-Fi AP/station management, AsyncWebServer, WebSocket oscilloscope telemetry, and pump control.
 - **High-Throughput Binary Protocol**: Frames of 64 decimated/raw samples packed with sequence IDs, 64-bit microsecond timestamps, and CRC-16 checksums.
-- **Emergency Safety Interlock**: Sub-millisecond interrupt response to weep-moat fluid detection, immediately shutting down peristaltic pumps and zeroing pore bias voltages.
+- **USB-C SBU Auto-Polarity Detection**: Dynamic GPIO-matrix sensing on SBU1/SBU2 pins automatically determines clock (SCL) and data (SDA) orientation for I2C communication to external pump modules, working seamlessly regardless of cable flip.
 - **Embedded Web Oscilloscope**: Live HTML5 Canvas visualization accessible via browser over Wi-Fi without needing host drivers.
+
+### Host 100 kHz Streaming DAQ Client (`scripts/daq_client.py`)
+
+A high-performance Python client for acquiring continuous 100 kHz binary telemetry from the Sentinel Reader:
+
+```bash
+# Live acquisition with terminal dashboard and CSV logging
+python scripts/daq_client.py --port COM3 --bias 180.0 --output data.csv
+
+# Run mock simulation mode (generates baseline ionic current & DNA translocation events)
+python scripts/daq_client.py --mock --duration 5.0 --output simulation.csv
+
+# Execute SBU I2C polarity auto-detection and start pump
+python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
+```
+
+- **Binary Frame Synchronization**: Synchronizes on `"SENT"` magic word (`0x53454E54` / little-endian `b"TNES"`).
+- **CRC-16-CCITT Verification**: 100% integrity validation on every 146-byte packet.
+- **Pore Current Conversion**: Converts differential 16-bit counts to Amperes ($I_{\text{pore}} = V_{\text{adc}} / R_f$, default $R_f = 1\text{ G}\Omega \implies 1\text{ V}/1\text{ nA}$).
+- **Real-Time Telemetry Dashboard**: Live sample rate (kS/s), data throughput (KB/s), dropped frame count, RMS current noise, pump status, and leak monitoring.
 
 ---
 

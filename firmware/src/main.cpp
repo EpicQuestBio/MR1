@@ -16,6 +16,7 @@
 #include "hal/leak_detector.h"
 #include "comm/pump_uart.h"
 #include "comm/usb_cdc_stream.h"
+#include "comm/sbu_i2c_detect.h"
 #include "web/web_portal.h"
 
 // Task handles
@@ -87,7 +88,11 @@ void setup() {
         Dac.emergency_zero();
     });
 
-    // 6. Initialize Wi-Fi Access Point & Web Portal
+    // 6. Initialize USB-C SBU Auto-Orientation & I2C Polarity Detection
+    SbuDetector.begin();
+    SbuDetector.detect_orientation();
+
+    // 7. Initialize Wi-Fi Access Point & Web Portal
     Portal.begin();
 
     // 7. Spawn dedicated FreeRTOS tasks pinned to respective Xtensa cores

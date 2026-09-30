@@ -37,6 +37,9 @@ if __name__ == '__main__':
     t6 = load_module('test_legacy_feature_parity', os.path.join(REPO_ROOT, 'tests', 'test_legacy_feature_parity.py'))
     suite.addTests(loader.loadTestsFromModule(t6))
 
+    t7 = load_module('test_daq_client', os.path.join(REPO_ROOT, 'tests', 'test_daq_client.py'))
+    suite.addTests(loader.loadTestsFromModule(t7))
+
     print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

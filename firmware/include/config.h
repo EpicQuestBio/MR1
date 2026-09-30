@@ -50,3 +50,12 @@
 // Safety Thresholds
 // =============================================================================
 #define LEAK_DEBOUNCE_MS               10   // Minimum trip duration to trigger cutoff
+
+// =============================================================================
+// USB-C SBU & I2C Auto-Polarity Configuration
+// =============================================================================
+#define I2C_SBU_FREQUENCY_HZ       100000   // Standard-mode 100 kHz I2C
+#define I2C_TARGET_PUMP_ADDR         0x38   // Default pump controller / GPIO expander
+#define I2C_TARGET_MOTOR_ADDR        0x60   // Alternate stepper / DC motor driver
+#define I2C_TARGET_SENSOR_ADDR       0x48   // Pressure / temperature sensor
+#define SBU_PROBE_TIMEOUT_MS           50   // I2C probe timeout

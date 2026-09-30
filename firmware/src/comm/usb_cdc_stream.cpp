@@ -8,6 +8,7 @@
 #include "hal/dac_mcp4822.h"
 #include "hal/leak_detector.h"
 #include "comm/pump_uart.h"
+#include "comm/sbu_i2c_detect.h"
 
 UsbCdcStream UsbStream;
 
@@ -84,6 +85,9 @@ void UsbCdcStream::execute_command(const String& cmd) {
         Serial.println(F("PUMP:STOP              - Stop peristaltic pump"));
         Serial.println(F("PUMP:ESTOP             - Emergency stop pump"));
         Serial.println(F("LEAK:RESET             - Reset latched leak error"));
+        Serial.println(F("SBU:DETECT             - Auto-detect USB-C SBU I2C polarity"));
+        Serial.println(F("SBU:STATUS             - Get SBU orientation & active pins"));
+        Serial.println(F("SBU:SCAN               - Scan SBU I2C bus for peripherals"));
         Serial.println(F("STATUS?                - Get JSON status telemetry"));
         return;
     }
@@ -168,6 +172,35 @@ void UsbCdcStream::execute_command(const String& cmd) {
         return;
     }
 
+    if (trimmed.equalsIgnoreCase("SBU:DETECT")) {
+        SbuOrientation orient = SbuDetector.detect_orientation();
+        Serial.printf("OK:SBU:%s\n", SbuDetector.get_orientation_str());
+        return;
+    }
+
+    if (trimmed.equalsIgnoreCase("SBU:STATUS")) {
+        Serial.printf("{\"sbu_orient\":\"%s\",\"scl_gpio\":%d,\"sda_gpio\":%d,\"connected\":%s}\n",
+            SbuDetector.get_orientation_str(),
+            SbuDetector.get_scl_pin(),
+            SbuDetector.get_sda_pin(),
+            SbuDetector.is_connected() ? "true" : "false"
+        );
+        return;
+    }
+
+    if (trimmed.equalsIgnoreCase("SBU:SCAN")) {
+        std::vector<uint8_t> devs = SbuDetector.scan_bus();
+        Serial.printf("{\"sbu_orient\":\"%s\",\"device_count\":%u,\"devices\":[",
+            SbuDetector.get_orientation_str(),
+            (unsigned int)devs.size()
+        );
+        for (size_t i = 0; i < devs.size(); i++) {
+            Serial.printf("\"0x%02X\"%s", devs[i], (i + 1 < devs.size()) ? "," : "");
+        }
+        Serial.println("]}");
+        return;
+    }
+
     if (trimmed.equalsIgnoreCase("STATUS?")) {
         send_status_json();
         return;
@@ -177,7 +210,7 @@ void UsbCdcStream::execute_command(const String& cmd) {
 }
 
 void UsbCdcStream::send_status_json() {
-    Serial.printf("{\"bias_mv\":%.2f,\"pulse_active\":%s,\"sampling\":%s,\"streaming\":%s,\"rate_hz\":%lu,\"leak\":%s,\"pump_conn\":%s,\"pump_run\":%s,\"pump_rpm\":%u,\"frames\":%lu,\"dropped\":%lu}\n",
+    Serial.printf("{\"bias_mv\":%.2f,\"pulse_active\":%s,\"sampling\":%s,\"streaming\":%s,\"rate_hz\":%lu,\"leak\":%s,\"pump_conn\":%s,\"pump_run\":%s,\"pump_rpm\":%u,\"sbu_orient\":\"%s\",\"frames\":%lu,\"dropped\":%lu}\n",
         Dac.get_current_bias_mv(),
         Dac.is_pulse_active() ? "true" : "false",
         Adc.is_sampling() ? "true" : "false",
@@ -187,6 +220,7 @@ void UsbCdcStream::send_status_json() {
         Pump.is_connected() ? "true" : "false",
         Pump.is_running() ? "true" : "false",
         Pump.get_speed(),
+        SbuDetector.get_orientation_str(),
         (unsigned long)Adc.get_total_frames(),
         (unsigned long)Adc.get_dropped_frames()
     );

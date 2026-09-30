@@ -32,6 +32,13 @@
 #define PIN_USB_DP          20  // USB D+ (Net: /Power/D+)
 
 // =============================================================================
+// USB-C Sideband Use (SBU) & I2C Auto-Polarity Interface
+// =============================================================================
+#define PIN_USB_SBU1        12  // USB-C SBU1 (Pin A8)
+#define PIN_USB_SBU2        13  // USB-C SBU2 (Pin B8)
+#define PIN_SBU_MUX_SEL     14  // Hardware cross-multiplexer select (optional)
+
+// =============================================================================
 // External Peristaltic Pump Port (J22 - B4B-PH Connector)
 // =============================================================================
 #define PIN_PUMP_TX         17  // UART TX to Pump Module (J22 Pin 2)

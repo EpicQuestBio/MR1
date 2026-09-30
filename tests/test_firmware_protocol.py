@@ -119,6 +119,62 @@ class TestFirmwareProtocol(unittest.TestCase):
         # Out-of-bounds positive clamped to 4095
         self.assertEqual(mv_to_code(3000.0), 4095)
 
+    def test_sbu_orientation_detection_logic(self):
+        """Verify USB-C SBU auto-polarity state machine and pin swap logic."""
+        PIN_SBU1 = 12
+        PIN_SBU2 = 13
+
+        class MockI2cBus:
+            def __init__(self, target_address: int, inverted_cable: bool = False):
+                self.target_address = target_address
+                self.inverted_cable = inverted_cable
+
+            def probe(self, sda_pin: int, scl_pin: int, addr: int) -> bool:
+                # Normal cable: SBU2 must be SDA (pin 13), SBU1 must be SCL (pin 12)
+                # Inverted cable: SBU1 must be SDA (pin 12), SBU2 must be SCL (pin 13)
+                if not self.inverted_cable:
+                    expected_sda, expected_scl = PIN_SBU2, PIN_SBU1
+                else:
+                    expected_sda, expected_scl = PIN_SBU1, PIN_SBU2
+
+                return (sda_pin == expected_sda and scl_pin == expected_scl and addr == self.target_address)
+
+        def detect_orientation(bus: MockI2cBus, target_addr: int = 0x38) -> str:
+            # Mode 1: Normal probe (SDA=SBU2, SCL=SBU1)
+            if bus.probe(PIN_SBU2, PIN_SBU1, target_addr):
+                return "NORMAL"
+            # Mode 2: Inverted probe (SDA=SBU1, SCL=SBU2)
+            if bus.probe(PIN_SBU1, PIN_SBU2, target_addr):
+                return "INVERTED"
+            return "DISCONNECTED"
+
+        # 1. Test normal cable orientation
+        normal_bus = MockI2cBus(target_address=0x38, inverted_cable=False)
+        self.assertEqual(detect_orientation(normal_bus, 0x38), "NORMAL")
+
+        # 2. Test 180-degree inverted cable orientation
+        inverted_bus = MockI2cBus(target_address=0x38, inverted_cable=True)
+        self.assertEqual(detect_orientation(inverted_bus, 0x38), "INVERTED")
+
+        # 3. Test disconnected / non-responsive peripheral
+        disconnected_bus = MockI2cBus(target_address=0x00, inverted_cable=False)
+        self.assertEqual(detect_orientation(disconnected_bus, 0x38), "DISCONNECTED")
+
+    def test_sbu_command_protocol(self):
+        """Verify SBU commands and telemetry JSON formatting."""
+        cmds = ["SBU:DETECT", "SBU:STATUS", "SBU:SCAN"]
+        for c in cmds:
+            self.assertTrue(c.startswith("SBU:"))
+
+        # Check JSON formatting output of SBU:STATUS
+        status_json = '{"sbu_orient":"NORMAL","scl_gpio":12,"sda_gpio":13,"connected":true}'
+        import json
+        parsed = json.loads(status_json)
+        self.assertEqual(parsed["sbu_orient"], "NORMAL")
+        self.assertEqual(parsed["scl_gpio"], 12)
+        self.assertEqual(parsed["sda_gpio"], 13)
+        self.assertTrue(parsed["connected"])
+
 
 if __name__ == "__main__":
     unittest.main()

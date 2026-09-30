@@ -267,4 +267,56 @@ This document outlines the step-by-step strategy for porting the Sentinel Nanopo
     - 43 / 43 tests pass (100% green).
     - 0 collisions across all 6 physical clearance suites.
 
+## 20. USB-C SBU Auto-Orientation & I2C Polarity Detection (`firmware/src/comm/sbu_i2c_detect.cpp`)
+- [x] Configure SBU pinout in firmware (`firmware/include/pinout.h`):
+    - `PIN_USB_SBU1` (GPIO12), `PIN_USB_SBU2` (GPIO13), and optional hardware `PIN_SBU_MUX_SEL` (GPIO14).
+- [x] Define I2C SBU timing & target addresses (`firmware/include/config.h`):
+    - 100 kHz standard-mode I2C frequency, probe timeouts, target addresses (`0x38`, `0x60`, `0x48`).
+- [x] Implement SBU Auto-Orientation State Machine (`firmware/src/comm/sbu_i2c_detect.h` / `.cpp`):
+    - `SbuI2cDetector` class with dynamic ESP32-S3 GPIO-matrix mapping.
+    - Probes Normal orientation (`SBU2 = SDA`, `SBU1 = SCL`) vs Inverted 180° orientation (`SBU1 = SDA`, `SBU2 = SCL`).
+    - Recovers gracefully from bus timeouts and reports `NORMAL`, `INVERTED`, `DISCONNECTED`, or `UNKNOWN`.
+    - Integrated full address bus scan (`scan_bus()`) across `0x01` to `0x7F`.
+- [x] Integrate SBU CLI Commands into USB CDC Streamer (`firmware/src/comm/usb_cdc_stream.cpp`):
+    - Added `SBU:DETECT`, `SBU:STATUS`, and `SBU:SCAN` commands.
+    - Included SBU connection status and orientation in `STATUS?` JSON telemetry.
+- [x] Integrate SBU Detection into Boot Sequence (`firmware/src/main.cpp`):
+    - `SbuDetector.begin()` and initial auto-orientation probe run in `setup()`.
+- [x] Expand Unit Tests (`tests/test_firmware_protocol.py`):
+    - Added `test_sbu_orientation_detection_logic` and `test_sbu_command_protocol`.
+
+## 21. High-Speed 100 kHz Streaming Host DAQ Client (`scripts/daq_client.py`)
+- [x] Implement High-Throughput Binary Telemetry Consumer (`scripts/daq_client.py`):
+    - Native USB CDC virtual serial connection (921,600+ baud).
+    - Little-endian frame synchronization on `"SENT"` magic word (`0x53454E54` -> `b"TNES"`).
+    - CRC-16-CCITT packet verification matching firmware polynomial (`0x1021`, init `0xFFFF`).
+    - Real-time frame sequence continuity and drop tracking.
+- [x] Physical Nanopore Current Calculation & Formatting:
+    - Mathematical conversion from 16-bit differential counts to Amperes ($I_{\text{pore}} = V_{\text{adc}} / R_f$).
+    - Transimpedance feedback resistor scaling ($1\text{ G}\Omega \implies 1\text{ nA}/1\text{ V}$).
+    - Automatic engineering unit formatting (pA, nA, $\mu$A, mA).
+- [x] Live Terminal Dashboard & Logging:
+    - Real-time CLI telemetry: kS/s sample rate, KB/s bandwidth, packet drops, mean $I_{\text{pore}}$, RMS noise, pump and leak flags.
+    - High-speed logging to CSV (`timestamp_us,frame_index,sample_in_frame,raw_adc,current_pa,status_flags`) or raw binary (`.bin`).
+- [x] High-Fidelity Mock Simulation Mode (`--mock` / `--sim`):
+    - Generates realistic baseline ionic pore currents with noise and simulated transient DNA translocation blockade events (~30% drop, 250 $\mu$s).
+    - Emulates all firmware commands for off-target validation and CI.
+- [x] Comprehensive DAQ Client Unit & Integration Tests (`tests/test_daq_client.py`):
+    - 8 / 8 tests validating CRC16, pack/unpack, corruption rejection, math conversions, mock serial commands, and end-to-end streaming.
+- [x] Full Project Test Suite Integration (`run_tests.py`):
+    - Expanded test suite to **53 passing tests** (100% green).
+
+## 22. External Pump Controller KiCad Board Architecture (Stretch Goal Roadmap)
+- [ ] Mechanical Form Factor:
+    - Sized to fit `Housing_Pump_Case` floor plate ($68.0 \times 88.0\text{ mm}$) with M3 mounting holes matching internal standoffs.
+- [ ] USB-C Cable Interface & Power Delivery:
+    - USB-C receptacle accepting power and data from Reader module.
+    - SBU1 / SBU2 lines routed to local I2C slave interface.
+    - Hardware USB-PD Sink controller (e.g., CH224K or FUSB302) configured to negotiate 9V or 12V VBUS for pump motors.
+- [ ] Motor Drive Stages:
+    - Dual H-bridge motor drivers (e.g., TI DRV8837 or DRV8871) or stepper drivers (TMC2209) for peristaltic pumps.
+    - Hardware emergency disable input wired directly to leak sensor cutoff.
+- [ ] Peripheral Sensors:
+    - I2C pressure transducer / bubble sensor interfaces.
+
 
