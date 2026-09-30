@@ -22,6 +22,7 @@ _autosave-*
 *.bak_*
 .history/
 */.history/
+**/.history/
 artifacts/
 */artifacts/
 Amplifier/_restore_backup*
@@ -58,3 +59,4 @@ env/
 # PlatformIO & Embedded Builds
 .pio/
 firmware/.pio/
+MR1_firmware/.pio/

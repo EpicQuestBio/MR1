@@ -18,7 +18,8 @@ from src.cartridge import (
     Plate_1_Base_Hex,
     Plate_3_Top_Hex,
     Pressure_Puck,
-    Nanopore_Wafer_Silicon
+    Nanopore_Wafer_Silicon,
+    PCB_Pump_Controller
 )
 from src.housing import (
     Housing_Pump_Case,
@@ -212,5 +213,21 @@ class TestGoldenSTLAndPCBBounds(unittest.TestCase):
         self.assertAlmostEqual(vol, 0.0, delta=0.001,
                                msg=f"Mated mold halves have collision volume: {vol} mm^3")
 
+    def test_pump_pcb_bounds(self):
+        """Verify PCB_Pump_Controller matches 88.0 x 88.0 x 1.6 mm bounds and fits in Housing_Pump_Case bucket."""
+        pcb = PCB_Pump_Controller()
+        self.assertTrue(pcb.is_valid)
+        bb = pcb.bounding_box()
+        self.assertAlmostEqual(bb.size.X, 88.0, delta=0.1)
+        self.assertAlmostEqual(bb.size.Y, 88.0, delta=0.1)
+        self.assertAlmostEqual(bb.size.Z, 1.6, delta=0.05)
+
+        # Check clearance inside Housing_Pump_Case bucket (90 x 90 mm)
+        bucket_w = BASE_W - 2 * WALL  # 90.0 mm
+        bucket_l = BASE_L - 2 * WALL  # 90.0 mm
+        self.assertLess(bb.size.X, bucket_w, "Pump PCB must fit within Housing_Pump_Case internal bucket")
+        self.assertLess(bb.size.Y, bucket_l, "Pump PCB must fit within Housing_Pump_Case internal bucket")
+
 if __name__ == '__main__':
     unittest.main()
+

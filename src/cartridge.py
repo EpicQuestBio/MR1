@@ -50,6 +50,48 @@ def PCB_Main_Reader():
         extrude(amount=PCB_THICK)
     return p.part
 
+def PCB_Pump_Controller_2D():
+    """Pump Controller & USB-PD Hub PCB 2D profile (88 x 88 mm square).
+    Matches Housing_Pump_Case bucket (90 x 90 mm) and mounting pattern.
+    Includes:
+    - 4 corner mounting holes (D=3.2mm) at (+/-38.0, +/-38.0)
+    - 2 rear USB-C edge cutouts at X = +/-15.0 mm, Y = 44.0 mm (matching Housing_Pump_Case cutouts)
+    - 2 peristaltic pump motor cutouts at X = +/-25.0 mm, Y = 20.0 mm
+    - 2 pressure transducer clearance holes at X = +/-32.0 mm, Y = 0.0 mm
+    """
+    with BuildSketch(mode=Mode.PRIVATE) as s:
+        Rectangle(88.0, 88.0)
+        # Fillet corners with 2.0 mm radius
+        fillet(s.vertices(), radius=2.0)
+
+        # 4 corner mounting holes
+        for mx in [-38.0, 38.0]:
+            for my in [-38.0, 38.0]:
+                with Locations((mx, my)):
+                    Circle(radius=3.2 / 2.0, mode=Mode.SUBTRACT)
+
+        # Dual USB-C back edge cutouts at X = +/-15, Y = 44.0 (size 14 x 10 mm)
+        with Locations((-15.0, 44.0), (15.0, 44.0)):
+            Rectangle(14.0, 10.0, mode=Mode.SUBTRACT)
+
+        # Peristaltic pump motor cutouts at X = +/-25, Y = 20
+        for px in [-25.0, 25.0]:
+            with Locations((px, 20.0)):
+                Circle(radius=PUMP_MOUNT_D / 2.0, mode=Mode.SUBTRACT)
+
+        # Pressure transducer fluid clearance holes at X = +/-32, Y = 0
+        with Locations((-32.0, 0.0), (32.0, 0.0)):
+            Circle(radius=6.35 / 2.0, mode=Mode.SUBTRACT)
+
+    return s.sketch
+
+def PCB_Pump_Controller():
+    """Pump Controller & USB-PD Hub PCB 3D solid (88 x 88 x 1.6 mm FR4)."""
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        add(PCB_Pump_Controller_2D())
+        extrude(amount=1.6)
+    return p.part
+
 def Carrier_Frame_Hex():
     """Hexagonal Carrier Frame (Plate 2 Channel) holding the active PCB.
     Matches OpenSCAD modules/cartridge.scad:Carrier_Frame_Hex.

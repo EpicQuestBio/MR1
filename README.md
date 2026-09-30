@@ -4,7 +4,7 @@
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
-[![Tests](https://img.shields.io/badge/Tests-53%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-54%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
 The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state / biological nanopore sequencer flow cell, low-current amplifier, and fluidic control system. It integrates high-precision parametric CAD models, low-noise front-end analog electronics, an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
@@ -31,7 +31,18 @@ The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state 
                        |           Host PC / Laptop            |
                        |  (High-Throughput Binary Telemetry)   |
                        +-------------------+-------------------+
-                                           | Native USB CDC (100 kHz continuous)
+                                           | J1_HOST (USB-C Cable: USB-PD Sink + High-Speed Data)
+                                           v
+                       +---------------------------------------+
+                       |      Pump Module Board (Pump/)        |
+                       |  - STUSB4500 Autonomous USB-PD Sink   |
+                       |  - TS3USB221 USB 2.0 Streaming Pass   |
+                       |  - STM32G431 Control MCU @ 170 MHz    |
+                       |  - Dual Honeywell ABP2 Pressure Sens  |
+                       |  - Dual DRV8837C Peristaltic Drivers  |
+                       |  - Clean Regulated 5V Output Filter   |
+                       +-------------------+-------------------+
+                                           | J2_MR1 (USB-C Link: +5V_MR1_CLEAN + SBU I2C + USB)
                                            v
                        +---------------------------------------+
                        |         ESP32-S3 MCU (MR1)            |
@@ -39,11 +50,11 @@ The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state 
                        |  Core 0: Web Server, Leak & Pump Ctrl |
                        +---------+-------------------+---------+
                                  |                   |
-            SPI Bus (100 kHz)    |                   | UART (J22)
+            SPI Bus (100 kHz)    |                   | UART (J22) / SBU I2C
                                  v                   v
      +-----------------------------+        +--------------------------+
-     |     AD40xx 16/18-Bit ADC    |        |  External Pump Module    |
-     |   LMP7721 Ultra-Low-Noise   |        |  (Dual Peristaltic Ditao)|
+     |     AD40xx 16/18-Bit ADC    |        |  Dual Peristaltic Pumps  |
+     |   LMP7721 Ultra-Low-Noise   |        |  (Cis & Trans Chambers)  |
      |     Cartridge Amplifier     |        +--------------------------+
      +--------------+--------------+
                     | Gold Pogo Pins (Ultra-low noise shielded)
@@ -75,7 +86,8 @@ daemon-pore/
 │   └── constants.py              # Central engineering & physical parameters
 ├── MR1/                          # KiCad 10.0 project for Main Reader Board (6-Layer)
 ├── Amplifier/                    # KiCad 10.0 project for Cartridge Transimpedance Amp (2-Layer)
-├── firmware/                     # ESP32-S3 C++ firmware (PlatformIO)
+├── Pump/                         # KiCad 10.0 project for Pump Controller & USB-PD Hub (4-Layer)
+├── MR1_firmware/                 # ESP32-S3 C++ firmware (PlatformIO)
 │   ├── include/                  # Pinout mapping, binary protocol framing, web portal
 │   ├── src/hal/                  # AD40xx SPI DMA ADC, MCP4822 DAC, Leak Detector
 │   ├── src/comm/                 # High-speed USB CDC streaming & UART Pump protocol
@@ -215,6 +227,20 @@ python run_tests.py
   - LMP7721 ultra-low input bias current amplifier (sub-femtoampere leakage).
   - Low-leakage guard rings and driven shields guarding the high-impedance nanopore input node.
   - Direct connection to flow cell via gold-plated Mill-Max pogo pins.
+- **Pump Controller & USB-PD Hub Board** (`Pump/` & `src/cartridge.py`):
+  - 4-Layer 1.6 mm board (88.0 × 88.0 mm) fitting within the `Housing_Pump_Case` internal pocket.
+  - **Dual USB-C Receptacles**:
+    - `J1_HOST` at $X = -15.0\text{ mm}$ (top edge): USB-PD Sink + Host laptop data interface.
+    - `J2_MR1` at $X = +15.0\text{ mm}$ (top edge): Regulated clean 5V power output to MR1 Reader + SBU I2C control link.
+    - Perfectly aligned to the $12 \times 6\text{ mm}$ cutouts on `Housing_Pump_Case` rear wall ($Y = 55.0\text{ mm}$).
+  - **High-Speed USB 2.0 Pass-Through**: TI TS3USB221 multiplexer (>1.1 GHz bandwidth, insertion loss < 0.5 dB) passes 100 kHz continuous ADC telemetry straight through to the laptop without MCU latency.
+  - **STUSB4500 Autonomous USB-PD Sink**: Automatically negotiates 9V/12V/15V/20V profiles from USB-PD power sources.
+  - **Clean +5V Output Subsystem**: Synchronous step-down buck converter (36V/3A) + TPS22916 soft-start load switch + LC $\pi$-filter ensuring ultra-low ripple 5V power for MR1's analog frontend.
+  - **STM32G431CBU6 Control MCU**: ARM Cortex-M4 @ 170 MHz orchestrating precision TIM1 PWM peristaltic velocity control, I2C telemetry, and hardware emergency stop gating.
+  - **Dual Honeywell TruStability / ABP2 Pressure Transducers**:
+    - Transducer 1 (0-15 psi gauge): Real-time pressure monitoring on Cis chamber feed line.
+    - Transducer 2 (0-5 psi gauge): Real-time pressure monitoring on Trans chamber recirculation line.
+  - **Dual TI DRV8837C Motor Drivers**: 1.8A peak H-bridge drivers with hardware shutdown interlock directly connected to the weep moat leak detector.
 
 ---
 

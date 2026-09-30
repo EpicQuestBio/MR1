@@ -13,7 +13,7 @@ from src.cartridge import (
     Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck,
     Nanopore_Wafer_Silicon, PCB_Main_Reader_2D, PCB_Main_Reader,
     Carrier_Frame_Hex, Nanopore_Carrier, PTFE_Interposer, Interposer,
-    Silver_Chloride_Ribbon_Pads
+    Silver_Chloride_Ribbon_Pads, PCB_Pump_Controller_2D, PCB_Pump_Controller
 )
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
@@ -54,6 +54,7 @@ def export_all():
         "Housing_Pump_Lid": Housing_Pump_Lid(),
         "Housing_Case_Reader": Housing_Case_Reader(),
         "Housing_Lid_Reader": Housing_Lid_Reader(),
+        "PCB_Pump_Controller": PCB_Pump_Controller(),
         "JST_XH_2_Pin_Header": JST_XH_2_Pin_Header(),
         "JST_XH_2_Pin_Plug": JST_XH_2_Pin_Plug(),
         "USB_C_Panel_Mount": USB_C_Panel_Mount(),
@@ -67,6 +68,7 @@ def export_all():
         "Interposer_DXF": parts_3d["PTFE_Interposer"],
         "PCB_Interposer_DXF": parts_3d["PTFE_Interposer"],
         "PCB_Main_Reader_DXF": PCB_Main_Reader_2D(),
+        "PCB_Pump_Controller_DXF": PCB_Pump_Controller_2D(),
         "Plate_1_Base_DXF": parts_3d["Plate_1_Base_Hex"],
         "Plate_2_Channel_DXF": parts_3d["Carrier_Frame_Hex"],
         "Plate_3_Top_DXF": parts_3d["Plate_3_Top_Hex"],

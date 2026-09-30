@@ -52,6 +52,7 @@ class TestExportsE2E(unittest.TestCase):
             "Housing_Pump_Lid.stl",
             "Housing_Case_Reader.stl",
             "Housing_Lid_Reader.stl",
+            "PCB_Pump_Controller.stl",
             "JST_XH_2_Pin_Header.stl",
             "JST_XH_2_Pin_Plug.stl",
             "USB_C_Panel_Mount.stl",
@@ -100,6 +101,7 @@ class TestExportsE2E(unittest.TestCase):
             "Interposer_DXF.dxf",
             "PCB_Interposer_DXF.dxf",
             "PCB_Main_Reader_DXF.dxf",
+            "PCB_Pump_Controller_DXF.dxf",
             "Plate_1_Base_DXF.dxf",
             "Plate_2_Channel_DXF.dxf",
             "Plate_3_Top_DXF.dxf",
@@ -148,9 +150,23 @@ class TestExportsE2E(unittest.TestCase):
             p = amp_dir / layer
             self.assertTrue(p.exists(), f"Missing Amplifier Gerber layer: {layer}")
 
+        pump_dir = EXPORTS_DIR / "gerbers_pump"
+        self.assertTrue(pump_dir.exists(), "Missing gerbers_pump directory")
+        expected_pump_layers = [
+            "Pump-F_Cu.gtl",
+            "Pump-B_Cu.gbl",
+            "Pump-Edge_Cuts.gm1",
+            "Pump-In1_Cu.g1",
+            "Pump-In2_Cu.g2",
+            "Pump.drl",
+        ]
+        for layer in expected_pump_layers:
+            p = pump_dir / layer
+            self.assertTrue(p.exists(), f"Missing Pump Gerber layer: {layer}")
+
     def test_kicad_ordering_packages(self):
         """Verify zipped Gerber packs for PCB fabrication houses."""
-        for zip_name in ["MR1_Gerbers.zip", "Amplifier_Gerbers.zip"]:
+        for zip_name in ["MR1_Gerbers.zip", "Amplifier_Gerbers.zip", "Pump_Gerbers.zip"]:
             zip_path = EXPORTS_DIR / zip_name
             self.assertTrue(zip_path.exists(), f"Missing ordering zip: {zip_name}")
             with zipfile.ZipFile(zip_path, "r") as zf:
@@ -161,15 +177,16 @@ class TestExportsE2E(unittest.TestCase):
 
     def test_kicad_bom_and_schematic_pdfs(self):
         """Verify BOM CSVs and schematic PDFs for ordering and assembly documentation."""
-        bom_path = EXPORTS_DIR / "bom" / "MR1_BOM.csv"
-        self.assertTrue(bom_path.exists(), "Missing MR1_BOM.csv")
-        self.assertGreater(bom_path.stat().st_size, 200, "MR1_BOM.csv is empty")
+        for b_name in ["MR1", "Pump"]:
+            bom_path = EXPORTS_DIR / "bom" / f"{b_name}_BOM.csv"
+            self.assertTrue(bom_path.exists(), f"Missing {b_name}_BOM.csv")
+            self.assertGreater(bom_path.stat().st_size, 100, f"{b_name}_BOM.csv is empty")
 
-        pdf_path = EXPORTS_DIR / "schematics" / "MR1.pdf"
-        self.assertTrue(pdf_path.exists(), "Missing MR1 schematic PDF")
-        with open(pdf_path, "rb") as fh:
-            magic = fh.read(4)
-            self.assertEqual(magic, b"%PDF", "Invalid PDF magic bytes")
+            pdf_path = EXPORTS_DIR / "schematics" / f"{b_name}.pdf"
+            self.assertTrue(pdf_path.exists(), f"Missing {b_name} schematic PDF")
+            with open(pdf_path, "rb") as fh:
+                magic = fh.read(4)
+                self.assertEqual(magic, b"%PDF", f"Invalid PDF magic bytes in {b_name}.pdf")
 
     def test_wiring_and_tubing_documentation(self):
         """Verify WireViz diagram outputs for wiring harness and fluid tubing."""

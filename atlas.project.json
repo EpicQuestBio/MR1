@@ -39,6 +39,18 @@
         "loss_tangent": 0.02,
         "thickness_mm": 1.6
       }
+    },
+    "pump": {
+      "name": "Sentinel Pump & USB-PD Hub",
+      "path": "Pump/Pump.kicad_pcb",
+      "schematic_path": "Pump/Pump.kicad_sch",
+      "role": "USB Power Delivery Sink, Clean 5V Output, STM32 Fluidic Pump Controller & Pressure Monitoring",
+      "substrate": {
+        "material": "FR4 High-TG",
+        "er": 4.3,
+        "loss_tangent": 0.02,
+        "thickness_mm": 1.6
+      }
     }
   },
   "mechanical": {

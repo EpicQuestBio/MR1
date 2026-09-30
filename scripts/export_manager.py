@@ -110,6 +110,14 @@ def export_kicad(verbose=True):
             "pos_dir": EXPORTS_DIR / "pos_amplifier",
             "zip_name": "Amplifier_Gerbers.zip",
         },
+        {
+            "name": "Pump",
+            "pcb": REPO_ROOT / "Pump" / "Pump.kicad_pcb",
+            "sch": REPO_ROOT / "Pump" / "Pump.kicad_sch",
+            "gerber_dir": EXPORTS_DIR / "gerbers_pump",
+            "pos_dir": EXPORTS_DIR / "pos_pump",
+            "zip_name": "Pump_Gerbers.zip",
+        },
     ]
 
     schematics_dir = EXPORTS_DIR / "schematics"
@@ -199,7 +207,7 @@ def export_firmware(verbose=True):
         print("  [WARN] Warning: PlatformIO (pio) not found. Skipping firmware build.")
         return False
 
-    fw_dir = REPO_ROOT / "firmware"
+    fw_dir = REPO_ROOT / "MR1_firmware" if (REPO_ROOT / "MR1_firmware").exists() else REPO_ROOT / "firmware"
     out_fw_dir = EXPORTS_DIR / "firmware"
     out_fw_dir.mkdir(parents=True, exist_ok=True)
 
