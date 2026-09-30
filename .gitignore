@@ -20,13 +20,16 @@ _autosave-*
 *.bak
 *.bak*
 *.bak_*
+.history
 .history/
 */.history/
 **/.history/
 artifacts/
 */artifacts/
 Amplifier/_restore_backup*
-Interposer/
+Amplifier/*-backups/
+Interposer/_restore_backup*
+Interposer/*-backups/
 
 # Compressed files
 *.zip

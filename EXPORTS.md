@@ -65,34 +65,44 @@ npm test              # Runs full test suite
 
 ```
 exports/
-??? manifest.json                  # SHA-256 integrity catalog of all deliverables
-??? MR1_Gerbers.zip                # Fab-ready zip archive for MR1 main board
-??? Amplifier_Gerbers.zip          # Fab-ready zip archive for cartridge amplifier
-?
-??? *.stl                          # 3D printable meshes (22 components)
-??? *.step                         # Parametric STEP solids for CAD exchange (22 components)
-??? *.dxf                          # 2D CNC profiles for PP sheet stock and KiCad Edge.Cuts (9 profiles)
-?
-??? gerbers_mr1/                   # Raw Gerber layers & NC drill for MR1 (6-layer board)
-??? gerbers_amplifier/             # Raw Gerber layers & NC drill for Amplifier (2-layer board)
-??? pos_mr1/                       # Pick-and-place XY coordinates (CSV) for MR1
-??? pos_amplifier/                 # Pick-and-place XY coordinates (CSV) for Amplifier
-?
-??? schematics/
-?   ??? MR1.pdf                    # Complete multi-sheet schematic for MR1
-?   ??? Amplifier.pdf              # Schematic for analog transimpedance amplifier
-?
-??? bom/
-?   ??? MR1_BOM.csv                # Component bill of materials for ordering
-?   ??? Amplifier_BOM.csv          # Amplifier bill of materials
-?
-??? reader_wiring/                 # Electrical harness documentation (HTML, PNG, SVG, TSV)
-??? reader_tubing/                 # Fluidic tubing routing documentation (HTML, PNG, SVG, TSV)
-?
-??? firmware/                      # Staged ESP32-S3 firmware release binaries
-    ??? firmware.bin               # Application binary
-    ??? bootloader.bin             # 2nd stage bootloader
-    ??? partitions.bin             # Partition table
+├── manifest.json                  # SHA-256 integrity catalog of all deliverables
+├── MR1_Gerbers.zip                # Fab-ready zip archive for MR1 main board
+├── Amplifier_Gerbers.zip          # Fab-ready zip archive for cartridge amplifier
+├── Pump_Gerbers.zip               # Fab-ready zip archive for peristaltic pump & USB-PD hub
+├── Interposer_Gerbers.zip         # Fab-ready zip archive for PTFE microfluidic interposer
+│
+├── *.stl                          # 3D printable meshes (30 components)
+├── *.step                         # Parametric STEP solids for CAD exchange (28 components)
+├── *.dxf                          # 2D CNC profiles for PP sheet stock and KiCad Edge.Cuts (11 profiles)
+│
+├── gerbers_mr1/                   # Raw Gerber layers & NC drill for MR1 (6-layer board)
+├── gerbers_amplifier/             # Raw Gerber layers & NC drill for Amplifier (2-layer board)
+├── gerbers_pump/                  # Raw Gerber layers & NC drill for Pump Controller (4-layer board)
+├── gerbers_interposer/            # Raw Gerber layers & NC drill for PTFE Interposer (2-layer board)
+├── pos_mr1/                       # Pick-and-place XY coordinates (CSV) for MR1
+├── pos_amplifier/                 # Pick-and-place XY coordinates (CSV) for Amplifier
+├── pos_pump/                      # Pick-and-place XY coordinates (CSV) for Pump Controller
+├── pos_interposer/                # Pick-and-place XY coordinates (CSV) for PTFE Interposer
+│
+├── schematics/
+│   ├── MR1.pdf                    # Complete multi-sheet schematic for MR1
+│   ├── Amplifier.pdf              # Schematic for analog transimpedance amplifier
+│   ├── Pump.pdf                   # Schematic for peristaltic pump & USB-PD hub
+│   └── Interposer.pdf             # Schematic for PTFE microfluidic interposer
+│
+├── bom/
+│   ├── MR1_BOM.csv                # Component bill of materials for MR1
+│   ├── Amplifier_BOM.csv          # Component bill of materials for Amplifier
+│   ├── Pump_BOM.csv               # Component bill of materials for Pump Controller
+│   └── Interposer_BOM.csv         # Component bill of materials for PTFE Interposer
+│
+├── reader_wiring/                 # Electrical harness documentation (HTML, PNG, SVG, TSV)
+├── reader_tubing/                 # Fluidic tubing routing documentation (HTML, PNG, SVG, TSV)
+│
+└── firmware/                      # Staged ESP32-S3 firmware release binaries
+    ├── firmware.bin               # Application binary
+    ├── bootloader.bin             # 2nd stage bootloader
+    └── partitions.bin             # Partition table
 ```
 
 ---

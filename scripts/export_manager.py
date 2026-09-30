@@ -118,6 +118,14 @@ def export_kicad(verbose=True):
             "pos_dir": EXPORTS_DIR / "pos_pump",
             "zip_name": "Pump_Gerbers.zip",
         },
+        {
+            "name": "Interposer",
+            "pcb": REPO_ROOT / "Interposer" / "Interposer.kicad_pcb",
+            "sch": REPO_ROOT / "Interposer" / "Interposer.kicad_sch",
+            "gerber_dir": EXPORTS_DIR / "gerbers_interposer",
+            "pos_dir": EXPORTS_DIR / "pos_interposer",
+            "zip_name": "Interposer_Gerbers.zip",
+        },
     ]
 
     schematics_dir = EXPORTS_DIR / "schematics"

@@ -164,9 +164,21 @@ class TestExportsE2E(unittest.TestCase):
             p = pump_dir / layer
             self.assertTrue(p.exists(), f"Missing Pump Gerber layer: {layer}")
 
+        int_dir = EXPORTS_DIR / "gerbers_interposer"
+        self.assertTrue(int_dir.exists(), "Missing gerbers_interposer directory")
+        expected_int_layers = [
+            "Interposer-F_Cu.gtl",
+            "Interposer-B_Cu.gbl",
+            "Interposer-Edge_Cuts.gm1",
+            "Interposer.drl",
+        ]
+        for layer in expected_int_layers:
+            p = int_dir / layer
+            self.assertTrue(p.exists(), f"Missing Interposer Gerber layer: {layer}")
+
     def test_kicad_ordering_packages(self):
         """Verify zipped Gerber packs for PCB fabrication houses."""
-        for zip_name in ["MR1_Gerbers.zip", "Amplifier_Gerbers.zip", "Pump_Gerbers.zip"]:
+        for zip_name in ["MR1_Gerbers.zip", "Amplifier_Gerbers.zip", "Pump_Gerbers.zip", "Interposer_Gerbers.zip"]:
             zip_path = EXPORTS_DIR / zip_name
             self.assertTrue(zip_path.exists(), f"Missing ordering zip: {zip_name}")
             with zipfile.ZipFile(zip_path, "r") as zf:
@@ -177,7 +189,7 @@ class TestExportsE2E(unittest.TestCase):
 
     def test_kicad_bom_and_schematic_pdfs(self):
         """Verify BOM CSVs and schematic PDFs for ordering and assembly documentation."""
-        for b_name in ["MR1", "Pump"]:
+        for b_name in ["MR1", "Pump", "Interposer"]:
             bom_path = EXPORTS_DIR / "bom" / f"{b_name}_BOM.csv"
             self.assertTrue(bom_path.exists(), f"Missing {b_name}_BOM.csv")
             self.assertGreater(bom_path.stat().st_size, 100, f"{b_name}_BOM.csv is empty")

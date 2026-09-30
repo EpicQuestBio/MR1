@@ -51,6 +51,32 @@
         "loss_tangent": 0.02,
         "thickness_mm": 1.6
       }
+    },
+    "interposer": {
+      "name": "PTFE Microfluidic Interposer Board",
+      "path": "Interposer/Interposer.kicad_pcb",
+      "schematic_path": "Interposer/Interposer.kicad_sch",
+      "role": "Passive Microfluidic Flow Cell Interposer & Electrode Pogo Interface",
+      "substrate": {
+        "material": "PTFE / Rogers RO4350B",
+        "er": 2.1,
+        "loss_tangent": 0.0002,
+        "thickness_mm": 0.8,
+        "copper_finish": "ENIG"
+      },
+      "pogo_interface": {
+        "target_ref": "J_POGO1",
+        "pin_count": 6,
+        "pitch_mm": 5.0,
+        "contact_force_n": 0.8,
+        "gold_plating_microinches": 50,
+        "leakage_target_fa": 10
+      },
+      "fluidic_coupling": {
+        "target_ref": "H1",
+        "type": "well_interface",
+        "pos": [0.0, 0.0, 3.8]
+      }
     }
   },
   "mechanical": {

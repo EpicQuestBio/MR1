@@ -40,6 +40,9 @@ if __name__ == '__main__':
     t7 = load_module('test_daq_client', os.path.join(REPO_ROOT, 'tests', 'test_daq_client.py'))
     suite.addTests(loader.loadTestsFromModule(t7))
 
+    t8 = load_module('test_interposer_kicad', os.path.join(REPO_ROOT, 'tests', 'test_interposer_kicad.py'))
+    suite.addTests(loader.loadTestsFromModule(t8))
+
     print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
