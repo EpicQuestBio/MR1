@@ -16,6 +16,7 @@
 #include "hal/leak_detector.h"
 #include "comm/pump_uart.h"
 #include "comm/usb_cdc_stream.h"
+#include "comm/opendaq_stream.h"
 #include "web/web_portal.h"
 
 // Task handles
@@ -87,8 +88,9 @@ void setup() {
         Dac.emergency_zero();
     });
 
-    // 6. Initialize Wi-Fi Access Point & Web Portal
+    // 6. Initialize Wi-Fi Access Point, Web Portal & OpenDAQ Streaming
     Portal.begin();
+    DAQStream.begin();
 
     // 7. Spawn dedicated FreeRTOS tasks pinned to respective Xtensa cores
     xTaskCreatePinnedToCore(
