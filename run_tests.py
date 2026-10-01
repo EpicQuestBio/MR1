@@ -43,6 +43,12 @@ if __name__ == '__main__':
     t8 = load_module('test_interposer_kicad', os.path.join(REPO_ROOT, 'tests', 'test_interposer_kicad.py'))
     suite.addTests(loader.loadTestsFromModule(t8))
 
+    t9 = load_module('test_pump_firmware', os.path.join(REPO_ROOT, 'tests', 'test_pump_firmware.py'))
+    suite.addTests(loader.loadTestsFromModule(t9))
+
+    t10 = load_module('test_physics_and_simulations', os.path.join(REPO_ROOT, 'tests', 'test_physics_and_simulations.py'))
+    suite.addTests(loader.loadTestsFromModule(t10))
+
     print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
