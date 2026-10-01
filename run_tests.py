@@ -49,6 +49,9 @@ if __name__ == '__main__':
     t10 = load_module('test_physics_and_simulations', os.path.join(REPO_ROOT, 'tests', 'test_physics_and_simulations.py'))
     suite.addTests(loader.loadTestsFromModule(t10))
 
+    t11 = load_module('test_flexure_fea', os.path.join(REPO_ROOT, 'tests', 'test_flexure_fea.py'))
+    suite.addTests(loader.loadTestsFromModule(t11))
+
     print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
