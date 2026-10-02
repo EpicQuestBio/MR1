@@ -31,7 +31,7 @@ flowchart TD
     end
 
     subgraph Host ["Host Interface Layer"]
-        MCU_MR1 -->|USB CDC-ACM / SENT Binary Stream| PyDAQ["Host DaqClient (src/daq_client.py)"]
+        MCU_MR1 -->|USB CDC-ACM / SENT Binary Stream| PyDAQ["Host DaqClient (scripts/daq_client.py)"]
         PyDAQ -->|IPC / WebSockets / ZeroMQ| ExternalApp["External Application / Scope GUI / ML Basecaller"]
         PyDAQ -->|HDF5 / Arrow / CSV| Storage["Fast NVMe Storage"]
     end
@@ -42,25 +42,45 @@ flowchart TD
 ## 2. Physical & Transport Layer Protocol (USB CDC-ACM)
 
 ### 2.1 Transport Framing
-The primary data stream operates over USB CDC-ACM. Telemetry and commands utilize 7-bit ASCII/JSON with `\n` line termination, while raw high-speed sensor streams utilize binary framing with the fixed magic header `SENT` (`0x53 0x45 0x4E 0x54`).
+The primary data stream operates over USB CDC-ACM at 12 Mbps Full-Speed. Telemetry and commands utilize 7-bit ASCII/JSON with `\n` line termination, while raw high-speed sensor streams utilize binary framing with the fixed magic header `SENT` (`0x53 0x45 0x4E 0x54`).
 
 ### 2.2 Binary Stream Frame Structure (`StreamFrame`)
-Binary packets are packed tightly into 40-byte aligned blocks transmitted at $6.25\text{ kHz}$ (each carrying 16 ADC current samples at $100\text{ kSPS}$, yielding $250\text{ kB/s}$ continuous payload):
+Binary packets are emitted continuously at $1{,}562.5\text{ Hz}$ when streaming is active. Each packet encapsulates 64 consecutive ADC current samples ($100\text{ kSPS}$ aggregate rate) in a 146-byte packed Little-Endian struct with CRC-16-CCITT integrity verification:
+
+```
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                      magic: 'S' 'E' 'N' 'T'                   | (0x53454E54)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                         frame_index                           | (uint32)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        timestamp_us                           | (uint32)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         sample_count          |         status_flags          | (uint16, uint16)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          sample[0]            |          sample[1]            | (int16 signed)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             ...                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          sample[62]           |          sample[63]           | (int16 signed)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|             crc16             | (uint16 CCITT)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
 
 | Offset (Bytes) | Field Name | Data Type | Description |
 | :--- | :--- | :--- | :--- |
-| `0..3` | `magic` | `char[4]` | Constant sync word: ASCII `"SENT"` (`0x53, 0x45, 0x4E, 0x54`) |
-| `4..7` | `packet_id` | `uint32_t` | Monotonically increasing packet sequence counter (drop detection) |
-| `8..15` | `timestamp_us` | `uint64_t` | Hardware microsecond timer synchronized to ADC conversion start |
-| `16..17` | `bias_voltage_mv` | `int16_t` | Applied transmembrane bias voltage in millivolts ($\pm 2048\text{ mV}$) |
-| `18..19` | `ambient_temp_centi_c` | `int16_t` | On-board temperature sensor in $0.01^\circ\text{C}$ ($2500 = 25.00^\circ\text{C}$) |
-| `20..21` | `cis_pressure_mbar` | `uint16_t` | Cis chamber feedline pressure in millibar ($0..1034\text{ mbar}$) |
-| `22..23` | `trans_pressure_mbar` | `uint16_t` | Trans chamber waste pressure in millibar ($0..345\text{ mbar}$) |
-| `24` | `status_flags` | `uint8_t` | Bitmask: `b0`=Leak Alert, `b1`=Cis Occlusion, `b2`=Trans Occlusion, `b3`=TIA Clamped, `b4`=SBU Sync |
-| `25` | `sample_count` | `uint8_t` | Number of samples in payload (Nominal = 16) |
-| `26..27` | `reserved` | `uint16_t` | Reserved for future expansion / multi-pore channel ID |
-| `28..37` | `adc_raw[16]` | `int16_t[16]` | 16 signed differential ADC conversion codes ($\pm 32768 = \pm 2.048\text{ V}$) |
-| `38..39` | `crc16` | `uint16_t` | CRC-16-CCITT (`0x1021`, init `0xFFFF`) calculated over bytes `0..37` |
+| `0..3` | `magic` | `uint32_t` | Constant sync word: `0x53454E54` (`"SENT"` in ASCII) |
+| `4..7` | `frame_index` | `uint32_t` | Monotonically increasing packet sequence counter (drop detection) |
+| `8..11` | `timestamp_us` | `uint32_t` | Hardware microsecond timer synchronized to ADC conversion start |
+| `12..13` | `sample_count` | `uint16_t` | Number of samples in payload (Nominal = 64) |
+| `14..15` | `status_flags` | `uint16_t` | Hardware bitmask (`b0`=Active, `b1`=Leak, `b2`=Pump Conn, `b3`=Pump Run, `b4`=Pump Estop) |
+| `16..143` | `samples[64]` | `int16_t[64]` | 64 signed differential ADC conversion codes ($\pm 32768 = \pm 2.048\text{ V}$) |
+| `144..145` | `crc16` | `uint16_t` | CRC-16-CCITT (`0x1021`, init `0xFFFF`) calculated over bytes `0..143` |
+
+> [!NOTE]
+> Physical variables that update at slower rates (applied bias voltage, ambient temperature, Cis/Trans fluid pressures) are communicated out-of-band via the 10 Hz Telemetry JSON channel or SBU link, preserving maximum USB throughput and zero sample jitter for the 100 kHz electrophysiology stream.
 
 ### 2.3 Physical Current Conversion Equation
 To compute the true ionic nanopore current $I_{pore}$ in Amperes from the 16-bit signed integer $S_{adc}$:
@@ -77,7 +97,7 @@ $$I_{pore} = \frac{V_{adc}}{R_{feedback}} = \frac{S_{adc} \cdot 62.5 \times 10^{
 
 ## 3. Host IPC & Downstream Program Interfaces
 
-To decouple the real-time USB hardware acquisition from external applications, `src/daq_client.py` exposes multiple standardized IPC endpoints:
+To decouple the real-time USB hardware acquisition from external applications, `scripts/daq_client.py` exposes multiple standardized IPC endpoints:
 
 ### 3.1 WebSocket Interface (`ws://127.0.0.1:8765/stream`)
 Ideal for web-based oscilloscopes, Electron apps, and Python/JavaScript frontends.
@@ -173,7 +193,7 @@ xychart-beta
 ### Step 1: Launch Daemon Pore Acquisition Bridge
 ```bash
 # In daemon-pore repository root:
-python src/daq_client.py --port COM5 --baud 2000000 --stream-ipc
+python scripts/daq_client.py --port COM5 --baud 2000000 --stream-ipc
 ```
 
 ### Step 2: Minimal Python Integration Example
