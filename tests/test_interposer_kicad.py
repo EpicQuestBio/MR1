@@ -93,6 +93,11 @@ class TestInterposerKiCad(unittest.TestCase):
         for p in range(1, 6):
             self.assertIn(f'(pad "{p}"', concentric_txt, f"Pad {p} must exist in concentric cell footprint")
 
+        # Regression check: PCB and footprint must not contain invalid '(fill (type ...))' syntax
+        self.assertNotIn("fill (type", concentric_txt, "Footprint must not contain invalid fill syntax")
+        pcb_txt = (REPO_ROOT / "Interposer" / "Interposer.kicad_pcb").read_text(encoding="utf-8")
+        self.assertNotIn("fill (type", pcb_txt, "PCB must not contain invalid fill syntax")
+
     def test_interposer_symbol_library(self):
         """Ensure Interposer custom symbol library exists and defines all feature symbols."""
         sym_file = REPO_ROOT / "Interposer" / "symbols" / "Interposer.kicad_sym"
