@@ -87,8 +87,8 @@
         "working_sense": "WS_CIS",
         "reference_sense": "RE_TRANS",
         "floating_ground": "GNDA_FLOAT",
-        "inner_sense_radius_mm": [3.6, 4.4],
-        "outer_drive_radius_mm": [5.6, 7.2],
+        "inner_sense_radius_mm": [5.0, 5.8],
+        "outer_drive_radius_mm": [6.9, 8.5],
         "aperture_window_mm": 6.2
       },
       "fluidic_coupling": {

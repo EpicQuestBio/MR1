@@ -1132,10 +1132,13 @@
 			(uuid "e1e2e3e4-0004-4000-8000-000000000004")
 		)
 		(attr smd)
-		(fp_rect (start -3.1 -3.1) (end 3.1 3.1)
-			(stroke (width 0.2) (type default))
+		(fp_poly
+			(pts
+				(xy -4.384 0) (xy 0 -4.384) (xy 4.384 0) (xy 0 4.384)
+			)
+			(stroke (width 0.1) (type default))
 			(fill none)
-			(layer "Edge.Cuts")
+			(layer "F.Fab")
 			(uuid "e1e2e3e4-0005-4000-8000-000000000005")
 		)
 		(pad "1" smd custom
@@ -1149,7 +1152,7 @@
 			(primitives
 				(gr_circle
 					(center 0 0)
-					(end 6.4 0)
+					(end 7.7 0)
 					(stroke (width 1.6) (type default))
 					(fill none)
 				)
@@ -1167,7 +1170,7 @@
 			(primitives
 				(gr_circle
 					(center 0 0)
-					(end 4.0 0)
+					(end 5.4 0)
 					(stroke (width 0.8) (type default))
 					(fill none)
 				)
@@ -1185,7 +1188,7 @@
 			(primitives
 				(gr_circle
 					(center 0 0)
-					(end 5.0 0)
+					(end 6.35 0)
 					(stroke (width 0.4) (type default))
 					(fill none)
 				)
@@ -1203,7 +1206,7 @@
 			(primitives
 				(gr_circle
 					(center 0 0)
-					(end 4.0 0)
+					(end 5.4 0)
 					(stroke (width 0.8) (type default))
 					(fill none)
 				)
@@ -1221,7 +1224,7 @@
 			(primitives
 				(gr_circle
 					(center 0 0)
-					(end 6.4 0)
+					(end 7.7 0)
 					(stroke (width 1.6) (type default))
 					(fill none)
 				)

@@ -59,12 +59,12 @@ class FourElectrodeCellSimulation:
         remote_channel_length_mm: float = 18.0,
         remote_channel_width_mm: float = 1.0,
         remote_channel_height_mm: float = 0.5,
-        # 4-Electrode concentric geometry
-        concentric_h1_aperture_radius_mm: float = 3.1,  # 6.2mm diamond inscribed radius
-        sense_ring_inner_r_mm: float = 3.6,
-        sense_ring_outer_r_mm: float = 4.4,
-        drive_ring_inner_r_mm: float = 5.6,
-        drive_ring_outer_r_mm: float = 7.2,
+        # 4-Electrode concentric geometry (clearing 4.384mm diamond aperture tips)
+        concentric_h1_aperture_radius_mm: float = 4.384,  # diamond tip radius (4.384 mm)
+        sense_ring_inner_r_mm: float = 5.0,               # inner sense edge clears cutout by 0.616 mm
+        sense_ring_outer_r_mm: float = 5.8,
+        drive_ring_inner_r_mm: float = 6.9,
+        drive_ring_outer_r_mm: float = 8.5,
         chamber_depth_mm: float = 0.8,
         # Instrument sense buffer input impedance (electrometer op-amp)
         sense_buffer_input_r_ohm: float = 1e13,  # 10 Teraohms
@@ -309,7 +309,7 @@ def run_summary():
     print("-" * 70)
     print("UNCOMPENSATED SOLUTION RESISTANCE (R_u):")
     print(f"  2-Electrode Remote Channel (18mm):    2 * {sim.ru_remote:.1f} = {2 * sim.ru_remote:.1f} ohm")
-    print(f"  4-Electrode Tight Concentric (3.6mm): 2 * {sim.ru_concentric_sense:.1f} = {2 * sim.ru_concentric_sense:.1f} ohm")
+    print(f"  4-Electrode Tight Concentric (5.4mm): 2 * {sim.ru_concentric_sense:.1f} = {2 * sim.ru_concentric_sense:.1f} ohm")
     ru_reduction = (1.0 - sim.ru_concentric_sense / sim.ru_remote) * 100.0
     print(f"  -> Solution Resistance Reduction:     {ru_reduction:.1f}%")
     print("-" * 70)

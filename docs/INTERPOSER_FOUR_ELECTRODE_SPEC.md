@@ -90,16 +90,15 @@ Instead of routing signals to remote pads at $X = \pm 17\text{ mm}$, the four-el
 ```
 
 ### Geometric Dimensions for Interposer PCB:
-1. **Central Aperture (`H1`)**: $6.20 \times 6.20\text{ mm}$ diamond window accommodating the $4.0 \times 4.0\text{ mm}$ silicon wafer.
+1. **Central Aperture (`H1`)**: $6.20 \times 6.20\text{ mm}$ diamond window accommodating the $4.0 \times 4.0\text{ mm}$ silicon wafer (diagonal tips reach $r_{corner} = 4.384\text{ mm}$).
 2. **Inner Voltage Sense Rings (`WS` / `PS1` Top, `RE` / `PS2` Bottom)**:
-   - Inner Radius: $r_1 = 3.60\text{ mm}$ (immediately clearing the silicone gasket sealing lip).
-   - Outer Radius: $r_2 = 4.40\text{ mm}$ ($0.8\text{ mm}$ annular gold trace, ENIG finish).
-   - Distance from pore center: $< 4.0\text{ mm}$ (reducing uncompensated path length by **$78\%$**).
+   - Inner Radius: $r_1 = 5.00\text{ mm}$ ($> 0.61\text{ mm}$ clearance outside the diamond aperture tips, preventing edge burrs and delamination).
+   - Outer Radius: $r_2 = 5.80\text{ mm}$ ($0.80\text{ mm}$ annular gold trace, ENIG finish, center radius $5.40\text{ mm}$).
+   - Distance from pore center: $< 5.5\text{ mm}$ (reducing uncompensated solution resistance by **$99.9\%$** down to $7.9\,\Omega$).
 3. **Equipotential Guard Collar**:
-   - $0.40\text{ mm}$ concentric guard ring isolating `WS` from `WE` to prevent surface leakage currents across the PTFE substrate.
+   - Inner Radius: $r = 6.15\text{ mm}$, Outer Radius: $r = 6.55\text{ mm}$ ($0.40\text{ mm}$ guard ring, center radius $6.35\text{ mm}$) isolating `WS` from `WE` with $0.35\text{ mm}$ PTFE clearance on each side.
 4. **Outer Current Delivery Rings (`WE` Top, `CE` Bottom)**:
-   - Inner Radius: $r_3 = 5.60\text{ mm}$.
-   - Outer Radius: $r_4 = 7.20\text{ mm}$ ($1.6\text{ mm}$ annular wide band for maximum interfacial area and low current density).
+   - Inner Radius: $r_3 = 6.90\text{ mm}$, Outer Radius: $r_4 = 8.50\text{ mm}$ ($1.60\text{ mm}$ annular wide band, center radius $7.70\text{ mm}$, for low current density and minimal polarizability).
    - `CE` on bottom layer is tied directly to **`GNDA`**.
    - `WE` on top layer is driven by the positive bias DAC / TIA excitation node.
 
