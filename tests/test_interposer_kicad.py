@@ -43,6 +43,10 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertEqual(int_atlas.get("schematic_path"), "Interposer/Interposer.kicad_sch")
         self.assertIn("pogo_interface", int_atlas)
         self.assertEqual(int_atlas["pogo_interface"]["pin_count"], 6)
+        self.assertIn("electrochemical_cell", int_atlas)
+        self.assertIn("4-electrode", int_atlas["electrochemical_cell"]["configuration"])
+        self.assertIn("positive", int_atlas["electrochemical_cell"]["working_terminal"])
+        self.assertIn("GNDA", int_atlas["electrochemical_cell"]["counter_terminal"])
 
     def test_interposer_footprints_and_active_removal(self):
         """Ensure active components are removed and passive interface components are preserved."""
@@ -63,7 +67,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertNotIn(ref, refs, f"Active component {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "J1", "J2", "J10", "J11", "J_POGO1"]
+        required = ["H1", "E1", "J1", "J2", "J10", "J11", "J_POGO1"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 
@@ -72,15 +76,22 @@ class TestInterposerKiCad(unittest.TestCase):
         target_fp = REPO_ROOT / "Interposer" / "footprints.pretty" / "PogoPin_Target_6Pin_Array.kicad_mod"
         target_pad_fp = REPO_ROOT / "Interposer" / "footprints.pretty" / "PogoPin_TargetPad_1.8mm.kicad_mod"
         spring_fp = REPO_ROOT / "Amplifier" / "footprints.pretty" / "PogoPin_SpringHeader_6Pin_Array.kicad_mod"
+        concentric_fp = REPO_ROOT / "Interposer" / "footprints.pretty" / "Concentric_Electrode_Cell.kicad_mod"
 
         self.assertTrue(target_fp.exists(), "PogoPin_Target_6Pin_Array.kicad_mod must exist")
         self.assertTrue(target_pad_fp.exists(), "PogoPin_TargetPad_1.8mm.kicad_mod must exist")
         self.assertTrue(spring_fp.exists(), "PogoPin_SpringHeader_6Pin_Array.kicad_mod must exist")
+        self.assertTrue(concentric_fp.exists(), "Concentric_Electrode_Cell.kicad_mod must exist")
 
         target_txt = target_fp.read_text(encoding="utf-8")
         # 6 pads must be present
         for p in range(1, 7):
             self.assertIn(f'(pad "{p}"', target_txt, f"Pad {p} must exist in target array")
+
+        concentric_txt = concentric_fp.read_text(encoding="utf-8")
+        # 5 pads (WE, WS, Guard, RE, CE) must be present
+        for p in range(1, 6):
+            self.assertIn(f'(pad "{p}"', concentric_txt, f"Pad {p} must exist in concentric cell footprint")
 
     def test_interposer_symbol_library(self):
         """Ensure Interposer custom symbol library exists and defines all feature symbols."""
@@ -96,10 +107,15 @@ class TestInterposerKiCad(unittest.TestCase):
             "Electrode_Guard_Shield",
             "Nanopore_Wafer_Aperture",
             "Weep_Moat_Sensor",
-            "Fluidic_Port_PassThrough"
+            "Fluidic_Port_PassThrough",
+            "Concentric_Electrode_Cell"
         ]
         for s in expected_symbols:
             self.assertIn(f'(symbol "{s}"', sym_txt, f"Symbol {s} must be defined in Interposer.kicad_sym")
+
+        # Validate 4-electrode Gamry pin names in PogoPin_Target_6Pin_Array
+        for pin_name in ["WE_POS", "WS_CIS", "GNDA_FLOAT", "RE_TRANS", "CE_GNDA", "WEEP_MOAT"]:
+            self.assertIn(f'(name "{pin_name}"', sym_txt, f"Pin {pin_name} must be in PogoPin_Target_6Pin_Array")
 
         table_txt = table_file.read_text(encoding="utf-8")
         self.assertIn('name "Interposer"', table_txt, "Interposer library must be registered in sym-lib-table")
@@ -115,9 +131,11 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn('lib_id "Interposer:Electrode_Guard_Shield"', sch_txt)
         self.assertIn('lib_id "Interposer:Weep_Moat_Sensor"', sch_txt)
         self.assertIn('lib_id "Interposer:Fluidic_Port_PassThrough"', sch_txt)
+        self.assertIn('lib_id "Interposer:Concentric_Electrode_Cell"', sch_txt)
 
         self.assertIn("J_POGO1", sch_txt)
         self.assertIn("H1", sch_txt)
+        self.assertIn("E1", sch_txt)
         self.assertIn("J1", sch_txt)
         self.assertIn("J2", sch_txt)
         self.assertIn("J10", sch_txt)
@@ -135,7 +153,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(bom_csv.exists(), "Interposer_BOM.csv must exist")
 
         bom_txt = bom_csv.read_text(encoding="utf-8")
-        for ref in ["H1", "J1", "J2", "J10", "J11", "J_POGO1", "P1", "P2", "P3", "P4", "W1"]:
+        for ref in ["H1", "E1", "J1", "J2", "J10", "J11", "J_POGO1", "P1", "P2", "P3", "P4", "W1"]:
             self.assertIn(f'"{ref}"', bom_txt, f"Reference {ref} must be listed in Interposer_BOM.csv")
 
     def test_interposer_gerber_exports(self):

@@ -70,7 +70,26 @@
         "pitch_mm": 5.0,
         "contact_force_n": 0.8,
         "gold_plating_microinches": 50,
-        "leakage_target_fa": 10
+        "leakage_target_fa": 10,
+        "pin_map": {
+          "1": "WE_POS (Working Electrode positive drive)",
+          "2": "WS_CIS (Working Sense probe)",
+          "3": "GNDA_FLOAT (Floating Analog Ground)",
+          "4": "RE_TRANS (Reference / Counter Sense probe)",
+          "5": "CE_GNDA (Counter Electrode return to GNDA)",
+          "6": "WEEP_MOAT (Perimeter leak detector)"
+        }
+      },
+      "electrochemical_cell": {
+        "configuration": "4-electrode Kelvin concentric",
+        "working_terminal": "positive (WE_POS)",
+        "counter_terminal": "GNDA (CE_GNDA)",
+        "working_sense": "WS_CIS",
+        "reference_sense": "RE_TRANS",
+        "floating_ground": "GNDA_FLOAT",
+        "inner_sense_radius_mm": [3.6, 4.4],
+        "outer_drive_radius_mm": [5.6, 7.2],
+        "aperture_window_mm": 6.2
       },
       "fluidic_coupling": {
         "target_ref": "H1",

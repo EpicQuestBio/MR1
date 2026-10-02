@@ -84,7 +84,7 @@
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0008-4000-8000-000000000008")
 	)
-	(fp_text user "CIS_WE"
+	(fp_text user "WE_POS"
 		(at -11.5 -2.5 0)
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0009-4000-8000-000000000009")
@@ -95,7 +95,7 @@
 			)
 		)
 	)
-	(fp_text user "CIS_GRD"
+	(fp_text user "WS_CIS"
 		(at -6.5 -2.5 0)
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0010-4000-8000-000000000010")
@@ -106,7 +106,7 @@
 			)
 		)
 	)
-	(fp_text user "SHLD"
+	(fp_text user "GNDA"
 		(at -1.5 -2.5 0)
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0011-4000-8000-000000000011")
@@ -117,7 +117,7 @@
 			)
 		)
 	)
-	(fp_text user "LEAK"
+	(fp_text user "RE_TRANS"
 		(at 1.5 -2.5 0)
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0012-4000-8000-000000000012")
@@ -128,7 +128,7 @@
 			)
 		)
 	)
-	(fp_text user "TRANS_GRD"
+	(fp_text user "CE_GNDA"
 		(at 6.5 -2.5 0)
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0013-4000-8000-000000000013")
@@ -139,7 +139,7 @@
 			)
 		)
 	)
-	(fp_text user "TRANS_VBIAS"
+	(fp_text user "WEEP"
 		(at 11.5 -2.5 0)
 		(layer "F.SilkS")
 		(uuid "b1b2c3d4-0014-4000-8000-000000000014")
