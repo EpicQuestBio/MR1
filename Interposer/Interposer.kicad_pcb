@@ -1147,7 +1147,7 @@
 				(anchor circle)
 			)
 			(primitives
-				(fp_circle
+				(gr_circle
 					(center 0 0)
 					(end 6.4 0)
 					(stroke (width 1.6) (type default))
@@ -1165,7 +1165,7 @@
 				(anchor circle)
 			)
 			(primitives
-				(fp_circle
+				(gr_circle
 					(center 0 0)
 					(end 4.0 0)
 					(stroke (width 0.8) (type default))
@@ -1183,7 +1183,7 @@
 				(anchor circle)
 			)
 			(primitives
-				(fp_circle
+				(gr_circle
 					(center 0 0)
 					(end 5.0 0)
 					(stroke (width 0.4) (type default))
@@ -1201,7 +1201,7 @@
 				(anchor circle)
 			)
 			(primitives
-				(fp_circle
+				(gr_circle
 					(center 0 0)
 					(end 4.0 0)
 					(stroke (width 0.8) (type default))
@@ -1219,7 +1219,7 @@
 				(anchor circle)
 			)
 			(primitives
-				(fp_circle
+				(gr_circle
 					(center 0 0)
 					(end 6.4 0)
 					(stroke (width 1.6) (type default))

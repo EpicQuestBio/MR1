@@ -98,6 +98,11 @@ class TestInterposerKiCad(unittest.TestCase):
         pcb_txt = (REPO_ROOT / "Interposer" / "Interposer.kicad_pcb").read_text(encoding="utf-8")
         self.assertNotIn("fill (type", pcb_txt, "PCB must not contain invalid fill syntax")
 
+        # Regression check: custom pad primitives must use gr_* (e.g. gr_circle), NOT fp_*
+        self.assertIn("gr_circle", concentric_txt, "Footprint primitives must use gr_circle")
+        self.assertNotIn("fp_circle", concentric_txt, "Footprint primitives must NOT use fp_circle")
+        self.assertIn("gr_circle", pcb_txt, "PCB pad primitives must use gr_circle")
+
     def test_interposer_symbol_library(self):
         """Ensure Interposer custom symbol library exists and defines all feature symbols."""
         sym_file = REPO_ROOT / "Interposer" / "symbols" / "Interposer.kicad_sym"
