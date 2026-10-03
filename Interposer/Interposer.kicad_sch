@@ -1204,7 +1204,7 @@
 		)
 		(uuid "12205b34-ba9e-4807-80f5-fa516a9ec6d4")
 	)
-	(label ">PORE_AMP"
+	(label "RE_TRANS"
 		(at 170.18 67.31 0)
 		(effects
 			(font
@@ -1213,7 +1213,7 @@
 		)
 		(uuid "247af74a-a689-4751-8e69-d528b3da41ff")
 	)
-	(label "GUARD_TRANS"
+	(label "GNDA"
 		(at 237.49 107.95 0)
 		(effects
 			(font
@@ -1240,7 +1240,7 @@
 		)
 		(uuid "4232fe5e-7ccd-48a0-a785-90798f81b267")
 	)
-	(label "Vbias"
+	(label "WS_CIS"
 		(at 237.49 135.89 0)
 		(effects
 			(font
@@ -1276,7 +1276,7 @@
 		)
 		(uuid "75fd4e8e-d510-4bf8-8cb1-c4153688e778")
 	)
-	(label ">PORE_AMP"
+	(label "CE_GNDA"
 		(at 237.49 76.2 0)
 		(effects
 			(font
@@ -1285,7 +1285,7 @@
 		)
 		(uuid "77321700-45c3-449e-8da8-6d8aa16e3c0f")
 	)
-	(label "GUARD"
+	(label "RE_TRANS"
 		(at 44.45 83.82 0)
 		(effects
 			(font
@@ -1303,7 +1303,7 @@
 		)
 		(uuid "93ec0a72-661e-4ecf-8310-4b8704eb40ca")
 	)
-	(label "Vbias"
+	(label "WE_POS"
 		(at 44.45 73.66 0)
 		(effects
 			(font
@@ -1312,7 +1312,7 @@
 		)
 		(uuid "970bcee2-5b29-471c-969e-941bc01b98f6")
 	)
-	(label "Vbias"
+	(label "WS_CIS"
 		(at 170.18 92.71 0)
 		(effects
 			(font
@@ -1321,7 +1321,7 @@
 		)
 		(uuid "a9709245-3f69-4ee3-833b-02c445ca6ad4")
 	)
-	(label ">PORE_AMP"
+	(label "RE_TRANS"
 		(at 237.49 50.8 0)
 		(effects
 			(font
@@ -1330,7 +1330,7 @@
 		)
 		(uuid "bd9a77b4-3b53-484d-bb8c-276d4114e8bd")
 	)
-	(label "GUARD"
+	(label "GNDA"
 		(at 237.49 46.99 0)
 		(effects
 			(font
@@ -1348,7 +1348,7 @@
 		)
 		(uuid "d1e161fd-fcd7-47be-a543-3f41591b9e0b")
 	)
-	(label "Vbias"
+	(label "WE_POS"
 		(at 237.49 111.76 0)
 		(effects
 			(font
@@ -1357,7 +1357,7 @@
 		)
 		(uuid "d9a65c00-6a7a-4881-a0a8-f665f2caf109")
 	)
-	(label "GUARD_TRANS"
+	(label "GNDA"
 		(at 237.49 132.08 0)
 		(effects
 			(font
@@ -1366,7 +1366,7 @@
 		)
 		(uuid "dec468b4-954f-4178-b763-b5a20a5f86c7")
 	)
-	(label ">PORE_AMP"
+	(label "CE_GNDA"
 		(at 44.45 86.36 0)
 		(effects
 			(font
@@ -1375,7 +1375,7 @@
 		)
 		(uuid "e6a390dc-d655-4bb0-ae81-7d615b3cf87f")
 	)
-	(label "GUARD_TRANS"
+	(label "WS_CIS"
 		(at 44.45 76.2 0)
 		(effects
 			(font
@@ -1384,7 +1384,7 @@
 		)
 		(uuid "ef1cdac6-f1ea-4ac3-96eb-1ff1aad8d00e")
 	)
-	(label "GUARD"
+	(label "GNDA"
 		(at 237.49 72.39 0)
 		(effects
 			(font
@@ -1415,7 +1415,7 @@
 				)
 			)
 		)
-		(property "Value" "Cis_Electrode_Out"
+		(property "Value" "CE_GNDA"
 			(at 257.81 67.2 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1447,7 +1447,7 @@
 				)
 			)
 		)
-		(property "Description" "Ag/AgCl Ribbon Electrode Pad (Cis Out, r=17mm) with Driven Guard Ring"
+		(property "Description" "Counter Electrode Pad (Ag/AgCl Ribbon, Trans Outer)"
 			(at 257.81 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -1495,7 +1495,7 @@
 				)
 			)
 		)
-		(property "Value" "Cis_Electrode_In"
+		(property "Value" "RE_TRANS"
 			(at 257.81 41.8 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1527,7 +1527,7 @@
 				)
 			)
 		)
-		(property "Description" "Ag/AgCl Ribbon Electrode Pad (Cis In, r=12mm) with Driven Guard Ring"
+		(property "Description" "Reference Sense Electrode Pad (Ag/AgCl Ribbon, Trans Inner)"
 			(at 257.81 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -1744,7 +1744,7 @@
 				)
 			)
 		)
-		(property "Value" "Trans_Electrode_In"
+		(property "Value" "WS_CIS"
 			(at 257.81 126.89 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1776,7 +1776,7 @@
 				)
 			)
 		)
-		(property "Description" "Ag/AgCl Ribbon Electrode Pad (Trans In, r=12mm) with Driven Guard Ring"
+		(property "Description" "Working Sense Electrode Pad (Ag/AgCl Ribbon, Cis Inner)"
 			(at 257.81 133.35 0)
 			(hide yes)
 			(show_name no)
@@ -1981,7 +1981,7 @@
 				)
 			)
 		)
-		(property "Value" "Trans_Electrode_Out"
+		(property "Value" "WE_POS"
 			(at 259.08 102.76 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2013,7 +2013,7 @@
 				)
 			)
 		)
-		(property "Description" "Ag/AgCl Ribbon Electrode Pad (Trans Out, r=17mm) with Driven Guard Ring"
+		(property "Description" "Working Electrode Pad (Ag/AgCl Ribbon, Cis Outer)"
 			(at 259.08 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -2268,95 +2268,6 @@
 			(project "Interposer"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "H1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Interposer:Concentric_Electrode_Cell")
-		(at 170.18 105.0 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d3a24681-4f11-40c2-9e8d-8153cfc909a1")
-		(property "Reference" "E1"
-			(at 170.18 93.0 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Concentric_Electrode_Cell"
-			(at 170.18 95.54 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "footprints:Nanopore holder_recessed"
-			(at 170.18 105.0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://pubs.acs.org/doi/10.1021/acs.jpcc.6b12543"
-			(at 170.18 105.0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Four-Electrode Concentric Kelvin Electrochemical Cell (WE, WS, RE, CE, Guard)"
-			(at 170.18 105.0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "175c2e91-8841-45ab-9fa1-419b4e183a91")
-		)
-		(pin "2"
-			(uuid "286d3fa2-9952-46bc-a1b2-520c5f294ba2")
-		)
-		(pin "3"
-			(uuid "397e4ab3-aa63-47cd-b2c3-631d603a5cb3")
-		)
-		(pin "4"
-			(uuid "4a8f5bc4-bb74-48de-c3d4-742e714b6dc4")
-		)
-		(pin "5"
-			(uuid "5b906cd5-cc85-49ef-d4e5-853f825c7ed5")
-		)
-		(instances
-			(project "Interposer"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "E1")
 					(unit 1)
 				)
 			)

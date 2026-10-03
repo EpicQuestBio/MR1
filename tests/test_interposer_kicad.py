@@ -56,18 +56,19 @@ class TestInterposerKiCad(unittest.TestCase):
         content = pcb_path.read_text(encoding="utf-8")
         refs = re.findall(r'\(property\s+"Reference"\s+"([^"]+)"', content)
 
-        # Prohibited active components
+        # Prohibited active components and colliding geometries
         prohibited = [
             "U2", "U16", "J9",
             "R1", "R3", "R4", "R5", "R6", "R8", "R9",
             "C1", "C2", "C3", "C4", "C5", "C6", "C19", "C20",
-            "NT3", "NT4", "NT5"
+            "NT3", "NT4", "NT5",
+            "E1"
         ]
         for ref in prohibited:
-            self.assertNotIn(ref, refs, f"Active component {ref} must NOT be present on Interposer PCB")
+            self.assertNotIn(ref, refs, f"Active component or colliding concentric ring {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "E1", "J1", "J2", "J10", "J11", "J_POGO1"]
+        required = ["H1", "J1", "J2", "J10", "J11", "J_POGO1"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 
@@ -101,7 +102,6 @@ class TestInterposerKiCad(unittest.TestCase):
         # Regression check: custom pad primitives must use gr_* (e.g. gr_circle), NOT fp_*
         self.assertIn("gr_circle", concentric_txt, "Footprint primitives must use gr_circle")
         self.assertNotIn("fp_circle", concentric_txt, "Footprint primitives must NOT use fp_circle")
-        self.assertIn("gr_circle", pcb_txt, "PCB pad primitives must use gr_circle")
 
     def test_interposer_symbol_library(self):
         """Ensure Interposer custom symbol library exists and defines all feature symbols."""
@@ -141,20 +141,21 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn('lib_id "Interposer:Electrode_Guard_Shield"', sch_txt)
         self.assertIn('lib_id "Interposer:Weep_Moat_Sensor"', sch_txt)
         self.assertIn('lib_id "Interposer:Fluidic_Port_PassThrough"', sch_txt)
-        self.assertIn('lib_id "Interposer:Concentric_Electrode_Cell"', sch_txt)
 
         self.assertIn("J_POGO1", sch_txt)
         self.assertIn("H1", sch_txt)
-        self.assertIn("E1", sch_txt)
+        self.assertNotIn("E1", sch_txt)
         self.assertIn("J1", sch_txt)
         self.assertIn("J2", sch_txt)
         self.assertIn("J10", sch_txt)
         self.assertIn("J11", sch_txt)
         self.assertIn("W1", sch_txt)
         self.assertIn("P1", sch_txt)
-        self.assertIn(">PORE_AMP", sch_txt)
-        self.assertIn("GUARD", sch_txt)
-        self.assertIn("Vbias", sch_txt)
+        self.assertIn("WE_POS", sch_txt)
+        self.assertIn("WS_CIS", sch_txt)
+        self.assertIn("RE_TRANS", sch_txt)
+        self.assertIn("CE_GNDA", sch_txt)
+        self.assertIn("GNDA", sch_txt)
         self.assertIn("WEEP_SENSE", sch_txt)
 
     def test_interposer_bom_completeness(self):
@@ -163,8 +164,9 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(bom_csv.exists(), "Interposer_BOM.csv must exist")
 
         bom_txt = bom_csv.read_text(encoding="utf-8")
-        for ref in ["H1", "E1", "J1", "J2", "J10", "J11", "J_POGO1", "P1", "P2", "P3", "P4", "W1"]:
+        for ref in ["H1", "J1", "J2", "J10", "J11", "J_POGO1", "P1", "P2", "P3", "P4", "W1"]:
             self.assertIn(f'"{ref}"', bom_txt, f"Reference {ref} must be listed in Interposer_BOM.csv")
+        self.assertNotIn('"E1"', bom_txt, "E1 must NOT be in Interposer_BOM.csv")
 
     def test_interposer_gerber_exports(self):
         """Ensure Gerbers and schematic PDF exist for Interposer."""

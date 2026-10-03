@@ -65,42 +65,38 @@ flowchart TD
 
 ---
 
-## 3. Tight Concentric Physical Geometry
+## 3. Channel-Aligned Ag/AgCl Ribbon Architecture
 
-Instead of routing signals to remote pads at $X = \pm 17\text{ mm}$, the four-electrode interposer places **concentric annular electrodes** directly on the top (Cis) and bottom (Trans) surfaces around the central $H1$ aperture ($6.20 \times 6.20\text{ mm}$ diamond pocket):
+### Why Planar Concentric Rings Fail
+A superficial implementation of concentric rings on an open PCB surface encounters severe fundamental failures:
+1. **Liquid Shorting**: Bulk electrolyte in a single chamber directly bridges and shorts open concentric rings together.
+2. **Polarization & Non-Reversibility**: Bare ENIG gold traces exposed to 1M KCl undergo irreversible charge transfer and water oxidation; true **silver chloride ($\text{Ag/AgCl}$)** interfaces are mandatory for stable, low-noise non-polarizable electrochemistry.
+3. **Mechanical Collisions**: $360^\circ$ annular rings cut across the silicone gasket sealing boundaries and intersect the dowel alignment pin holes (`H1` NPTH) at $r=7.0\text{ mm}$.
+4. **Routing Traps**: On a 2-layer board, an unbroken outer annular ring prevents planar traces from reaching the inner sense ring without shorting.
+
+### The Solution: 4 Channel-Aligned Microfluidic Ag/AgCl Ribbons
+The 4-electrode Kelvin cell is implemented using **dual channel-aligned Ag/AgCl ribbon electrode pockets (`J10`, `J11`, `J1`, `J2`)** recessed along the linear $1.4\text{ mm}$ wide microfluidic channels clamped by the cast silicone gasket:
 
 ```
-                     TOP LAYER (Cis Side)
-       ┌──────────────────────────────────────────────┐
-       │                                              │
-       │           Driven Guard Ring (GND/Guard)      │
-       │       ┌──────────────────────────────┐       │
-       │       │    Working Sense (WS / PS1)  │       │
-       │       │    [Annular Ring r=3.8mm]    │       │
-       │       │    ┌────────────────────┐    │       │
-       │       │    │   6.2mm Aperture   │    │       │
-       │       │    │   (Nanopore Chip)  │    │       │
-       │       │    │        [H1]        │    │       │
-       │       │    └────────────────────┘    │       │
-       │       │                              │       │
-       │       └──────────────────────────────┘       │
-       │             Working Electrode (WE)           │
-       │           [Outer Ring r=5.5 - 7.0mm]         │
-       └──────────────────────────────────────────────┘
+TOP LAYER (Cis Inlet Channel, 30° / F.Cu):
+[Fluid In] ──> [J10: WE_POS (r=15.8mm)] ──> [J11: WS_CIS (r=6.9mm)] ──> [Nanopore Wafer Pocket: H1]
+               • Positive Current Drive      • High-Z Voltage Sense Tap
+
+BOTTOM LAYER (Trans Outlet Channel, 210° / B.Cu):
+[Nanopore Wafer Pocket: H1] ──> [J1: RE_TRANS (r=6.85mm)] ──> [J2: CE_GNDA (r=15.8mm)] ──> [Fluid Out]
+                                • High-Z Reference Sense Tap  • Negative Current Return (GNDA)
 ```
 
-### Geometric Dimensions for Interposer PCB:
-1. **Central Aperture (`H1`)**: $6.20 \times 6.20\text{ mm}$ diamond window accommodating the $4.0 \times 4.0\text{ mm}$ silicon wafer (diagonal tips reach $r_{corner} = 4.384\text{ mm}$).
-2. **Inner Voltage Sense Rings (`WS` / `PS1` Top, `RE` / `PS2` Bottom)**:
-   - Inner Radius: $r_1 = 5.00\text{ mm}$ ($> 0.61\text{ mm}$ clearance outside the diamond aperture tips, preventing edge burrs and delamination).
-   - Outer Radius: $r_2 = 5.80\text{ mm}$ ($0.80\text{ mm}$ annular gold trace, ENIG finish, center radius $5.40\text{ mm}$).
-   - Distance from pore center: $< 5.5\text{ mm}$ (reducing uncompensated solution resistance by **$99.9\%$** down to $7.9\,\Omega$).
-3. **Equipotential Guard Collar**:
-   - Inner Radius: $r = 6.15\text{ mm}$, Outer Radius: $r = 6.55\text{ mm}$ ($0.40\text{ mm}$ guard ring, center radius $6.35\text{ mm}$) isolating `WS` from `WE` with $0.35\text{ mm}$ PTFE clearance on each side.
-4. **Outer Current Delivery Rings (`WE` Top, `CE` Bottom)**:
-   - Inner Radius: $r_3 = 6.90\text{ mm}$, Outer Radius: $r_4 = 8.50\text{ mm}$ ($1.60\text{ mm}$ annular wide band, center radius $7.70\text{ mm}$, for low current density and minimal polarizability).
-   - `CE` on bottom layer is tied directly to **`GNDA`**.
-   - `WE` on top layer is driven by the positive bias DAC / TIA excitation node.
+### Physical Implementation Details:
+1. **Electrode Material**: Pre-chloridized silver ribbons ($2.0\text{ mm} \times 0.8\text{ mm} \times 0.1\text{ mm}$, Alfa Aesar 99.9% Ag foil treated in $0.1\text{ M FeCl}_3$) seated into PCB solder mask recesses.
+2. **Hermetic Confinement**: The cast silicone gaskets (`Cast_Nanopore_Wafer_Gasket` and `Fitted_Amplifier_Gasket`) press directly against the PTFE interposer, confining electrolyte strictly to the $1.4\text{ mm}$ channel and preventing cross-electrode liquid shorting.
+3. **Proximity Optimization**:
+   - `WS_CIS` (`J11`) and `RE_TRANS` (`J1`) are positioned immediately adjacent to the $4\times 4\text{ mm}$ silicon wafer aperture ($r \approx 6.85 - 6.90\text{ mm}$), tapping the transmembrane potential boundary with near-zero uncompensated solution drop ($< 150\,\Omega$).
+   - `WE_POS` (`J10`) and `CE_GNDA` (`J2`) are placed upstream and downstream ($r \approx 15.8\text{ mm}$), isolating current-injection polarization ($Z_{WE}, Z_{CE}$) from the sensing electrometers.
+4. **Zero Trace Crossings**:
+   - Cis signals (`WE_POS`, `WS_CIS`) route exclusively on Top Layer (`F.Cu`).
+   - Trans signals (`CE_GNDA`, `RE_TRANS`) route exclusively on Bottom Layer (`B.Cu`).
+   - No vias cut between Cis and Trans, providing infinite DC isolation and zero capacitive cross-talk.
 
 ---
 
@@ -129,23 +125,23 @@ classDiagram
   $$I_{sense} \approx 0 \implies V_{WS} - V_{RE} \equiv I \cdot \left( R_{pore} + 2 R_{access} \right)$$
 - **Result:**
   1. $Z_{WE}$ and $Z_{CE}$ (electrode interfacial capacitance and polarization) are **completely eliminated** from the measured potential.
-  2. $R_u$ is reduced from $\sim 2{,}000\,\Omega$ (remote channel) to $< 150\,\Omega$ (tight concentric ring).
+  2. $R_u$ is reduced from remote values to $< 150\,\Omega$.
   3. The transimpedance amplifier measures the **pure transmembrane ionic current with zero drift**.
 
 ---
 
 ## 5. 6-Pin Pogo Interface Pinout Mapping
 
-To mate with the Mill-Max spring pin array header on the Amplifier board, the Interposer's 6 gold target pads are assigned as follows:
+To mate with the Mill-Max spring pin array header on the Amplifier board, the Interposer's 6 gold target pads (`J_POGO1`, rotated $180^\circ$ at $Y=73.5\text{ mm}$) map symmetrically to the Cis and Trans channels:
 
-| Pin # | Net Name | Electrochemical Function | Termination / Shielding |
-| :---: | :--- | :--- | :--- |
-| **1** | `WE_POS` | **Working Electrode (`WE`)** | Positive terminal ($+V_{bias}$ current drive to Cis outer ring) |
-| **2** | `WS_CIS` | **Working Sense (`WS` / `PS1`)** | High-Z potential sensing probe at Cis aperture boundary |
-| **3** | `GNDA_FLOAT`| **Floating Analog Ground (`FloatGND`)** | Decoupled analog ground reference for electrometer |
-| **4** | `RE_TRANS`| **Reference / Counter Sense (`RE` / `PS2`)** | High-Z potential sensing probe at Trans aperture boundary |
-| **5** | `CE_GNDA` | **Counter Electrode (`CE`)** | Negative return terminal connected to `GNDA` (Trans outer ring) |
-| **6** | `WEEP_MOAT`| **Weep Moat Perimeter Leak Detector** | Moisture detection loop with hardware emergency stop cutoff |
+| Pin # | Board X | Net Name | Electrochemical Function (Gamry Standard) | Connection |
+| :---: | :---: | :--- | :--- | :--- |
+| **1** | $176.0\text{ mm}$ | `CE_GNDA` | **Counter Electrode (`CE`)** | Negative current return connected to `GNDA` (`J2` Trans outer ribbon) |
+| **2** | $171.0\text{ mm}$ | `RE_TRANS` | **Reference Electrode (`RE` / `CS`)** | High-Z potential sensing probe at Trans pore boundary (`J1`) |
+| **3** | $166.0\text{ mm}$ | `GNDA` | **Floating Analog Ground (`FloatGND`)** | Decoupled analog ground reference and driven guard |
+| **4** | $163.0\text{ mm}$ | `WEEP_SENSE` | **Weep Moat Perimeter Leak Detector** | Moisture detection loop with hardware emergency stop cutoff |
+| **5** | $158.0\text{ mm}$ | `WS_CIS` | **Working Sense (`WS` / `PS1`)** | High-Z potential sensing probe at Cis pore boundary (`J11`) |
+| **6** | $153.0\text{ mm}$ | `WE_POS` | **Working Electrode (`WE`)** | Positive terminal ($+V_{bias}$ current drive to `J10` Cis outer ribbon) |
 
 ---
 

@@ -240,7 +240,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "1.1"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -788,8 +788,8 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "amplifier.kicad_sch",
-        "name": "amplifier",
+        "filename": "Interposer.kicad_sch",
+        "name": "Interposer",
         "uuid": "0fac162c-ca5e-4358-934a-30718aa12176"
       }
     ],
@@ -799,7 +799,7 @@
   "sheets": [
     [
       "0fac162c-ca5e-4358-934a-30718aa12176",
-      "amplifier"
+      "Interposer"
     ]
   ],
   "text_variables": {},
