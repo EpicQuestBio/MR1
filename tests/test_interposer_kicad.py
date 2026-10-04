@@ -178,5 +178,36 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(sch_pdf.exists(), "Interposer.pdf schematic must exist")
         self.assertTrue(bom_csv.exists(), "Interposer_BOM.csv must exist")
 
+    def test_interposer_gnda_copper_flood_and_weep_traces(self):
+        """Ensure full-board GNDA copper pour zone and channel-contouring weep sense traces are present."""
+        pcb_path = REPO_ROOT / "Interposer" / "Interposer.kicad_pcb"
+        self.assertTrue(pcb_path.exists(), "Interposer.kicad_pcb must exist")
+        pcb_txt = pcb_path.read_text(encoding="utf-8")
+
+        # 1. GNDA zone must exist and cover both F.Cu and B.Cu
+        self.assertIn('(net "GNDA")', pcb_txt)
+        gnda_zones = re.findall(r'\(zone[^\)]*?\(net\s+"GNDA"\)[^\)]*?\(layers\s+"([^"]+)"\s+"([^"]+)"\)', pcb_txt, re.DOTALL)
+        self.assertTrue(len(gnda_zones) > 0, "GNDA copper flood zone must cover both F.Cu and B.Cu")
+        l1, l2 = gnda_zones[0]
+        self.assertIn("F.Cu", [l1, l2])
+        self.assertIn("B.Cu", [l1, l2])
+
+        # 2. WEEP_SENSE segments must be present on both F.Cu and B.Cu
+        segments = re.findall(r'\(segment\b.*?\n\t\)', pcb_txt, re.DOTALL)
+        weep_fcu = [s for s in segments if '(layer "F.Cu")' in s and '(net "WEEP_SENSE")' in s]
+        weep_bcu = [s for s in segments if '(layer "B.Cu")' in s and '(net "WEEP_SENSE")' in s]
+        self.assertGreaterEqual(len(weep_fcu), 5, f"F.Cu must have channel-contouring WEEP_SENSE segments (found {len(weep_fcu)})")
+        self.assertGreaterEqual(len(weep_bcu), 5, f"B.Cu must have channel-contouring WEEP_SENSE segments (found {len(weep_bcu)})")
+
+        # 3. Transition vias must exist for WEEP_SENSE, RE_TRANS, and CE_GNDA
+        vias = re.findall(r'\(via\b.*?\n\t\)', pcb_txt, re.DOTALL)
+        weep_vias = [v for v in vias if '(net "WEEP_SENSE")' in v]
+        re_vias = [v for v in vias if '(net "RE_TRANS")' in v]
+        ce_vias = [v for v in vias if '(net "CE_GNDA")' in v]
+        self.assertGreaterEqual(len(weep_vias), 2, f"WEEP_SENSE must have stitch/transition vias between F.Cu and B.Cu (found {len(weep_vias)})")
+        self.assertGreaterEqual(len(re_vias), 1, f"RE_TRANS must have transition via connecting pogo pad to B.Cu (found {len(re_vias)})")
+        self.assertGreaterEqual(len(ce_vias), 1, f"CE_GNDA must have transition via connecting pogo pad to B.Cu (found {len(ce_vias)})")
+
 if __name__ == "__main__":
     unittest.main()
+

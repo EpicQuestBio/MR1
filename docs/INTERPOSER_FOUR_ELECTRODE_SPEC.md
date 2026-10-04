@@ -145,7 +145,44 @@ To mate with the Mill-Max spring pin array header on the Amplifier board, the In
 
 ---
 
-## 6. Manufacturing & Cleaning Specifications
+## 6. Driven Guard, Weep Sense Moat, and Full-Board GNDA Ground Flood
+
+### Can Guard and Weep Sense Be Used as One and the Same?
+**No. They serve diametrically opposed electrical functions and must remain electrically separate nets:**
+1. **Driven Guard (`GUARD` / Pad 2)**:
+   - **Operating Principle**: Active, low-impedance op-amp output driven at $V_{guard} \approx V_{sense}$ ($\Delta V = 0$) to eliminate picoampere dielectric surface leakage into the ultra-high impedance electrometer nodes (`WS_CIS`, `RE_TRANS`).
+   - **Why it cannot be Weep Sense**: If shorted to leaked conductive fluid (1M KCl), the low-Z buffer would supply heavy current directly into the leak, corrupting the biological measurement, overloading the buffer, and masking the impedance collapse needed for leak detection.
+2. **Weep Sense (`WEEP_SENSE` / Pad 4)**:
+   - **Operating Principle**: Passive, high-impedance sensing input biased through a weak pull-up (e.g. $1\,\text{M}\Omega$ to $3.3\,\text{V}$) into an analog comparator / ADC threshold.
+   - **Detection Action**: In dry operation, the open air gap between the `WEEP_SENSE` trace and the adjacent `GNDA` copper flood exhibits $> 10\,\text{G}\Omega$ isolation. When any conductive saline breaches the silicone gasket seal, it bridges across the narrow $0.25\,\text{mm}$ gap to `GNDA`, collapsing the net impedance to $< 1\,\text{k}\Omega$ and tripping an immediate hardware ESTOP / pump shutdown.
+
+### Concentric Guard-and-Moat Layout Hierarchy
+To achieve both picoampere femtofarad signal integrity and hermetic leak security, the interposer layout implements a concentric hierarchy:
+```
+[Sensing Node (WS_CIS / RE_TRANS Pad 1)]
+       │
+       ▼ (Inside gasket boundary)
+[Driven Guard Ring (Pad 2, Delta V = 0, Low-Z)]
+       │
+       ▼ (Mechanical compression interface)
+[Cast Silicone Gasket Hermetic Seal Rib]
+       │
+       ▼ (Outside gasket boundary)
+[Weep Sense Moat Trace (WEEP_SENSE, High-Z passive)]
+       │
+       ▼ (0.25 mm uniform detection spark gap)
+[GNDA Full-Board Copper Pour (F.Cu & B.Cu Flood)]
+```
+
+### Channel-Contouring Geometry
+- **Top Layer (`F.Cu`)**: The `WEEP_SENSE` trace flanks both sides of the Cis microfluidic channel ($210^\circ \leftrightarrow \text{Center} \leftrightarrow 30^\circ$) at a $2.8\,\text{mm}$ offset, wrapping around the central aperture keepout and both fluid ports.
+- **Bottom Layer (`B.Cu`)**: The `WEEP_SENSE` trace flanks both sides of the Trans microfluidic channel ($150^\circ \leftrightarrow \text{Center} \leftrightarrow 330^\circ$) at a $2.8\,\text{mm}$ offset.
+- **Inter-Layer Stitching**: Top and bottom moat traces are bonded into a single continuous dual-sided leak detection fence via stitch vias at $(163.0, 68.0)$, $(180.4, 46.1)$, and $(148.6, 70.9)$.
+- **GNDA Copper Pour**: Both `F.Cu` and `B.Cu` outer copper layers are flooded with `GNDA` across the entire hexagonal interposer envelope, maintaining an exact $0.25\,\text{mm}$ detection gap to `WEEP_SENSE` over its complete perimeter.
+
+---
+
+## 7. Manufacturing & Cleaning Specifications
 
 1. **Substrate Material**: Rogers RO4350B or pure PTFE laminate ($0.8\text{ mm}$ thickness, $\epsilon_r = 2.1$, surface resistivity $> 10^{14}\,\Omega/\Box$).
 2. **Plating**: Electroless Nickel Immersion Gold (**ENIG**), minimum $50\,\mu\text{in}$ soft gold over $150\,\mu\text{in}$ nickel to resist 1M KCl chlorination and corrosion.

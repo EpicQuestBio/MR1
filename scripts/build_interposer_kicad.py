@@ -204,47 +204,65 @@ def build_interposer_pcb():
         out_lines.append(line)
         i += 1
 
-    # 4. Add new Interposer Routing Segments
-    # J_POGO1 Pad 1 (153.0, 73.5) to J1/J2 Pad 1 (>PORE_AMP)
-    # J_POGO1 Pad 2 (158.0, 73.5) to J1 Pad 2 (GUARD)
-    # J_POGO1 Pad 3 (163.0, 73.5) to Ground
-    # J_POGO1 Pad 4 (166.0, 73.5) to Weep moat
-    # J_POGO1 Pad 5 (171.0, 73.5) to J10 Pad 2 (GUARD_TRANS)
-    # J_POGO1 Pad 6 (176.0, 73.5) to J10/J11 Pad 1 (Vbias)
+    # 4. Add new Interposer Routing Segments and Copper Flood Zones (4-Electrode Gamry Architecture)
+    # J_POGO1 Pad 1 (176.0, 73.5) to J2 (CE_GNDA on B.Cu) via transition via
+    # J_POGO1 Pad 2 (171.0, 73.5) to J1 (RE_TRANS on B.Cu) via transition via
+    # J_POGO1 Pad 3 (166.0, 73.5) to GNDA ground plane
+    # J_POGO1 Pad 4 (163.0, 73.5) to WEEP_SENSE channel-contouring moat (F.Cu & B.Cu)
+    # J_POGO1 Pad 5 (158.0, 73.5) to J11 (WS_CIS on F.Cu)
+    # J_POGO1 Pad 6 (153.0, 73.5) to J10 (WE_POS on F.Cu)
 
     new_segments = [
-        # >PORE_AMP: From pogo pin 1 (153.0, 73.5) -> (153.0, 68.0) -> (170.855, 61.077)
-        f'\t(segment (start 153.0 73.5) (end 153.0 68.0) (width 0.4) (layer "F.Cu") (net ">PORE_AMP") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 153.0 68.0) (end 162.0 64.0) (width 0.4) (layer "F.Cu") (net ">PORE_AMP") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 162.0 64.0) (end 170.855 61.077) (width 0.4) (layer "F.Cu") (net ">PORE_AMP") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 170.855 61.077) (end 178.595 65.542) (width 0.4) (layer "F.Cu") (net ">PORE_AMP") (uuid "{new_uuid()}"))',
+        # WE_POS: Cis outer drive electrode
+        f'\t(segment (start 153 73.5) (end 153 68) (width 0.4) (layer "F.Cu") (net "WE_POS") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 153 68) (end 150.37866 65.488975) (width 0.4) (layer "F.Cu") (net "WE_POS") (uuid "{new_uuid()}"))',
 
-        # GUARD: Guard line running alongside >PORE_AMP from pogo pin 2 (158.0, 73.5)
-        f'\t(segment (start 158.0 73.5) (end 158.0 69.0) (width 0.3) (layer "F.Cu") (net "GUARD") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 158.0 69.0) (end 163.5 66.5) (width 0.3) (layer "F.Cu") (net "GUARD") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 163.5 66.5) (end 170.855 62.5) (width 0.3) (layer "F.Cu") (net "GUARD") (uuid "{new_uuid()}"))',
+        # WS_CIS: Cis inner sense electrode
+        f'\t(segment (start 158 73.5) (end 158.103349 61.072276) (width 0.4) (layer "F.Cu") (net "WS_CIS") (uuid "{new_uuid()}"))',
 
-        # Vbias: From pogo pin 6 (176.0, 73.5) -> (176.0, 68.0) -> (158.103, 61.072) on B.Cu
-        f'\t(segment (start 176.0 73.5) (end 176.0 68.0) (width 0.4) (layer "B.Cu") (net "Vbias") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 176.0 68.0) (end 166.0 64.0) (width 0.4) (layer "B.Cu") (net "Vbias") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 166.0 64.0) (end 158.103 61.072) (width 0.4) (layer "B.Cu") (net "Vbias") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 158.103 61.072) (end 150.379 65.489) (width 0.4) (layer "B.Cu") (net "Vbias") (uuid "{new_uuid()}"))',
+        # RE_TRANS: Trans inner sense electrode (B.Cu)
+        f'\t(segment (start 171 73.5) (end 170.855 61.077276) (width 0.4) (layer "B.Cu") (net "RE_TRANS") (uuid "{new_uuid()}"))',
 
-        # GUARD_TRANS: Guard line running alongside Vbias from pogo pin 5 (171.0, 73.5)
-        f'\t(segment (start 171.0 73.5) (end 171.0 69.0) (width 0.3) (layer "B.Cu") (net "GUARD_TRANS") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 171.0 69.0) (end 164.5 66.0) (width 0.3) (layer "B.Cu") (net "GUARD_TRANS") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 164.5 66.0) (end 158.103 62.5) (width 0.3) (layer "B.Cu") (net "GUARD_TRANS") (uuid "{new_uuid()}"))',
+        # CE_GNDA: Trans outer counter electrode (B.Cu)
+        f'\t(segment (start 176 73.5) (end 176 68) (width 0.4) (layer "B.Cu") (net "CE_GNDA") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 176 68) (end 178.595144 65.541773) (width 0.4) (layer "B.Cu") (net "CE_GNDA") (uuid "{new_uuid()}"))',
 
-        # WEEP_SENSE: Leak detection moat trace around fluidic zone
-        f'\t(segment (start 166.0 73.5) (end 166.0 71.0) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 166.0 71.0) (end 175.0 71.0) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 175.0 71.0) (end 175.0 52.0) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 175.0 52.0) (end 154.0 52.0) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 154.0 52.0) (end 154.0 71.0) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 154.0 71.0) (end 163.0 71.0) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        # Transition and Stitch Vias
+        f'\t(via (at 176 73.5) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "CE_GNDA") (uuid "{new_uuid()}"))',
+        f'\t(via (at 171 73.5) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "RE_TRANS") (uuid "{new_uuid()}"))',
+        f'\t(via (at 163 68) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(via (at 180.4 46.1) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(via (at 148.6 70.9) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
 
-        # GNDA / Shield tie
-        f'\t(segment (start 163.0 73.5) (end 163.0 75.0) (width 0.5) (layer "F.Cu") (net "GNDA") (uuid "{new_uuid()}"))',
+        # WEEP_SENSE: Channel-contouring moat traces on F.Cu (Cis channel)
+        f'\t(segment (start 163 73.5) (end 163 68) (width 0.4) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 163 68) (end 165.9 60.9) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 165.9 60.9) (end 183.2 50.9) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 183.2 50.9) (end 183.5 47.5) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 183.5 47.5) (end 180.4 46.1) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 180.4 46.1) (end 165.9 54.5) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 165.9 54.5) (end 164.5 52) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 164.5 52) (end 160 52) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 160 52) (end 157 56.5) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 157 56.5) (end 149 63) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 149 63) (end 145.8 66.1) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 145.8 66.1) (end 145.5 69.5) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 145.5 69.5) (end 148.6 70.9) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+
+        # WEEP_SENSE: Channel-contouring moat traces on B.Cu (Trans channel)
+        f'\t(segment (start 148.6 70.9) (end 156 68.5) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 156 68.5) (end 163 68) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 163 68) (end 163.1 61) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 163.1 61) (end 145.8 51) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 145.8 51) (end 145.5 48) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 145.5 48) (end 146 46) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 146 46) (end 163.1 55.9) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 163.1 55.9) (end 180.4 65.9) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 180.4 65.9) (end 183.5 67.5) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        f'\t(segment (start 183.5 67.5) (end 180.4 46.1) (width 0.3) (layer "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+
+        # GNDA: Full-board copper pour zone on F.Cu and B.Cu
+        f'\t(zone (net "GNDA") (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (connect_pads (clearance 0.25)) (min_thickness 0.2) (fill yes (thermal_gap 0.3) (thermal_bridge_width 0.3) (island_removal_mode 0)) (polygon (pts (xy 149.51 84.48) (xy 137.55 84.48) (xy 136.55 83.48) (xy 136.55 32.84) (xy 137.89 31.5) (xy 192.23 31.5) (xy 195.2 34.47) (xy 195.2 85.22) (xy 150.25 85.22))))',
     ]
 
     # Insert new segments right before the final closing parenthesis
