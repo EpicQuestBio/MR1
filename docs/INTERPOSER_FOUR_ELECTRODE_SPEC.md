@@ -180,6 +180,20 @@ To achieve both picoampere femtofarad signal integrity and hermetic leak securit
 - **Inter-Layer Stitching**: Top and bottom moat traces are bonded into a single continuous dual-sided leak detection fence via stitch vias at $(163.0, 68.0)$, $(180.4, 46.1)$, and $(148.6, 70.9)$.
 - **GNDA Copper Pour**: Both `F.Cu` and `B.Cu` outer copper layers are flooded with `GNDA` across the entire hexagonal interposer envelope, maintaining an exact $0.25\,\text{mm}$ detection gap to `WEEP_SENSE` over its complete perimeter.
 
+### Hardware Interlock & Negative Excursion Protection (ECO-2026-004)
+On the Amplifier / MR1 board, the `WEEP_SENSE` pogo line (Pin 4) directly controls the enable pin of the **LP5907 1.8V LDO (`U11`)** that powers the AD40xx high-speed ADC. 
+
+Because `PORE_amp` delivers bidirectional excitation up to $\pm 2.5\text{ V}$, any direct unbuffered connection would expose the LP5907 EN pin (Absolute Maximum Rating: $-0.3\text{ V}$ to $V_{IN} + 0.3\text{ V}$) to destructive negative excursions.
+
+An active **N-channel MOSFET buffer (2N7002 / BSS138) with Schottky clamping** is placed at the input:
+- **$R_{limit} = 100\text{ k}\Omega$**: Limits injected fault current to $\le 22\text{ }\mu\text{A}$.
+- **$D_1$ (BAT54)**: Clamps negative excursion at the gate to $-0.3\text{ V}$ (Cathode to Gate, Anode to `GNDA`).
+- **$R_{gate} = 1\text{ M}\Omega$**: Bleeder pull-down keeping the N-FET OFF in dry quiescent operation.
+- **$R_{pullup} = 100\text{ k}\Omega$**: Pulls U11 EN to $+3.3\text{ V}$ dry.
+- **Trigger Action**: A positive excursion or 1M KCl saline breach ($+2.5\text{ V}$) raises the Gate to $+2.27\text{ V} > V_{GS(th)}$, turning the N-FET ON, clamping U11 Pin 3 to `GNDA`, instantly collapsing the 1.8V analog rail to $0\text{ V}$, and halting ADC conversions.
+
+See `docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md` for complete rework directives and verification procedures.
+
 ---
 
 ## 7. Manufacturing & Cleaning Specifications

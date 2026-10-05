@@ -37,6 +37,36 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertLess(moat["v_sense_wet_volts"], 0.8)    # Logic LOW
         self.assertTrue(moat["estop_tripped"])
 
+    def test_weep_buffer_dry_quiescent_state(self):
+        """Verify weep buffer N-FET is OFF dry, holding LP5907 EN at 3.3V with 1.8V VDD active."""
+        dry = self.guard_sim.simulate_weep_buffer_circuit(v_fault=0.0)
+        self.assertEqual(dry["v_gate_volts"], 0.0)
+        self.assertFalse(dry["fet_conducting"])
+        self.assertEqual(dry["v_en_pin_volts"], 3.3)
+        self.assertEqual(dry["v_ldo_out_volts"], 1.8)
+        self.assertFalse(dry["interlock_tripped"])
+        self.assertTrue(dry["lp5907_safe"])
+
+    def test_weep_buffer_positive_fault_interlock(self):
+        """Verify +2.5V PORE_amp short turns N-FET ON, pulling LP5907 EN LOW and dropping 1.8V rail."""
+        pos = self.guard_sim.simulate_weep_buffer_circuit(v_fault=2.5)
+        self.assertGreater(pos["v_gate_volts"], 1.5) # Above 2N7002 V_th
+        self.assertTrue(pos["fet_conducting"])
+        self.assertLess(pos["v_en_pin_volts"], 0.4)  # Below LP5907 V_IL (0.4V)
+        self.assertEqual(pos["v_ldo_out_volts"], 0.0)
+        self.assertTrue(pos["interlock_tripped"])
+        self.assertTrue(pos["lp5907_safe"])
+
+    def test_weep_buffer_negative_excursion_clamping(self):
+        """Verify -2.5V PORE_amp fault clamps gate to -0.3V, limits I_fault < 25 uA, and protects LP5907."""
+        neg = self.guard_sim.simulate_weep_buffer_circuit(v_fault=-2.5)
+        self.assertEqual(neg["v_gate_volts"], -0.3)
+        self.assertLessEqual(neg["i_fault_ua"], 25.0) # 22 uA limited by 100k series R
+        self.assertFalse(neg["fet_conducting"])
+        self.assertEqual(neg["v_en_pin_volts"], 3.3)  # Isolated from -2.5V!
+        self.assertTrue(neg["lp5907_safe"])
+        self.assertTrue(neg["current_safe"])
+
     def test_fluidic_channel_resistance_and_reynolds(self):
         """Verify laminar creeping Stokes flow (Re < 5.0) and realistic pressure drop."""
         flow = self.fluid_sim.calculate_flowcell_pressure_drop(flow_rate_ul_min=25.0)

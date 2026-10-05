@@ -221,6 +221,73 @@ class GuardRingElectrostatics:
         }
 
 
+    def simulate_weep_buffer_circuit(
+        self,
+        v_fault: float = 2.5,
+        r_limit_ohms: float = 100_000.0,
+        r_gate_ohms: float = 1_000_000.0,
+        r_pullup_ohms: float = 100_000.0,
+        v_diode_clamp: float = 0.3, # BAT54 Schottky forward voltage
+        v_th_fet: float = 1.5,      # 2N7002 / BSS138 threshold voltage
+        v_cc_ldo: float = 3.3,       # Supply for LDO pull-up
+    ) -> Dict[str, float]:
+        """
+        Simulates the N-channel MOSFET buffer and Schottky clamping circuit between
+        the weep sense pad and the LP5907 EN pin (U11 Pin 3) under arbitrary fault voltages
+        (-2.5V to +2.5V from PORE_amp).
+
+        Topology:
+          Weep Trace -> [R_limit: 100k] -> Gate node
+          Gate node -> [R_gate: 1M] -> GNDA
+          Gate node -> [D1: BAT54, Cathode to Gate, Anode to GNDA]
+          Gate node -> Gate of 2N7002 / BSS138 (Source = GNDA)
+          Drain -> U11 Pin 3 (EN) with [R_pullup: 100k] to +3V3
+
+        LP5907 Absolute Maximum Ratings on EN pin:
+          V_EN_min = -0.3 V
+          V_EN_max = V_IN + 0.3 V
+          V_EN_high (enabled) >= 1.2 V
+          V_EN_low (disabled) <= 0.4 V
+        """
+        # 1. Negative excursion: Diode clamps Gate to -v_diode_clamp
+        if v_fault < -v_diode_clamp:
+            v_gate = -v_diode_clamp
+            i_fault_uA = (abs(v_fault) - v_diode_clamp) / r_limit_ohms * 1e6
+            fet_on = False
+            v_en_pin = v_cc_ldo
+            ldo_active = True
+        # 2. Positive excursion or dry/zero
+        else:
+            # Voltage divider between R_limit and R_gate
+            v_gate = v_fault * (r_gate_ohms / (r_limit_ohms + r_gate_ohms))
+            i_fault_uA = (v_fault - v_gate) / r_limit_ohms * 1e6 if v_fault > 0 else 0.0
+            fet_on = v_gate >= v_th_fet
+            # When FET is ON, Drain is pulled down to near GNDA (< 50 mV);
+            # when OFF, Drain sits at +3V3.
+            v_en_pin = 0.04 if fet_on else v_cc_ldo
+            ldo_active = not fet_on
+
+        # LDO 1.8V output state
+        v_ldo_out = 1.8 if ldo_active else 0.0
+
+        # Safety check: LP5907 EN pin must never violate -0.3V to V_IN + 0.3V
+        lp5907_safe = (-0.3 <= v_en_pin <= v_cc_ldo + 0.3)
+        # Injected fault current must be < 25 uA
+        current_safe = (i_fault_uA <= 25.0)
+
+        return {
+            "v_fault_in": v_fault,
+            "v_gate_volts": v_gate,
+            "i_fault_ua": i_fault_uA,
+            "fet_conducting": fet_on,
+            "v_en_pin_volts": v_en_pin,
+            "v_ldo_out_volts": v_ldo_out,
+            "interlock_tripped": fet_on,
+            "lp5907_safe": lp5907_safe,
+            "current_safe": current_safe,
+        }
+
+
 if __name__ == "__main__":
     sim = GuardRingElectrostatics()
     print("=== Running Guard Ring Electrostatic Simulation ===")
@@ -234,3 +301,11 @@ if __name__ == "__main__":
     print(f"Dry Moat Resistance:     {moat['r_dry_gigaohms']:.1f} Giga-Ohms (V_sense = {moat['v_sense_dry_volts']:.3f} V)")
     print(f"Wet Moat Resistance:     {moat['r_wet_ohms']:.2f} Ohms (V_sense = {moat['v_sense_wet_volts']:.4f} V)")
     print(f"Emergency Trip Triggered: {moat['estop_tripped']}")
+
+    print("\n=== Simulating Weep Sense N-FET Buffer & Interlock ===")
+    dry = sim.simulate_weep_buffer_circuit(v_fault=0.0)
+    print(f"Dry State:    V_gate={dry['v_gate_volts']:.2f}V, V_EN={dry['v_en_pin_volts']:.2f}V, VDD_1V8={dry['v_ldo_out_volts']:.1f}V (Safe={dry['lp5907_safe']})")
+    pos = sim.simulate_weep_buffer_circuit(v_fault=2.5)
+    print(f"+2.5V Breach: V_gate={pos['v_gate_volts']:.2f}V, V_EN={pos['v_en_pin_volts']:.2f}V, VDD_1V8={pos['v_ldo_out_volts']:.1f}V (Tripped={pos['interlock_tripped']})")
+    neg = sim.simulate_weep_buffer_circuit(v_fault=-2.5)
+    print(f"-2.5V Fault:  V_gate={neg['v_gate_volts']:.2f}V, I_fault={neg['i_fault_ua']:.1f}uA, V_EN={neg['v_en_pin_volts']:.2f}V (Safe={neg['lp5907_safe']})")
