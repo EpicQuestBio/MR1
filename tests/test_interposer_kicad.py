@@ -208,6 +208,44 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertGreaterEqual(len(re_vias), 1, f"RE_TRANS must have transition via connecting pogo pad to B.Cu (found {len(re_vias)})")
         self.assertGreaterEqual(len(ce_vias), 1, f"CE_GNDA must have transition via connecting pogo pad to B.Cu (found {len(ce_vias)})")
 
+    def test_amplifier_schematic_digitized_pogo_and_adc(self):
+        """Ensure Amplifier schematic has 6-pin Pogo header, digitized ADC stage, damping, and interlock."""
+        amp_sch_path = REPO_ROOT / "Amplifier" / "amplifier.kicad_sch"
+        self.assertTrue(amp_sch_path.exists(), "amplifier.kicad_sch must exist")
+        txt = amp_sch_path.read_text(encoding="utf-8")
+
+        # 1. 6-Pin Pogo header matching interposer
+        self.assertIn('"J_POGO1"', txt)
+        self.assertIn('"PogoPin_SpringHeader_6Pin_Array"', txt)
+        for net in ["CE_GNDA", "RE_TRANS", "GNDA", "WEEP_SENSE", "WS_CIS", ">PORE_AMP"]:
+            self.assertIn(f'"{net}"', txt, f"Net {net} must be present in amplifier schematic")
+
+        # 2. TIA + ADC on board: U2 (LMP7721), U12 (ADA4940), U10 (AD40xx), U11 (LP5907)
+        self.assertIn('"LMP7721"', txt)
+        self.assertIn('"ADA4940-1xCP"', txt)
+        self.assertIn('"AD40xxBRMZ"', txt)
+        self.assertIn('"LP5907MFX-1.8"', txt)
+
+        # 3. Interleaved 10-pin ribbon connector J9
+        self.assertIn('"GDAC_CLK"', txt)
+        self.assertIn('"GDAC_SDO"', txt)
+        self.assertIn('"GDAC_EN"', txt)
+        self.assertIn('"+3V3"', txt)
+        self.assertIn('"PORE_BIAS"', txt)
+
+        # 4. Source damping resistor & destination filter
+        self.assertIn('"R_DAMP"', txt)
+        self.assertIn('"49.9"', txt)
+        self.assertIn('"R_BIAS_FILT"', txt)
+        self.assertIn('"C_BIAS_FILT"', txt)
+
+        # 5. Weep sense buffer & clamping (ECO-2026-004)
+        self.assertIn('"R_WEEP_LIM"', txt)
+        self.assertIn('"R_WEEP_GATE"', txt)
+        self.assertIn('"D_WEEP_CLAMP"', txt)
+        self.assertIn('"Q_WEEP"', txt)
+        self.assertIn('"R_WEEP_PULL"', txt)
+
 if __name__ == "__main__":
     unittest.main()
 
