@@ -17,6 +17,7 @@
 #include "comm/pump_uart.h"
 #include "comm/usb_cdc_stream.h"
 #include "comm/sbu_i2c_detect.h"
+#include "comm/opendaq_stream.h"
 #include "web/web_portal.h"
 
 // Task handles
@@ -95,8 +96,9 @@ void setup() {
     SbuDetector.begin();
     SbuDetector.detect_orientation();
 
-    // 7. Initialize Wi-Fi Access Point & Web Portal
+    // 7. Initialize Wi-Fi Access Point, Web Portal & OpenDAQ Streaming
     Portal.begin();
+    DAQStream.begin();
 
     // 7. Spawn dedicated FreeRTOS tasks pinned to respective Xtensa cores
     xTaskCreatePinnedToCore(
