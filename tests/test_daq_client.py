@@ -187,6 +187,56 @@ class TestDaqClient(unittest.TestCase):
         self.assertIn("bias_mv", resp)
         self.assertIn("sampling", resp)
 
+    def test_mock_serial_dac_waveform_commands(self):
+        """Verify DAC speed, gain mode, raw transfer, and waveform synthesis commands."""
+        mock = MockSerialPort()
+
+        # Gain mode
+        mock.write(b"SET:DAC:GAIN:1X\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:DAC:GAIN:1X")
+        self.assertFalse(mock.dac_gain_2x)
+
+        mock.write(b"SET:DAC:GAIN:2X\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:DAC:GAIN:2X")
+        self.assertTrue(mock.dac_gain_2x)
+
+        # Update rate / speed
+        mock.write(b"SET:DAC:SPEED:1000000\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:DAC:SPEED:1000000")
+        self.assertEqual(mock.dac_speed_sps, 1000000)
+
+        # Waveform config and start
+        mock.write(b"WAVE:CONFIG:SINE:10000:250:50\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:WAVE:CONFIG:SINE:10000.00:250.00:50.00")
+        self.assertEqual(mock.wave_shape, "SINE")
+        self.assertEqual(mock.wave_freq_hz, 10000.0)
+
+        mock.write(b"WAVE:START\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:WAVE:STARTED")
+        self.assertTrue(mock.wave_active)
+
+        # Telemetry reflecting wave active
+        mock.write(b"STATUS?\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertIn('"wave_active":true', resp)
+        self.assertIn('"wave_shape":"SINE"', resp)
+        self.assertIn('"dac_sps":1000000', resp)
+
+        mock.write(b"WAVE:STOP\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:WAVE:STOPPED")
+        self.assertFalse(mock.wave_active)
+
+        # Direct raw write
+        mock.write(b"DAC:SET:RAW:0:2048\n")
+        resp = mock.read(mock.in_waiting).decode("utf-8")
+        self.assertEqual(resp.strip(), "OK:DAC:RAW:0:2048")
+
     def test_daq_client_streaming_mock_e2e(self):
         """Verify DaqClient end-to-end streaming, frame parsing, throughput, and CSV output."""
         with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tf:

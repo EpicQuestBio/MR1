@@ -9,6 +9,7 @@ import unittest
 from simulations.guard_ring_electrostatics import GuardRingElectrostatics
 from simulations.fluidic_dynamics_nanopore import FluidicDynamicsNanopore
 from simulations.nanopore_electrokinetics import NanoporeElectrokinetics
+from simulations.pore_dac_dynamics import PoreDacDynamics
 
 
 class TestPhysicsAndSimulations(unittest.TestCase):
@@ -18,6 +19,7 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.pore_sim = NanoporeElectrokinetics(
             kcl_molarity=1.0, temperature_c=25.0, pore_diameter_nm=4.0, membrane_thickness_nm=20.0
         )
+        self.dac_sim = PoreDacDynamics()
 
     def test_guard_ring_attenuation_and_leakage(self):
         """Verify driven guard ring provides > 20 dB of surface leakage suppression."""
@@ -110,6 +112,36 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         cap_200 = self.pore_sim.calculate_capture_radius_and_rate(200.0, 10.0)
         self.assertAlmostEqual(cap_200["capture_radius_um"], 2.0 * cap_100["capture_radius_um"], places=1)
         self.assertGreater(cap_200["capture_rate_hz"], cap_100["capture_rate_hz"])
+
+    def test_dac_analog_bandwidth_slew_rate_limits(self):
+        """Verify MCP4822 slew rate limit of 0.55 V/us yields 85.5 kHz in 1x mode and 42.7 kHz in 2x mode."""
+        bw_1x = self.dac_sim.calculate_slew_limited_bandwidth(gain_2x=False)
+        self.assertAlmostEqual(bw_1x["f_max_full_power_khz"], 85.48, places=1)
+        self.assertEqual(bw_1x["v_full_scale_v"], 2.048)
+
+        bw_2x = self.dac_sim.calculate_slew_limited_bandwidth(gain_2x=True)
+        self.assertAlmostEqual(bw_2x["f_max_full_power_khz"], 42.74, places=1)
+        self.assertEqual(bw_2x["v_full_scale_v"], 4.096)
+
+        settle = self.dac_sim.calculate_settling_rate()
+        self.assertAlmostEqual(settle["max_resolved_sps"], 222222.2, places=0)
+
+    def test_dac_spi_throughput_and_hardware_limit(self):
+        """Verify 20 MHz SPI 16-bit frame transfer takes 800 ns, yielding 1.17 MSPS raw throughput."""
+        spi = self.dac_sim.calculate_spi_throughput()
+        self.assertAlmostEqual(spi["frame_transfer_ns"], 800.0, places=1)
+        self.assertAlmostEqual(spi["min_cycle_time_ns"], 855.0, places=1)
+        self.assertGreater(spi["max_theoretical_sps"], 1.1e6)
+        self.assertGreaterEqual(spi["realistic_dma_sps"], 8.0e5)
+
+    def test_dac_waveform_reconstruction_density(self):
+        """Verify waveform table generation across standard frequencies."""
+        table = self.dac_sim.generate_waveform_table()
+        self.assertEqual(len(table), 8)
+        # 1 kHz sine should have 800 samples/cycle at 800 kSPS
+        row_1k = next(r for r in table if r["frequency_hz"] == 1000.0)
+        self.assertGreaterEqual(row_1k["samples_per_cycle"], 800.0)
+        self.assertTrue(row_1k["analog_ok"])
 
 
 if __name__ == "__main__":

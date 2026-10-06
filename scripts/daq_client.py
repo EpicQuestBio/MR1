@@ -41,6 +41,7 @@ STATUS_PUMP_CONNECTED   = 1 << 2
 STATUS_PUMP_RUNNING     = 1 << 3
 STATUS_PUMP_EMERGENCY   = 1 << 4
 STATUS_DAC_PULSE_ACTIVE = 1 << 5
+STATUS_DAC_WAVE_ACTIVE  = 1 << 6
 
 
 def calculate_crc16(data: bytes) -> int:
@@ -132,6 +133,10 @@ class StreamFrame:
     def is_pulse_active(self) -> bool:
         return bool(self.status_flags & STATUS_DAC_PULSE_ACTIVE)
 
+    @property
+    def is_wave_active(self) -> bool:
+        return bool(self.status_flags & STATUS_DAC_WAVE_ACTIVE)
+
     @classmethod
     def unpack(cls, buffer: bytes) -> Optional["StreamFrame"]:
         """Unpacks 146 bytes into a StreamFrame and verifies CRC-16."""
@@ -194,6 +199,13 @@ class MockSerialPort:
         self.streaming = False
         self.bias_mv = 200.0
         self.pulse_active = False
+        self.dac_gain_2x = True
+        self.dac_speed_sps = 200000
+        self.wave_active = False
+        self.wave_shape = "OFF"
+        self.wave_freq_hz = 1000.0
+        self.wave_amp_mv = 100.0
+        self.wave_offset_mv = 0.0
         self.pump_connected = True
         self.pump_running = False
         self.pump_rpm = 0
@@ -251,6 +263,45 @@ class MockSerialPort:
         elif cmd.startswith("CMD:PULSE:"):
             parts = cmd.split(":")
             response = f"OK:PULSE:{parts[2]}:{parts[3]}\n"
+        elif cmd.startswith("SET:DAC:GAIN:"):
+            mode = cmd.split(":")[3].upper()
+            if mode == "1X":
+                self.dac_gain_2x = False
+                response = "OK:DAC:GAIN:1X\n"
+            elif mode == "2X":
+                self.dac_gain_2x = True
+                response = "OK:DAC:GAIN:2X\n"
+            else:
+                response = "ERR:INVALID_GAIN_MODE\n"
+        elif cmd.startswith("SET:DAC:SPEED:"):
+            try:
+                sps = int(cmd.split(":")[3])
+                self.dac_speed_sps = min(max(sps, 1000), 1000000)
+                response = f"OK:DAC:SPEED:{self.dac_speed_sps}\n"
+            except (IndexError, ValueError):
+                response = "ERR:INVALID_ARG\n"
+        elif cmd.startswith("WAVE:CONFIG:"):
+            parts = cmd.split(":")
+            if len(parts) >= 5:
+                self.wave_shape = parts[2].upper()
+                self.wave_freq_hz = float(parts[3])
+                self.wave_amp_mv = float(parts[4])
+                self.wave_offset_mv = float(parts[5]) if len(parts) > 5 else 0.0
+                response = f"OK:WAVE:CONFIG:{self.wave_shape}:{self.wave_freq_hz:.2f}:{self.wave_amp_mv:.2f}:{self.wave_offset_mv:.2f}\n"
+            else:
+                response = "ERR:WAVE:SYNTAX\n"
+        elif cmd == "WAVE:START":
+            self.wave_active = True
+            response = "OK:WAVE:STARTED\n"
+        elif cmd == "WAVE:STOP":
+            self.wave_active = False
+            response = "OK:WAVE:STOPPED\n"
+        elif cmd.startswith("DAC:SET:RAW:"):
+            parts = cmd.split(":")
+            if len(parts) >= 5:
+                response = f"OK:DAC:RAW:{parts[3]}:{parts[4]}\n"
+            else:
+                response = "ERR:INVALID_ARG\n"
         elif cmd == "STREAM:START":
             self.streaming = True
             response = "OK:STREAM:STARTED\n"
@@ -269,6 +320,7 @@ class MockSerialPort:
             self.pump_running = False
             self.pump_rpm = 0
             self.bias_mv = 0.0
+            self.wave_active = False
             response = "OK:PUMP:ESTOP\n"
         elif cmd == "LEAK:RESET":
             self.leak_detected = False
@@ -281,8 +333,11 @@ class MockSerialPort:
             orient_str = "NORMAL" if self.sbu_orientation == 1 else "INVERTED"
             response = f'{{"sbu_orient":"{orient_str}","scl_gpio":12,"sda_gpio":13,"devices":["0x38","0x60"]}}\n'
         elif cmd == "STATUS?":
+            gain_str = "2X" if self.dac_gain_2x else "1X"
             response = (
-                f'{{"bias_mv":{self.bias_mv:.2f},"pulse_active":false,'
+                f'{{"bias_mv":{self.bias_mv:.2f},"dac_gain":"{gain_str}","dac_sps":{self.dac_speed_sps},'
+                f'"wave_active":{str(self.wave_active).lower()},"wave_shape":"{self.wave_shape}",'
+                f'"wave_freq":{self.wave_freq_hz:.1f},"pulse_active":false,'
                 f'"sampling":{str(self.streaming).lower()},"streaming":{str(self.streaming).lower()},'
                 f'"rate_hz":{self.sample_rate_hz},"leak":{str(self.leak_detected).lower()},'
                 f'"pump_conn":{str(self.pump_connected).lower()},"pump_run":{str(self.pump_running).lower()},'
@@ -336,6 +391,7 @@ class MockSerialPort:
                 if self.leak_detected:   flags |= STATUS_LEAK_DETECTED
                 if self.pump_connected:  flags |= STATUS_PUMP_CONNECTED
                 if self.pump_running:    flags |= STATUS_PUMP_RUNNING
+                if self.wave_active:     flags |= STATUS_DAC_WAVE_ACTIVE
 
                 frame = StreamFrame(
                     magic=STREAM_MAGIC_WORD,
@@ -485,6 +541,25 @@ class DaqClient:
 
     def detect_sbu(self) -> str:
         return self.send_command("SBU:DETECT")
+
+    def set_dac_gain(self, gain_2x: bool = True):
+        mode = "2X" if gain_2x else "1X"
+        return self.send_command(f"SET:DAC:GAIN:{mode}")
+
+    def set_dac_speed(self, sps: int):
+        return self.send_command(f"SET:DAC:SPEED:{int(sps)}")
+
+    def configure_waveform(self, shape: str, freq_hz: float, amp_mv: float, offset_mv: float = 0.0):
+        return self.send_command(f"WAVE:CONFIG:{shape.upper()}:{freq_hz:.2f}:{amp_mv:.2f}:{offset_mv:.2f}")
+
+    def start_waveform(self):
+        return self.send_command("WAVE:START")
+
+    def stop_waveform(self):
+        return self.send_command("WAVE:STOP")
+
+    def set_dac_raw(self, channel: int, code: int):
+        return self.send_command(f"DAC:SET:RAW:{channel}:{code}")
 
     def set_csv_output(self, file_path: str):
         """Configures live CSV sample stream logging."""
@@ -733,6 +808,42 @@ def parse_args() -> argparse.Namespace:
         help="Transimpedance feedback resistor Rf in Ohms (default: 1e9 = 1 Gigaohm)."
     )
     parser.add_argument(
+        "--dac-gain-1x",
+        action="store_true",
+        help="Configure DAC to 1X gain (0-2.048V, unlocking 85.5 kHz full-power bandwidth)."
+    )
+    parser.add_argument(
+        "--dac-speed",
+        type=int,
+        default=None,
+        help="Configure DAC update speed in SPS (up to 1,000,000 SPS)."
+    )
+    parser.add_argument(
+        "--wave-shape",
+        type=str,
+        default=None,
+        choices=["SINE", "TRIANGLE", "SQUARE", "RAMP", "CHIRP", "OFF"],
+        help="Configure periodic/arbitrary DDS waveform shape."
+    )
+    parser.add_argument(
+        "--wave-freq",
+        type=float,
+        default=1000.0,
+        help="Waveform frequency in Hz (default: 1000.0 Hz, max 85.5 kHz full-power)."
+    )
+    parser.add_argument(
+        "--wave-amp",
+        type=float,
+        default=100.0,
+        help="Waveform amplitude in mV (default: 100.0 mV)."
+    )
+    parser.add_argument(
+        "--wave-offset",
+        type=float,
+        default=0.0,
+        help="Waveform offset in mV (default: 0.0 mV)."
+    )
+    parser.add_argument(
         "--mock", "--sim",
         action="store_true",
         help="Run with high-fidelity internal mock simulation without requiring hardware."
@@ -752,6 +863,21 @@ def main():
 
     try:
         client.connect()
+
+        if args.dac_gain_1x:
+            resp = client.set_dac_gain(gain_2x=False)
+            print(f"[CMD] Set DAC Gain 1X: {resp.strip()}")
+
+        if args.dac_speed is not None:
+            resp = client.set_dac_speed(args.dac_speed)
+            print(f"[CMD] Set DAC Speed: {resp.strip()}")
+
+        if args.wave_shape:
+            resp = client.configure_waveform(args.wave_shape, args.wave_freq, args.wave_amp, args.wave_offset)
+            print(f"[CMD] Config Waveform: {resp.strip()}")
+            if args.wave_shape.upper() != "OFF":
+                resp_start = client.start_waveform()
+                print(f"[CMD] Start Waveform: {resp_start.strip()}")
 
         # Execute pre-stream commands
         if args.bias is not None:

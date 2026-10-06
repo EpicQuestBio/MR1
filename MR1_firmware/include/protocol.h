@@ -24,7 +24,20 @@ enum SystemStatusFlags : uint16_t {
     STATUS_PUMP_CONNECTED   = (1 << 2),
     STATUS_PUMP_RUNNING     = (1 << 3),
     STATUS_PUMP_EMERGENCY   = (1 << 4),
-    STATUS_DAC_PULSE_ACTIVE = (1 << 5)
+    STATUS_DAC_PULSE_ACTIVE = (1 << 5),
+    STATUS_DAC_WAVE_ACTIVE  = (1 << 6)
+};
+
+/**
+ * @brief DAC Waveform Synthesis Types
+ */
+enum DacWaveformShape : uint8_t {
+    WAVE_SHAPE_OFF      = 0,
+    WAVE_SHAPE_SINE     = 1,
+    WAVE_SHAPE_TRIANGLE = 2,
+    WAVE_SHAPE_SQUARE   = 3,
+    WAVE_SHAPE_RAMP     = 4,
+    WAVE_SHAPE_CHIRP    = 5
 };
 
 /**

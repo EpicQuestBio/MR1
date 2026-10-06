@@ -30,6 +30,9 @@ void TaskAcquisition(void* pvParameters) {
     (void)pvParameters;
 
     for (;;) {
+        // High-speed DDS waveform generation step (up to 1 MSPS)
+        Dac.service_waveform();
+
         // High-speed drain of ADC frames over USB CDC
         UsbStream.process_streaming();
     }
