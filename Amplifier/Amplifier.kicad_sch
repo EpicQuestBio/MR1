@@ -8988,7 +8988,7 @@
 			(uuid "3a0f392e-9664-473a-b688-8b5eebdfcecf")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "U2")
 					(unit 1)
@@ -9198,7 +9198,7 @@
 			(uuid "020472a7-a933-4a3a-92b7-9f820590b421")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R1")
 					(unit 1)
@@ -9408,7 +9408,7 @@
 			(uuid "67f313dd-ff21-4223-9723-03b7dcb248ba")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C1")
 					(unit 1)
@@ -9618,7 +9618,7 @@
 			(uuid "d8b52d19-0b68-4a39-b09e-dc643aa92dbd")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R6")
 					(unit 1)
@@ -9830,7 +9830,7 @@
 			(uuid "0e93d304-aa1a-483d-9c8d-cb486cff8912")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C6")
 					(unit 1)
@@ -9921,7 +9921,7 @@
 			(uuid "2c467e32-32ff-4a20-be53-1b2d18b36fee")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C32")
 					(unit 1)
@@ -9998,7 +9998,7 @@
 			(uuid "c419bec3-0110-4e76-9e28-2ad00438b843")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0101")
 					(unit 1)
@@ -10076,7 +10076,7 @@
 			(uuid "d456245a-eafc-4e6b-9cd8-a793b3d2cafa")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR020")
 					(unit 1)
@@ -10154,7 +10154,7 @@
 			(uuid "5e081d5a-55a2-4ec9-bc26-480fc9537c31")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR017")
 					(unit 1)
@@ -10232,7 +10232,7 @@
 			(uuid "4f4a8bdd-ba7b-45a7-b32e-e83793aad14c")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR036")
 					(unit 1)
@@ -10310,7 +10310,7 @@
 			(uuid "cea3e93d-62d6-4e51-840a-b76ed7fc8369")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR027")
 					(unit 1)
@@ -10401,7 +10401,7 @@
 			(uuid "ec533536-08af-4305-a980-111baaadbfa3")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C30")
 					(unit 1)
@@ -10590,7 +10590,7 @@
 			(uuid "cb9d30ff-f58d-4731-8e56-6c212472c23e")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R30")
 					(unit 1)
@@ -10681,7 +10681,7 @@
 			(uuid "d0875bbe-e285-4741-8f4f-d79063510cc1")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R44")
 					(unit 1)
@@ -10759,7 +10759,7 @@
 			(uuid "e4c62546-d196-4b6a-85ce-0066562ca1d7")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0104")
 					(unit 1)
@@ -10898,7 +10898,7 @@
 			(uuid "97efcdcc-2336-4814-a16b-c841e09f3f8e")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "U13")
 					(unit 1)
@@ -10989,7 +10989,7 @@
 			(uuid "9a40b7a9-4393-4c1a-a791-19b294b4fe9e")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C12")
 					(unit 1)
@@ -11067,7 +11067,7 @@
 			(uuid "526c260a-0825-448f-9efe-239ef0ed3ee8")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR046")
 					(unit 1)
@@ -11145,7 +11145,7 @@
 			(uuid "79447989-2272-48a4-9c1f-05f314d87e12")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR069")
 					(unit 1)
@@ -11223,7 +11223,7 @@
 			(uuid "b3077ad9-b6e6-4d6b-a068-782ba692dccf")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0106")
 					(unit 1)
@@ -11301,7 +11301,7 @@
 			(uuid "3dfe4251-3ef6-444b-94dd-25b376eec5ac")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR026")
 					(unit 1)
@@ -11392,7 +11392,7 @@
 			(uuid "cf571c00-e42d-4d72-af78-ff7436c48b7f")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C7")
 					(unit 1)
@@ -11470,7 +11470,7 @@
 			(uuid "79f43b51-8d17-48b0-977f-d9b02edf7ee8")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR045")
 					(unit 1)
@@ -11548,7 +11548,7 @@
 			(uuid "f352b195-cf40-4e9a-ac87-39b99c719c22")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR055")
 					(unit 1)
@@ -11626,7 +11626,7 @@
 			(uuid "5579c8a4-57c8-42fe-9ffc-b29bc7fb4863")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR051")
 					(unit 1)
@@ -11704,7 +11704,7 @@
 			(uuid "7d528239-db03-4e8e-85a4-bce103eeefc4")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR037")
 					(unit 1)
@@ -11795,7 +11795,7 @@
 			(uuid "9d0ea2c4-3b15-4db0-8add-0558e89a4415")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C39")
 					(unit 1)
@@ -11873,7 +11873,7 @@
 			(uuid "c461ad26-022b-4ee8-b274-a6adc1f9fc51")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR018")
 					(unit 1)
@@ -11953,7 +11953,7 @@
 			(uuid "debf408a-a7f5-4d0a-b2a9-d874f1867542")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR024")
 					(unit 1)
@@ -12031,7 +12031,7 @@
 			(uuid "512e0bea-b8c6-43f9-a0dd-1878cc2cb81a")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0107")
 					(unit 1)
@@ -12222,7 +12222,7 @@
 			(uuid "eb0804bb-4277-4c7f-8789-71b68123368c")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C35")
 					(unit 1)
@@ -12300,7 +12300,7 @@
 			(uuid "ca3531b8-b327-4641-902a-80f619506507")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR071")
 					(unit 1)
@@ -12422,7 +12422,7 @@
 			(uuid "265d802d-0250-4f47-956a-407944a246a7")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "U14")
 					(unit 1)
@@ -12500,7 +12500,7 @@
 			(uuid "1835b647-f59f-4b27-b9b7-7978afd5b474")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR080")
 					(unit 1)
@@ -12778,7 +12778,7 @@
 			(uuid "430ed6bc-c32e-4c26-9b43-3777c0000769")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "NT3")
 					(unit 1)
@@ -12856,7 +12856,7 @@
 			(uuid "723d89b0-839a-4037-9a66-16738435b7ed")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR050")
 					(unit 1)
@@ -12987,7 +12987,7 @@
 			(uuid "d4392ffc-cb34-4974-9334-5cc706456efc")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "U16")
 					(unit 1)
@@ -13078,7 +13078,7 @@
 			(uuid "b83e0e5c-2f10-41e1-affc-eb5befb953c9")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C31")
 					(unit 1)
@@ -13156,7 +13156,7 @@
 			(uuid "8feb8aa9-4bfb-4384-b390-8c70dac3aa62")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR022")
 					(unit 1)
@@ -13198,7 +13198,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 209.042 124.46 90)
 			(hide yes)
 			(show_name no)
@@ -13238,7 +13238,7 @@
 			(uuid "4c078f9c-619c-497d-9214-4b6afbeba5d9")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R14")
 					(unit 1)
@@ -13336,7 +13336,7 @@
 			(uuid "39253ac1-76ee-466f-ad70-330f85a0c600")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "Q1")
 					(unit 2)
@@ -13414,7 +13414,7 @@
 			(uuid "fb01f632-7e3a-43ad-b9bd-1fc1c00d6e86")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR084")
 					(unit 1)
@@ -13505,7 +13505,7 @@
 			(uuid "b9a5a061-f2d1-406f-9156-72af2928b7fd")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C10")
 					(unit 1)
@@ -13596,7 +13596,7 @@
 			(uuid "2f43d7b7-b2ed-4cd3-9530-a0a58d9b9538")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R43")
 					(unit 1)
@@ -13674,7 +13674,7 @@
 			(uuid "5725f35e-a06b-4061-b5e1-ab7645902833")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR083")
 					(unit 1)
@@ -13752,7 +13752,7 @@
 			(uuid "e8608418-c498-4d4f-8cb0-fd9f09f7f032")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR047")
 					(unit 1)
@@ -13830,7 +13830,7 @@
 			(uuid "abc6d009-1153-48ed-9c14-d496cba61220")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0118")
 					(unit 1)
@@ -13917,7 +13917,7 @@
 			(uuid "f398f6da-6966-4fbd-bec8-4027b7789a75")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "Q3")
 					(unit 1)
@@ -14009,7 +14009,7 @@
 			(uuid "fd4602c8-a39b-49fd-a2ef-46c7848d016c")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R16")
 					(unit 1)
@@ -14098,7 +14098,7 @@
 			(uuid "196e4472-9e4e-43b6-b05f-b8d5591e48ea")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R5")
 					(unit 1)
@@ -14376,7 +14376,7 @@
 			(uuid "8603b2a8-4f3b-4c1d-87a1-beb91c55676f")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "NT8")
 					(unit 1)
@@ -14454,7 +14454,7 @@
 			(uuid "e0b1fa7c-6fbc-41bc-864e-9247412ff45f")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR057")
 					(unit 1)
@@ -14531,7 +14531,7 @@
 			(uuid "943c6483-cf71-46b5-accc-3bd88b342ad7")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR023")
 					(unit 1)
@@ -14741,7 +14741,7 @@
 			(uuid "51909312-9261-4c69-9166-5db16ad6f23d")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R8")
 					(unit 1)
@@ -14877,7 +14877,7 @@
 			(uuid "14cc4153-9d0b-40d5-937a-3f9e01e64d07")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C11")
 					(unit 1)
@@ -14959,7 +14959,7 @@
 			(uuid "58669228-9a15-4b61-9afc-36b992513dbd")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C41")
 					(unit 1)
@@ -15073,7 +15073,7 @@
 			(uuid "dd93a099-087e-492f-a9fb-a3eda4ec301a")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "D82")
 					(unit 1)
@@ -15262,7 +15262,7 @@
 			(uuid "1e3f2590-1880-45d3-9ac7-2375ce96bff9")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R41")
 					(unit 1)
@@ -15340,7 +15340,7 @@
 			(uuid "6225007f-991e-4797-9477-bfb521841539")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR015")
 					(unit 1)
@@ -15431,7 +15431,7 @@
 			(uuid "dbd89631-82bc-4474-85ed-a2a8c226ec96")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C19")
 					(unit 1)
@@ -15529,7 +15529,7 @@
 			(uuid "c0c48786-d986-4ffa-aa41-033cd3f2e6e3")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "Q1")
 					(unit 1)
@@ -15608,7 +15608,7 @@
 			(uuid "979412b3-9563-410f-a2b0-95ec45ef3956")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0103")
 					(unit 1)
@@ -15699,7 +15699,7 @@
 			(uuid "6a5ca54c-cb3c-4af5-a833-9f3f45802c35")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R3")
 					(unit 1)
@@ -15777,7 +15777,7 @@
 			(uuid "b68c6b10-91fb-40fe-a3ee-4f86916a5b9c")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0113")
 					(unit 1)
@@ -15855,7 +15855,7 @@
 			(uuid "3e004ca5-7c07-45de-9b56-b98139c52ef0")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR039")
 					(unit 1)
@@ -16012,7 +16012,7 @@
 			(uuid "4a173fd1-0397-4c7c-bfc1-03e1b455a60a")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "NT7")
 					(unit 1)
@@ -16103,7 +16103,7 @@
 			(uuid "a3abedf9-7723-4a06-baf4-71654ae46627")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C29")
 					(unit 1)
@@ -16181,7 +16181,7 @@
 			(uuid "e7fa90c9-9743-4dea-9c2e-d9d0a13cee51")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR025")
 					(unit 1)
@@ -16272,7 +16272,7 @@
 			(uuid "d72dc17a-3fe9-4859-af97-87908ea59502")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C20")
 					(unit 1)
@@ -16350,7 +16350,7 @@
 			(uuid "cdcbe6dc-e92b-4c25-a93f-2aacb2e2ee6d")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR02")
 					(unit 1)
@@ -16539,7 +16539,7 @@
 			(uuid "3e2e132e-58ae-4ed3-b119-d9c78c6a1e59")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R31")
 					(unit 1)
@@ -16630,7 +16630,7 @@
 			(uuid "9007ee53-a2c3-4649-b89d-a7feb5393765")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C8")
 					(unit 1)
@@ -16713,7 +16713,7 @@
 			(uuid "74b36e24-e175-4843-9d14-a03d6c844ab8")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "Q2")
 					(unit 1)
@@ -16791,7 +16791,7 @@
 			(uuid "a4467c77-14c8-49d2-8c09-5e6f2328dbf3")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR035")
 					(unit 1)
@@ -16833,7 +16833,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 188.722 111.76 90)
 			(hide yes)
 			(show_name no)
@@ -16873,7 +16873,7 @@
 			(uuid "821a58d0-65e3-46c9-b823-a3b526207fac")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R15")
 					(unit 1)
@@ -16893,7 +16893,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b33de337-98f9-4f70-be40-65ca5b374e04")
-		(property "Reference" "R_DAMP"
+		(property "Reference" "R_DAMP1"
 			(at -149.86 430.53 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16951,9 +16951,9 @@
 			(uuid "e71c71c9-934f-49bc-99f1-c64101319cbd")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "R_DAMP")
+					(reference "R_DAMP1")
 					(unit 1)
 				)
 			)
@@ -17027,7 +17027,7 @@
 			(uuid "f661c735-edd4-45d8-94a8-53cfa24ed434")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0134")
 					(unit 1)
@@ -17105,7 +17105,7 @@
 			(uuid "7b864bce-7940-4c24-a559-684fa596fb89")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0105")
 					(unit 1)
@@ -17194,7 +17194,7 @@
 			(uuid "587cccbf-54f0-4334-9916-b69dc4d4fa90")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R4")
 					(unit 1)
@@ -17383,7 +17383,7 @@
 			(uuid "19919497-943c-4b8d-854c-e97f8a186b1a")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R28")
 					(unit 1)
@@ -17461,7 +17461,7 @@
 			(uuid "b3609aee-50fa-48ad-b706-55dfbebfc623")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR016")
 					(unit 1)
@@ -17537,7 +17537,7 @@
 			(uuid "cb5f7298-26f4-4ad0-b123-82aeea68d5c5")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0135")
 					(unit 1)
@@ -17615,7 +17615,7 @@
 			(uuid "52ebc7b8-d1a2-413f-b551-c5b7a311a9f8")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR070")
 					(unit 1)
@@ -17693,7 +17693,7 @@
 			(uuid "2f057fa1-9ccc-4a9f-af51-ebde6f9f05fa")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0109")
 					(unit 1)
@@ -17882,7 +17882,7 @@
 			(uuid "d5cda01e-4979-458f-b84d-8a869f0cea26")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R29")
 					(unit 1)
@@ -17960,7 +17960,7 @@
 			(uuid "f7a3515b-7a4f-4a22-beb2-d236603fc6c1")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0111")
 					(unit 1)
@@ -18038,7 +18038,7 @@
 			(uuid "a1f91e8f-0888-4eba-a398-ca16b20aeaf8")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR034")
 					(unit 1)
@@ -18116,7 +18116,7 @@
 			(uuid "94cbddde-b8ec-4187-b0ff-f5a895169195")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR029")
 					(unit 1)
@@ -18207,7 +18207,7 @@
 			(uuid "2beee8b3-9191-457b-892a-d28a99beb934")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R45")
 					(unit 1)
@@ -18285,7 +18285,7 @@
 			(uuid "7113b8f1-2657-4702-8130-8166eb83e3fc")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR019")
 					(unit 1)
@@ -18363,7 +18363,7 @@
 			(uuid "f497cf9e-35da-420d-881b-eeb01369ecab")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR028")
 					(unit 1)
@@ -18440,7 +18440,7 @@
 			(uuid "aa93392f-fb55-416b-9a34-df68078a6922")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0102")
 					(unit 1)
@@ -18534,7 +18534,7 @@
 			(uuid "0596123b-74f6-44b6-a00d-ffb2904bdc37")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "J_POGO1")
 					(unit 1)
@@ -18612,7 +18612,7 @@
 			(uuid "63df14f1-c6a5-4d96-b74e-c94a73223a19")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR079")
 					(unit 1)
@@ -18690,7 +18690,7 @@
 			(uuid "ef021fc4-7add-4edd-999a-77560faaf5a4")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0108")
 					(unit 1)
@@ -18768,7 +18768,7 @@
 			(uuid "1675c4a0-a965-4465-bf6c-7f2bcacc4819")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR044")
 					(unit 1)
@@ -19046,7 +19046,7 @@
 			(uuid "f7e745e3-aa78-470b-a3f1-f6b6a9ca116e")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "NT4")
 					(unit 1)
@@ -19124,7 +19124,7 @@
 			(uuid "4d3b163b-b578-428c-a91d-5f01ee09ebce")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR021")
 					(unit 1)
@@ -19201,7 +19201,7 @@
 			(uuid "94e2217d-febc-4fd4-b315-151185410b01")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR059")
 					(unit 1)
@@ -19279,7 +19279,7 @@
 			(uuid "f0bfb85b-e01b-428b-a4f6-75901345b6bb")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0110")
 					(unit 1)
@@ -19370,7 +19370,7 @@
 			(uuid "684137f1-c799-4911-a6c0-f17f74b5c570")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C33")
 					(unit 1)
@@ -19448,7 +19448,7 @@
 			(uuid "2f6dd79b-8b37-4e82-bbc6-8c25e03fc45e")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR038")
 					(unit 1)
@@ -19726,7 +19726,7 @@
 			(uuid "94d7081f-081d-4848-88e7-b1b211e60380")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "NT5")
 					(unit 1)
@@ -19826,7 +19826,7 @@
 			(uuid "39253ac1-76ee-466f-ad70-330f85a0c601")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "Q1")
 					(unit 3)
@@ -19904,7 +19904,7 @@
 			(uuid "f1138894-9023-4144-9e7e-45acb9ade593")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR058")
 					(unit 1)
@@ -19982,7 +19982,7 @@
 			(uuid "ed96d16f-dc5c-41bd-9c34-0f347fe5ab49")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR067")
 					(unit 1)
@@ -20171,7 +20171,7 @@
 			(uuid "7c565957-faa3-48fa-8fde-b171c1253d5a")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R27")
 					(unit 1)
@@ -20331,7 +20331,7 @@
 			(uuid "7be84dca-3e06-45a4-8b0b-3f9eb4a6160e")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "U6")
 					(unit 1)
@@ -20491,7 +20491,7 @@
 			(uuid "b2b3a9cf-81c5-4e58-a4de-d80a9ab1c785")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "U6")
 					(unit 2)
@@ -20582,7 +20582,7 @@
 			(uuid "0788e3e4-0df9-4cb9-9c5d-5d4fbd1f5ef6")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R46")
 					(unit 1)
@@ -20703,7 +20703,7 @@
 			(uuid "17751d3b-59f2-486c-801e-0e2b79b3b7cc")
 		)
 		(instances
-			(project "amplifier"
+			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "J7")
 					(unit 1)
