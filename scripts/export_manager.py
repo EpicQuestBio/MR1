@@ -105,7 +105,7 @@ def export_kicad(verbose=True):
         {
             "name": "Amplifier",
             "pcb": REPO_ROOT / "Amplifier" / "amplifier.kicad_pcb",
-            "sch": REPO_ROOT / "Amplifier" / "amplifier.kicad_sch",
+            "sch": REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch",
             "gerber_dir": EXPORTS_DIR / "gerbers_amplifier",
             "pos_dir": EXPORTS_DIR / "pos_amplifier",
             "zip_name": "Amplifier_Gerbers.zip",
