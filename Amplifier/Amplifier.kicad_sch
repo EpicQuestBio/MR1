@@ -2009,201 +2009,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:Q_NJFET_DSG"
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "Q"
-				(at 5.08 1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "Q_NJFET_DSG"
-				(at 5.08 -1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 5.08 2.54 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "N-JFET transistor, drain/source/gate"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "transistor NJFET N-JFET"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Q_NJFET_DSG_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy -1.016 0.381) (xy -1.016 -0.381) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.254 1.905) (xy 0.254 -1.905) (xy 0.254 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 1.397) (xy 0.254 1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 2.54 -1.27) (xy 0.254 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Q_NJFET_DSG_1_1"
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "D"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "S"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -5.08 0 0)
-					(length 5.334)
-					(name "G"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:R"
 			(pin_numbers
 				(hide yes)
@@ -3325,6 +3130,105 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Regulator_Linear:LP5907MFX-1.8"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -3507,380 +3411,6 @@
 								(size 1.27 1.27)
 							)
 						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Transistor_FET:JFE2140D"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "Q"
-				(at 5.08 1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "JFE2140D"
-				(at 8.89 -1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/jfe2140.pdf"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Ultra-Low Noise, Matched, Dual, Low-Gate Current, Discrete, Audio, N‑Channel JFET, SOIC-8"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "low noise n-channel dual matched jfet"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SOIC?8*3.9x4.9mm*P1.27mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "JFE2140D_1_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy -1.016 0.381) (xy -1.016 -0.381) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.254 1.905) (xy 0.254 -1.905) (xy 0.254 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 1.397) (xy 0.254 1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 2.54 -1.27) (xy 0.254 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -5.08 0 0)
-					(length 5.334)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "JFE2140D_2_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy -1.016 0.381) (xy -1.016 -0.381) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.254 1.905) (xy 0.254 -1.905) (xy 0.254 -1.905)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 2.54 1.397) (xy 0.254 1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 2.54 -1.27) (xy 0.254 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -5.08 0 0)
-					(length 5.334)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "JFE2140D_3_0"
-				(pin passive line
-					(at 0 10.16 270)
-					(length 5.08)
-					(name "VCH"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -10.16 90)
-					(length 5.08)
-					(name "VCL"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "JFE2140D_3_1"
-				(rectangle
-					(start -2.54 5.08)
-					(end 2.54 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
 					)
 				)
 			)
@@ -4764,8 +4294,8 @@
 		(uuid "13a4042a-e0d2-4a14-8d56-464be98baf0e")
 	)
 	(rectangle
-		(start -124.46 427.99)
-		(end -96.52 433.07)
+		(start -67.31 123.19)
+		(end -39.37 128.27)
 		(stroke
 			(width 0)
 			(type default)
@@ -4788,8 +4318,8 @@
 		(uuid "6ff3a25d-82be-4a3f-a251-6265e0b1fb28")
 	)
 	(rectangle
-		(start -124.46 438.15)
-		(end -96.52 443.23)
+		(start -67.31 133.35)
+		(end -39.37 138.43)
 		(stroke
 			(width 0)
 			(type default)
@@ -4800,8 +4330,8 @@
 		(uuid "9661a056-bdfd-4259-8360-3fb181a84ab2")
 	)
 	(rectangle
-		(start -124.46 422.91)
-		(end -96.52 427.99)
+		(start -67.31 118.11)
+		(end -39.37 123.19)
 		(stroke
 			(width 0)
 			(type default)
@@ -4824,8 +4354,8 @@
 		(uuid "c0fe298f-e163-475a-ba9f-310b1c327abc")
 	)
 	(rectangle
-		(start -124.46 433.07)
-		(end -96.52 438.15)
+		(start -67.31 128.27)
+		(end -39.37 133.35)
 		(stroke
 			(width 0)
 			(type default)
@@ -4910,7 +4440,7 @@
 	)
 	(text "P4"
 		(exclude_from_sim no)
-		(at -121.92 440.69 0)
+		(at -64.77 135.89 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5012,16 +4542,6 @@
 		)
 		(uuid "6918b622-ee64-40b5-a812-4ce9e139decb")
 	)
-	(text "LSK489-SOT-23-6L-CT"
-		(exclude_from_sim no)
-		(at 149.86 144.018 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "6c37d5bb-765c-46b5-b7c4-da6b4d7404aa")
-	)
 	(text "amplifier board"
 		(exclude_from_sim no)
 		(at 22.098 15.748 0)
@@ -5034,7 +4554,7 @@
 	)
 	(text "P1"
 		(exclude_from_sim no)
-		(at -121.92 425.45 0)
+		(at -64.77 120.65 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5087,7 +4607,7 @@
 	)
 	(text "P3"
 		(exclude_from_sim no)
-		(at -121.92 435.61 0)
+		(at -64.77 130.81 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5179,7 +4699,7 @@
 	)
 	(text "P2"
 		(exclude_from_sim no)
-		(at -121.92 430.53 0)
+		(at -64.77 125.73 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5188,16 +4708,6 @@
 			)
 		)
 		(uuid "d6c79b00-fe9d-485b-be8c-c19719b79748")
-	)
-	(text "LSK170D-SOT-23-3L-CT"
-		(exclude_from_sim no)
-		(at 149.352 109.474 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "df39d154-b965-475f-b01f-2fc6bb101f83")
 	)
 	(text "SSH-003T-P0.2-H #32 to #28 (0.032 to 0.081) 0.4 to 0.8 23,000\n"
 		(exclude_from_sim no)
@@ -5218,16 +4728,6 @@
 			)
 		)
 		(uuid "e9d02f2e-feb2-4196-b6ac-421feb736231")
-	)
-	(text "consider cat 7 flat ribbon cable, 8 pairs, shielded"
-		(exclude_from_sim no)
-		(at 140.97 104.14 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "ef9ebd71-500d-4bdd-b071-b165a573411f")
 	)
 	(text "SHR-10V-S"
 		(exclude_from_sim no)
@@ -5297,6 +4797,12 @@
 		(uuid "3561bb3e-3c76-4a4a-a6e9-78dd6b3224f2")
 	)
 	(junction
+		(at 161.29 49.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4292a03e-024c-4d58-b8a4-8c3781dad65b")
+	)
+	(junction
 		(at 81.28 52.07)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5345,18 +4851,6 @@
 		(uuid "9fd988f1-42da-453b-bcb8-5a1923ddcc0b")
 	)
 	(junction
-		(at 109.22 127)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "aac5eca8-f799-4a25-aa91-25a071d1ac62")
-	)
-	(junction
-		(at 109.22 109.22)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b9805590-7aee-468f-bf93-80b0183d89b0")
-	)
-	(junction
 		(at 90.17 44.45)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5382,17 +4876,7 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 119.38) (xy 114.3 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "046ced81-8007-4f0a-ba74-ed720dd7f826")
-	)
-	(wire
-		(pts
-			(xy -106.68 425.45) (xy -106.68 424.18)
+			(xy -49.53 120.65) (xy -49.53 119.38)
 		)
 		(stroke
 			(width 0)
@@ -5402,7 +4886,7 @@
 	)
 	(wire
 		(pts
-			(xy -106.68 431.8) (xy -104.14 431.8)
+			(xy -49.53 127) (xy -46.99 127)
 		)
 		(stroke
 			(width 0)
@@ -5439,16 +4923,6 @@
 			(type default)
 		)
 		(uuid "0c883d89-ca79-40bc-a01a-e93fa6810bf5")
-	)
-	(wire
-		(pts
-			(xy 104.14 135.89) (xy 104.14 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0d0365f4-7cb9-45b9-b720-5a8a492d4809")
 	)
 	(wire
 		(pts
@@ -5562,7 +5036,7 @@
 	)
 	(wire
 		(pts
-			(xy -106.68 426.72) (xy -106.68 427.99)
+			(xy -49.53 121.92) (xy -49.53 123.19)
 		)
 		(stroke
 			(width 0)
@@ -5612,16 +5086,6 @@
 	)
 	(wire
 		(pts
-			(xy 140.97 121.92) (xy 140.97 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "38e28449-d241-45bc-b709-ceb6dc66c7ef")
-	)
-	(wire
-		(pts
 			(xy 39.37 99.06) (xy 49.53 99.06)
 		)
 		(stroke
@@ -5662,17 +5126,7 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 109.22) (xy 109.22 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "41caf316-fff0-4d38-8624-f7880087502c")
-	)
-	(wire
-		(pts
-			(xy -106.68 424.18) (xy -104.14 424.18)
+			(xy -49.53 119.38) (xy -46.99 119.38)
 		)
 		(stroke
 			(width 0)
@@ -5732,7 +5186,7 @@
 	)
 	(wire
 		(pts
-			(xy -106.68 436.88) (xy -104.14 436.88)
+			(xy -49.53 132.08) (xy -46.99 132.08)
 		)
 		(stroke
 			(width 0)
@@ -5762,17 +5216,7 @@
 	)
 	(wire
 		(pts
-			(xy 140.97 133.35) (xy 151.13 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5a9e5bed-31de-45fd-97d5-957ca1a79c7b")
-	)
-	(wire
-		(pts
-			(xy -106.68 429.26) (xy -104.14 429.26)
+			(xy -49.53 124.46) (xy -46.99 124.46)
 		)
 		(stroke
 			(width 0)
@@ -5892,6 +5336,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 49.53) (xy 161.29 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "793516c8-2764-4ccf-b3a4-00558613b6a9")
+	)
+	(wire
+		(pts
 			(xy 185.42 44.45) (xy 185.42 49.53)
 		)
 		(stroke
@@ -5982,7 +5436,7 @@
 	)
 	(wire
 		(pts
-			(xy -104.14 419.1) (xy -106.68 419.1)
+			(xy -46.99 114.3) (xy -49.53 114.3)
 		)
 		(stroke
 			(width 0)
@@ -6012,16 +5466,6 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 127) (xy 109.22 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9194b28c-0657-48dd-9f8d-5d0b6139f248")
-	)
-	(wire
-		(pts
 			(xy 195.58 133.35) (xy 210.82 133.35)
 		)
 		(stroke
@@ -6032,7 +5476,7 @@
 	)
 	(wire
 		(pts
-			(xy -104.14 445.77) (xy -104.14 444.5)
+			(xy -46.99 140.97) (xy -46.99 139.7)
 		)
 		(stroke
 			(width 0)
@@ -6082,7 +5526,7 @@
 	)
 	(wire
 		(pts
-			(xy -116.84 445.77) (xy -104.14 445.77)
+			(xy -59.69 140.97) (xy -46.99 140.97)
 		)
 		(stroke
 			(width 0)
@@ -6152,7 +5596,7 @@
 	)
 	(wire
 		(pts
-			(xy -105.41 443.23) (xy -105.41 441.96)
+			(xy -48.26 138.43) (xy -48.26 137.16)
 		)
 		(stroke
 			(width 0)
@@ -6172,7 +5616,17 @@
 	)
 	(wire
 		(pts
-			(xy -110.49 421.64) (xy -104.14 421.64)
+			(xy 153.67 62.23) (xy 161.29 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8504977-7c0f-4c19-ac0e-ea7692fcea27")
+	)
+	(wire
+		(pts
+			(xy -53.34 116.84) (xy -46.99 116.84)
 		)
 		(stroke
 			(width 0)
@@ -6182,7 +5636,7 @@
 	)
 	(wire
 		(pts
-			(xy -106.68 434.34) (xy -104.14 434.34)
+			(xy -49.53 129.54) (xy -46.99 129.54)
 		)
 		(stroke
 			(width 0)
@@ -6192,7 +5646,7 @@
 	)
 	(wire
 		(pts
-			(xy -106.68 439.42) (xy -104.14 439.42)
+			(xy -49.53 134.62) (xy -46.99 134.62)
 		)
 		(stroke
 			(width 0)
@@ -6212,16 +5666,6 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 135.89) (xy 114.3 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cae01233-5f0e-4217-82a6-0bfad48f9c21")
-	)
-	(wire
-		(pts
 			(xy 208.28 41.91) (xy 204.47 41.91)
 		)
 		(stroke
@@ -6232,13 +5676,13 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 127) (xy 109.22 127)
+			(xy 161.29 62.23) (xy 161.29 59.69)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d3069bc4-1494-489f-9a69-79e11eaeec09")
+		(uuid "d1b3163b-7a67-418c-aefe-f817097ecccf")
 	)
 	(wire
 		(pts
@@ -6292,7 +5736,7 @@
 	)
 	(wire
 		(pts
-			(xy -104.14 426.72) (xy -106.68 426.72)
+			(xy -46.99 121.92) (xy -49.53 121.92)
 		)
 		(stroke
 			(width 0)
@@ -6329,6 +5773,16 @@
 			(type default)
 		)
 		(uuid "df797e32-fe36-495f-a821-8e674c3c802b")
+	)
+	(wire
+		(pts
+			(xy 161.29 49.53) (xy 177.8 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3e409cf-bc81-4e00-8117-c5067b8bdff8")
 	)
 	(wire
 		(pts
@@ -6382,7 +5836,7 @@
 	)
 	(wire
 		(pts
-			(xy -105.41 441.96) (xy -104.14 441.96)
+			(xy -48.26 137.16) (xy -46.99 137.16)
 		)
 		(stroke
 			(width 0)
@@ -6432,16 +5886,6 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 109.22) (xy 109.22 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f057666a-871b-4c15-8183-e9295c1c063d")
-	)
-	(wire
-		(pts
 			(xy 29.21 99.06) (xy 34.29 99.06)
 		)
 		(stroke
@@ -6452,27 +5896,7 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 121.92) (xy 151.13 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f32e2ad3-4f56-4419-8c43-75e791f1c6d4")
-	)
-	(wire
-		(pts
-			(xy 104.14 119.38) (xy 104.14 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f46081b0-9850-4fc1-beee-ce27b22eac40")
-	)
-	(wire
-		(pts
-			(xy 153.67 49.53) (xy 177.8 49.53)
+			(xy 153.67 49.53) (xy 161.29 49.53)
 		)
 		(stroke
 			(width 0)
@@ -8198,7 +7622,7 @@
 		(uuid "00a2ee76-0efd-4eb4-ba87-ff99d3a1619f")
 	)
 	(label "SHIELD_AMP"
-		(at -114.3 412.75 180)
+		(at -57.15 107.95 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8208,7 +7632,7 @@
 		(uuid "08eb599e-b16e-4297-99b3-0dcd3ee0e906")
 	)
 	(label "WS_CIS"
-		(at 27.94 26.67 180)
+		(at 27.94 29.21 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8248,7 +7672,7 @@
 		(uuid "29ab95ab-4abf-4ae8-b224-3d399431b36d")
 	)
 	(label "Vbias_AMP"
-		(at -114.3 419.1 180)
+		(at -57.15 114.3 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8278,7 +7702,7 @@
 		(uuid "3d5127e6-1f63-4a06-a77a-d1791e8ed0c8")
 	)
 	(label "GDAC_EN"
-		(at 29.21 99.06 180)
+		(at 29.21 96.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8298,7 +7722,7 @@
 		(uuid "428452a6-1391-4122-94b9-ce0fbccc5122")
 	)
 	(label "GDAC_SDO"
-		(at -132.08 471.17 0)
+		(at -74.93 166.37 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8397,6 +7821,16 @@
 		)
 		(uuid "801179ba-a644-4f68-825d-7fbc8a62d8a3")
 	)
+	(label ">PORE_AMP"
+		(at -20.32 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "834a265f-34de-4a02-8d66-bf42b52ec61e")
+	)
 	(label "Vbias"
 		(at 57.15 132.08 0)
 		(effects
@@ -8418,7 +7852,7 @@
 		(uuid "8f3410bf-4ec1-44b9-b51f-2eba8f7af4a2")
 	)
 	(label "SHIELD_AMP"
-		(at -106.68 452.12 180)
+		(at -49.53 147.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8458,7 +7892,7 @@
 		(uuid "991cddac-87db-43a1-8276-295939f165be")
 	)
 	(label "GDAC_CLK"
-		(at -149.86 473.71 0)
+		(at -92.71 168.91 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8518,7 +7952,7 @@
 		(uuid "acc7cc6c-ecee-4dca-8241-3aea7c6522c7")
 	)
 	(label "Virtual_Ground"
-		(at 153.67 62.23 0)
+		(at 161.29 62.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8548,7 +7982,7 @@
 		(uuid "ba736b00-4c94-405f-96fd-c3f3d590d1ca")
 	)
 	(label "GDAC_EN"
-		(at -115.57 421.64 180)
+		(at -58.42 116.84 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8558,7 +7992,7 @@
 		(uuid "bc700612-74ab-4594-a1e5-005ccdcba8c2")
 	)
 	(label "GND"
-		(at -71.12 402.59 180)
+		(at -13.97 97.79 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8588,7 +8022,7 @@
 		(uuid "bf6fcc52-c085-46e1-9456-cf3b04bd400b")
 	)
 	(label "PORE_BIAS"
-		(at -195.58 382.27 180)
+		(at -138.43 77.47 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8648,7 +8082,7 @@
 		(uuid "d92fdc8d-07b7-419e-8ecc-1189200da788")
 	)
 	(label "Signal_AMP"
-		(at -114.3 410.21 180)
+		(at -57.15 105.41 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8658,7 +8092,7 @@
 		(uuid "d95d8972-740d-4200-82e3-520541e5eb04")
 	)
 	(label "WEEP_SENSE"
-		(at 27.94 29.21 180)
+		(at 27.94 26.67 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8678,7 +8112,7 @@
 		(uuid "e055a68e-2f4d-4846-8633-b0e931ffe564")
 	)
 	(label "GDAC_SDI"
-		(at 29.21 96.52 180)
+		(at 29.21 99.06 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8698,7 +8132,7 @@
 		(uuid "e75c7598-73e6-4243-95e3-095b8a9da92b")
 	)
 	(label "SHIELD_AMP"
-		(at -143.51 453.39 0)
+		(at -86.36 148.59 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8718,7 +8152,7 @@
 		(uuid "f09b7ed0-cc85-4014-9ac9-f832d5683e73")
 	)
 	(label "GND"
-		(at -87.63 401.32 180)
+		(at -30.48 96.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8736,16 +8170,6 @@
 			(justify left bottom)
 		)
 		(uuid "f73c358f-a486-41d3-85d1-872a924d6992")
-	)
-	(label "Vbias_AMP"
-		(at 151.13 133.35 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f7d20c7d-8575-485f-9a10-68f7b0403379")
 	)
 	(label "SHIELD_AMP"
 		(at 54.61 121.92 0)
@@ -10001,84 +9425,6 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:VSSA")
-		(at 109.22 143.51 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "0ceb185c-6843-4243-b14e-d7680a266c6f")
-		(property "Reference" "#PWR020"
-			(at 109.22 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "VSSA"
-			(at 109.22 148.59 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 109.22 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 109.22 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VSSA\""
-			(at 109.22 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d456245a-eafc-4e6b-9cd8-a793b3d2cafa")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -11804,86 +11150,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VSSA")
-		(at 119.38 143.51 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "3cfbcaf1-d1a6-4601-9249-3e349a485ed1")
-		(property "Reference" "#PWR018"
-			(at 119.38 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "VSSA"
-			(at 119.38 148.59 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 119.38 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 119.38 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VSSA\""
-			(at 119.38 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c461ad26-022b-4ee8-b274-a6adc1f9fc51")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR018")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VDDA")
-		(at 49.53 106.68 90)
+		(at 49.53 111.76 90)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -11895,7 +11163,7 @@
 		(fields_autoplaced yes)
 		(uuid "45af0e2f-c6ec-4527-bcf8-29f85b7a8938")
 		(property "Reference" "#PWR024"
-			(at 53.34 106.68 0)
+			(at 53.34 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11906,7 +11174,7 @@
 			)
 		)
 		(property "Value" "VDDA"
-			(at 46.355 106.6801 90)
+			(at 46.355 111.7601 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11917,7 +11185,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 49.53 106.68 0)
+			(at 49.53 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11928,7 +11196,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 106.68 0)
+			(at 49.53 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11939,7 +11207,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VDDA\""
-			(at 49.53 106.68 0)
+			(at 49.53 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13088,7 +12356,7 @@
 	)
 	(symbol
 		(lib_id "power:VSSA")
-		(at 49.53 111.76 90)
+		(at 49.53 106.68 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -13098,7 +12366,7 @@
 		(dnp no)
 		(uuid "614dc74e-88b7-47de-8fd1-a13b2342e695")
 		(property "Reference" "#PWR022"
-			(at 53.34 111.76 0)
+			(at 53.34 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13109,7 +12377,7 @@
 			)
 		)
 		(property "Value" "VSSA"
-			(at 46.228 111.76 90)
+			(at 46.228 106.68 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13120,7 +12388,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 49.53 111.76 0)
+			(at 49.53 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13131,7 +12399,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 111.76 0)
+			(at 49.53 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13142,7 +12410,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VSSA\""
-			(at 49.53 111.76 0)
+			(at 49.53 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13242,104 +12510,6 @@
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R14")
 					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Transistor_FET:JFE2140D")
-		(at 109.22 138.43 90)
-		(unit 2)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "656a6cbb-627d-44dd-b7f4-6981481ee290")
-		(property "Reference" "Q1"
-			(at 109.22 129.54 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "JFE2140D"
-			(at 109.22 132.08 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 109.22 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/jfe2140.pdf"
-			(at 109.22 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Ultra-Low Noise, Matched, Dual, Low-Gate Current, Discrete, Audio, N‑Channel JFET, SOIC-8"
-			(at 109.22 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "eb6d37c0-5a22-47cf-b1bb-25772661fd04")
-		)
-		(pin "1"
-			(uuid "423e95bc-02b2-427e-bf78-cead2855676f")
-		)
-		(pin "8"
-			(uuid "e13f3770-a710-4b0e-887d-f2cde1bacc5e")
-		)
-		(pin "6"
-			(uuid "601f3e2e-f3ef-4533-9c87-9649df32263e")
-		)
-		(pin "5"
-			(uuid "644d05c5-ea2c-43ba-b031-db40417a6ab6")
-		)
-		(pin "2"
-			(uuid "60673fc3-99d0-4aa5-8b00-d95cbb7c9c08")
-		)
-		(pin "7"
-			(uuid "26d2a8c1-5df5-468b-bf29-339b3b645800")
-		)
-		(pin "3"
-			(uuid "39253ac1-76ee-466f-ad70-330f85a0c600")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "Q1")
-					(unit 2)
 				)
 			)
 		)
@@ -14385,6 +13555,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 33.02 189.23 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7c39fbf4-822d-4adb-9608-6ac2e0bf624e")
+		(property "Reference" "H4"
+			(at 35.56 187.9599 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FluidHole"
+			(at 35.56 190.4999 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.1mm"
+			(at 33.02 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 33.02 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GNDA")
 		(at 238.76 49.53 0)
 		(unit 1)
@@ -14457,6 +13703,82 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR057")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 33.02 179.07 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "81f6114f-8d65-4d18-99f2-72e6965e2a48")
+		(property "Reference" "H2"
+			(at 35.56 177.7999 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FluidHole"
+			(at 35.56 180.3399 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.1mm"
+			(at 33.02 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 33.02 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "H2")
 					(unit 1)
 				)
 			)
@@ -14968,6 +14290,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 33.02 172.72 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8ad76c6f-72ed-4ba6-80b0-611b2b59a3c9")
+		(property "Reference" "H1"
+			(at 35.56 171.4499 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FluidHole"
+			(at 35.56 173.9899 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.1mm"
+			(at 33.02 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 33.02 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Diode:MBR0540")
 		(at 172.72 121.92 270)
 		(unit 1)
@@ -15271,84 +14669,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VDDA")
-		(at 119.38 123.19 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "94e08673-910b-42ef-8abe-b1234ac1f23b")
-		(property "Reference" "#PWR015"
-			(at 119.38 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "VDDA"
-			(at 119.38 119.634 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 119.38 123.19 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 119.38 123.19 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VDDA\""
-			(at 119.38 123.19 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6225007f-991e-4797-9477-bfb521841539")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR015")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 119.38 64.77 0)
 		(unit 1)
@@ -15440,39 +14760,40 @@
 		)
 	)
 	(symbol
-		(lib_id "Transistor_FET:JFE2140D")
-		(at 109.22 121.92 90)
+		(lib_id "Device:C")
+		(at 161.29 55.88 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board no)
+		(on_board yes)
 		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "98fd009f-2773-4e7d-9c9c-de587a4ea15e")
-		(property "Reference" "Q1"
-			(at 109.22 113.03 90)
+		(dnp no)
+		(uuid "963cb2c6-188d-4f3b-b9fc-b746007c0aec")
+		(property "Reference" "C9"
+			(at 161.29 58.42 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "JFE2140D"
-			(at 109.22 115.57 90)
+		(property "Value" "100nF"
+			(at 154.432 58.42 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 109.22 121.92 0)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+			(at 162.2552 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15482,8 +14803,8 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/jfe2140.pdf"
-			(at 109.22 121.92 0)
+		(property "Datasheet" ""
+			(at 161.29 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15493,8 +14814,18 @@
 				)
 			)
 		)
-		(property "Description" "Ultra-Low Noise, Matched, Dual, Low-Gate Current, Discrete, Audio, N‑Channel JFET, SOIC-8"
-			(at 109.22 121.92 0)
+		(property "Description" ""
+			(at 161.29 55.88 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser PN" ""
+			(at 161.29 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15504,34 +14835,213 @@
 				)
 			)
 		)
-		(pin "8"
-			(uuid "3f1a280e-aaca-4032-afd2-93162e1262e9")
+		(property "Alternate Part Number 1" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
-		(pin "7"
-			(uuid "8b530db8-b421-4208-ad56-b155a34c4c5f")
+		(property "AssemblyType" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
-		(pin "5"
-			(uuid "754c228e-33d0-4cf6-9fd4-6df0468f17a3")
+		(property "Configuration" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
-		(pin "1"
-			(uuid "ac62e4f6-68a5-4441-b765-3b09c62d1658")
+		(property "Distributor 2 PN" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer_Name" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer_Part_Number" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "price" ""
+			(at 161.29 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
 		(pin "2"
-			(uuid "80197c90-d933-4cd2-ad6a-eacd282654f5")
+			(uuid "3262f6fc-a85d-4109-9ee7-c56c25f138be")
 		)
-		(pin "4"
-			(uuid "e9b0f412-bf7d-4e00-b64c-073bf013ca79")
-		)
-		(pin "6"
-			(uuid "203a507b-5652-4c03-b355-3ad4d72b68f1")
-		)
-		(pin "3"
-			(uuid "c0c48786-d986-4ffa-aa41-033cd3f2e6e3")
+		(pin "1"
+			(uuid "f741f7dd-2ae1-4c0b-ba86-d37ac3889404")
 		)
 		(instances
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "Q1")
+					(reference "C9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 33.02 184.15 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "98fcb8a0-c59f-42d7-9f1d-550d0f9352f6")
+		(property "Reference" "H3"
+			(at 35.56 182.8799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FluidHole"
+			(at 35.56 185.4199 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.1mm"
+			(at 33.02 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 33.02 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "H3")
 					(unit 1)
 				)
 			)
@@ -16639,89 +16149,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Q_NJFET_DSG")
-		(at 146.05 119.38 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ae00b6f5-7dcc-42fe-8ddd-443f6c94bf17")
-		(property "Reference" "Q2"
-			(at 146.05 125.73 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Q_NJFET_DSG"
-			(at 146.05 128.27 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 148.59 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 146.05 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "N-JFET transistor, drain/source/gate"
-			(at 146.05 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c030923d-34c4-40f8-83ca-0abd697095e0")
-		)
-		(pin "2"
-			(uuid "70f3fbd6-3252-4644-a7c2-54497e48806f")
-		)
-		(pin "3"
-			(uuid "74b36e24-e175-4843-9d14-a03d6c844ab8")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "Q2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GNDA")
 		(at 172.72 125.73 0)
 		(unit 1)
@@ -16876,84 +16303,6 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "R15")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at -149.86 435.61 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b33de337-98f9-4f70-be40-65ca5b374e04")
-		(property "Reference" "R_DAMP1"
-			(at -149.86 430.53 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "49.9"
-			(at -149.86 433.07 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at -149.86 435.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at -149.86 435.61 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at -149.86 435.61 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a74497ed-1a19-4a9e-bdb6-a76e9a9b9df3")
-		)
-		(pin "2"
-			(uuid "e71c71c9-934f-49bc-99f1-c64101319cbd")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "R_DAMP1")
 					(unit 1)
 				)
 			)
@@ -18216,86 +17565,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VDDA")
-		(at 109.22 109.22 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "d78b8340-72a1-48cf-b0ed-ceec7ec8c6cf")
-		(property "Reference" "#PWR019"
-			(at 109.22 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "VDDA"
-			(at 109.22 105.664 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 109.22 109.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 109.22 109.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VDDA\""
-			(at 109.22 109.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7113b8f1-2657-4702-8130-8166eb83e3fc")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR019")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GNDA")
-		(at -135.89 445.77 270)
+		(at -78.74 140.97 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -18305,7 +17576,7 @@
 		(dnp no)
 		(uuid "dac568de-19fb-4902-87eb-6bc9a8d67fd1")
 		(property "Reference" "#PWR028"
-			(at -142.24 445.77 0)
+			(at -85.09 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18316,7 +17587,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at -139.192 445.77 90)
+			(at -82.042 140.97 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18327,7 +17598,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at -135.89 445.77 0)
+			(at -78.74 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18338,7 +17609,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -135.89 445.77 0)
+			(at -78.74 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18349,7 +17620,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at -135.89 445.77 0)
+			(at -78.74 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18482,7 +17753,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Array"
+		(property "Footprint" "footprints:PogoPin_Target_6Pin_Distributed"
 			(at 46.99 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -19735,106 +19006,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Transistor_FET:JFE2140D")
-		(at 119.38 133.35 0)
-		(unit 3)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "f073b32e-8fc7-4354-9675-f809a8362008")
-		(property "Reference" "Q1"
-			(at 123.19 132.0799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "JFE2140D"
-			(at 123.19 134.6199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 119.38 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/jfe2140.pdf"
-			(at 119.38 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Ultra-Low Noise, Matched, Dual, Low-Gate Current, Discrete, Audio, N‑Channel JFET, SOIC-8"
-			(at 119.38 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "eb6d37c0-5a22-47cf-b1bb-25772661fd05")
-		)
-		(pin "1"
-			(uuid "423e95bc-02b2-427e-bf78-cead28556770")
-		)
-		(pin "8"
-			(uuid "e13f3770-a710-4b0e-887d-f2cde1bacc5f")
-		)
-		(pin "6"
-			(uuid "601f3e2e-f3ef-4533-9c87-9649df32263f")
-		)
-		(pin "5"
-			(uuid "644d05c5-ea2c-43ba-b031-db40417a6ab7")
-		)
-		(pin "2"
-			(uuid "60673fc3-99d0-4aa5-8b00-d95cbb7c9c09")
-		)
-		(pin "7"
-			(uuid "26d2a8c1-5df5-468b-bf29-339b3b645801")
-		)
-		(pin "3"
-			(uuid "39253ac1-76ee-466f-ad70-330f85a0c601")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "Q1")
-					(unit 3)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VSSA")
 		(at 201.93 92.71 180)
 		(unit 1)
@@ -20624,7 +19795,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_FFC-FPC:Amphenol_F32R-1A7x1-11014_1x14-1MP_P0.5mm_Horizontal"
 			(at 54.61 99.06 0)
 			(hide yes)
 			(show_name no)
