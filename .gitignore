@@ -11,6 +11,7 @@ clone_retry.log
 *.kicad_sch-bak
 fp-info-cache
 *.lck
+.history
 
 # Backups & Editor History
 *-backups
