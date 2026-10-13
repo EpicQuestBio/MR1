@@ -111,8 +111,8 @@ def build_base_mold_half(is_left=True):
         with BuildSketch(Plane.YZ.offset(0)):
             with Locations((0, CAVITY_Z)):
                 RegularPolygon(radius=HEX_DIAM / 2.0, side_count=6, rotation=90)
-                with Locations((0, HEX_DIAM / 2.0), (0, -HEX_DIAM / 2.0)):
-                    Circle(5.0, mode=Mode.SUBTRACT)
+                with Locations((FINGER_GRIP_NOTCH_X, 0), (-FINGER_GRIP_NOTCH_X, 0)):
+                    Circle(FINGER_GRIP_NOTCH_R, mode=Mode.SUBTRACT)
         extrude(amount=-GASKET_THICK / 2.0 if is_left else GASKET_THICK / 2.0, mode=Mode.SUBTRACT)
 
     return p.part

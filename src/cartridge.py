@@ -278,6 +278,10 @@ def Cast_Nanopore_Wafer_Gasket():
         with Locations((0, 0, GASKET_THICK - WEEP_MOAT_DEPTH/2.0)):
             add(Weep_Trench_Cutout(), mode=Mode.SUBTRACT)
 
+        # Finger grip cutouts
+        with Locations((0, 0, GASKET_THICK/2.0)):
+            add(Finger_Grip_Cutout(height=GASKET_THICK * 3.0), mode=Mode.SUBTRACT)
+
     return p.part
 
 def Fitted_Amplifier_Gasket():
@@ -328,6 +332,10 @@ def Fitted_Amplifier_Gasket():
         # Weep duct pass-through
         with Locations((0, 0, GASKET_THICK/2.0)):
             add(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
+
+        # Finger grip cutouts
+        with Locations((0, 0, GASKET_THICK/2.0)):
+            add(Finger_Grip_Cutout(height=GASKET_THICK * 3.0), mode=Mode.SUBTRACT)
 
     return p.part
 
