@@ -948,14 +948,14 @@ module Bottom_Pusher_Plate(show_orings=Show_O_Rings) {
 // ==============================================================================
 module Finger_Grip_Cutout(height=10) {
      // Side notches for finger grip
-     // Placed at X = +/- 30 (Hex Corners) to avoid internal components
-     translate([30, 0, 0]) cylinder(h=height, d=10, center=true);
-     translate([-30, 0, 0]) cylinder(h=height, d=10, center=true);
+     // Placed at X = +/- 25 to match FINGER_GRIP_NOTCH_X and avoid internal components
+     translate([25, 0, 0]) cylinder(h=height, d=10, center=true);
+     translate([-25, 0, 0]) cylinder(h=height, d=10, center=true);
 }
 
 module Finger_Grip_Cutout_2D() {
-     translate([30, 0]) circle(d=10);
-     translate([-30, 0]) circle(d=10);
+     translate([25, 0]) circle(d=10);
+     translate([-25, 0]) circle(d=10);
 }
 
 module Pressure_Puck_3D() {
