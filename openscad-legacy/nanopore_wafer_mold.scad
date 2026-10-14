@@ -123,7 +123,10 @@ module Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true) {
         translate([-gasket_thick/2, 0, cavity_z]) {
             rotate([0, 90, 0])
                 linear_extrude(gasket_thick/2 + 0.1)
-                    circle(d=primary_gasket_diam, $fn=6);
+                    difference() {
+                        circle(d=primary_gasket_diam, $fn=6);
+                        Finger_Grip_Cutout_2D();
+                    }
         }
 
         if (is_nanopore) {
@@ -131,13 +134,6 @@ module Nanopore_Wafer_Mold_Left(type="top", is_nanopore=true) {
             translate([-gasket_thick/2 - PCB_Thickness/2, 0, cavity_z]) {
                 cube([PCB_Thickness + 0.1, protrusion_size, protrusion_size], center=true);
             }
-        }
-
-        // B: Finger Grip Cutout clearances
-        translate([-gasket_thick/2, 0, cavity_z]) {
-            rotate([0, 90, 0])
-                linear_extrude(gasket_thick/2 + 0.1)
-                    Finger_Grip_Cutout_2D();
         }
 
         // C: Large Top Reservoir (Foam expansion chamber)
@@ -335,14 +331,10 @@ module Nanopore_Wafer_Mold_Right(type="top", is_nanopore=true) {
         translate([-0.001, 0, cavity_z]) {
             rotate([0, 90, 0])
                 linear_extrude(gasket_thick/2 + 0.1)
-                    circle(d=primary_gasket_diam, $fn=6);
-        }
-
-        // B: Finger Grip Cutout clearances
-        translate([-0.001, 0, cavity_z]) {
-            rotate([0, 90, 0])
-                linear_extrude(gasket_thick/2 + 0.1)
-                    Finger_Grip_Cutout_2D();
+                    difference() {
+                        circle(d=primary_gasket_diam, $fn=6);
+                        Finger_Grip_Cutout_2D();
+                    }
         }
 
         // C: Large Top Reservoir
