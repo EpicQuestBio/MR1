@@ -3042,7 +3042,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Transistor_BJT:BCP53"
+		(symbol "Transistor_BJT:Q_NPN_BEC"
 			(pin_names
 				(offset 0)
 				(hide yes)
@@ -3053,7 +3053,7 @@
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "Q"
-				(at 5.08 1.905 0)
+				(at 5.08 1.27 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -3063,8 +3063,8 @@
 					(justify left)
 				)
 			)
-			(property "Value" "BCP53"
-				(at 5.08 0 0)
+			(property "Value" "Q_NPN_BEC"
+				(at 5.08 -1.27 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -3074,21 +3074,8 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
-				(at 5.08 -1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(justify left)
-				)
-			)
-			(property "Datasheet" "http://www.onsemi.com/pub_link/Collateral/BCP53T1-D.PDF"
-				(at 0 0 0)
+			(property "Footprint" ""
+				(at 5.08 2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -3096,10 +3083,9 @@
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
-			(property "Description" "1A Ic, 80V Vce, PNP Medium Power Transistor, SOT-223"
+			(property "Datasheet" ""
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3110,7 +3096,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "PNP Transistor"
+			(property "Description" "NPN transistor, base/emitter/collector"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3121,7 +3107,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "SOT?223*"
+			(property "Sim.Device" "NPN"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3132,7 +3118,258 @@
 					)
 				)
 			)
-			(symbol "BCP53_0_1"
+			(property "Sim.Pins" "1=B 2=E 3=C"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "BJT"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Q_NPN_BEC_0_1"
+				(polyline
+					(pts
+						(xy -2.54 0) (xy 0.635 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 1.905) (xy 0.635 -1.905)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 0)
+					(radius 2.8194)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Q_NPN_BEC_1_1"
+				(polyline
+					(pts
+						(xy 0.635 0.635) (xy 2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(pin input line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Transistor_BJT:Q_PNP_BEC"
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "Q"
+				(at 5.08 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "Q_PNP_BEC"
+				(at 5.08 -1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "PNP transistor, base/emitter/collector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Sim.Device" "PNP"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Sim.Pins" "1=B 2=E 3=C"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "BJT"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Q_PNP_BEC_0_1"
 				(polyline
 					(pts
 						(xy -2.54 0) (xy 0.635 0)
@@ -3204,20 +3441,8 @@
 						(type outline)
 					)
 				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 			)
-			(symbol "BCP53_1_1"
+			(symbol "Q_PNP_BEC_1_1"
 				(pin input line
 					(at -5.08 0 0)
 					(length 2.54)
@@ -3237,24 +3462,6 @@
 					)
 				)
 				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
 					(at 2.54 -5.08 90)
 					(length 2.54)
 					(name "E"
@@ -3264,222 +3471,7 @@
 							)
 						)
 					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 5.08 270)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Transistor_BJT:BCP56"
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "Q"
-				(at 5.08 1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "BCP56"
-				(at 5.08 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
-				(at 5.08 -1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(justify left)
-				)
-			)
-			(property "Datasheet" "https://www.nxp.com/docs/en/data-sheet/BCP56_BCX56_BC56PA.pdf"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Description" "1A Ic, 80V Vce, NPN Medium Power Transistor, SOT-223"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "NPN Transistor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SOT?223*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "BCP56_0_1"
-				(polyline
-					(pts
-						(xy -2.54 0) (xy 0.635 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 1.905) (xy 0.635 -1.905)
-					)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 5.08 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "BCP56_1_1"
-				(polyline
-					(pts
-						(xy 0.635 0.635) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 -0.635) (xy 2.54 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(pin input line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3497,43 +3489,7 @@
 							)
 						)
 					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "E"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
 					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 5.08 270)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5194,7 +5150,7 @@
 		(uuid "008bcee9-c7f5-478e-8cd8-16456871057a")
 	)
 	(junction
-		(at 214.63 87.63)
+		(at 234.95 148.59)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "02513ba2-660f-4227-b643-6661403f0eb5")
@@ -5314,12 +5270,6 @@
 		(uuid "63a4e175-9be1-4ce6-8164-cac3ffaa6ac8")
 	)
 	(junction
-		(at 226.06 76.2)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "63a658f8-6cd3-45d5-a1f3-cff56b4b5457")
-	)
-	(junction
 		(at 68.58 44.45)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5372,12 +5322,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "93a3fa6f-076f-4fe4-b1c0-cdf8727c6569")
-	)
-	(junction
-		(at 247.65 102.87)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "93e9abb3-2774-4d29-8999-c490e04ee0cf")
 	)
 	(junction
 		(at 222.25 29.21)
@@ -5458,7 +5402,7 @@
 		(uuid "f56c86b6-65e1-4f36-9f1a-cbbc3a771145")
 	)
 	(junction
-		(at 212.09 87.63)
+		(at 232.41 148.59)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f9414301-5c14-4cc8-af06-538c1b891b47")
@@ -5581,7 +5525,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 93.98) (xy 200.66 101.6)
+			(xy 220.98 154.94) (xy 220.98 162.56)
 		)
 		(stroke
 			(width 0)
@@ -5691,16 +5635,6 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 82.55) (xy 228.6 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "20e76c25-7e4d-4668-9eb7-72f839571121")
-	)
-	(wire
-		(pts
 			(xy 80.01 31.75) (xy 80.01 36.83)
 		)
 		(stroke
@@ -5791,7 +5725,7 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 101.6) (xy 226.06 101.6)
+			(xy 232.41 162.56) (xy 246.38 162.56)
 		)
 		(stroke
 			(width 0)
@@ -5821,7 +5755,7 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 86.36) (xy 214.63 87.63)
+			(xy 234.95 147.32) (xy 234.95 148.59)
 		)
 		(stroke
 			(width 0)
@@ -5841,16 +5775,6 @@
 	)
 	(wire
 		(pts
-			(xy 250.19 102.87) (xy 247.65 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "37cbafa9-b849-44cc-91e4-4453324669d9")
-	)
-	(wire
-		(pts
 			(xy 54.61 82.55) (xy 54.61 74.93)
 		)
 		(stroke
@@ -5861,7 +5785,7 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 76.2) (xy 214.63 78.74)
+			(xy 234.95 137.16) (xy 234.95 139.7)
 		)
 		(stroke
 			(width 0)
@@ -6031,16 +5955,6 @@
 	)
 	(wire
 		(pts
-			(xy 250.19 109.22) (xy 250.19 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4c18dcc8-9bb2-4f19-9267-22dd702c6de8")
-	)
-	(wire
-		(pts
 			(xy 111.76 74.93) (xy 113.03 74.93)
 		)
 		(stroke
@@ -6141,7 +6055,7 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 87.63) (xy 212.09 87.63)
+			(xy 234.95 148.59) (xy 232.41 148.59)
 		)
 		(stroke
 			(width 0)
@@ -6221,7 +6135,7 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 87.63) (xy 218.44 87.63)
+			(xy 234.95 148.59) (xy 238.76 148.59)
 		)
 		(stroke
 			(width 0)
@@ -6261,7 +6175,7 @@
 	)
 	(wire
 		(pts
-			(xy 226.06 76.2) (xy 214.63 76.2)
+			(xy 246.38 137.16) (xy 234.95 137.16)
 		)
 		(stroke
 			(width 0)
@@ -6301,7 +6215,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 87.63) (xy 200.66 88.9)
+			(xy 220.98 148.59) (xy 220.98 149.86)
 		)
 		(stroke
 			(width 0)
@@ -6361,7 +6275,7 @@
 	)
 	(wire
 		(pts
-			(xy 226.06 82.55) (xy 226.06 76.2)
+			(xy 246.38 143.51) (xy 246.38 137.16)
 		)
 		(stroke
 			(width 0)
@@ -6381,7 +6295,7 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 87.63) (xy 212.09 90.17)
+			(xy 232.41 148.59) (xy 232.41 151.13)
 		)
 		(stroke
 			(width 0)
@@ -6671,7 +6585,7 @@
 	)
 	(wire
 		(pts
-			(xy 226.06 101.6) (xy 226.06 92.71)
+			(xy 246.38 162.56) (xy 246.38 153.67)
 		)
 		(stroke
 			(width 0)
@@ -6871,7 +6785,7 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 87.63) (xy 200.66 87.63)
+			(xy 232.41 148.59) (xy 220.98 148.59)
 		)
 		(stroke
 			(width 0)
@@ -7001,16 +6915,6 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 76.2) (xy 226.06 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "df361b21-77dc-42f0-bf68-edcade43173d")
-	)
-	(wire
-		(pts
 			(xy 102.87 53.34) (xy 102.87 57.15)
 		)
 		(stroke
@@ -7101,7 +7005,7 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 97.79) (xy 212.09 101.6)
+			(xy 232.41 158.75) (xy 232.41 162.56)
 		)
 		(stroke
 			(width 0)
@@ -7370,7 +7274,7 @@
 		(uuid "693c9e06-f6a0-4052-9605-beb4a337ed93")
 	)
 	(label "+Vp_cm"
-		(at 214.63 76.2 0)
+		(at 234.95 137.16 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7480,7 +7384,7 @@
 		(uuid "b1f539cf-8d64-4a40-8558-fd468aac1fdb")
 	)
 	(label "+Vp"
-		(at 226.06 101.6 0)
+		(at 246.38 162.56 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7605,7 +7509,7 @@
 			(justify left bottom)
 		)
 		(uuid "8fc05acb-891f-4d1a-b868-be08de38df72")
-		(property "Net Class" "current"
+		(property "Netclass" "current"
 			(at 215.3285 26.67 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10485,7 +10389,7 @@
 	)
 	(symbol
 		(lib_id "Diode:1N4148WS")
-		(at 212.09 93.98 270)
+		(at 232.41 154.94 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10496,7 +10400,7 @@
 		(fields_autoplaced yes)
 		(uuid "20118e35-4e4a-43c2-ad42-9a5076d9ae02")
 		(property "Reference" "D1"
-			(at 214.63 92.7099 90)
+			(at 234.95 153.6699 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10507,7 +10411,7 @@
 			)
 		)
 		(property "Value" "1N4148WS"
-			(at 214.63 95.2499 90)
+			(at 234.95 156.2099 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10518,7 +10422,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_SOD-323"
-			(at 207.645 93.98 0)
+			(at 227.965 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10529,7 +10433,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/85751/1n4148ws.pdf"
-			(at 212.09 93.98 0)
+			(at 232.41 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10540,7 +10444,7 @@
 			)
 		)
 		(property "Description" "75V 0.15A Fast switching Diode, SOD-323"
-			(at 212.09 93.98 0)
+			(at 232.41 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10551,7 +10455,7 @@
 			)
 		)
 		(property "Sim.Device" "D"
-			(at 212.09 93.98 0)
+			(at 232.41 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10562,7 +10466,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 212.09 93.98 0)
+			(at 232.41 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11305,7 +11209,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Transistor_BJT:BCP53")
+		(lib_id "Transistor_BJT:Q_PNP_BEC")
 		(at 245.11 114.3 0)
 		(unit 1)
 		(body_style 1)
@@ -11317,7 +11221,7 @@
 		(fields_autoplaced yes)
 		(uuid "37b0fb87-1ed6-4d51-8b8b-e05f3e1e7f0a")
 		(property "Reference" "Q1"
-			(at 251.46 113.0299 0)
+			(at 250.19 113.0299 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11327,8 +11231,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "BCP53"
-			(at 251.46 115.5699 0)
+		(property "Value" "2SA1037"
+			(at 250.19 115.5699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11338,17 +11242,15 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
-			(at 250.19 116.205 0)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 250.19 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
-					(italic yes)
 				)
-				(justify left)
 			)
 		)
 		(property "Datasheet" "http://www.onsemi.com/pub_link/Collateral/BCP53T1-D.PDF"
@@ -11360,10 +11262,31 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Description" "1A Ic, 80V Vce, PNP Medium Power Transistor, SOT-223"
+		(property "Description" "PNP transistor, base/emitter/collector"
+			(at 245.11 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" "PNP"
+			(at 245.11 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=B 2=E 3=C"
 			(at 245.11 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -11379,9 +11302,6 @@
 		)
 		(pin "2"
 			(uuid "8955134e-e53d-434d-8b45-a239f71e0846")
-		)
-		(pin "4"
-			(uuid "10ad2392-f268-44dc-8e71-577842bc501d")
 		)
 		(pin "3"
 			(uuid "5ebdb49b-cd8d-44e9-aae3-24764db24036")
@@ -12545,7 +12465,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Polarized_Small_US")
-		(at 200.66 91.44 0)
+		(at 220.98 152.4 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12556,7 +12476,7 @@
 		(fields_autoplaced yes)
 		(uuid "60d1bc22-2e53-4b02-8c1f-a00870f3c20e")
 		(property "Reference" "C40"
-			(at 203.2 89.7381 0)
+			(at 223.52 150.6981 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12567,7 +12487,7 @@
 			)
 		)
 		(property "Value" "100u"
-			(at 203.2 92.2781 0)
+			(at 223.52 153.2381 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12578,7 +12498,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 91.44 0)
+			(at 220.98 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12589,7 +12509,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 91.44 0)
+			(at 220.98 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12600,7 +12520,7 @@
 			)
 		)
 		(property "Description" "Polarized capacitor, small US symbol"
-			(at 200.66 91.44 0)
+			(at 220.98 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14577,7 +14497,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 214.63 82.55 0)
+		(at 234.95 143.51 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -14587,7 +14507,7 @@
 		(dnp no)
 		(uuid "9f71feba-d6c3-401d-b32f-3033320bcf20")
 		(property "Reference" "R49"
-			(at 209.3722 82.55 90)
+			(at 229.6922 143.51 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14597,7 +14517,7 @@
 			)
 		)
 		(property "Value" "1K"
-			(at 211.6836 82.55 90)
+			(at 232.0036 143.51 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14607,7 +14527,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 212.852 82.55 90)
+			(at 233.172 143.51 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14618,7 +14538,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 214.63 82.55 0)
+			(at 234.95 143.51 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14629,7 +14549,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 214.63 82.55 0)
+			(at 234.95 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14639,7 +14559,7 @@
 			)
 		)
 		(property "Mouser PN" ""
-			(at 214.63 82.55 90)
+			(at 234.95 143.51 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15196,7 +15116,7 @@
 	)
 	(symbol
 		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
-		(at 200.66 101.6 0)
+		(at 220.98 162.56 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -15206,7 +15126,7 @@
 		(dnp no)
 		(uuid "b2321c3a-cecc-46f3-a090-d3fb7f2360d0")
 		(property "Reference" "#PWR0132"
-			(at 200.66 107.95 0)
+			(at 220.98 168.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15217,7 +15137,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.787 105.9942 0)
+			(at 221.107 166.9542 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15227,7 +15147,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 101.6 0)
+			(at 220.98 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15238,7 +15158,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 101.6 0)
+			(at 220.98 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15249,7 +15169,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 200.66 101.6 0)
+			(at 220.98 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16608,8 +16528,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Transistor_BJT:BCP56")
-		(at 223.52 87.63 0)
+		(lib_id "Transistor_BJT:Q_NPN_BEC")
+		(at 243.84 148.59 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -16620,7 +16540,7 @@
 		(fields_autoplaced yes)
 		(uuid "eb155fe6-9aff-4ab7-9b56-3d83c2970b4b")
 		(property "Reference" "Q2"
-			(at 229.87 86.3599 0)
+			(at 248.92 147.3199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16630,8 +16550,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "BCP56"
-			(at 229.87 88.8999 0)
+		(property "Value" "CMBT2222A"
+			(at 248.92 149.8599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16641,21 +16561,19 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2"
-			(at 228.6 89.535 0)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 248.92 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
-					(italic yes)
 				)
-				(justify left)
 			)
 		)
 		(property "Datasheet" "https://www.nxp.com/docs/en/data-sheet/BCP56_BCX56_BC56PA.pdf"
-			(at 223.52 87.63 0)
+			(at 243.84 148.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16663,11 +16581,32 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Description" "1A Ic, 80V Vce, NPN Medium Power Transistor, SOT-223"
-			(at 223.52 87.63 0)
+		(property "Description" "NPN transistor, base/emitter/collector"
+			(at 243.84 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" "NPN"
+			(at 243.84 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" "1=B 2=E 3=C"
+			(at 243.84 148.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16685,9 +16624,6 @@
 		)
 		(pin "3"
 			(uuid "248cd3ee-d4ad-4242-95f3-cd58fd4c33c0")
-		)
-		(pin "4"
-			(uuid "c49444ad-5641-4d37-889d-55c403e9a68f")
 		)
 		(instances
 			(project "MR1"
