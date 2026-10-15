@@ -8,10 +8,74 @@
 
 The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state / biological nanopore sequencer flow cell, low-current amplifier, and fluidic control system. It integrates high-precision parametric CAD models, low-noise front-end analog electronics, an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
+
+## Architecture & Overview
+The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state nanopore sensing platform. The system uses a complete **4-electrode topology** (Working Electrode `WE_POS`, Working Sense `WS_CIS`, Reference Electrode `RE_TRANS`, Counter Electrode `CE_GNDA`) combined with driven guards (`GUARD`) to achieve picoampere sensitivity while neutralizing the effects of stray capacitance and dielectric leakage.
+
+The architecture consists of:
+- **Headstage Hardware**: A custom, low-parasitic PTFE/Rogers interposer cartridge that seats a 4x4mm nanopore wafer clamped within silicone PDMS gaskets. It interfaces via gold-plated pogo pins to a low-bias-current transimpedance amplifier (LMP7721) mounted beneath the flowcell.
+- **Reader Hardware (MR1)**: An ESP32-S3-driven core processing node operating a continuous 100 kHz SPI DMA data acquisition sequence, dual DACs for precision transmembrane voltage bias, and USB CDC-ACM streaming logic.
+- **Pump / Power Subsystem**: A dedicated USB-PD powered board managing automated fluidic dispensing (peristaltic motors), pressure sensing, and SBU-based I2C communication back to the main MR1 host.
+- **Data Ingestion Pipeline**: High-throughput IPC software utilizing python scripts (`daq_client.py`) and zeroMQ / WebSocket endpoints to reliably process, structure, decode, and log the real-time electrical data for machine learning basecalling or browser visualization.
+
+## Setup & Prerequisites
+To build, modify, or interact with this repository, ensure your environment meets these requirements.
+
+### Toolchain Prerequisites
+- **Python**: 3.10+
+- **KiCad**: Version 7.0+ (For PCB design modifications and scripting exports)
+- **PlatformIO Core (CLI)**: For firmware compilation (`pio run`)
+- **OpenSCAD / build123d**: For generating solid body parts.
+- **Node.js**: v18+ (For UI and test automation dependencies)
+
+### Environment Setup
+Run the bootstrap setup scripts depending on your OS to establish a clean python virtual environment and node module cache.
+```bash
+# On Linux/macOS
+./setup_env.sh
+
+# On Windows (PowerShell)
+.\setup_env.ps1
+```
+
+Activate the python virtual environment:
+```bash
+source .venv/bin/activate
+```
+
+### Build & Test
+You can trigger the comprehensive unit, integration, and dimension-parity tests using the included test suite.
+```bash
+# Ensure you have activated the virtual environment and built assets
+python run_tests.py
+# Or directly via pytest
+pytest tests/
+```
+
+To build and upload firmware to the MR1 reader or the Pump board:
+```bash
+# Navigate to the target directory
+cd MR1_firmware  # or cd Pump_firmware
+pio run --target upload
+```
+
+## License
+
+This project is released under the **GNU Affero General Public License v3.0 (AGPLv3)**.
+
+Copyright (C) 2026 Lawrence R. Kincheloe III / Molecular Reality Corp.
+See the `LICENSE` file for the full text.
+
+
 ---
+
+
 
 ## Table of Contents
 
+- [Architecture & Overview](#architecture--overview)
+- [Setup & Prerequisites](#setup--prerequisites)
+- [License](#license)
 - [System Architecture](#system-architecture)
 - [Project Structure](#project-structure)
 - [Quick Start & Environment Setup](#quick-start--environment-setup)
@@ -21,8 +85,6 @@ The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state 
 - [ESP32-S3 Firmware](#esp32-s3-firmware)
 - [Fluidic Routing & Mold Casting](#fluidic-routing--mold-casting)
 - [Documentation Index](#documentation-index)
-
----
 
 ## System Architecture
 

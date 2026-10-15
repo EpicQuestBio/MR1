@@ -99,7 +99,7 @@ $$I_{pore} = \frac{V_{adc}}{R_{feedback}} = \frac{S_{adc} \cdot 62.5 \times 10^{
 
 To decouple the real-time USB hardware acquisition from external applications, `scripts/daq_client.py` exposes multiple standardized IPC endpoints:
 
-### 3.1 WebSocket Interface (`ws://127.0.0.1:8765/stream`)
+### 3.1 WebSocket Interface (`ws://localhost:8765/stream`)
 Ideal for web-based oscilloscopes, Electron apps, and Python/JavaScript frontends.
 
 #### Message Types:
@@ -205,7 +205,7 @@ import websockets
 import json
 
 async def monitor_nanopore():
-    uri = "ws://127.0.0.1:8765/stream"
+    uri = "ws://localhost:8765/stream"
     async with websockets.connect(uri) as ws:
         # Subscribe to telemetry & events
         await ws.send(json.dumps({"cmd": "subscribe", "channels": ["telemetry", "events"]}))
