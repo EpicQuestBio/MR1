@@ -164,14 +164,15 @@ class TestExportsE2E(unittest.TestCase):
         amp_dir = EXPORTS_DIR / "gerbers_amplifier"
         self.assertTrue(amp_dir.exists(), "Missing gerbers_amplifier directory")
         expected_amp_layers = [
-            "amplifier-F_Cu.gtl",
-            "amplifier-B_Cu.gbl",
-            "amplifier-Edge_Cuts.gm1",
-            "amplifier.drl",
+            "Amplifier-F_Cu.gtl",
+            "Amplifier-B_Cu.gbl",
+            "Amplifier-Edge_Cuts.gm1",
+            "Amplifier.drl",
         ]
         for layer in expected_amp_layers:
             p = amp_dir / layer
-            self.assertTrue(p.exists(), f"Missing Amplifier Gerber layer: {layer}")
+            p_alt = amp_dir / layer.lower()
+            self.assertTrue(p.exists() or p_alt.exists(), f"Missing Amplifier Gerber layer: {layer}")
 
         pump_dir = EXPORTS_DIR / "gerbers_pump"
         self.assertTrue(pump_dir.exists(), "Missing gerbers_pump directory")

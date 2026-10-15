@@ -225,3 +225,6 @@ MIN_BEND_RADIUS_WIRE = 10.0
 WIRE_USB_OD = 1.6       # 28 AWG shielded
 WIRE_MOTOR_OD = 2.4     # 24 AWG shielded twisted pair
 WIRE_POGO_OD = 1.2      # 30 AWG shielded
+
+# USB-C Offset
+USB_OFFSET_X = -15.0

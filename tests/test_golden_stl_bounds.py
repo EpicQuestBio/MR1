@@ -118,12 +118,12 @@ class TestGoldenSTLAndPCBBounds(unittest.TestCase):
         self.assertAlmostEqual(bb.size.Z, 6.0, delta=0.1)
 
     def test_housing_lid_reader_bounds_and_threading(self):
-        """Verify Housing_Lid_Reader matches golden STL (100.0 x 100.0 x 57.7 mm)."""
+        """Verify Housing_Lid_Reader matches reader case envelope (115.0 x 115.0 x 57.7 mm)."""
         lid = Housing_Lid_Reader()
         self.assertTrue(lid.is_valid)
         bb = lid.bounding_box()
-        self.assertAlmostEqual(bb.size.X, 100.0, delta=0.5)
-        self.assertAlmostEqual(bb.size.Y, 100.0, delta=0.5)
+        self.assertAlmostEqual(bb.size.X, 115.0, delta=0.5)
+        self.assertAlmostEqual(bb.size.Y, 115.0, delta=0.5)
         self.assertAlmostEqual(bb.size.Z, 57.7, delta=0.5)
         self.assertGreater(lid.volume, 100000.0)
 

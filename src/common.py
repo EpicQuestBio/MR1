@@ -12,9 +12,9 @@ def Circuitry_Cutouts(height=10.0):
         # LMP7721 OpAmp
         with Locations((0, -13, 0)):
             Box(6, 7, height)
-        # JST Connector
-        with Locations((0, -19, 0)):
-            Box(13, 7, height)
+        # Ribbon Cable Clearance Channel against hexagon wall
+        with Locations((0, -27.5, 0)):
+            Box(13.5, 3.0, height)
         # V+ Rail Filtering
         with Locations((-10, -18, 0)):
             Box(4, 4, height)
@@ -30,9 +30,6 @@ def Circuitry_Cutouts(height=10.0):
         # Optional Test Point / Via clearout
         with Locations((0, -25, 0)):
             Box(8, 4, height)
-        # Downward-pointing headers
-        with Locations((0, -30, 0)):
-            Box(14, 5, height)
 
     return p.part
 

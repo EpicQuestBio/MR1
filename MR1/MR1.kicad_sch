@@ -987,6 +987,16 @@
 		)
 		(uuid "bc1fef7a-9f17-4cc6-bd4f-69f601179e6c")
 	)
+	(text "Error: Cannot add SW1 (footprint 'Custom Footprints:SW_SPST_6mm_gull wing' not found).\nError: Cannot add E1 (no footprint assigned).\nError: Cannot add E2 (no footprint assigned).\nError: Cannot add C40 (no footprint assigned).\nError: Cannot add SW2 (footprint 'Custom Footprints:SW_SPST_6mm_gull wing' not found).\nError: Cannot add C42 (no footprint assigned).\nTotal warnings: 10, errors: 6."
+		(exclude_from_sim no)
+		(at 99.06 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f1c1060c-1f25-4b6b-8d0e-0d806f1232ac")
+	)
 	(junction
 		(at 220.98 113.03)
 		(diameter 0)
@@ -2235,7 +2245,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
 			(at 217.17 126.238 0)
 			(hide yes)
 			(show_name no)
@@ -2469,7 +2479,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
 			(at 218.44 154.178 0)
 			(hide yes)
 			(show_name no)

@@ -4717,7 +4717,7 @@
 	)
 	(gr_line
 		(start 149.5 84.475044)
-		(end 158.5 84.475044)
+		(end 157.75 84.475044)
 		(stroke
 			(width 0.2)
 			(type default)
@@ -4726,18 +4726,8 @@
 		(uuid "fe78e0c3-9029-46ee-acff-aa3bfbf54f90")
 	)
 	(gr_line
-		(start 158.5 81.99)
-		(end 170.5 81.99)
-		(stroke
-			(width 0.2)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "38c81db8-aa9e-4bf4-82ee-268fc419e231")
-	)
-	(gr_line
-		(start 158.5 84.475044)
-		(end 158.5 81.994244)
+		(start 157.75 81.475044)
+		(end 157.75 84.475044)
 		(stroke
 			(width 0.2)
 			(type default)
@@ -4746,8 +4736,18 @@
 		(uuid "6fb7a02f-0472-4bd8-b68e-54c937384c69")
 	)
 	(gr_line
-		(start 170.5 81.994244)
-		(end 170.5 84.475044)
+		(start 157.75 81.475044)
+		(end 171.25 81.475044)
+		(stroke
+			(width 0.2)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "38c81db8-aa9e-4bf4-82ee-268fc419e231")
+	)
+	(gr_line
+		(start 171.25 81.475044)
+		(end 171.25 84.475044)
 		(stroke
 			(width 0.2)
 			(type default)
@@ -4756,7 +4756,7 @@
 		(uuid "41e2b493-3096-4231-ba9f-22a13eeb2543")
 	)
 	(gr_line
-		(start 170.5 84.475044)
+		(start 171.25 84.475044)
 		(end 179.5 84.475044)
 		(stroke
 			(width 0.2)
