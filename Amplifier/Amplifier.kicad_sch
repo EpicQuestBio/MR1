@@ -11151,7 +11151,7 @@
 	)
 	(symbol
 		(lib_id "power:VDDA")
-		(at 49.53 111.76 90)
+		(at 49.53 106.68 90)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -11163,7 +11163,7 @@
 		(fields_autoplaced yes)
 		(uuid "45af0e2f-c6ec-4527-bcf8-29f85b7a8938")
 		(property "Reference" "#PWR024"
-			(at 53.34 111.76 0)
+			(at 53.34 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11174,7 +11174,7 @@
 			)
 		)
 		(property "Value" "VDDA"
-			(at 46.355 111.7601 90)
+			(at 46.355 106.6801 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11185,7 +11185,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 49.53 111.76 0)
+			(at 49.53 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11196,7 +11196,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 111.76 0)
+			(at 49.53 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11207,7 +11207,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VDDA\""
-			(at 49.53 111.76 0)
+			(at 49.53 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12356,7 +12356,7 @@
 	)
 	(symbol
 		(lib_id "power:VSSA")
-		(at 49.53 106.68 90)
+		(at 49.53 111.76 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12366,7 +12366,7 @@
 		(dnp no)
 		(uuid "614dc74e-88b7-47de-8fd1-a13b2342e695")
 		(property "Reference" "#PWR022"
-			(at 53.34 106.68 0)
+			(at 53.34 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12377,7 +12377,7 @@
 			)
 		)
 		(property "Value" "VSSA"
-			(at 46.228 106.68 90)
+			(at 46.228 111.76 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12388,7 +12388,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 49.53 106.68 0)
+			(at 49.53 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12399,7 +12399,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 49.53 106.68 0)
+			(at 49.53 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12410,7 +12410,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VSSA\""
-			(at 49.53 106.68 0)
+			(at 49.53 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

@@ -128,6 +128,11 @@ def Housing_Case_Reader():
         if edges:
             fillet(edges, radius=WALL - inset_depth)
 
+        # Bottom edges fillet for rounded corners
+        b_edges = [e for e in p.edges() if abs(e.center().Z - (-READER_LID_THICK/2.0)) < 0.01 and e.geom_type == GeomType.LINE]
+        if b_edges:
+            fillet(b_edges, radius=2.0)
+
         # Hollow out
         with Locations((0, 0, WALL)):
             with BuildPart(mode=Mode.PRIVATE) as bucket:
@@ -136,6 +141,11 @@ def Housing_Case_Reader():
                 if bedges:
                     fillet(bedges, radius=2.0)
             add(bucket.part, mode=Mode.SUBTRACT)
+
+        # Top outer rim fillet
+        t_edges = [e for e in p.edges() if abs(e.center().Z - (READER_LID_THICK/2.0)) < 0.01 and e.geom_type == GeomType.LINE and (abs(e.center().X) > 40 or abs(e.center().Y) > 40)]
+        if t_edges:
+            fillet(t_edges, radius=1.0)
 
         # Feet Dimples (Truncated sphere)
         with Locations((0, 0, -READER_LID_THICK/2.0)):
@@ -148,8 +158,8 @@ def Housing_Case_Reader():
         # PCB Standoffs (Floor / Bottom Lid)
         standoff_h = 5.0
         with Locations((0, 0, -READER_LID_THICK/2.0 + WALL + standoff_h/2.0)):
-            for mx in [-PCB_W/2.0 + 2.0, PCB_W/2.0 - 2.0]:
-                for my in [-PCB_L/2.0 + 2.0, PCB_L/2.0 - 2.0]:
+            for mx in [-35.0, 35.0]:
+                for my in [-25.0, 25.0]:
                     with Locations((mx, my, 0)):
                         Cylinder(radius=6.0/2.0, height=standoff_h, mode=Mode.ADD)
                         Cylinder(radius=(2.5 - TOLERANCE)/2.0, height=standoff_h + 2.0, mode=Mode.SUBTRACT)
@@ -174,23 +184,34 @@ def Housing_Case_Reader():
                 extrude(amount=SEAL_RADIUS)
             add(seal.part, mode=Mode.ADD)
 
+        # Wire clearance cutouts for internal reader wiring harness
+        try:
+            from src.assembly import route_spline, get_wiring_routes
+            for name, (pts, radius) in get_wiring_routes().items():
+                pts_local = [(x, y, z - (PUMP_H + PUMP_LID_THICK + 5.0)) for x, y, z in pts]
+                w_cut = route_spline(pts_local, radius + 0.1)
+                add(w_cut, mode=Mode.SUBTRACT)
+        except Exception:
+            pass
+
     return p.part
 
 def Housing_Lid_Reader():
-    """Top reader module lid with threaded neck (M75 x 8mm thread) and inner hex socket.
-    Exact match to golden STL (100.0 x 100.0 x 57.7 mm).
-    Includes legacy OpenSCAD features:
-    - 4 vertical fluid pass-through holes (D=10mm at PORT_RADIUS=20mm)
-    - JST downward cable clearance cutout (14x10mm at (0, -19))
-    - 4 horizontal side fluid ports (D=6.35mm at Y = +/-20mm)
+    """Top reader module lid with threaded neck (M75 x 8mm thread), inner hex socket,
+    hollow internal chamber for tubes and fittings, and rounded corners.
+    Includes:
+    - 4 vertical fluid pass-through holes (D=10mm at PORT_RADIUS=20mm) into hollow chamber
+    - Ribbon cable clearance channel (13.5x3.0mm cavity recessed into hexagon wall at Y=-27.5)
+    - 4 horizontal side fluid ports (D=6.35mm at Y = +/-20mm) penetrating into hollow chamber
+    - Corner mounting holes matching case at (+/- 53.0, +/- 53.0) with counterbores
     - Lower outer wall inset (2.5mm inset on bottom 15mm)
-    - Corner mounting holes with counterbores
-    - Bottom O-ring groove
+    - Bottom indexing lip and underside O-ring groove
+    - Rounded edges and corners for smooth ergonomics
     """
-    lid_w = 100.0
-    lid_l = 100.0
-    lid_thick = 35.0
-    ceiling_thick = 10.0
+    lid_w = BASE_W + 2*(WALL - 2.5) # 115.0 mm matching case width
+    lid_l = BASE_L + 2*(WALL - 2.5) # 115.0 mm matching case length
+    lid_thick = 25.0
+    ceiling_thick = 5 # Thin ceiling under hex socket leaves 24mm tall hollow bucket
     neck_length = 25.2
     neck_r = NECK_OD / 2.0
     pitch = CAP_THREAD_PITCH
@@ -199,35 +220,42 @@ def Housing_Lid_Reader():
     inset_height = 15.0
 
     with BuildPart(mode=Mode.PRIVATE) as p:
-        # Base plate centered at Z = -lid_thick / 2.0 (top surface at Z = 0)
+        # 1. Base plate centered at Z = -lid_thick / 2.0 (top surface at Z = 0)
         with Locations((0, 0, -lid_thick / 2.0)):
             Box(lid_w, lid_l, lid_thick)
-            edges = p.edges().filter_by(Axis.Z)
-            if edges:
-                fillet(edges, radius=WALL)
+            edges_z = p.edges().filter_by(Axis.Z)
+            if edges_z:
+                fillet(edges_z, radius=WALL)
 
-        # Inset indexing lip at bottom extending down to Z = -27.5
+        # 2. Inset indexing lip at bottom extending down to Z = -27.5
         with Locations((0, 0, -lid_thick - 1.25)):
-            Box(lid_w - 2.5 * 2, lid_l - 2.5 * 2, 2.5)
+            Box(BASE_W - 2 * WALL - 0.4, BASE_L - 2 * WALL - 0.4, 2.5)
 
-        # Internal bucket from bottom
-        with Locations((0, 0, -ceiling_thick - (lid_thick - ceiling_thick + 2.5) / 2.0)):
+        # 3. Fillet top outer perimeter edges of base plate (at Z = 0)
+        top_outer_edges = [e for e in p.edges() if abs(e.center().Z) < 0.01 and e.geom_type == GeomType.LINE]
+        if top_outer_edges:
+            fillet(top_outer_edges, radius=2.5)
+
+        # 4. Hollow internal bucket from Z = -ceiling_thick down to bottom
+        bucket_h = lid_thick - ceiling_thick + 2.5 + 2.0 # 26.0 mm height
+        bucket_z = -ceiling_thick - bucket_h / 2.0
+        with Locations((0, 0, bucket_z)):
             with BuildPart(mode=Mode.PRIVATE) as bucket:
-                Box(lid_w - 2 * WALL - 3.4, lid_l - 2 * WALL - 3.4, lid_thick - ceiling_thick + 3.0)
+                Box(lid_w - 2 * WALL - 4.0, lid_l - 2 * WALL - 4.0, bucket_h)
                 bedges = bucket.edges().filter_by(Axis.Z)
                 if bedges:
-                    fillet(bedges, radius=2.0)
+                    fillet(bedges, radius=3.0)
             add(bucket.part, mode=Mode.SUBTRACT)
 
-        # Neck transition cone (Z: 0 to 5)
+        # 5. Neck transition cone (Z: 0 to 5)
         with Locations((0, 0, 2.5)):
-            Cone(bottom_radius=(lid_w - 20.0) / 2.0, top_radius=neck_r, height=5.0)
+            Cone(bottom_radius=neck_r + 2.5, top_radius=neck_r, height=5.0)
 
-        # Neck cylinder (Z: 5 to 5 + neck_length)
+        # 6. Neck cylinder (Z: 5 to 5 + neck_length)
         with Locations((0, 0, 5.0 + neck_length / 2.0)):
             Cylinder(radius=neck_r, height=neck_length)
 
-        # External Helical Thread (M75 x 8mm pitch)
+        # 7. External Helical Thread (M75 x 8mm pitch)
         with BuildLine():
             path = Helix(pitch=pitch, height=neck_length, radius=neck_r)
         with Locations((0, 0, 5.0)):
@@ -242,46 +270,51 @@ def Housing_Lid_Reader():
                     Polygon(pts)
             sweep(sections=s.sketch, path=path, mode=Mode.ADD)
 
-        # Inner Hex Socket Cutout (61mm across corners)
-        with Locations((0, 0, 5.0 + neck_length / 2.0)):
+        # 8. Inner Hex Socket Cutout (61mm across corners) starting cleanly at Z = 0.0
+        with Locations((0, 0, 0.0)):
             with BuildSketch():
                 RegularPolygon(radius=61.0 / 2.0, side_count=6)
-            extrude(amount=neck_length + 20.0, mode=Mode.SUBTRACT)
+            extrude(amount=5.0 + neck_length + 20.0, mode=Mode.SUBTRACT)
 
-        # Vertical Fluid Pass-Through Holes (4x D=10mm through neck/ceiling)
+        # 9. Vertical Fluid Pass-Through Holes (4x D=10mm through neck/ceiling into hollow interior)
         for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP, ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
             ang_rad = math.radians(a)
             with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad), -ceiling_thick/2.0)):
                 Cylinder(radius=10.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
 
-        # JST Connector Clearance Channel (centered at [0, -19])
-        with Locations((0.0, -19.0, -ceiling_thick/2.0)):
-            Box(14.0, 10.0, neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
+        # 10. Ribbon Cable Clearance Channel (13.5mm x 3.0mm cavity recessed into hexagon wall at Y = -27.5)
+        with Locations((0.0, -27.5, 0.0)):
+            Box(13.5, 3.0, 100.0, mode=Mode.SUBTRACT)
 
-        # Horizontal Side Fluid Ports (at Y = +/- 20, Z = -ceiling_thick / 2.0 = -5.0mm)
+        # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -8.0mm penetrating into hollow bucket)
         for x_wall in [-(lid_w / 2.0), (lid_w / 2.0)]:
             for y_port in [-20.0, 20.0]:
-                with Locations((x_wall, y_port, -ceiling_thick / 2.0)):
+                with Locations((x_wall, y_port, -8.0)):
                     Cylinder(radius=6.35 / 2.0, height=WALL * 4.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
-        # Lower Outer Inset (2.5mm thinned wall on bottom 15mm creating overhang)
+        # 12. Lower Outer Inset (2.5mm thinned wall on bottom 15mm creating overhang)
         with Locations((0, 0, -lid_thick + inset_height / 2.0)):
             with BuildPart(mode=Mode.PRIVATE) as inset:
                 Box(lid_w + 1.0, lid_l + 1.0, inset_height)
                 Box(lid_w - 2 * inset_depth, lid_l - 2 * inset_depth, inset_height + 1.0, mode=Mode.SUBTRACT)
             add(inset.part, mode=Mode.SUBTRACT)
 
-        # Mounting Holes (with counterbores)
+        # 13. Back Wall Connectivity (USB-C cutouts)
+        #with Locations((0, lid_l / 2.0, 0)):
+        #    with Locations((-15, 0, 0), (15, 0, 0)):
+        #        Box(12, WALL * 10, 6, mode=Mode.SUBTRACT)
+
+        # 14. Corner Mounting Holes (with counterbores) matching case at (+/- 53.0, +/- 53.0)
         for x_sign in [-1, 1]:
             for y_sign in [-1, 1]:
-                mx = x_sign * (lid_w / 2.0 - 2.0)
-                my = y_sign * (lid_l / 2.0 - 2.0)
+                mx = x_sign * (BASE_W / 2.0 - 2.0)
+                my = y_sign * (BASE_L / 2.0 - 2.0)
                 with Locations((mx, my, -lid_thick / 2.0)):
                     Cylinder(radius=3.5 / 2.0, height=lid_thick * 3.0, mode=Mode.SUBTRACT)
                 with Locations((mx, my, -2.5)):
                     Cylinder(radius=6.0 / 2.0, height=5.1, mode=Mode.SUBTRACT)
 
-        # Underside O-Ring Groove
+        # 15. Underside O-Ring Groove
         with Locations((0, 0, -lid_thick)):
             with BuildPart(mode=Mode.PRIVATE) as ogroove:
                 with BuildSketch():
@@ -289,5 +322,15 @@ def Housing_Lid_Reader():
                     Rectangle(BASE_W - 8.0 - 1.0, BASE_L - 8.0 - 1.0, mode=Mode.SUBTRACT)
                 extrude(amount=1.5)
             add(ogroove.part, mode=Mode.SUBTRACT)
+
+        # Wire clearance cutout for W_USB passing through lower indexing lip
+        try:
+            from src.assembly import route_spline, get_wiring_routes
+            pts_u, r_u = get_wiring_routes()["W_USB"]
+            pts_local_l = [(x, y, z - (PUMP_H + PUMP_LID_THICK + 5.0 + 30.0)) for x, y, z in pts_u]
+            w_cut_l = route_spline(pts_local_l, r_u + 0.1)
+            add(w_cut_l, mode=Mode.SUBTRACT)
+        except Exception:
+            pass
 
     return p.part

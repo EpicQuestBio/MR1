@@ -987,6 +987,16 @@
 		)
 		(uuid "bc1fef7a-9f17-4cc6-bd4f-69f601179e6c")
 	)
+	(text "Error: Cannot add SW1 (footprint 'Custom Footprints:SW_SPST_6mm_gull wing' not found).\nError: Cannot add E1 (no footprint assigned).\nError: Cannot add E2 (no footprint assigned).\nError: Cannot add C40 (no footprint assigned).\nError: Cannot add SW2 (footprint 'Custom Footprints:SW_SPST_6mm_gull wing' not found).\nError: Cannot add C42 (no footprint assigned).\nTotal warnings: 10, errors: 6."
+		(exclude_from_sim no)
+		(at 99.06 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f1c1060c-1f25-4b6b-8d0e-0d806f1232ac")
+	)
 	(junction
 		(at 220.98 113.03)
 		(diameter 0)
@@ -1097,6 +1107,16 @@
 	)
 	(wire
 		(pts
+			(xy 99.06 124.46) (xy 121.92 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "220b972d-f88a-4e9e-9a9f-d0a77004c0e5")
+	)
+	(wire
+		(pts
 			(xy 220.98 113.03) (xy 220.98 107.95)
 		)
 		(stroke
@@ -1107,7 +1127,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 124.46) (xy 121.92 124.46)
+			(xy 91.44 125.73) (xy 99.06 125.73)
 		)
 		(stroke
 			(width 0)
@@ -1207,6 +1227,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 110.49) (xy 106.68 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f9d5c0c-cd9d-40e2-a08a-e19261cdfc1b")
+	)
+	(wire
+		(pts
 			(xy 220.98 113.03) (xy 224.79 113.03)
 		)
 		(stroke
@@ -1244,6 +1274,16 @@
 			(type default)
 		)
 		(uuid "8bec85cb-6603-4239-b9ad-8266c37874bf")
+	)
+	(wire
+		(pts
+			(xy 106.68 76.2) (xy 109.22 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "920da702-4df9-4947-b149-40bef00d46d5")
 	)
 	(wire
 		(pts
@@ -1327,6 +1367,16 @@
 	)
 	(wire
 		(pts
+			(xy 99.06 125.73) (xy 99.06 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa81cf94-38ea-4e3e-bcc0-0638ebe43948")
+	)
+	(wire
+		(pts
 			(xy 146.05 78.74) (xy 146.05 96.52)
 		)
 		(stroke
@@ -1397,6 +1447,16 @@
 	)
 	(wire
 		(pts
+			(xy 106.68 110.49) (xy 106.68 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7f67b6a-04fc-4189-b22e-873b5a19e777")
+	)
+	(wire
+		(pts
 			(xy 214.63 135.89) (xy 214.63 140.97)
 		)
 		(stroke
@@ -1414,85 +1474,6 @@
 			(type default)
 		)
 		(uuid "fe5fe535-5b6e-4751-ae1d-e0714f0a5247")
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 228.6 46.99 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0c1ccef9-2ab2-496b-8256-734a8449e562")
-		(property "Reference" "H5"
-			(at 231.14 44.4499 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 231.14 46.9899 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_6mm_Pad_Via"
-			(at 228.6 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 228.6 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 228.6 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "2434ea4b-396d-4c37-80e5-324298a5b588")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "H5")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "power:Earth")
@@ -1645,84 +1626,6 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR088")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 199.39 49.53 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "28265225-4eea-4a89-b243-661664d4a92f")
-		(property "Reference" "#PWR091"
-			(at 199.39 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 199.39 54.61 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 199.39 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 199.39 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 199.39 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8eb39d42-5c98-48f8-88e4-30924d5f2848")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR091")
 					(unit 1)
 				)
 			)
@@ -2076,85 +1979,6 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 199.39 46.99 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "468ab9e4-59ff-4fab-8c50-4d2031ec717d")
-		(property "Reference" "H4"
-			(at 201.93 44.4499 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 201.93 46.9899 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_6mm_Pad_Via"
-			(at 199.39 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 199.39 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 199.39 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9e8f7b88-c63e-4307-a571-8aa2f7a1cca2")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "H4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
 		(at 227.33 87.63 0)
 		(unit 1)
 		(body_style 1)
@@ -2227,85 +2051,6 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "H9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 228.6 33.02 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5a9aa924-5a72-4245-9ac3-ab66f804a0ea")
-		(property "Reference" "H3"
-			(at 231.14 30.4799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 231.14 33.0199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_6mm_Pad_Via"
-			(at 228.6 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 228.6 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 228.6 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bf92632b-aea5-41c6-aa4e-895ca263a8b7")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "H3")
 					(unit 1)
 				)
 			)
@@ -2469,84 +2214,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 199.39 35.56 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7d01514c-79f7-4d07-b495-c2b0d46a76a1")
-		(property "Reference" "#PWR093"
-			(at 199.39 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 199.39 40.64 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 199.39 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 199.39 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 199.39 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b08eeb1b-3874-4c72-9436-0d2557557ec8")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR093")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:SparkGap")
 		(at 217.17 124.46 0)
 		(unit 1)
@@ -2578,7 +2245,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
 			(at 217.17 126.238 0)
 			(hide yes)
 			(show_name no)
@@ -2781,162 +2448,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 228.6 35.56 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a3378c6a-e495-4bde-9e5b-3dc476f713d4")
-		(property "Reference" "#PWR098"
-			(at 228.6 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 228.6 40.64 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 228.6 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 228.6 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 228.6 35.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "dca51293-5ecc-4ebe-843f-fbcf4a95dceb")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR098")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 228.6 49.53 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b712597f-5cc0-4038-963a-925f0c1a543d")
-		(property "Reference" "#PWR092"
-			(at 228.6 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 228.6 54.61 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 228.6 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 228.6 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 228.6 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ab08900a-d9a4-405e-a237-0123c5def480")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR092")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:SparkGap")
 		(at 218.44 152.4 0)
 		(unit 1)
@@ -2968,7 +2479,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
 			(at 218.44 154.178 0)
 			(hide yes)
 			(show_name no)
@@ -3179,85 +2690,6 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C28")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole_Pad")
-		(at 199.39 33.02 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d18ebe60-407c-4abd-aabe-ce13a7ab859e")
-		(property "Reference" "H2"
-			(at 201.93 30.4799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole_Pad"
-			(at 201.93 33.0199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_6mm_Pad_Via"
-			(at 199.39 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 199.39 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole with connection"
-			(at 199.39 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "2e9fd474-3afe-43f7-8868-a166ad774551")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "H2")
 					(unit 1)
 				)
 			)
@@ -3498,7 +2930,7 @@
 		)
 	)
 	(sheet
-		(at 33.02 96.52)
+		(at 33.02 97.79)
 		(size 58.42 40.64)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3514,7 +2946,7 @@
 		)
 		(uuid "38d1a3ed-811f-4f3b-80a2-5ae77b649a51")
 		(property "Sheetname" "Insturmentation"
-			(at 33.02 95.8084 0)
+			(at 33.02 97.0784 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3525,7 +2957,7 @@
 			)
 		)
 		(property "Sheetfile" "Insturmentation.kicad_sch"
-			(at 33.02 137.7446 0)
+			(at 33.02 139.0146 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3536,7 +2968,7 @@
 			)
 		)
 		(pin ">PORE" input
-			(at 91.44 124.46 0)
+			(at 91.44 125.73 0)
 			(uuid "8c00883f-71e9-4695-9842-6ff3ea3c94ca")
 			(effects
 				(font
@@ -3545,19 +2977,9 @@
 				(justify right)
 			)
 		)
-		(pin "DAC_CLK" input
-			(at 91.44 107.95 0)
-			(uuid "65f4cfc1-5f75-4869-8d99-b7b7c4cd034a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DAC_Dout" input
+		(pin "ADC_CLK" input
 			(at 91.44 102.87 0)
-			(uuid "5307d93a-cad6-46e4-a6ec-00efd6f8d471")
+			(uuid "d5d38051-0657-4957-8cdd-f445833d7c01")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3565,9 +2987,29 @@
 				(justify right)
 			)
 		)
-		(pin "DAC_EN" input
+		(pin "ADC_EN" input
 			(at 91.44 105.41 0)
-			(uuid "360e3498-62ee-4a82-b59c-90c2ddda4a62")
+			(uuid "d81a9169-02e3-412e-a981-bd19fc39b14f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ADC_SDI" input
+			(at 91.44 107.95 0)
+			(uuid "64592867-7770-4da0-a5c7-c7ab296d07ad")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ADC_SDO" input
+			(at 91.44 110.49 0)
+			(uuid "8eab6c75-ce94-44cf-9ca4-e047f7a02b91")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3793,7 +3235,7 @@
 			)
 		)
 		(property "Sheetfile" "Microcontroller.kicad_sch"
-			(at 109.22 78.6896 0)
+			(at 109.22 79.3246 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3883,36 +3325,6 @@
 				(justify left)
 			)
 		)
-		(pin "DAC_CLK" input
-			(at 109.22 73.66 180)
-			(uuid "35fb4f76-f5a4-4931-8e49-339485de5082")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "DAC_Dout" input
-			(at 109.22 68.58 180)
-			(uuid "4b5bd2a3-7a97-4295-bead-659e8afbe928")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "DAC_EN" input
-			(at 109.22 71.12 180)
-			(uuid "87d24f6f-9577-45ed-9fd2-d665c91e6794")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "USB_SCL" input
 			(at 109.22 44.45 180)
 			(uuid "dac5a047-2e74-40aa-b3f8-27645725becd")
@@ -3926,6 +3338,46 @@
 		(pin "USB_SDA" input
 			(at 109.22 46.99 180)
 			(uuid "f04f369b-f38e-47c3-890e-0b56b4f1793a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ADC_CLK" input
+			(at 109.22 68.58 180)
+			(uuid "988da7e5-c076-43bd-936f-dc3b21c4fa51")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ADC_EN" input
+			(at 109.22 71.12 180)
+			(uuid "2c71680e-b668-45ca-aa1c-59bfea078374")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ADC_SDI" input
+			(at 109.22 73.66 180)
+			(uuid "e60c5a84-9058-4e31-ae06-10cf5fe67a48")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ADC_SDO" input
+			(at 109.22 76.2 180)
+			(uuid "e6878578-27d2-4b9a-b19d-89118debad93")
 			(effects
 				(font
 					(size 1.27 1.27)
