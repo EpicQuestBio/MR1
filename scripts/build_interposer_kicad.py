@@ -5,7 +5,7 @@ Generates the adapted Interposer KiCad PCB and Schematic:
 1. Strips all active components (U2 LMP7721, U16 LTC6268, R1..R9, C1..C20, NT3..NT5, J9).
 2. Retains Edge.Cuts (55.0 x 51.962 mm hexagon, central wafer aperture, fluid pass-throughs).
 3. Retains H1 (Nanopore chip holder) and J1, J2, J10, J11 (Ag/AgCl ribbon electrode pads).
-4. Adds J_POGO1 (PogoPin_Target_6Pin_Array) with ultra-low-leakage ENIG landing pads.
+4. Adds J_POGO1 (PogoPin_Target_12Pin_Distributed) with ultra-low-leakage ENIG landing pads.
 5. Adds guarded, low-leakage routing tracks connecting Pogo targets to electrodes.
 6. Builds a clean, valid Interposer schematic (Interposer.kicad_sch).
 """
@@ -18,7 +18,7 @@ def new_uuid():
     return str(uuid.uuid4())
 
 def build_interposer_pcb():
-    src_pcb = Path("Amplifier/amplifier.kicad_pcb").read_text(encoding="utf-8")
+    src_pcb = Path("Amplifier/Amplifier.kicad_pcb").read_text(encoding="utf-8")
     lines = src_pcb.splitlines()
 
     active_refs = {
@@ -95,7 +95,7 @@ def build_interposer_pcb():
     # Add J_POGO1 (Pogo Pin Landing Array) at (164.500, 73.500)
     # Pitch: X offsets [-11.5, -6.5, -1.5, +1.5, +6.5, +11.5]
     # Abs X: [153.0, 158.0, 163.0, 166.0, 171.0, 176.0]
-    pogo_fp = f"""\t(footprint "footprints:PogoPin_Target_6Pin_Array"
+    pogo_fp = f"""\t(footprint "footprints:PogoPin_Target_12Pin_Distributed"
 \t\t(layer "F.Cu")
 \t\t(uuid "{new_uuid()}")
 \t\t(at 164.5 73.5)
@@ -107,13 +107,13 @@ def build_interposer_pcb():
 \t\t\t(uuid "{new_uuid()}")
 \t\t\t(effects (font (size 0.8 0.8) (thickness 0.12)))
 \t\t)
-\t\t(property "Value" "PogoPin_Target_6Pin_Array"
+\t\t(property "Value" "PogoPin_Target_12Pin_Distributed"
 \t\t\t(at 0 3.0 0)
 \t\t\t(layer "F.Fab")
 \t\t\t(uuid "{new_uuid()}")
 \t\t\t(effects (font (size 0.8 0.8) (thickness 0.12)))
 \t\t)
-\t\t(property "Footprint" "footprints:PogoPin_Target_6Pin_Array"
+\t\t(property "Footprint" "footprints:PogoPin_Target_12Pin_Distributed"
 \t\t\t(at 0 0 0)
 \t\t\t(hide yes)
 \t\t\t(layer "F.Fab")
@@ -293,7 +293,7 @@ def build_interposer_sch():
 \t\t(comment 4 "Dual-Sided Ag/AgCl Ribbon Electrode Contacts with Weep Moat Leak Detection")
 \t)
 \t(lib_symbols
-\t\t(symbol "Connector_Generic:Conn_01x06" (in_bom yes) (on_board yes)
+\t\t(symbol "Connector_Generic:Conn_01x12" (in_bom yes) (on_board yes)
 \t\t\t(property "Reference" "J" (at 0 0 0) (effects (font (size 1.27 1.27))))
 \t\t\t(property "Value" "Conn_01x06" (at 0 0 0) (effects (font (size 1.27 1.27))))
 \t\t\t(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27))))
@@ -310,11 +310,11 @@ def build_interposer_sch():
 \t\t)
 \t)
 
-\t(symbol (lib_id "Connector_Generic:Conn_01x06") (at 70.0 80.0 0) (unit 1)
+\t(symbol (lib_id "Connector_Generic:Conn_01x12") (at 70.0 80.0 0) (unit 1)
 \t\t(uuid "{new_uuid()}")
 \t\t(property "Reference" "J_POGO1" (at 70.0 68.0 0) (effects (font (size 1.27 1.27))))
-\t\t(property "Value" "PogoPin_Target_6Pin_Array" (at 70.0 70.0 0) (effects (font (size 1.27 1.27))))
-\t\t(property "Footprint" "footprints:PogoPin_Target_6Pin_Array" (at 70.0 80.0 0) (hide yes) (effects (font (size 1.27 1.27))))
+\t\t(property "Value" "PogoPin_Target_12Pin_Distributed" (at 70.0 70.0 0) (effects (font (size 1.27 1.27))))
+\t\t(property "Footprint" "footprints:PogoPin_Target_12Pin_Distributed" (at 70.0 80.0 0) (hide yes) (effects (font (size 1.27 1.27))))
 \t\t(pin "1" (uuid "{new_uuid()}"))
 \t\t(pin "2" (uuid "{new_uuid()}"))
 \t\t(pin "3" (uuid "{new_uuid()}"))
