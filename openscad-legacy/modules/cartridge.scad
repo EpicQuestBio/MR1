@@ -19,7 +19,7 @@ module PCB_2D() {
         }
 
         // Cable Slot (2D projection)
-        translate([0, -26]) square([12, 5], center=true);
+        translate([0, -27.5]) square([13.5, 3.0], center=true);
 
         // Port Pass-throughs
         for(a = [angle_fluid_in_top, angle_fluid_out_top, angle_fluid_in_bot, angle_fluid_out_bot, angle_elec_cis, angle_elec_trans]) {
@@ -600,9 +600,9 @@ module Circuitry_Cutouts(height=10) {
         translate([0, -13, 0])
             cube([6, 7, height], center=true);
 
-        // JST Connector (X=0, Y=-19, dX=13, dY=7 for clearance)
-        translate([0, -19, 0])
-            cube([13, 7, height], center=true);
+        // Ribbon Cable Clearance Channel (X=0, Y=-27.5, dX=13.5, dY=3.0 for clearance)
+        translate([0, -27.5, 0])
+            cube([13.5, 3.0, height], center=true);
 
         // V+ Rail Filtering (Left Side) (X=-10, Y=-18, dX=4, dY=4)
         translate([-10, -18, 0])

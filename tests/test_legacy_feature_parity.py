@@ -52,8 +52,8 @@ class TestLegacyFeatureParity(unittest.TestCase):
 
         # Test intersection on 3D solid at mounting hole locations (must be cut out / empty)
         solid = PCB_Main_Reader()
-        for mx in [-PCB_W / 2.0 + 2.0, PCB_W / 2.0 - 2.0]:
-            for my in [-PCB_L / 2.0 + 2.0, PCB_L / 2.0 - 2.0]:
+        for mx in [-35.0, 35.0]:
+            for my in [-25.0, 25.0]:
                 probe = Solid.make_cylinder(0.5, 4.0).move(Location((mx, my, -1.0)))
                 inter = solid.intersect(probe)
                 vol = inter.volume if inter is not None else 0.0
@@ -144,7 +144,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
         """
         Verify Housing_Lid_Reader features from OpenSCAD modules/housing_reader.scad:
         1. 4x 10mm vertical fluid pass-through holes at PORT_RADIUS=20mm
-        2. JST connector clearance cutout at (0, -19)
+        2. Ribbon cable clearance cavity in hexagon wall at (0, -27.5)
         3. 4x horizontal side fluid ports at Y = ±20mm
         4. Lower wall outer inset (2.5mm inset on bottom 15mm)
         5. Corner screw mounting holes with counterbores
@@ -164,19 +164,35 @@ class TestLegacyFeatureParity(unittest.TestCase):
             self.assertLess(vol, 0.5,
                             f"Housing_Lid_Reader is missing fluid pass-through hole at angle {a} deg ({px:.1f}, {py:.1f}).")
 
-        # 2. Test JST connector clearance cutout at (0, -19, 0)
-        jst_probe = Solid.make_box(8.0, 6.0, 20.0).move(Location((-4.0, -22.0, -10.0)))
-        inter_jst = lid.intersect(jst_probe)
-        vol_jst = inter_jst.volume if inter_jst is not None else 0.0
-        self.assertLess(vol_jst, 0.5,
-                        "Housing_Lid_Reader is missing JST downward connector cutout at (0, -19).")
+        def _get_shape_volume(shape):
+            if shape is None:
+                return 0.0
+            if hasattr(shape, "volume"):
+                return shape.volume
+            if hasattr(shape, "__iter__"):
+                return sum(getattr(s, "volume", 0.0) for s in shape)
+            return 0.0
 
-        # 3. Test horizontal side fluid ports at Y = ±20mm, Z = -ceiling_thick/2 = -5mm
-        # Left wall at X = -50, Right wall at X = +50
-        for x_wall in [-(BASE_W / 2.0 + WALL), (BASE_W / 2.0 + WALL)]:
+        # 2. Test ribbon cable clearance cavity at (0, -27.5) across full vertical extent (Z in [-10.0, 30.2] mm)
+        cable_probe = Solid.make_box(8.0, 2.0, 40.2).move(Location((-4.0, -28.5, -10.0)))
+        inter_cable = lid.intersect(cable_probe)
+        vol_cable = _get_shape_volume(inter_cable)
+        self.assertLess(vol_cable, 0.5,
+                        f"Housing_Lid_Reader has solid obstruction in ribbon cable cavity (blocked volume: {vol_cable:.4f} mm^3).")
+
+        # 2b. Explicit upper neck test probe (Z in [22.0, 30.2] mm)
+        neck_probe = Solid.make_box(8.0, 2.0, 8.2).move(Location((-4.0, -28.5, 22.0)))
+        inter_neck = lid.intersect(neck_probe)
+        vol_neck = _get_shape_volume(inter_neck)
+        self.assertLess(vol_neck, 0.5,
+                        f"Housing_Lid_Reader has solid obstruction in upper neck ribbon cavity (blocked volume: {vol_neck:.4f} mm^3).")
+
+        # 3. Test horizontal side fluid ports at Y = ±20mm, Z = -8.0mm penetrating hollow chamber
+        lid_half_w = (BASE_W + 2 * (WALL - 2.5)) / 2.0  # 57.5mm
+        for x_wall in [-lid_half_w, lid_half_w]:
             for y_port in [-20.0, 20.0]:
                 probe = Solid.make_cylinder(1.5, 10.0).move(
-                    Location((x_wall - 5.0 if x_wall < 0 else x_wall - 5.0, y_port, -5.0)) * Rotation(0, 90, 0)
+                    Location((x_wall - 5.0 if x_wall < 0 else x_wall - 5.0, y_port, -8.0)) * Rotation(0, 90, 0)
                 )
                 inter_side = lid.intersect(probe)
                 vol_side = inter_side.volume if inter_side is not None else 0.0
