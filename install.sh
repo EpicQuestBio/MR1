@@ -8,6 +8,21 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
 
+LAUNCH_VIEWER="no"
+
+# Parse arguments
+for arg in "$@"; do
+    case $arg in
+        --viewer)
+            LAUNCH_VIEWER="yes"
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -39,9 +54,17 @@ fi
 PY_VER=$(${PYTHON_CMD} -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')")
 echo -e "${GREEN}[OK]${NC} (${PYTHON_CMD} v${PY_VER})"
 
-# 2. Python Packages Verification (build123d, wireviz)
+# 2. Python Packages Verification (build123d, ocp_vscode, wireviz)
 echo -n "Checking build123d in environment... "
 if ${PYTHON_CMD} -c "import build123d" >/dev/null 2>&1; then
+    echo -e "${GREEN}[OK]${NC}"
+else
+    echo -e "${YELLOW}[NOT FOUND]${NC} Installing via requirements.txt..."
+    ${PYTHON_CMD} -m pip install -q -r "${REPO_ROOT}/requirements.txt"
+fi
+
+echo -n "Checking ocp_vscode in environment... "
+if ${PYTHON_CMD} -c "import ocp_vscode" >/dev/null 2>&1; then
     echo -e "${GREEN}[OK]${NC}"
 else
     echo -e "${YELLOW}[NOT FOUND]${NC} Installing via requirements.txt..."
@@ -93,3 +116,8 @@ fi
 
 echo -e "\n${GREEN}Environment verification completed successfully.${NC}"
 echo "You can now run: ./scripts/export_all.sh --all"
+
+if [ "${LAUNCH_VIEWER}" = "yes" ]; then
+    echo -e "\n${BLUE}>> Launching ocp_vscode standalone viewer...${NC}"
+    ${PYTHON_CMD} -m ocp_vscode &
+fi
