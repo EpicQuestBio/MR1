@@ -27,8 +27,8 @@ def PCB_Main_Reader_2D():
                 with Locations((mx, my)):
                     Circle(radius=3.2 / 2.0, mode=Mode.SUBTRACT)
 
-        # Dual USB-C back edge cutouts (at X = +/-15, Y = 25, size 14 x 10.1 mm)
-        with Locations((-15.0, 25.0), (15.0, 25.0)):
+        # Single parameterized USB-C back edge cutout (Y = 25, size 14 x 10.1 mm)
+        with Locations((USB_OFFSET_X, 25.0)):
             Rectangle(14.0, 10.1, mode=Mode.SUBTRACT)
 
         # Fluid port clearance holes (D=6mm at PORT_RADIUS=20mm)

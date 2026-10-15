@@ -146,13 +146,18 @@ def Housing_Case_Reader():
                         Box(15.0, 15.0, 10.0, mode=Mode.SUBTRACT)
 
         # PCB Standoffs (Floor / Bottom Lid)
-        standoff_h = 20.0
+        standoff_h = 5.0
         with Locations((0, 0, -READER_LID_THICK/2.0 + WALL + standoff_h/2.0)):
             for mx in [-PCB_W/2.0 + 2.0, PCB_W/2.0 - 2.0]:
                 for my in [-PCB_L/2.0 + 2.0, PCB_L/2.0 - 2.0]:
                     with Locations((mx, my, 0)):
                         Cylinder(radius=6.0/2.0, height=standoff_h, mode=Mode.ADD)
                         Cylinder(radius=(2.5 - TOLERANCE)/2.0, height=standoff_h + 2.0, mode=Mode.SUBTRACT)
+
+        # Back Wall Connectivity (USB-C cutout for Main Reader PCB)
+        with Locations((0, BASE_L/2.0 + WALL, 0)):
+            with Locations((USB_OFFSET_X, 0, 0)):
+                Box(12, WALL*10, 6, mode=Mode.SUBTRACT)
 
         # Corner Lid Mounting Screw Holes
         for x_sign in [-1, 1]:
@@ -184,7 +189,7 @@ def Housing_Lid_Reader():
     """
     lid_w = 100.0
     lid_l = 100.0
-    lid_thick = 25.0
+    lid_thick = 35.0
     ceiling_thick = 10.0
     neck_length = 25.2
     neck_r = NECK_OD / 2.0
@@ -265,11 +270,6 @@ def Housing_Lid_Reader():
                 Box(lid_w + 1.0, lid_l + 1.0, inset_height)
                 Box(lid_w - 2 * inset_depth, lid_l - 2 * inset_depth, inset_height + 1.0, mode=Mode.SUBTRACT)
             add(inset.part, mode=Mode.SUBTRACT)
-
-        # Back Wall Connectivity (USB-C cutouts)
-        with Locations((0, lid_l / 2.0, 0)):
-            with Locations((-15, 0, 0), (15, 0, 0)):
-                Box(12, WALL * 10, 6, mode=Mode.SUBTRACT)
 
         # Mounting Holes (with counterbores)
         for x_sign in [-1, 1]:
