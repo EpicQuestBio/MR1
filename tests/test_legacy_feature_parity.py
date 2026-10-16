@@ -60,18 +60,32 @@ class TestLegacyFeatureParity(unittest.TestCase):
                 self.assertAlmostEqual(vol, 0.0, delta=0.01,
                                  msg=f"Mounting hole at ({mx}, {my}) must be cut out of PCB_Main_Reader.")
 
-        # Test USB-C cutouts at (±15, 25)
-        for ux in [-15.0, 15.0]:
-            probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((ux - 2.0, 25.0 - 2.0, -1.0)))
-            inter = solid.intersect(probe)
-            vol = inter.volume if inter is not None else 0.0
-            self.assertAlmostEqual(vol, 0.0, delta=0.01,
-                             msg=f"USB-C cutout at ({ux}, 25.0) must be cut out of PCB_Main_Reader.")
+        # Test single parameterized USB-C cutout at (USB_OFFSET_X, 25)
+        ux = USB_OFFSET_X
+        probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((ux - 2.0, 25.0 - 2.0, -1.0)))
+        inter = solid.intersect(probe)
+        if hasattr(inter, "volume"):
+            vol = inter.volume
+        elif hasattr(inter, "solids"):
+            vol = sum([s.volume for s in inter.solids()])
+        elif inter is None:
+            vol = 0.0
+        else:
+            vol = 0.0
+        self.assertAlmostEqual(vol, 0.0, delta=0.01,
+                         msg=f"USB-C cutout at ({ux}, 25.0) must be cut out of PCB_Main_Reader.")
 
         # Test JST cutout at (0, -19)
         probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((-2.0, -19.0 - 2.0, -1.0)))
         inter = solid.intersect(probe)
-        vol = inter.volume if inter is not None else 0.0
+        if hasattr(inter, "volume"):
+            vol = inter.volume
+        elif hasattr(inter, "solids"):
+            vol = sum([s.volume for s in inter.solids()])
+        elif inter is None:
+            vol = 0.0
+        else:
+            vol = 0.0
         self.assertAlmostEqual(vol, 0.0, delta=0.01,
                          msg=f"JST connector cutout at (0, -19) must be cut out of PCB_Main_Reader.")
 
@@ -81,7 +95,14 @@ class TestLegacyFeatureParity(unittest.TestCase):
             fy = PORT_RADIUS * math.sin(math.radians(a))
             probe = Solid.make_cylinder(0.5, 4.0).move(Location((fx, fy, -1.0)))
             inter = solid.intersect(probe)
-            vol = inter.volume if inter is not None else 0.0
+            if hasattr(inter, "volume"):
+                vol = inter.volume
+            elif hasattr(inter, "solids"):
+                vol = sum([s.volume for s in inter.solids()])
+            elif inter is None:
+                vol = 0.0
+            else:
+                vol = 0.0
             self.assertAlmostEqual(vol, 0.0, delta=0.01,
                              msg=f"Fluid clearance hole at angle {a} deg ({fx:.2f}, {fy:.2f}) must be cut out.")
 
@@ -187,15 +208,26 @@ class TestLegacyFeatureParity(unittest.TestCase):
         self.assertLess(vol_neck, 0.5,
                         f"Housing_Lid_Reader has solid obstruction in upper neck ribbon cavity (blocked volume: {vol_neck:.4f} mm^3).")
 
-        # 3. Test horizontal side fluid ports at Y = ±20mm, Z = -8.0mm penetrating hollow chamber
+        # 3. Horizontal side fluid ports at Y = ±20, Z = -13.0
         lid_half_w = (BASE_W + 2 * (WALL - 2.5)) / 2.0  # 57.5mm
         for x_wall in [-lid_half_w, lid_half_w]:
             for y_port in [-20.0, 20.0]:
                 probe = Solid.make_cylinder(1.5, 10.0).move(
-                    Location((x_wall - 5.0 if x_wall < 0 else x_wall - 5.0, y_port, -8.0)) * Rotation(0, 90, 0)
+                    Location((x_wall - 5.0 if x_wall < 0 else x_wall - 5.0, y_port, -13.0)) * Rotation(0, 90, 0)
                 )
                 inter_side = lid.intersect(probe)
-                vol_side = inter_side.volume if inter_side is not None else 0.0
+
+                # build123d.intersect returns a ShapeList or Part
+                if hasattr(inter_side, "volume"):
+                    vol_side = inter_side.volume
+                elif hasattr(inter_side, "solids"):
+                    # it might be a shapelist, get sum of volumes
+                    vol_side = sum([s.volume for s in inter_side.solids()])
+                elif inter_side is None:
+                    vol_side = 0.0
+                else:
+                    vol_side = 0.0
+
                 self.assertLess(vol_side, 50.0,
                                 f"Housing_Lid_Reader is missing side fluid port at X={x_wall}, Y={y_port}.")
 

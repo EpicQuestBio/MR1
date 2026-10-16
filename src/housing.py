@@ -1,5 +1,6 @@
 from build123d import *
 from src.constants import *
+from src.common import Weep_Duct_Holes
 import math
 
 def Housing_Pump_Case(pump_type=PUMP_TYPE):
@@ -276,20 +277,24 @@ def Housing_Lid_Reader():
                 RegularPolygon(radius=61.0 / 2.0, side_count=6)
             extrude(amount=5.0 + neck_length + 20.0, mode=Mode.SUBTRACT)
 
-        # 9. Vertical Fluid Pass-Through Holes (4x D=10mm through neck/ceiling into hollow interior)
+        # 9. Vertical Fluid Pass-Through Holes (4x D=13mm through neck/ceiling into hollow interior)
         for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP, ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
             ang_rad = math.radians(a)
             with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad), -ceiling_thick/2.0)):
-                Cylinder(radius=10.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
+                Cylinder(radius=13.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
 
         # 10. Ribbon Cable Clearance Channel (13.5mm x 3.0mm cavity recessed into hexagon wall at Y = -27.5)
         with Locations((0.0, -27.5, 0.0)):
             Box(13.5, 3.0, 100.0, mode=Mode.SUBTRACT)
 
-        # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -8.0mm penetrating into hollow bucket)
+        # 10b. Weep holes penetrating the reader lid ceiling into the hollow bucket
+        with Locations((0, 0, -ceiling_thick/2.0)):
+            add(Weep_Duct_Holes(height=neck_length + ceiling_thick*3.0), mode=Mode.SUBTRACT)
+
+        # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -13.0mm penetrating into hollow bucket)
         for x_wall in [-(lid_w / 2.0), (lid_w / 2.0)]:
             for y_port in [-20.0, 20.0]:
-                with Locations((x_wall, y_port, -8.0)):
+                with Locations((x_wall, y_port, -13.0)):
                     Cylinder(radius=6.35 / 2.0, height=WALL * 4.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
         # 12. Lower Outer Inset (2.5mm thinned wall on bottom 15mm creating overhang)
