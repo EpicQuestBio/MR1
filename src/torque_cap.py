@@ -21,6 +21,9 @@ def Torque_Cap_Inner():
         # 1. Retention Flange at bottom
         with Locations((0, 0, retention_h / 2.0)):
             Cylinder(radius=flange_r, height=retention_h)
+        edges_z0 = [e for e in p.edges() if abs(e.center().Z) < 0.01 and e.geom_type == GeomType.CIRCLE]
+        if edges_z0:
+            fillet(edges_z0, radius=0.8)
 
         # 2. Main ring body above flange
         with Locations((0, 0, retention_h + (cap_h - retention_h) / 2.0)):
@@ -63,8 +66,9 @@ def Torque_Cap_Inner():
     return p.part
 
 def Torque_Cap_Outer():
-    """Outer rotating cap handle with 12 fluted grips, 6 flex ratchet slots, retention lip, and pipette access.
-    Matches golden STL (95.0 x 95.0 x 30.2 mm).
+    """Outer rotating cap handle with 12 fluted grips, 18 textured knurling ribs, rounded corners,
+    6 flex ratchet slots, retention lip, and pipette access.
+    Matches golden STL (95.0 x 95.0-97.0 x 30.2 mm).
     """
     cap_h = OUTER_CAP_H # 30.2
     body_r = OUTER_CAP_OD / 2.0 # 47.5 (D = 95.0)
@@ -76,6 +80,11 @@ def Torque_Cap_Outer():
         # Main Body Cylinder
         with Locations((0, 0, cap_h / 2.0)):
             Cylinder(radius=body_r, height=cap_h)
+
+        # Round top and bottom rims (rounding=2.0)
+        edges_rim = [e for e in p.edges() if e.geom_type == GeomType.CIRCLE and (abs(e.center().Z) < 0.01 or abs(e.center().Z - cap_h) < 0.01)]
+        if edges_rim:
+            fillet(edges_rim, radius=2.0)
 
         # 12 Fluted Grips around circumference
         for i in range(12):
@@ -106,6 +115,16 @@ def Torque_Cap_Outer():
             ang = i * 60.0
             with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0, 0, slot_z))):
                 Box(slot_w, slot_l, slot_h, mode=Mode.SUBTRACT)
+
+        # Textured Finger Knurling Ribs (Cap_Ribs)
+        # Vertical ribs around perimeter at 5 deg steps where deg % 60 in [25, 30, 35]
+        rib_h = cap_h - cap_retention_h - 4.0
+        rib_z = cap_retention_h + rib_h / 2.0
+        for r_deg in range(0, 360, 5):
+            check = r_deg % 60
+            if check in [25, 30, 35]:
+                with Locations(Rotation(0, 0, r_deg) * Location((body_r, 0, rib_z))):
+                    Cylinder(radius=1.0, height=rib_h, mode=Mode.ADD)
 
         # Cantilever spring arms with pawls
         arm_h = cap_h - cap_retention_h - 6.0

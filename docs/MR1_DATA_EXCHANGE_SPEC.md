@@ -153,7 +153,7 @@ When enabled, MR1 starts a local softAP (`MR1-Nanopore-XXXX`) or joins an existi
 - **`POST /api/pump`**: Payload `{"pump": 1, "rate_ul_min": 15.0, "dir": "FWD"}` controls fluidics.
 - **`POST /api/estop`**: Payload `{}` triggers emergency stop.
 
-### 5.2 WebSocket Streaming (`ws://<ip>/stream`)
+### 5.2 WebSocket Streaming (`ws://localhost:8765/stream`)
 - **Binary Channel**: Streams decimated 1,000-sample blocks ($10\text{ kSPS}$ downsampled from $100\text{ kSPS}$) formatted as single-precision 32-bit IEEE floats for live browser plotting.
 - **JSON Telemetry Channel**: Emits periodic health status frames at 10 Hz.
 

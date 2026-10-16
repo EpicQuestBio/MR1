@@ -55,13 +55,31 @@ def find_kicad_cli():
 
 
 def find_wireviz():
-    """Locate wireviz on PATH or in Python Scripts."""
-    return shutil.which("wireviz") or shutil.which("wireviz.exe")
+    """Locate wireviz on PATH or in Python Scripts/venv."""
+    on_path = shutil.which("wireviz") or shutil.which("wireviz.exe")
+    if on_path:
+        return on_path
+    venv_bin = Path(sys.executable).parent / "wireviz"
+    if venv_bin.exists():
+        return str(venv_bin)
+    venv_exe = Path(sys.executable).parent / "wireviz.exe"
+    if venv_exe.exists():
+        return str(venv_exe)
+    return None
 
 
 def find_pio():
-    """Locate PlatformIO core on PATH."""
-    return shutil.which("pio") or shutil.which("pio.exe")
+    """Locate PlatformIO core on PATH or in Python Scripts/venv."""
+    on_path = shutil.which("pio") or shutil.which("pio.exe")
+    if on_path:
+        return on_path
+    venv_bin = Path(sys.executable).parent / "pio"
+    if venv_bin.exists():
+        return str(venv_bin)
+    venv_exe = Path(sys.executable).parent / "pio.exe"
+    if venv_exe.exists():
+        return str(venv_exe)
+    return None
 
 
 # -----------------------------------------------------------------------------
@@ -192,11 +210,21 @@ def export_wiring(verbose=True):
         ("wiring/reader_tubing.yaml", EXPORTS_DIR / "reader_tubing"),
     ]
 
+    env = os.environ.copy()
+    venv_dir = str(Path(sys.executable).parent)
+    if venv_dir not in env.get("PATH", "").split(os.pathsep):
+        env["PATH"] = venv_dir + os.pathsep + env.get("PATH", "")
+    if not shutil.which("dot", path=env.get("PATH", "")):
+        for extra in ["/home/loki/miniconda3/bin", "/usr/bin", "/usr/local/bin"]:
+            if (Path(extra) / "dot").exists():
+                env["PATH"] = extra + os.pathsep + env.get("PATH", "")
+                break
+
     for yaml_rel, out_dir in targets:
         yaml_path = REPO_ROOT / yaml_rel
         out_dir.mkdir(parents=True, exist_ok=True)
         cmd = [wv, str(yaml_path), "-o", str(out_dir)]
-        res = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True)
+        res = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True, env=env)
         if res.returncode == 0:
             if verbose:
                 print(f"  [OK] Rendered {yaml_path.name} -> {out_dir.relative_to(REPO_ROOT)}")
@@ -221,6 +249,9 @@ def export_firmware(verbose=True):
 
     env = os.environ.copy()
     env["PYTHONIOENCODING"] = "utf-8"
+    venv_dir = str(Path(sys.executable).parent)
+    if venv_dir not in env.get("PATH", "").split(os.pathsep):
+        env["PATH"] = venv_dir + os.pathsep + env.get("PATH", "")
 
     cmd = [pio, "run"]
     res = subprocess.run(cmd, cwd=fw_dir, capture_output=True, text=True, env=env)
@@ -312,7 +343,7 @@ def main():
     parser.add_argument("--all", action="store_true", help="Run all export targets")
     parser.add_argument("--cad", action="store_true", help="Export 3D STL/STEP and 2D DXF models")
     parser.add_argument("--kicad", action="store_true", help="Export KiCad Gerbers, BOM, POS, and PDFs")
-    parser.add_argument("--wiring", action="store_true", help="Export WireViz harness diagrams")
+    parser.add_argument("--wiring", "--wireviz", dest="wiring", action="store_true", help="Export WireViz harness diagrams")
     parser.add_argument("--firmware", action="store_true", help="Build and stage ESP32-S3 firmware")
     parser.add_argument("--manifest", action="store_true", help="Generate exports/manifest.json")
     parser.add_argument("--check", action="store_true", help="Validate existing exports integrity")
@@ -349,13 +380,25 @@ def main():
         with open(manifest_file, "r") as fh:
             data = json.load(fh)
         missing = []
-        for path_str in data["deliverables"].keys():
-            if not (EXPORTS_DIR / path_str).exists():
+        hash_mismatches = []
+        for path_str, meta in data["deliverables"].items():
+            fpath = EXPORTS_DIR / path_str
+            if not fpath.exists():
                 missing.append(path_str)
+            else:
+                h = hashlib.sha256()
+                with open(fpath, "rb") as fh:
+                    while chunk := fh.read(65536):
+                        h.update(chunk)
+                if h.hexdigest() != meta.get("sha256"):
+                    hash_mismatches.append(path_str)
         if missing:
             print(f"  [FAIL] {len(missing)} files missing from exports: {missing[:5]}...")
             sys.exit(1)
-        print(f"  [OK] All {len(data['deliverables'])} indexed deliverables verified on disk.")
+        if hash_mismatches:
+            print(f"  [FAIL] {len(hash_mismatches)} files have SHA-256 mismatches: {hash_mismatches[:5]}...")
+            sys.exit(1)
+        print(f"  [OK] All {len(data['deliverables'])} indexed deliverables verified on disk (existence & SHA-256).")
 
     print("\n[SUCCESS] Export operations completed.")
 

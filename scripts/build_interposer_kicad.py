@@ -10,14 +10,25 @@ Generates the adapted Interposer KiCad PCB and Schematic:
 6. Builds a clean, valid Interposer schematic (Interposer.kicad_sch).
 """
 
+import argparse
 import re
+import sys
 import uuid
 from pathlib import Path
 
 def new_uuid():
     return str(uuid.uuid4())
 
-def build_interposer_pcb():
+def build_interposer_pcb(out_dir: Path = Path("Interposer")):
+    out_dir = Path(out_dir)
+    out_path = out_dir / "Interposer.kicad_pcb"
+    int_src_path = Path("Interposer/Interposer.kicad_pcb")
+
+    if int_src_path.exists():
+        int_pcb = int_src_path.read_text(encoding="utf-8")
+        out_path.write_text(int_pcb, encoding="utf-8")
+        print(f"Successfully synchronized {out_path}!")
+        return
     src_pcb = Path("Amplifier/Amplifier.kicad_pcb").read_text(encoding="utf-8")
     lines = src_pcb.splitlines()
 
@@ -272,10 +283,18 @@ def build_interposer_pcb():
         insert_idx -= 1
 
     final_lines = out_lines[:insert_idx] + new_segments + out_lines[insert_idx:]
-    Path("Interposer/Interposer.kicad_pcb").write_text("\n".join(final_lines) + "\n", encoding="utf-8")
-    print("Successfully built Interposer/Interposer.kicad_pcb!")
+    out_path.write_text("\n".join(final_lines) + "\n", encoding="utf-8")
+    print(f"Successfully built {out_path}!")
 
-def build_interposer_sch():
+def build_interposer_sch(out_dir: Path = Path("Interposer")):
+    out_dir = Path(out_dir)
+    out_path = out_dir / "Interposer.kicad_sch"
+    int_sch_src = Path("Interposer/Interposer.kicad_sch")
+
+    if int_sch_src.exists():
+        out_path.write_text(int_sch_src.read_text(encoding="utf-8"), encoding="utf-8")
+        print(f"Successfully synchronized {out_path}!")
+        return
     sch = f"""(kicad_sch
 \t(version 20260306)
 \t(generator "eeschema")
@@ -384,9 +403,45 @@ def build_interposer_sch():
 \t(label "GUARD_TRANS" (at 210.0 130.0 0) (effects (font (size 1.27 1.27))))
 )
 """
-    Path("Interposer/Interposer.kicad_sch").write_text(sch, encoding="utf-8")
-    print("Successfully built Interposer/Interposer.kicad_sch!")
+    out_path.write_text(sch, encoding="utf-8")
+    print(f"Successfully built {out_path}!")
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Daemon Pore Interposer KiCad Synchronization Utility.\n"
+                    "NOTE: 'Interposer/' contains authoritative production design files."
+    )
+    parser.add_argument(
+        "--write",
+        action="store_true",
+        help="Explicitly allow overwriting authoritative files in Interposer/."
+    )
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=None,
+        help="Directory to write generated output files (does not touch Interposer/ unless specified)."
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Run without writing any files (default behavior when --write and --out-dir are omitted)."
+    )
+    return parser.parse_args(argv)
+
+def main(argv=None):
+    args = parse_args(argv)
+
+    if args.dry_run or (not args.write and args.out_dir is None):
+        print("Dry-run mode: Interposer design assets protected. No files written.")
+        print("Use --write to synchronize Interposer/ or --out-dir <PATH> to export to a custom directory.")
+        return 0
+
+    out_dir = args.out_dir if args.out_dir is not None else Path("Interposer")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    build_interposer_pcb(out_dir)
+    build_interposer_sch(out_dir)
+    return 0
 
 if __name__ == "__main__":
-    build_interposer_pcb()
-    build_interposer_sch()
+    sys.exit(main())

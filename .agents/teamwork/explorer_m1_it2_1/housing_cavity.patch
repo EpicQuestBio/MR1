@@ -1,0 +1,24 @@
+--- a/src/housing.py
++++ b/src/housing.py
+@@ -261,5 +261,5 @@ def Housing_Lid_Reader():
+ 
+         # Ribbon Cable Clearance Channel (13.5mm x 3.0mm cavity recessed into hexagon wall at Y = -27.5)
+-        with Locations((0.0, -27.5, -ceiling_thick / 2.0)):
+-            Box(13.5, 3.0, neck_length + ceiling_thick * 3.0, mode=Mode.SUBTRACT)
++        with Locations((0.0, -27.5, 0.0)):
++            Box(13.5, 3.0, 100.0, mode=Mode.SUBTRACT)
+ 
+--- a/tests/test_legacy_feature_parity.py
++++ b/tests/test_legacy_feature_parity.py
+@@ -167,7 +167,8 @@ class TestLegacyFeatureParity(unittest.TestCase):
+ 
+-        # 2. Test ribbon cable clearance cavity at (0, -27.5, 0)
+-        cable_probe = Solid.make_box(8.0, 2.0, 20.0).move(Location((-4.0, -28.5, -10.0)))
++        # 2. Test ribbon cable clearance cavity at (0, -27.5, 0) across full neck height (Z in [-10.0, 30.2] mm)
++        cable_probe = Solid.make_box(8.0, 2.0, 40.2).move(Location((-4.0, -28.5, -10.0)))
+         inter_cable = lid.intersect(cable_probe)
+-        vol_cable = inter_cable.volume if inter_cable is not None else 0.0
++        vol_cable = sum(s.volume for s in inter_cable) if isinstance(inter_cable, (list, tuple, ShapeList)) or hasattr(inter_cable, "__iter__") else (inter_cable.volume if inter_cable is not None else 0.0)
+         self.assertLess(vol_cable, 0.5,
+-                        "Housing_Lid_Reader is missing ribbon cable cavity at (0, -27.5).")
++                        f"Housing_Lid_Reader has solid obstruction in ribbon cable cavity (blocked volume: {vol_cable:.4f} mm^3).")

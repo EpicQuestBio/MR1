@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
+
+# Copyright (C) 2026 Lawrence R. Kincheloe III / Molecular Reality Corp
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 # =============================================================================
 # Sentinel Nanopore Reader ? Python Virtual Environment Manager
 # =============================================================================
@@ -88,7 +104,7 @@ fi
 echo -e "\n${BLUE}--- Installed Packages in VENV ---${NC}"
 "${VENV_PYTHON}" -c "
 import sys
-for pkg in ['build123d', 'wireviz', 'platformio']:
+for pkg in ['build123d', 'ocp_vscode', 'wireviz', 'platformio']:
     try:
         mod = __import__(pkg)
         ver = getattr(mod, '__version__', 'installed')

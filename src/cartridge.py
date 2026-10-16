@@ -21,14 +21,14 @@ def PCB_Main_Reader_2D():
     with BuildSketch(mode=Mode.PRIVATE) as s:
         Rectangle(PCB_W, PCB_L)
 
-        # Mounting holes matching lid standoffs (+/- (PCB_W/2 - 2), +/- (PCB_L/2 - 2))
-        for mx in [-PCB_W / 2.0 + 2.0, PCB_W / 2.0 - 2.0]:
-            for my in [-PCB_L / 2.0 + 2.0, PCB_L / 2.0 - 2.0]:
+        # Mounting holes matching KiCad MR1 PCB and reader case standoffs (+/-35.0, +/-25.0)
+        for mx in [-35.0, 35.0]:
+            for my in [-25.0, 25.0]:
                 with Locations((mx, my)):
                     Circle(radius=3.2 / 2.0, mode=Mode.SUBTRACT)
 
-        # Dual USB-C back edge cutouts (at X = +/-15, Y = 25, size 14 x 10.1 mm)
-        with Locations((-15.0, 25.0), (15.0, 25.0)):
+        # Single parameterized USB-C back edge cutout (Y = 25, size 14 x 10.1 mm)
+        with Locations((USB_OFFSET_X, 25.0)):
             Rectangle(14.0, 10.1, mode=Mode.SUBTRACT)
 
         # Fluid port clearance holes (D=6mm at PORT_RADIUS=20mm)

@@ -59,6 +59,8 @@ __pycache__/
 venv/
 env/
 *.pyc
+__pycache__/
+.pytest_cache/
 
 # PlatformIO & Embedded Builds
 .pio/

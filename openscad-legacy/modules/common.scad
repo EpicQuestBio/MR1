@@ -1,14 +1,14 @@
 // Vertical Cable Slot Definition
 module Cable_Slot() {
-    // Slot for JST cable passing down to the reader
-    // Located at "Front" (Y negative, angle 270)
-    translate([0, -26, 0])
-        cube([12, 5, 200], center=true);
+    // Slot for ribbon cable passing down to the reader
+    // Located against the wall of the hexagon
+    translate([0, -27.5, 0])
+        cube([13.5, 3.0, 200], center=true);
 }
 
 module Cable_Slot_2D() {
-    translate([0, -26])
-        square([12, 5], center=true);
+    translate([0, -27.5])
+        square([13.5, 3.0], center=true);
 }
 
 module BoltHoles() {

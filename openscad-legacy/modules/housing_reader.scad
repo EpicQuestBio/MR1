@@ -61,8 +61,8 @@ module Housing_Lid_Reader() {
         diff("remove")
         cuboid([base_w+2*wall, base_l+2*wall, lid_thick], rounding=wall, edges="Z", anchor=TOP) {
 
-            // New Clearance channel for vertical downward JST cable (instead of old Cable Slot)
-            tag("remove") translate([0, -19, 0]) cube([14, 10, 200], center=true);
+            // Clearance channel for ribbon cable recessed into hexagon wall
+            tag("remove") translate([0, -27.5, 0]) cube([13.5, 3.0, 200], center=true);
 
             // Internal Bucket (Now starts lower to leave ceiling room)
             // Added +0.1 padding to depth to prevent Z-fighting at the bottom boundary
