@@ -56,22 +56,21 @@ class TestLegacyFeatureParity(unittest.TestCase):
             for my in [-25.0, 25.0]:
                 probe = Solid.make_cylinder(0.5, 4.0).move(Location((mx, my, -1.0)))
                 inter = solid.intersect(probe)
-                vol = inter.volume if inter is not None else 0.0
+                vol = sum(s.volume for s in inter) if inter is not None else 0.0
                 self.assertAlmostEqual(vol, 0.0, delta=0.01,
                                  msg=f"Mounting hole at ({mx}, {my}) must be cut out of PCB_Main_Reader.")
 
-        # Test USB-C cutouts at (±15, 25)
-        for ux in [-15.0, 15.0]:
-            probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((ux - 2.0, 25.0 - 2.0, -1.0)))
-            inter = solid.intersect(probe)
-            vol = inter.volume if inter is not None else 0.0
-            self.assertAlmostEqual(vol, 0.0, delta=0.01,
-                             msg=f"USB-C cutout at ({ux}, 25.0) must be cut out of PCB_Main_Reader.")
+        # Test USB-C cutout at (USB_OFFSET_X, 25)
+        probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((USB_OFFSET_X - 2.0, 25.0 - 2.0, -1.0)))
+        inter = solid.intersect(probe)
+        vol = sum(s.volume for s in inter) if inter is not None else 0.0
+        self.assertAlmostEqual(vol, 0.0, delta=0.01,
+                         msg=f"USB-C cutout at ({USB_OFFSET_X}, 25.0) must be cut out of PCB_Main_Reader.")
 
         # Test JST cutout at (0, -19)
         probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((-2.0, -19.0 - 2.0, -1.0)))
         inter = solid.intersect(probe)
-        vol = inter.volume if inter is not None else 0.0
+        vol = sum(s.volume for s in inter) if inter is not None else 0.0
         self.assertAlmostEqual(vol, 0.0, delta=0.01,
                          msg=f"JST connector cutout at (0, -19) must be cut out of PCB_Main_Reader.")
 

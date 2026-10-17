@@ -152,8 +152,11 @@ def Housing_Case_Reader():
             for x_sign in [-1, 1]:
                 for y_sign in [-1, 1]:
                     with Locations((x_sign * (BASE_W/2.0 - FEET_INSET), y_sign * (BASE_L/2.0 - FEET_INSET), 0)):
-                        Sphere(radius=13.0/2.0, mode=Mode.ADD)
-                        Box(15.0, 15.0, 10.0, mode=Mode.SUBTRACT)
+                        with BuildPart(mode=Mode.PRIVATE) as dimple:
+                            Sphere(radius=13.0/2.0)
+                            with Locations((0, 0, -3.5/2.0 + 0.1/2.0)):
+                                Cylinder(radius=15.0/2.0, height=3.5 + 0.1, mode=Mode.INTERSECT)
+                        add(dimple.part, mode=Mode.ADD)
 
         # PCB Standoffs (Floor / Bottom Lid)
         standoff_h = 5.0
