@@ -50,13 +50,22 @@ class TestLegacyFeatureParity(unittest.TestCase):
         self.assertAlmostEqual(bb.size.Y, PCB_L, delta=0.5,
                                msg=f"Main Reader PCB length {bb.size.Y} must be {PCB_L}mm")
 
+        def _get_shape_volume(shape):
+            if shape is None:
+                return 0.0
+            if hasattr(shape, "volume"):
+                return shape.volume
+            if hasattr(shape, "__iter__"):
+                return sum(getattr(s, "volume", 0.0) for s in shape)
+            return 0.0
+
         # Test intersection on 3D solid at mounting hole locations (must be cut out / empty)
         solid = PCB_Main_Reader()
         for mx in [-35.0, 35.0]:
             for my in [-25.0, 25.0]:
                 probe = Solid.make_cylinder(0.5, 4.0).move(Location((mx, my, -1.0)))
                 inter = solid.intersect(probe)
-                vol = inter.volume if inter is not None else 0.0
+                vol = _get_shape_volume(inter)
                 self.assertAlmostEqual(vol, 0.0, delta=0.01,
                                  msg=f"Mounting hole at ({mx}, {my}) must be cut out of PCB_Main_Reader.")
 
@@ -64,28 +73,14 @@ class TestLegacyFeatureParity(unittest.TestCase):
         ux = USB_OFFSET_X
         probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((ux - 2.0, 25.0 - 2.0, -1.0)))
         inter = solid.intersect(probe)
-        if hasattr(inter, "volume"):
-            vol = inter.volume
-        elif hasattr(inter, "solids"):
-            vol = sum([s.volume for s in inter.solids()])
-        elif inter is None:
-            vol = 0.0
-        else:
-            vol = 0.0
+        vol = _get_shape_volume(inter)
         self.assertAlmostEqual(vol, 0.0, delta=0.01,
-                         msg=f"USB-C cutout at ({ux}, 25.0) must be cut out of PCB_Main_Reader.")
+                         msg=f"USB-C cutout at ({USB_OFFSET_X}, 25.0) must be cut out of PCB_Main_Reader.")
 
         # Test JST cutout at (0, -19)
         probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((-2.0, -19.0 - 2.0, -1.0)))
         inter = solid.intersect(probe)
-        if hasattr(inter, "volume"):
-            vol = inter.volume
-        elif hasattr(inter, "solids"):
-            vol = sum([s.volume for s in inter.solids()])
-        elif inter is None:
-            vol = 0.0
-        else:
-            vol = 0.0
+        vol = _get_shape_volume(inter)
         self.assertAlmostEqual(vol, 0.0, delta=0.01,
                          msg=f"JST connector cutout at (0, -19) must be cut out of PCB_Main_Reader.")
 
@@ -95,14 +90,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
             fy = PORT_RADIUS * math.sin(math.radians(a))
             probe = Solid.make_cylinder(0.5, 4.0).move(Location((fx, fy, -1.0)))
             inter = solid.intersect(probe)
-            if hasattr(inter, "volume"):
-                vol = inter.volume
-            elif hasattr(inter, "solids"):
-                vol = sum([s.volume for s in inter.solids()])
-            elif inter is None:
-                vol = 0.0
-            else:
-                vol = 0.0
+            vol = _get_shape_volume(inter)
             self.assertAlmostEqual(vol, 0.0, delta=0.01,
                              msg=f"Fluid clearance hole at angle {a} deg ({fx:.2f}, {fy:.2f}) must be cut out.")
 
