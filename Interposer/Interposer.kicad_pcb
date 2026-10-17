@@ -124,7 +124,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "/home/loki/Projects/daemon-pore/Amplifier/")
+			(outputdirectory "")
 		)
 	)
 	(footprint "Resistor_SMD:R_0402_1005Metric"

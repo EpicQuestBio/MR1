@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sentinel Nanopore Reader (Daemon Pore) - Open-source solid-state and biological nanopore sequencer, low-noise transimpedance amplifier, and automated fluidic control system",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -21,9 +21,20 @@
     "type": "git",
     "url": "git+https://github.com/LokiMetaSmith/daemon-pore.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "nanopore",
+    "sequencer",
+    "solid-state-nanopore",
+    "dna-sequencing",
+    "open-source-hardware",
+    "build123d",
+    "kicad",
+    "esp32-s3",
+    "microfluidics",
+    "transimpedance-amplifier"
+  ],
+  "author": "Lawrence R. Kincheloe III / Molecular Reality Corp.",
+  "license": "AGPL-3.0-or-later",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/LokiMetaSmith/daemon-pore/issues"

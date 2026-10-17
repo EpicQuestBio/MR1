@@ -134,12 +134,12 @@ def Housing_Case_Reader():
             fillet(b_edges, radius=2.0)
 
         # Hollow out
+        with BuildPart(mode=Mode.PRIVATE) as bucket:
+            Box(BASE_W - 2*WALL, BASE_L - 2*WALL, READER_LID_THICK)
+            bedges = bucket.edges().filter_by(Axis.Z)
+            if bedges:
+                fillet(bedges, radius=2.0)
         with Locations((0, 0, WALL)):
-            with BuildPart(mode=Mode.PRIVATE) as bucket:
-                Box(BASE_W - 2*WALL, BASE_L - 2*WALL, READER_LID_THICK)
-                bedges = bucket.edges().filter_by(Axis.Z)
-                if bedges:
-                    fillet(bedges, radius=2.0)
             add(bucket.part, mode=Mode.SUBTRACT)
 
         # Top outer rim fillet
@@ -239,12 +239,12 @@ def Housing_Lid_Reader():
         # 4. Hollow internal bucket from Z = -ceiling_thick down to bottom
         bucket_h = lid_thick - ceiling_thick + 2.5 + 2.0 # 26.0 mm height
         bucket_z = -ceiling_thick - bucket_h / 2.0
+        with BuildPart(mode=Mode.PRIVATE) as bucket:
+            Box(lid_w - 2 * WALL - 4.0, lid_l - 2 * WALL - 4.0, bucket_h)
+            bedges = bucket.edges().filter_by(Axis.Z)
+            if bedges:
+                fillet(bedges, radius=3.0)
         with Locations((0, 0, bucket_z)):
-            with BuildPart(mode=Mode.PRIVATE) as bucket:
-                Box(lid_w - 2 * WALL - 4.0, lid_l - 2 * WALL - 4.0, bucket_h)
-                bedges = bucket.edges().filter_by(Axis.Z)
-                if bedges:
-                    fillet(bedges, radius=3.0)
             add(bucket.part, mode=Mode.SUBTRACT)
 
         # 5. Neck transition cone (Z: 0 to 5)
@@ -276,21 +276,23 @@ def Housing_Lid_Reader():
                 RegularPolygon(radius=61.0 / 2.0, side_count=6)
             extrude(amount=5.0 + neck_length + 20.0, mode=Mode.SUBTRACT)
 
-        # 9. Vertical Fluid Pass-Through Holes (4x D=10mm through neck/ceiling into hollow interior)
+        # 9. Vertical Fluid Pass-Through Holes (4x D=12mm through neck/ceiling into hollow interior)
         for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP, ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
             ang_rad = math.radians(a)
             with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad), -ceiling_thick/2.0)):
-                Cylinder(radius=10.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
+                Cylinder(radius=12.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
 
         # 10. Ribbon Cable Clearance Channel (13.5mm x 3.0mm cavity recessed into hexagon wall at Y = -27.5)
         with Locations((0.0, -27.5, 0.0)):
             Box(13.5, 3.0, 100.0, mode=Mode.SUBTRACT)
 
         # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -8.0mm penetrating into hollow bucket)
+        # Includes counterbores for Luer bulkhead panel mount fittings (D=15.0mm, depth=2.5mm)
         for x_wall in [-(lid_w / 2.0), (lid_w / 2.0)]:
             for y_port in [-20.0, 20.0]:
                 with Locations((x_wall, y_port, -8.0)):
-                    Cylinder(radius=6.35 / 2.0, height=WALL * 4.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+                    Cylinder(radius=15.0 / 2.0, height=5.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+                    Cylinder(radius=6.6 / 2.0, height=WALL * 4.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
         # 12. Lower Outer Inset (2.5mm thinned wall on bottom 15mm creating overhang)
         with Locations((0, 0, -lid_thick + inset_height / 2.0)):
@@ -322,6 +324,20 @@ def Housing_Lid_Reader():
                     Rectangle(BASE_W - 8.0 - 1.0, BASE_L - 8.0 - 1.0, mode=Mode.SUBTRACT)
                 extrude(amount=1.5)
             add(ogroove.part, mode=Mode.SUBTRACT)
+
+        # 16. Internal microfluidic conduit guide channels routing from side ports up into cartridge stack
+        try:
+            from src.assembly import route_spline, get_tubing_routes
+            reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
+            z_stack = reader_z_base + 30.0
+            for name, pts in get_tubing_routes().items():
+                if name == "TUBE_PUMP":
+                    continue
+                pts_local = [(x, y, z - z_stack) for x, y, z in pts]
+                t_conduit = route_spline(pts_local, (TUBE_OD / 2.0) + 0.3)
+                add(t_conduit, mode=Mode.SUBTRACT)
+        except Exception:
+            pass
 
         # Wire clearance cutout for W_USB passing through lower indexing lip
         try:

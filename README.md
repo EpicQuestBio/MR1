@@ -4,13 +4,12 @@
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
-[![Tests](https://img.shields.io/badge/Tests-54%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-95%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
-The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state / biological nanopore sequencer flow cell, low-current amplifier, and fluidic control system. It integrates high-precision parametric CAD models, low-noise front-end analog electronics, an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
-
+The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
 ## Architecture & Overview
-The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state nanopore sensing platform. The system uses a complete **4-electrode topology** (Working Electrode `WE_POS`, Working Sense `WS_CIS`, Reference Electrode `RE_TRANS`, Counter Electrode `CE_GNDA`) combined with driven guards (`GUARD`) to achieve picoampere sensitivity while neutralizing the effects of stray capacitance and dielectric leakage.
+The system uses a complete **4-electrode topology** (Working Electrode `WE_POS`, Working Sense `WS_CIS`, Reference Electrode `RE_TRANS`, Counter Electrode `CE_GNDA`) combined with explicitly driven guards (`GUARD`, `GUARD_TRANS`) across a 12-pin interface to achieve sub-picoampere sensitivity while neutralizing the effects of stray capacitance and dielectric surface leakage.
 
 The architecture consists of:
 - **Headstage Hardware**: A custom, low-parasitic PTFE/Rogers interposer cartridge that seats a 4x4mm nanopore wafer clamped within silicone PDMS gaskets. It interfaces via gold-plated pogo pins to a low-bias-current transimpedance amplifier (LMP7721) mounted beneath the flowcell.
@@ -277,12 +276,12 @@ python run_tests.py
   - Dedicated SPI bus for high-speed ADC sampling.
   - Dual MCP4822 12-bit DACs providing bipolar pore bias voltages (-1.587V to +1.587V) and unblocking pulses.
   - Conductive weep-hole leak detection sensing on GPIO1.
-- **PTFE Interposer Circuit Board** (`Amplifier/` & `src/cartridge.py`):
+- **PTFE Interposer Circuit Board** (`Interposer/` & `src/cartridge.py`):
   - 55.0 × 51.962 × 0.8 mm hexagonal substrate fabricated on ultra-low-loss PTFE / Rogers RO4350B.
   - Physical and electrical barrier dividing Cis (top) and Trans (bottom) microfluidic chambers.
   - Dual-sided silver chloride (Ag/AgCl) ribbon electrode pads positioned inside the Cis ($30^\circ$) and Trans ($210^\circ$) flow channels.
   - Central 6.20 × 6.20 mm diamond cutout ($45^\circ$) allowing the silicone gasket protrusion to seal directly around the silicon nanopore wafer.
-  - 6 gold landing pads at $Y = 2.5\text{ mm}$ for gold-plated pogo pin connectivity to the reader instrumentation.
+  - 12-pin guarded ENIG landing array (`PogoPin_Target_12Pin_Distributed`) flanking high-impedance sense lines (`WS_CIS`, `RE_TRANS`) with driven low-impedance `GUARD` pins.
   - Hermetically clamped between `Cast_Nanopore_Wafer_Gasket` (top) and `Fitted_Amplifier_Gasket` (bottom).
 - **Cartridge Transimpedance Amplifier** (`Amplifier/`):
   - 2-Layer 0.8 mm ultra-thin board designed for direct insertion into the flow cell stack.
@@ -308,7 +307,7 @@ python run_tests.py
 
 ## ESP32-S3 Firmware
 
-Located in `firmware/`, the firmware provides:
+Located in `MR1_firmware/` (ESP32-S3 Main Reader) and `Pump_firmware/` (STM32G431 Peristaltic Pump & USB-PD Hub):
 - **Dual-Core Architecture**:
   - **Core 1**: Dedicated to continuous 100 kHz SPI DMA ADC sampling and high-throughput USB CDC streaming.
   - **Core 0**: Handles Wi-Fi AP/station management, AsyncWebServer, WebSocket oscilloscope telemetry, and pump control.
@@ -352,8 +351,24 @@ python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
 
 ## Documentation Index
 
+### Open Source Governance & Policies
+- [CONTRIBUTING.md](CONTRIBUTING.md): Engineering guidelines, code style, and pull request workflow.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Contributor Covenant v2.1 standards and pledge.
+- [SECURITY.md](SECURITY.md): Security vulnerability reporting policy and electrical safety bounds.
+- [CITATION.cff](CITATION.cff): Academic citation metadata for research and publications.
+- [LICENSE](LICENSE): GNU Affero General Public License v3.0 (AGPLv3).
+
+### Hardware & Manufacturing Specifications
+- [BOM.md](BOM.md): Complete mechanical, fluidic, PCB, and active electronic bill of materials with sourcing links.
 - [EXPORTS.md](EXPORTS.md): Complete export deliverables catalog, fab ordering specifications, and drift tracking.
-- [TODO.md](TODO.md): Development roadmap, completed porting phases, and firmware architecture.
-- [BOM.md](BOM.md): Mechanical bill of materials, fasteners, fittings, and sheet stock sourcing links.
 - [CASTING.md](CASTING.md): Engineering guide for casting ultra-low-noise PDMS gaskets.
-- [Firmware Documentation](firmware/README.md): Detailed firmware subsystem architecture, pinout, and build instructions.
+- [PROJECT.md](PROJECT.md): Project architecture, interface contracts, and milestone tracking.
+- [TODO.md](TODO.md): Development roadmap and completed porting phases.
+
+### Firmware & Protocols
+- [MR1 Reader Firmware](MR1_firmware/README.md): ESP32-S3 dual-core firmware architecture, SPI DMA ADC, and web oscilloscope.
+- [Pump Hub Firmware](Pump_firmware/README.md): STM32G431 peristaltic motor control, STUSB4500 USB-PD, and pressure monitoring.
+- [DAQ Streaming Protocol](docs/DAQ_STREAMING_SPEC.md): Binary stream framing, CRC-16 checksums, and 100 kHz sample encoding.
+- [MR1 Data Exchange Spec](docs/MR1_DATA_EXCHANGE_SPEC.md): Inter-board SBU I2C and UART communications.
+- [Interposer 4-Electrode Spec](docs/INTERPOSER_FOUR_ELECTRODE_SPEC.md): Gamry 4-electrode topology and driven guard architectures.
+- [Weep Moat Interlock Spec](docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md): Leak detection sensor and hardware power cutoff circuitry.
