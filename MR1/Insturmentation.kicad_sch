@@ -1483,7 +1483,7 @@
 	)
 	(text "consider cat 7 flat ribbon cable, 8 pairs, shielded"
 		(exclude_from_sim no)
-		(at 124.46 142.24 0)
+		(at 121.92 218.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1493,7 +1493,7 @@
 	)
 	(text "pins for holding the board in place while applying adhesive\n\nhttps://www.mcmaster.com/98378A208/"
 		(exclude_from_sim no)
-		(at 55.88 151.13 0)
+		(at 53.34 227.33 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1524,7 +1524,7 @@
 	)
 	(text "https://www.vpi.us/bulk-cable-sf/super-flat-cat7-736#idTab9"
 		(exclude_from_sim no)
-		(at 119.38 198.12 0)
+		(at 116.84 274.32 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1534,7 +1534,7 @@
 	)
 	(text "SM10B-SRSS-TB"
 		(exclude_from_sim no)
-		(at 93.98 215.9 0)
+		(at 91.44 292.1 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1605,7 +1605,7 @@
 	)
 	(text "250ft 32AWG CAT7 STP Solid, 0.075\" Super Flat Bulk Ethernet Bare Copper Cable - White."
 		(exclude_from_sim no)
-		(at 121.92 201.93 0)
+		(at 119.38 278.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1615,7 +1615,7 @@
 	)
 	(text "SHR-10V-S"
 		(exclude_from_sim no)
-		(at 91.44 213.36 0)
+		(at 88.9 289.56 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1645,7 +1645,7 @@
 	)
 	(text "SSH-003T-P0.2-H #32 to #28 (0.032 to 0.081) 0.4 to 0.8 23,000\n"
 		(exclude_from_sim no)
-		(at 118.11 209.55 0)
+		(at 115.57 285.75 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1774,7 +1774,7 @@
 		(uuid "d73aba23-0ead-4b8e-9734-b6039775932c")
 	)
 	(image
-		(at 121.92 184.15)
+		(at 119.38 260.35)
 		(uuid "a3486a1b-26d3-43d5-b9ef-e0c57f1f72ec")
 		(data "iVBORw0KGgoAAAANSUhEUgAAAm8AAADlCAYAAAAFghAfAAAABHNCSVQICAgIfAhkiAAAIABJREFU"
 			"eJzsfXmUXFW1/ldVt+apx3SS7swd0gkJCUHGBEGmBBIMPoTHAgQZRBAez7d+iBKXiiiKDxHx4Vuo"
@@ -3379,7 +3379,7 @@
 		)
 	)
 	(image
-		(at 123.19 160.02)
+		(at 120.65 236.22)
 		(scale 3.20589)
 		(uuid "c8c38c12-3569-41e7-96ca-c830ea6e2c6e")
 		(data "iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAABHNCSVQICAgIfAhkiAAADmNJREFU"

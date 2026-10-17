@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use the Sentinel Nanopore Reader hardware, CAD models, or firmware in your research, please cite it as below."
+authors:
+  - family-names: "Kincheloe"
+    given-names: "Lawrence R."
+    name-suffix: "III"
+title: "Sentinel Nanopore Reader: An Open-Source Low-Noise Solid-State and Biological Nanopore Sensing Platform"
+version: 1.0.0
+date-released: 2026-10-16
+url: "https://github.com/LokiMetaSmith/daemon-pore"
+repository-code: "https://github.com/LokiMetaSmith/daemon-pore"
+keywords:
+  - "nanopore"
+  - "sequencing"
+  - "solid-state nanopore"
+  - "open-source hardware"
+  - "transimpedance amplifier"
+  - "microfluidics"
+  - "build123d"
+  - "kicad"
+  - "esp32-s3"
+license: "AGPL-3.0-or-later"
