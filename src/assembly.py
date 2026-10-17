@@ -27,7 +27,7 @@ def get_tubing_routes():
     reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
     z_lid = 30.0
     z_stack = reader_z_base + z_lid
-    z_port = z_stack - 8.0
+    z_port = z_stack - 13.0
 
     return {
         # 1. TUBE_PUMP: Buffer reservoir -> Peristaltic pump intake (PharMed BPT, 0.12 m)
@@ -150,7 +150,7 @@ def Reader_Module_Assembly():
         for y_port in [-20.0, 20.0]:
             parts.append(
                 Luer_Bulkhead_Panel_Mount().move(
-                    Location((x_wall, y_port, z_lid - 8.0)) * Rotation(0, rot_y, 0)
+                    Location((x_wall, y_port, z_lid - 13.0)) * Rotation(0, rot_y, 0)
                 )
             )
 

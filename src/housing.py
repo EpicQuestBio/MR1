@@ -1,5 +1,6 @@
 from build123d import *
 from src.constants import *
+from src.common import Weep_Duct_Holes
 import math
 
 def Housing_Pump_Case(pump_type=PUMP_TYPE):
@@ -276,23 +277,27 @@ def Housing_Lid_Reader():
                 RegularPolygon(radius=61.0 / 2.0, side_count=6)
             extrude(amount=5.0 + neck_length + 20.0, mode=Mode.SUBTRACT)
 
-        # 9. Vertical Fluid Pass-Through Holes (4x D=12mm through neck/ceiling into hollow interior)
+        # 9. Vertical Fluid Pass-Through Holes (4x D=13mm through neck/ceiling into hollow interior)
         for a in [ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_TOP, ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
             ang_rad = math.radians(a)
             with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad), -ceiling_thick/2.0)):
-                Cylinder(radius=12.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
+                Cylinder(radius=13.0 / 2.0, height=neck_length + ceiling_thick*3.0, mode=Mode.SUBTRACT)
 
         # 10. Ribbon Cable Clearance Channel (13.5mm x 3.0mm cavity recessed into hexagon wall at Y = -27.5)
         with Locations((0.0, -27.5, 0.0)):
             Box(13.5, 3.0, 100.0, mode=Mode.SUBTRACT)
 
-        # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -8.0mm penetrating into hollow bucket)
+        # 10b. Weep holes penetrating the reader lid ceiling into the hollow bucket
+        with Locations((0, 0, -ceiling_thick/2.0)):
+            add(Weep_Duct_Holes(height=neck_length + ceiling_thick*3.0), mode=Mode.SUBTRACT)
+
+        # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -13.0mm penetrating into hollow bucket)
         # Includes counterbores for Luer bulkhead panel mount fittings (D=15.0mm, depth=2.5mm)
         for x_wall in [-(lid_w / 2.0), (lid_w / 2.0)]:
             for y_port in [-20.0, 20.0]:
-                with Locations((x_wall, y_port, -8.0)):
+                with Locations((x_wall, y_port, -13.0)):
                     Cylinder(radius=15.0 / 2.0, height=5.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
-                    Cylinder(radius=6.6 / 2.0, height=WALL * 4.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+                    Cylinder(radius=6.35 / 2.0, height=WALL * 4.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
         # 12. Lower Outer Inset (2.5mm thinned wall on bottom 15mm creating overhang)
         with Locations((0, 0, -lid_thick + inset_height / 2.0)):
@@ -325,6 +330,16 @@ def Housing_Lid_Reader():
                 extrude(amount=1.5)
             add(ogroove.part, mode=Mode.SUBTRACT)
 
+        # Wire clearance cutout for W_USB passing through lower indexing lip
+        try:
+            from src.assembly import route_spline, get_wiring_routes
+            pts_u, r_u = get_wiring_routes()["W_USB"]
+            pts_local_l = [(x, y, z - (PUMP_H + PUMP_LID_THICK + 5.0 + 30.0)) for x, y, z in pts_u]
+            w_cut_l = route_spline(pts_local_l, r_u + 0.1)
+            add(w_cut_l, mode=Mode.SUBTRACT)
+        except Exception:
+            pass
+
         # 16. Internal microfluidic conduit guide channels routing from side ports up into cartridge stack
         try:
             from src.assembly import route_spline, get_tubing_routes
@@ -333,19 +348,11 @@ def Housing_Lid_Reader():
             for name, pts in get_tubing_routes().items():
                 if name == "TUBE_PUMP":
                     continue
-                pts_local = [(x, y, z - z_stack) for x, y, z in pts]
+                # Slice only the internal routing between the bulkhead panel mount and the cartridge stack
+                pts_inside = pts[:4] if name.startswith("TUBE_WASTE") else pts[3:]
+                pts_local = [(x, y, z - z_stack) for x, y, z in pts_inside]
                 t_conduit = route_spline(pts_local, (TUBE_OD / 2.0) + 0.3)
                 add(t_conduit, mode=Mode.SUBTRACT)
-        except Exception:
-            pass
-
-        # Wire clearance cutout for W_USB passing through lower indexing lip
-        try:
-            from src.assembly import route_spline, get_wiring_routes
-            pts_u, r_u = get_wiring_routes()["W_USB"]
-            pts_local_l = [(x, y, z - (PUMP_H + PUMP_LID_THICK + 5.0 + 30.0)) for x, y, z in pts_u]
-            w_cut_l = route_spline(pts_local_l, r_u + 0.1)
-            add(w_cut_l, mode=Mode.SUBTRACT)
         except Exception:
             pass
 
