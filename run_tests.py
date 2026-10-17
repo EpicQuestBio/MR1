@@ -70,6 +70,9 @@ if __name__ == '__main__':
     t12 = load_module('test_four_electrode_cell', os.path.join(REPO_ROOT, 'tests', 'test_four_electrode_cell.py'))
     suite.addTests(loader.loadTestsFromModule(t12))
 
+    t13 = load_module('test_openauto_cfd', os.path.join(REPO_ROOT, 'tests', 'test_openauto_cfd.py'))
+    suite.addTests(loader.loadTestsFromModule(t13))
+
     print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

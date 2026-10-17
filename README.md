@@ -4,7 +4,7 @@
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
-[![Tests](https://img.shields.io/badge/Tests-95%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-100%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
 The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
@@ -79,6 +79,9 @@ See the `LICENSE` file for the full text.
 - [Project Structure](#project-structure)
 - [Quick Start & Environment Setup](#quick-start--environment-setup)
 - [Deliverables & Export System](#deliverables--export-system)
+- [OpenAuto-CFD & Co-Design](#openauto-cfd--co-design)
+- [3D Visualizer & Interactive Inspection](#3d-visualizer--interactive-inspection)
+- [KiCad Action Plugin & CLI](#kicad-action-plugin--cli)
 - [Testing & Verification](#testing--verification)
 - [Hardware & Electronics](#hardware--electronics)
 - [ESP32-S3 Firmware](#esp32-s3-firmware)
@@ -243,6 +246,72 @@ See [EXPORTS.md](EXPORTS.md) for full details and PCB fabrication recommendation
 
 ---
 
+## OpenAuto-CFD & Co-Design
+
+The **Sentinel Nanopore Reader** incorporates the **OpenAuto-CFD** co-design framework ([`openauto.project.json`](openauto.project.json) / [`atlas.project.json`](atlas.project.json)) to bridge Electrical CAD (KiCad), Mechanical CAD (Build123d / OpenSCAD), and Microfluidic Multiphysics into a single automated pipeline.
+
+### Why OpenAuto-CFD?
+Nanopore sensing demands precise hydrodynamic and electro-chemical alignment:
+1. **Laminar Stokes Flow ($\text{Re} \ll 1$):** With $50\,\mu\text{m} \times 25\,\mu\text{m}$ channels and $10\,\mu\text{L/min}$ delivery, OpenAuto-CFD calculates viscous pressure drops ($\Delta P \approx 6.2\text{ kPa}$) and eliminates turbulent vortex formation.
+2. **SiN Membrane Burst Safety:** Free-standing $20\text{ nm}$ silicon nitride membranes rupture at differential pressures $\Delta P_{\text{burst}} \sim 10\text{ mbar}$. OpenAuto-CFD co-simulation balances hydrodynamic resistance across Cis and Trans chambers to prevent wafer fracture.
+3. **Dead-Volume & Bubble Prevention:** Eliminates stagnation recirculation zones ($\vec{v} < 0.01 \cdot v_{\text{bulk}}$) that trap air microbubbles or cause analyte sample carryover.
+4. **Concentric Kelvin Cell Coupling:** Aligns the 4-electrode Kelvin sensing array on the PTFE interposer directly with the microfluidic chamber aperture.
+
+See the comprehensive [OpenAuto-CFD Guide](docs/OPENAUTO_CFD.md) for full physical derivations and co-simulation specs.
+
+---
+
+## 3D Visualizer & Interactive Inspection
+
+The repository provides a rich multi-layer 3D visualizer powered by `build123d` and `ocp_vscode`:
+
+```bash
+# Launch interactive 3D assembly visualizer
+npm run visualize
+# Or via Python directly:
+python src/assembly.py
+
+# Or launch via install script diagnostic flag:
+./install.sh --viewer
+```
+
+### Visualizer Features
+- **Full System Assembly:** Displays the Peristaltic Pump base module, Reader Housing & Tower, 4× Luer Bulkhead Panel Mounts, 7-layer Cartridge Stack (Bottom Pusher Plate, Base Hex Plate, Fitted Gasket, Active PCB, Wafer Gasket, Top Hex Plate, Pressure Puck), and Torque-Lock Cap.
+- **3D Swept Tubing Routes:** Renders actual 3D splines for all 5 fluidic paths (`TUBE_PUMP`, `TUBE_FEED`, `TUBE_TRANS_LINE`, `TUBE_WASTE_1`, `TUBE_WASTE_2`) with verified bend radii.
+- **X-Ray & Clipping Plane Inspection:** Enables cross-sectional slicing to verify internal gasket compression and pogo pin deflection.
+- **WireViz Electrical & Tubing Harnesses:** Generates SVG and HTML diagrams for internal wiring (`wiring/reader_wiring.yaml`) and fluid lines (`wiring/reader_tubing.yaml`) via `npm run export:wiring`.
+- **Automated 360° Flythrough Video:** Renders photorealistic rotating orbits using PyVista VTK via `npm run render:flythrough`.
+
+---
+
+## KiCad Action Plugin & CLI
+
+The repository includes a dedicated KiCad Action Plugin and CLI verification engine ([`plugins/openauto_cfd_plugin.py`](plugins/openauto_cfd_plugin.py)) ensuring PCB layouts strictly comply with mechanical, fluidic, and manifest constraints.
+
+### How to Install the Plugin into KiCad
+```bash
+# Install plugin into active KiCad installation (~/.local/share/kicad/ or %APPDATA%/kicad/)
+npm run openauto:install-plugin
+# Or via Python:
+python plugins/openauto_cfd_plugin.py --install
+```
+
+### Using Inside KiCad PCB Editor (GUI)
+1. Open any board (`Amplifier.kicad_pcb`, `MR1.kicad_pcb`, `Pump.kicad_pcb`, or `Interposer.kicad_pcb`).
+2. Navigate to **Tools $\to$ External Plugins $\to$ OpenAuto-CFD: Co-Design & Clearance Verifier**.
+3. The plugin parses the board, checks Edge.Cuts continuity, verifies bounding dimensions against `openauto.project.json`, and displays a comprehensive verification report.
+
+### Standalone CLI & CI/CD Verification
+```bash
+# Validate all 4 boards in headless mode (Edge.Cuts continuity, dimensions, and net mapping)
+npm run openauto:validate
+
+# Synchronize Edge.Cuts dimensions back into the openauto.project.json manifest
+npm run openauto:sync
+```
+
+---
+
 ## Testing & Verification
 
 The project enforces zero physical interference and strict dimensional fidelity across all hardware interfaces:
@@ -372,3 +441,7 @@ python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
 - [MR1 Data Exchange Spec](docs/MR1_DATA_EXCHANGE_SPEC.md): Inter-board SBU I2C and UART communications.
 - [Interposer 4-Electrode Spec](docs/INTERPOSER_FOUR_ELECTRODE_SPEC.md): Gamry 4-electrode topology and driven guard architectures.
 - [Weep Moat Interlock Spec](docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md): Leak detection sensor and hardware power cutoff circuitry.
+
+### Co-Design, Simulation & Tools
+- [OpenAuto-CFD & 3D Visualizer Guide](docs/OPENAUTO_CFD.md): Multiphysics co-simulation, interactive 3D assembly visualizer (`ocp_vscode`), and KiCad action plugin documentation.
+- [OpenAuto Project Manifest](openauto.project.json): Single-source-of-truth hardware manifest linking ECAD, MCAD, fluidics, and harnesses.

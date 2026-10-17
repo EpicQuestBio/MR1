@@ -81,6 +81,12 @@ The project spans five tightly coupled engineering domains. When contributing, p
 - Python scripts must follow PEP 8 and include type annotations.
 - The DAQ client must support both live hardware streaming over USB CDC-ACM and `--mock` simulation mode for offline integration testing.
 
+### 5. OpenAuto-CFD & Multiphysics Co-Design (`openauto.project.json`, `plugins/`)
+- **Single Source of Truth**: All PCB dimensions, fluidic channel geometries ($50\,\mu\text{m} \times 25\,\mu\text{m}$), and CAD parts are cataloged in [`openauto.project.json`](openauto.project.json).
+- **KiCad Action Plugin & CLI**: Run `npm run openauto:validate` before committing changes to any `.kicad_pcb` layout. Use `npm run openauto:sync` to reconcile Edge.Cuts dimensions back into the project manifest.
+- **3D Visualizer**: Inspect the complete mechanical, fluidic, and harness assembly interactively via `npm run visualize` or `python src/assembly.py` using `ocp_vscode`.
+- See [`docs/OPENAUTO_CFD.md`](docs/OPENAUTO_CFD.md) for detailed co-design and CFD documentation.
+
 ---
 
 ## Automated Testing & Quality Gates
@@ -111,6 +117,9 @@ python -m unittest tests/test_firmware_protocol.py
 
 # 6. Deliverables & Staged Exports Validation
 python -m unittest tests/test_exports_e2e.py
+
+# 7. OpenAuto-CFD Manifest, KiCad Plugin, and Tubing Verification
+python -m unittest tests/test_openauto_cfd.py
 ```
 
 ---

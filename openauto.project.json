@@ -8,8 +8,8 @@
   "boards": {
     "amplifier": {
       "name": "LMP7721 Analog Frontend",
-      "path": "Amplifier/amplifier.kicad_pcb",
-      "schematic_path": "Amplifier/amplifier.kicad_sch",
+      "path": "Amplifier/Amplifier.kicad_pcb",
+      "schematic_path": "Amplifier/Amplifier.kicad_sch",
       "role": "Analog Transimpedance Amplifier (TIA)",
       "substrate": {
         "material": "PTFE / Rogers RO4350B",
@@ -18,14 +18,18 @@
         "thickness_mm": 0.8
       },
       "spice": {
-        "transimpedance_gain_ohms": 1e9,
+        "transimpedance_gain_ohms": 1000000000.0,
         "feedback_cap_pf": 0.15,
         "bandwidth_khz": 100
       },
       "fluidic_coupling": {
         "target_ref": "H1",
         "type": "well_interface",
-        "pos": [0.0, 0.0, 3.8]
+        "pos": [
+          0.0,
+          0.0,
+          3.8
+        ]
       }
     },
     "mr1": {
@@ -87,14 +91,30 @@
         "working_sense": "WS_CIS",
         "reference_sense": "RE_TRANS",
         "floating_ground": "GNDA_FLOAT",
-        "inner_sense_radius_mm": [5.0, 5.8],
-        "outer_drive_radius_mm": [6.9, 8.5],
+        "inner_sense_radius_mm": [
+          5.0,
+          5.8
+        ],
+        "outer_drive_radius_mm": [
+          6.9,
+          8.5
+        ],
         "aperture_window_mm": 6.2
       },
       "fluidic_coupling": {
         "target_ref": "H1",
         "type": "well_interface",
-        "pos": [0.0, 0.0, 3.8]
+        "pos": [
+          0.0,
+          0.0,
+          3.8
+        ]
+      },
+      "geometry": {
+        "width_mm": 55.004,
+        "height_mm": 51.962,
+        "center_x_mm": 164.5,
+        "center_y_mm": 58.494
       }
     }
   },
@@ -227,8 +247,13 @@
   },
   "cosimulation": {
     "enabled": true,
-    "circuits": ["amplifier"],
-    "physics": ["fluidic_transport", "translocation_current"]
+    "circuits": [
+      "amplifier"
+    ],
+    "physics": [
+      "fluidic_transport",
+      "translocation_current"
+    ]
   },
   "harnesses": {
     "electrical": "wiring/reader_wiring.yaml",

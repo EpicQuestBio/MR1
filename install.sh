@@ -25,12 +25,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}"
 
 LAUNCH_VIEWER="no"
+INSTALL_PLUGIN="no"
 
 # Parse arguments
 for arg in "$@"; do
     case $arg in
         --viewer)
             LAUNCH_VIEWER="yes"
+            shift
+            ;;
+        --install-kicad-plugin|--plugin)
+            INSTALL_PLUGIN="yes"
             shift
             ;;
         *)
@@ -128,6 +133,12 @@ if command -v npm >/dev/null 2>&1; then
     fi
 else
     echo -e "${YELLOW}[OPTIONAL]${NC} Node.js not detected."
+fi
+
+# 6. OpenAuto-CFD KiCad Plugin Installation (if requested)
+if [ "${INSTALL_PLUGIN}" = "yes" ]; then
+    echo -e "\n${BLUE}>> Installing OpenAuto-CFD KiCad Action Plugin...${NC}"
+    ${PYTHON_CMD} "${REPO_ROOT}/plugins/openauto_cfd_plugin.py" --install
 fi
 
 echo -e "\n${GREEN}Environment verification completed successfully.${NC}"

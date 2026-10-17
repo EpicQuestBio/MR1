@@ -15,6 +15,10 @@
     "export:wiring": "python scripts/export_manager.py --wiring",
     "export:firmware": "python scripts/export_manager.py --firmware",
     "export:check": "python scripts/export_manager.py --check",
+    "openauto:validate": "python plugins/openauto_cfd_plugin.py --validate-all",
+    "openauto:sync": "python plugins/openauto_cfd_plugin.py --sync",
+    "openauto:install-plugin": "python plugins/openauto_cfd_plugin.py --install",
+    "visualize": "python src/assembly.py",
     "render:flythrough": "xvfb-run python3 scripts/render_flythrough.py"
   },
   "repository": {
