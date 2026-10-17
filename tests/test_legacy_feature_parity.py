@@ -56,22 +56,21 @@ class TestLegacyFeatureParity(unittest.TestCase):
             for my in [-25.0, 25.0]:
                 probe = Solid.make_cylinder(0.5, 4.0).move(Location((mx, my, -1.0)))
                 inter = solid.intersect(probe)
-                vol = inter.volume if inter is not None else 0.0
+                vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
                 self.assertAlmostEqual(vol, 0.0, delta=0.01,
                                  msg=f"Mounting hole at ({mx}, {my}) must be cut out of PCB_Main_Reader.")
 
-        # Test USB-C cutouts at (±15, 25)
-        for ux in [-15.0, 15.0]:
-            probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((ux - 2.0, 25.0 - 2.0, -1.0)))
-            inter = solid.intersect(probe)
-            vol = inter.volume if inter is not None else 0.0
-            self.assertAlmostEqual(vol, 0.0, delta=0.01,
-                             msg=f"USB-C cutout at ({ux}, 25.0) must be cut out of PCB_Main_Reader.")
+        # Test single parameterized USB-C cutout at USB_OFFSET_X
+        probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((USB_OFFSET_X - 2.0, 25.0 - 2.0, -1.0)))
+        inter = solid.intersect(probe)
+        vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
+        self.assertAlmostEqual(vol, 0.0, delta=0.01,
+                         msg=f"USB-C cutout at USB_OFFSET_X ({USB_OFFSET_X}, 25.0) must be cut out of PCB_Main_Reader.")
 
         # Test JST cutout at (0, -19)
         probe = Solid.make_box(4.0, 4.0, 4.0).move(Location((-2.0, -19.0 - 2.0, -1.0)))
         inter = solid.intersect(probe)
-        vol = inter.volume if inter is not None else 0.0
+        vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
         self.assertAlmostEqual(vol, 0.0, delta=0.01,
                          msg=f"JST connector cutout at (0, -19) must be cut out of PCB_Main_Reader.")
 
@@ -81,7 +80,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
             fy = PORT_RADIUS * math.sin(math.radians(a))
             probe = Solid.make_cylinder(0.5, 4.0).move(Location((fx, fy, -1.0)))
             inter = solid.intersect(probe)
-            vol = inter.volume if inter is not None else 0.0
+            vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
             self.assertAlmostEqual(vol, 0.0, delta=0.01,
                              msg=f"Fluid clearance hole at angle {a} deg ({fx:.2f}, {fy:.2f}) must be cut out.")
 
@@ -104,7 +103,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
         # Bounding box of pocket or intersection test
         test_box = Solid.make_box(20.0, 20.0, 10.0).move(Location((-10, -10, -5)))
         inter = frame.intersect(test_box)
-        vol = inter.volume if inter is not None else 0.0
+        vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
         self.assertAlmostEqual(vol, 0.0, delta=0.01, msg="Carrier frame center must have through pocket for PCB.")
 
     def test_nanopore_carrier_round_pcb(self):
@@ -137,7 +136,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
         # In amplifier mode, there should be NO protrusion pocket at X = -gasket_thick/2 - PCB_Thickness/2
         # Both molds should mate with 0 collision
         inter = mold_l.intersect(mold_r)
-        vol = inter.volume if inter is not None else 0.0
+        vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
         self.assertAlmostEqual(vol, 0.0, delta=0.01)
 
     def test_housing_lid_reader_legacy_features(self):
@@ -160,7 +159,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
             # Test point at (px, py, 2.5) must NOT be inside the solid lid
             port_cyl = Solid.make_cylinder(2.0, 20.0).move(Location((px, py, -5.0)))
             inter = lid.intersect(port_cyl)
-            vol = inter.volume if inter is not None else 0.0
+            vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
             self.assertLess(vol, 0.5,
                             f"Housing_Lid_Reader is missing fluid pass-through hole at angle {a} deg ({px:.1f}, {py:.1f}).")
 

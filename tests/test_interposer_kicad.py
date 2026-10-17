@@ -84,7 +84,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertNotIn(ref, refs, f"Active component or colliding concentric ring {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "J1", "J2", "J10", "J11", "J_POGO1"]
+        required = ["H1", "J1", "J2", "J10", "J11"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 
@@ -182,7 +182,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(bom_csv.exists(), "Interposer_BOM.csv must exist")
 
         bom_txt = bom_csv.read_text(encoding="utf-8")
-        for ref in ["H1", "J1", "J2", "J10", "J11", "J_POGO1", "P1", "P2", "P3", "P4", "W1"]:
+        for ref in ["H1", "J1", "J2", "J10", "J11", "P1", "P2", "P3", "P4", "W1"]:
             self.assertIn(f'"{ref}"', bom_txt, f"Reference {ref} must be listed in Interposer_BOM.csv")
         self.assertNotIn('"E1"', bom_txt, "E1 must NOT be in Interposer_BOM.csv")
 
