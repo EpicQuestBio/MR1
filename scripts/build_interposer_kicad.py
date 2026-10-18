@@ -39,7 +39,7 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
         "NT3", "NT4", "NT5"
     }
 
-    retained_refs = {"H1", "J1", "J2", "J10", "J11"}
+    retained_refs = {"H1", "J1", "J2", "J10", "J11", "J_POGO1", "J_POGO2"}
 
     # Separate header (up to footprints), footprints, drawings, tracks/zones/groups
     out_lines = []
@@ -75,6 +75,10 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
         ref_m = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', fp_txt)
         ref = ref_m.group(1) if ref_m else ""
 
+        if ref.startswith("J_POGO") or "PogoPin_Target" in fp_txt:
+            retained_fp_blocks.append(fp_txt)
+            continue
+
         if ref in active_refs:
             # Capture all UUIDs in this footprint to clean up groups later
             for u in re.findall(r'\(uuid\s+"([^"]+)"\)', fp_txt):
@@ -103,52 +107,7 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
     for fp in retained_fp_blocks:
         out_lines.append(fp)
 
-    # Add J_POGO1 (Pogo Pin Landing Array) at (164.500, 73.500)
-    # Pitch: X offsets [-11.5, -6.5, -1.5, +1.5, +6.5, +11.5]
-    # Abs X: [153.0, 158.0, 163.0, 166.0, 171.0, 176.0]
-    pogo_fp = f"""\t(footprint "footprints:PogoPin_Target_12Pin_Distributed"
-\t\t(layer "F.Cu")
-\t\t(uuid "{new_uuid()}")
-\t\t(at 164.5 73.5)
-\t\t(descr "6-Pin Low-Leakage ENIG Pogo Pin Landing Array for Nanopore Microfluidic Interposer (Mill-Max 821/824 series, 0.8N spring force, Guarded Cis/Trans lines)")
-\t\t(tags "pogo landing array target enig rogers ptfe nanopore mill-max")
-\t\t(property "Reference" "J_POGO1"
-\t\t\t(at 0 -3.0 0)
-\t\t\t(layer "F.SilkS")
-\t\t\t(uuid "{new_uuid()}")
-\t\t\t(effects (font (size 0.8 0.8) (thickness 0.12)))
-\t\t)
-\t\t(property "Value" "PogoPin_Target_12Pin_Distributed"
-\t\t\t(at 0 3.0 0)
-\t\t\t(layer "F.Fab")
-\t\t\t(uuid "{new_uuid()}")
-\t\t\t(effects (font (size 0.8 0.8) (thickness 0.12)))
-\t\t)
-\t\t(property "Footprint" "footprints:PogoPin_Target_12Pin_Distributed"
-\t\t\t(at 0 0 0)
-\t\t\t(hide yes)
-\t\t\t(layer "F.Fab")
-\t\t\t(uuid "{new_uuid()}")
-\t\t)
-\t\t(attr smd)
-\t\t(fp_line (start -13.5 -2.0) (end 13.5 -2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "{new_uuid()}"))
-\t\t(fp_line (start 13.5 -2.0) (end 13.5 2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "{new_uuid()}"))
-\t\t(fp_line (start 13.5 2.0) (end -13.5 2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "{new_uuid()}"))
-\t\t(fp_line (start -13.5 2.0) (end -13.5 -2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "{new_uuid()}"))
-\t\t(fp_text user "CIS_WE" (at -11.5 -2.5 0) (layer "F.SilkS") (uuid "{new_uuid()}") (effects (font (size 0.6 0.6) (thickness 0.1))))
-\t\t(fp_text user "CIS_GRD" (at -6.5 -2.5 0) (layer "F.SilkS") (uuid "{new_uuid()}") (effects (font (size 0.6 0.6) (thickness 0.1))))
-\t\t(fp_text user "SHLD" (at -1.5 -2.5 0) (layer "F.SilkS") (uuid "{new_uuid()}") (effects (font (size 0.6 0.6) (thickness 0.1))))
-\t\t(fp_text user "LEAK" (at 1.5 -2.5 0) (layer "F.SilkS") (uuid "{new_uuid()}") (effects (font (size 0.6 0.6) (thickness 0.1))))
-\t\t(fp_text user "TRANS_GRD" (at 6.5 -2.5 0) (layer "F.SilkS") (uuid "{new_uuid()}") (effects (font (size 0.6 0.6) (thickness 0.1))))
-\t\t(fp_text user "TRANS_VBIAS" (at 11.5 -2.5 0) (layer "F.SilkS") (uuid "{new_uuid()}") (effects (font (size 0.6 0.6) (thickness 0.1))))
-\t\t(pad "1" smd circle (at -11.5 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net ">PORE_AMP") (uuid "{new_uuid()}"))
-\t\t(pad "2" smd circle (at -6.5 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.3) (zone_connect 0) (net "GUARD") (uuid "{new_uuid()}"))
-\t\t(pad "3" smd circle (at -1.5 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.3) (zone_connect 0) (net "GNDA") (uuid "{new_uuid()}"))
-\t\t(pad "4" smd circle (at 1.5 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.3) (zone_connect 0) (net "WEEP_SENSE") (uuid "{new_uuid()}"))
-\t\t(pad "5" smd circle (at 6.5 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.3) (zone_connect 0) (net "GUARD_TRANS") (uuid "{new_uuid()}"))
-\t\t(pad "6" smd circle (at 11.5 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "Vbias") (uuid "{new_uuid()}"))
-\t)"""
-    out_lines.append(pogo_fp)
+
 
     # 3. Process drawings, segments, vias, zones, groups
     while i < len(lines):

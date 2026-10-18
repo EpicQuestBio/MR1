@@ -113,7 +113,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
         # Bounding box of pocket or intersection test
         test_box = Solid.make_box(20.0, 20.0, 10.0).move(Location((-10, -10, -5)))
         inter = frame.intersect(test_box)
-        vol = inter.volume if inter is not None else 0.0
+        vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
         self.assertAlmostEqual(vol, 0.0, delta=0.01, msg="Carrier frame center must have through pocket for PCB.")
 
     def test_nanopore_carrier_round_pcb(self):
@@ -146,7 +146,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
         # In amplifier mode, there should be NO protrusion pocket at X = -gasket_thick/2 - PCB_Thickness/2
         # Both molds should mate with 0 collision
         inter = mold_l.intersect(mold_r)
-        vol = inter.volume if inter is not None else 0.0
+        vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
         self.assertAlmostEqual(vol, 0.0, delta=0.01)
 
     def test_housing_lid_reader_legacy_features(self):
@@ -169,7 +169,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
             # Test point at (px, py, 2.5) must NOT be inside the solid lid
             port_cyl = Solid.make_cylinder(2.0, 20.0).move(Location((px, py, -5.0)))
             inter = lid.intersect(port_cyl)
-            vol = inter.volume if inter is not None else 0.0
+            vol = sum(s.volume for s in inter) if hasattr(inter, '__iter__') else getattr(inter, 'volume', 0.0)
             self.assertLess(vol, 0.5,
                             f"Housing_Lid_Reader is missing fluid pass-through hole at angle {a} deg ({px:.1f}, {py:.1f}).")
 
