@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader — Nanopore Electrokinetics & Translocation Physics
+MR1 Nanopore Reader — Nanopore Electrokinetics & Translocation Physics
 
 Models the nanoscale electrical field, ionic conductance, and macromolecule
 translocation signatures through solid-state and biological nanopores:

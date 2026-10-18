@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore DAQ Client
+MR1 Nanopore DAQ Client
 =============================
 High-throughput 100 kHz USB streaming consumer and control client for the
-ESP32-S3 Sentinel Nanopore Reader.
+ESP32-S3 MR1 Nanopore Reader.
 
 Features:
 - Connects to native USB CDC-ACM virtual serial port (up to 921,600+ baud).
@@ -82,7 +82,7 @@ def format_current(amps: float) -> str:
 
 
 class StreamFrame:
-    """Represents an unpacked binary telemetry frame from the Sentinel Reader."""
+    """Represents an unpacked binary telemetry frame from the MR1 Reader."""
 
     __slots__ = (
         "magic", "frame_index", "timestamp_us", "sample_count",
@@ -251,7 +251,7 @@ class MockSerialPort:
     def _handle_command(self, cmd: str):
         response = ""
         if cmd == "HELP":
-            response = "=== Sentinel Nanopore Commands ===\nOK:HELP\n"
+            response = "=== MR1 Nanopore Commands ===\nOK:HELP\n"
         elif cmd.startswith("SET:BIAS:"):
             try:
                 self.bias_mv = float(cmd.split(":")[2])
@@ -692,7 +692,7 @@ def run_cli_dashboard(client: DaqClient, duration_sec: Optional[float] = None):
     """Renders a responsive live terminal dashboard with throughput & pore current."""
     client.start_streaming()
     print("\n" + "=" * 70)
-    print("  Sentinel Nanopore 100 kHz Streaming Client (Active)")
+    print("  MR1 Nanopore 100 kHz Streaming Client (Active)")
     print("  Press Ctrl+C to stop acquisition.")
     print("=" * 70)
 
@@ -752,7 +752,7 @@ def run_cli_dashboard(client: DaqClient, duration_sec: Optional[float] = None):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Sentinel Nanopore 100 kHz USB Streaming DAQ Client"
+        description="MR1 Nanopore 100 kHz USB Streaming DAQ Client"
     )
     parser.add_argument(
         "--port", "-p",

@@ -1,4 +1,4 @@
-# Project: daemon-pore
+# Project: mr1
 
 ## Architecture
 - CAD / Mechanical Housing & Cartridge Stack: Python (build123d / CadQuery) modeling in `src/`, generating STEP, STL, and DXF deliverables in `exports/`.

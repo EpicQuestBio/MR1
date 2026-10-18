@@ -5,10 +5,10 @@
 	(uuid "a2000001-0001-4000-8000-000000000001")
 	(paper "A4")
 	(title_block
-		(title "Sentinel Pump Module - STM32 Control Processor")
+		(title "MR1 Pump Module - STM32 Control Processor")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Project")
+		(company "MR1 Open Source Project")
 		(comment 1 "STM32G431CBU6 32-bit ARM Cortex-M4 MCU @ 170 MHz")
 		(comment 2 "Hardware I2C buses for pressure transducers, USB-PD, and SBU link")
 		(comment 3 "TIM1 16-bit precision PWM motor velocity control")

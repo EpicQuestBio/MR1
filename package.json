@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "Sentinel Nanopore Reader (Daemon Pore) - Open-source solid-state and biological nanopore sequencer, low-noise transimpedance amplifier, and automated fluidic control system",
+  "description": "MR1 Nanopore Reader (MR1) - Open-source solid-state and biological nanopore sequencer, low-noise transimpedance amplifier, and automated fluidic control system",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LokiMetaSmith/daemon-pore.git"
+    "url": "git+https://github.com/LokiMetaSmith/mr1.git"
   },
   "keywords": [
     "nanopore",
@@ -37,9 +37,9 @@
   "license": "AGPL-3.0-or-later",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/LokiMetaSmith/daemon-pore/issues"
+    "url": "https://github.com/LokiMetaSmith/mr1/issues"
   },
-  "homepage": "https://github.com/LokiMetaSmith/daemon-pore#readme",
+  "homepage": "https://github.com/LokiMetaSmith/mr1#readme",
   "dependencies": {
     "openscad-wasm": "git+https://github.com/LokiMetaSmith/Corkscrew-Filter.git"
   }

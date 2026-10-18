@@ -1,5 +1,5 @@
 """
-Unit tests for Sentinel Nanopore Reader firmware protocol, packet serialization,
+Unit tests for MR1 Nanopore Reader firmware protocol, packet serialization,
 CRC-16 validation, and host-device command interfaces.
 """
 

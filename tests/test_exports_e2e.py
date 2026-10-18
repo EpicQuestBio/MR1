@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
-End-to-End (E2E) Test Suite for Sentinel Nanopore Reader Export Deliverables
+End-to-End (E2E) Test Suite for MR1 Nanopore Reader Export Deliverables
 Validates all manufacturing outputs, CAD models, PCB packages, wiring docs,
 and firmware binaries for repository maintenance and CI/CD drift detection.
 """

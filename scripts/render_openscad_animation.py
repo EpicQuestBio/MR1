@@ -78,7 +78,7 @@ def encode_video(output_webm, output_mp4, framerate=30):
 def main():
     os.makedirs("renders", exist_ok=True)
 
-    input_scad = "openscad-legacy/sentinel_nanopore_reader.scad"
+    input_scad = "openscad-legacy/mr1_nanopore_reader.scad"
     output_webm = "renders/openscad_animation.webm"
     output_mp4 = "renders/openscad_animation.mp4"
 

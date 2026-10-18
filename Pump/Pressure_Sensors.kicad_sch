@@ -5,10 +5,10 @@
 	(uuid "a3000001-0001-4000-8000-000000000001")
 	(paper "A4")
 	(title_block
-		(title "Sentinel Pump Module - Dual Fluidic Pressure Transducers")
+		(title "MR1 Pump Module - Dual Fluidic Pressure Transducers")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Project")
+		(company "MR1 Open Source Project")
 		(comment 1 "Honeywell TruStability / ABP2 Series Microfluidic Pressure Transducers")
 		(comment 2 "Precision 24-bit delta-sigma I2C digital pressure and temperature sensing")
 		(comment 3 "Transducer 1: Cis Chamber Feed Line (0 to 15 psi gauge / 1/8\" hose barb)")

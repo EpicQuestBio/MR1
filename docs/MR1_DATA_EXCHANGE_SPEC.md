@@ -2,7 +2,7 @@
 
 **Document Version:** 1.0.0  
 **Target Hardware:** MR1 Digital Motherboard (ESP32-S3 @ 240 MHz, AD40xx 16/18-bit ADC, MCP4822 Dual DAC)  
-**Co-Processors & Subsystems:** Sentinel Pump Controller (STM32G431), Host DAQ Client (`src/daq_client.py`), Web Portal, and External Single-Board Computers (Raspberry Pi, NVIDIA Jetson).
+**Co-Processors & Subsystems:** MR1 Pump Controller (STM32G431), Host DAQ Client (`src/daq_client.py`), Web Portal, and External Single-Board Computers (Raspberry Pi, NVIDIA Jetson).
 
 ---
 
@@ -31,7 +31,7 @@ flowchart TD
     end
 
     subgraph Channel4 ["Method 4: USB-C SBU Bus"]
-        Core <-->|Sideband SBU1 / SBU2| Pump["Sentinel Pump & Power Hub (STM32G431)"]
+        Core <-->|Sideband SBU1 / SBU2| Pump["MR1 Pump & Power Hub (STM32G431)"]
     end
 ```
 
@@ -171,7 +171,7 @@ Designed for headless embedded operation on single-board computers (Raspberry Pi
 
 ## 7. Method 4: USB-C SBU (Sideband Use) Inter-Board Link
 
-Communicates across the USB-C cable with the Sentinel Pump Controller:
+Communicates across the USB-C cable with the MR1 Pump Controller:
 - **Auto-Polarity Detection:** SBU manager tests orientation on plug insertion to map SBU1/SBU2 to SCL/SDA or TX/RX regardless of cable orientation.
 - **Packet Structure (Compact 5-Byte Framing):**
 
@@ -193,7 +193,7 @@ For downstream recording, archiving, and analysis, the Host DAQ bridge (`src/daq
 Optimized for multi-hour recordings at 100 kSPS ($720\text{ MB/hour}$ uncompressed, $\sim 280\text{ MB/hour}$ with Blosc/zlib compression):
 
 ```
-sentinel_experiment_20261001_143000.h5
+mr1_experiment_20261001_143000.h5
 ├── /acquisition
 │   ├── current_pa           [Dataset: (N,) float32, chunked=(65536,)]
 │   ├── timestamps_us        [Dataset: (N,) uint64]

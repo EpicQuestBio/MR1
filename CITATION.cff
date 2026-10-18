@@ -1,14 +1,14 @@
 cff-version: 1.2.0
-message: "If you use the Sentinel Nanopore Reader hardware, CAD models, or firmware in your research, please cite it as below."
+message: "If you use the MR1 Nanopore Reader hardware, CAD models, or firmware in your research, please cite it as below."
 authors:
   - family-names: "Kincheloe"
     given-names: "Lawrence R."
     name-suffix: "III"
-title: "Sentinel Nanopore Reader: An Open-Source Low-Noise Solid-State and Biological Nanopore Sensing Platform"
+title: "MR1 Nanopore Reader: An Open-Source Low-Noise Solid-State and Biological Nanopore Sensing Platform"
 version: 1.0.0
 date-released: 2026-10-16
-url: "https://github.com/LokiMetaSmith/daemon-pore"
-repository-code: "https://github.com/LokiMetaSmith/daemon-pore"
+url: "https://github.com/LokiMetaSmith/mr1"
+repository-code: "https://github.com/LokiMetaSmith/mr1"
 keywords:
   - "nanopore"
   - "sequencing"

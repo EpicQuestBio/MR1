@@ -1,5 +1,5 @@
 # =============================================================================
-# Sentinel Nanopore Reader (Daemon Pore) ? Python Requirements
+# MR1 Nanopore Reader (MR1) ? Python Requirements
 # =============================================================================
 
 # Parametric 3D CAD & 2D Profile Generation

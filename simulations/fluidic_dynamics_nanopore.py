@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader — Fluidic Dynamics & Flowcell Simulation
+MR1 Nanopore Reader — Fluidic Dynamics & Flowcell Simulation
 
 Models the hydrodynamic resistance, Navier-Stokes channel flow, and structural
 membrane stress across the microfluidic flowcell and solid-state nanopore:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Sentinel Nanopore Reader ? End-to-End Test Suite Runner
+# MR1 Nanopore Reader ? End-to-End Test Suite Runner
 # =============================================================================
 # Runs:
 # 1. Python Unit Tests (golden bounds, geometry generation, connectors)
@@ -22,7 +22,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${BLUE}=================================================================${NC}"
-echo -e "${BLUE}  Running Sentinel Nanopore Reader E2E Test Suite${NC}"
+echo -e "${BLUE}  Running MR1 Nanopore Reader E2E Test Suite${NC}"
 echo -e "${BLUE}=================================================================${NC}"
 
 # Find Python (prefer .venv)

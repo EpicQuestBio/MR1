@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader — Four-Electrode Electrochemical Cell Simulation
+MR1 Nanopore Reader — Four-Electrode Electrochemical Cell Simulation
 
 Models and compares 2-electrode vs 4-electrode electrochemical cell dynamics:
 1. Electrochemical Impedance Spectroscopy (EIS):
@@ -301,7 +301,7 @@ def run_summary():
     fc_2e, fc_4e = sim.calculate_cutoff_bandwidths()
     
     print("=" * 70)
-    print("SENTINEL NANOPORE READER — 4-ELECTRODE ELECTROCHEMICAL CELL SIMULATION")
+    print("MR1 NANOPORE READER — 4-ELECTRODE ELECTROCHEMICAL CELL SIMULATION")
     print("=" * 70)
     print(f"Electrolyte: 1M KCl (sigma = {sim.sigma:.1f} S/m)")
     print(f"Pore Lumen Resistance (R_pore):      {sim.r_pore / 1e6:.2f} M-ohm")

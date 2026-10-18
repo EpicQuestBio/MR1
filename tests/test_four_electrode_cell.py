@@ -1,7 +1,7 @@
 """
 test_four_electrode_cell.py
 
-Unit tests for Sentinel Nanopore Reader 4-Electrode Electrochemical Cell:
+Unit tests for MR1 Nanopore Reader 4-Electrode Electrochemical Cell:
 1. Validates physical calculation of pore lumen and access resistance.
 2. Validates uncompensated solution resistance (R_u) reduction in tight concentric geometry.
 3. Validates AC EIS impedance calculation and elimination of interfacial polarization (Z_int).

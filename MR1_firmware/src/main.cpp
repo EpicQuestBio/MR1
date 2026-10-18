@@ -17,7 +17,7 @@
 
 /**
  * @file main.cpp
- * @brief Sentinel Nanopore Reader (MR1 Board) Firmware Main Entry Point
+ * @brief MR1 Nanopore Reader (MR1 Board) Firmware Main Entry Point
  * 
  * Hardware Architecture:
  * - Dual-Core Xtensa LX7 @ 240 MHz (ESP32-S3-MINI-1U)

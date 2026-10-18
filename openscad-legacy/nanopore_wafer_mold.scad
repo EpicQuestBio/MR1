@@ -1,5 +1,5 @@
 // ==============================================================================
-// SENTINEL NANOPORE READER - 2-PART VERTICALLY-SPLIT SILICONE MOLD
+// MR1 NANOPORE READER - 2-PART VERTICALLY-SPLIT SILICONE MOLD
 // Generates a 3D printable vertically split compression mold to cast the
 // hexagonal gasket with an embedded silicon square nanopore wafer,
 // or a flat gasket without the nanopore (for the Fitted Amplifier Gasket).

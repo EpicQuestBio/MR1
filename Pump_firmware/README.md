@@ -1,12 +1,12 @@
-# Sentinel Pump & USB-PD Hub Firmware
+# MR1 Pump & USB-PD Hub Firmware
 
-This directory contains the production C++ firmware for the **Sentinel Pump & USB-PD Hub Board (`Pump/`)** targeting the **STM32G431CBU6** microcontroller (ARM Cortex-M4 @ 170 MHz).
+This directory contains the production C++ firmware for the **MR1 Pump & USB-PD Hub Board (`Pump/`)** targeting the **STM32G431CBU6** microcontroller (ARM Cortex-M4 @ 170 MHz).
 
 ---
 
 ## 1. Overview & Capabilities
 
-The Pump Subsystem manages automated fluid delivery and power distribution for the Sentinel Nanopore Reader:
+The Pump Subsystem manages automated fluid delivery and power distribution for the MR1 Nanopore Reader:
 
 - **Autonomous USB-PD Negotiation**: Manages the STUSB4500 autonomous USB-PD sink controller to negotiate 9V/12V/15V/20V power profiles from host USB-C power supplies.
 - **Ultra-Clean +5V Output**: Controls the high-efficiency step-down buck converter and LC $\pi$-filter supplying clean, isolated 5V power to the MR1 Reader analog frontend.

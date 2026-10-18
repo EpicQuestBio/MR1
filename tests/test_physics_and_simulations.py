@@ -1,5 +1,5 @@
 """
-Unit tests for Daemon Pore physical simulations:
+Unit tests for MR1 physical simulations:
 - Guard ring and guard trace electrostatics & weep moat leak detection.
 - Microfluidic channel fluid dynamics, hydrodynamic resistance, and SiNx membrane burst limits.
 - Nanopore electrokinetics, ionic conductance, translocation blockades, and capture dynamics.

@@ -16,7 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # =============================================================================
-# Sentinel Nanopore Reader - Development Environment Setup & Diagnostics
+# MR1 Nanopore Reader - Development Environment Setup & Diagnostics
 # =============================================================================
 
 set -e
@@ -46,7 +46,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${BLUE}=================================================================${NC}"
-echo -e "${BLUE}  Sentinel Nanopore Reader - Environment Setup & Tool Verification${NC}"
+echo -e "${BLUE}  MR1 Nanopore Reader - Environment Setup & Tool Verification${NC}"
 echo -e "${BLUE}=================================================================${NC}"
 
 # 1. Virtual Environment & Python Check

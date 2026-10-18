@@ -17,7 +17,7 @@
 
 /**
  * @file pinout.h
- * @brief Canonical Hardware Pin Mapping for Sentinel Nanopore Reader (MR1 Board)
+ * @brief Canonical Hardware Pin Mapping for MR1 Nanopore Reader (MR1 Board)
  * 
  * Target MCU: ESP32-S3-MINI-1U
  * Schematics: MR1 (Microcontroller, Ignition, Insturmentation, Power)

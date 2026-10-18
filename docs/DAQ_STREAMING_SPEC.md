@@ -1,15 +1,15 @@
-# Sentinel Nanopore Reader — High-Speed Streaming DAQ & External Interfacing Specification
+# MR1 Nanopore Reader — High-Speed Streaming DAQ & External Interfacing Specification
 
 **Document Version:** 1.0.0  
 **Status:** Approved for External Integration  
 **Date:** 2026-09-30  
-**Target Systems:** MR1 ESP32-S3 Nanopore Reader, Sentinel STM32G431 Pump Controller, Host DaqClient (`src/daq_client.py`), and External Visualization / Downstream Analysis Programs.
+**Target Systems:** MR1 ESP32-S3 Nanopore Reader, MR1 STM32G431 Pump Controller, Host DaqClient (`src/daq_client.py`), and External Visualization / Downstream Analysis Programs.
 
 ---
 
 ## 1. Executive Summary
 
-This document specifies the communication architecture, binary packet formats, telemetry contracts, IPC (Inter-Process Communication) streaming protocols, and event-detection data structures for the Sentinel Nanopore Sequencing platform.
+This document specifies the communication architecture, binary packet formats, telemetry contracts, IPC (Inter-Process Communication) streaming protocols, and event-detection data structures for the MR1 Nanopore Sequencing platform.
 
 Downstream programs (such as real-time oscilloscope GUIs, machine-learning basecallers, and automated flowcell controllers) can interface with the reader either:
 1. **Directly over USB CDC-ACM** at $12\text{ Mbps}$ Full-Speed / $480\text{ Mbps}$ High-Speed USB.
@@ -146,12 +146,12 @@ Ideal for web-based oscilloscopes, Electron apps, and Python/JavaScript frontend
    }
    ```
 
-### 3.2 High-Throughput ZeroMQ PUB/SUB Socket (`ipc:///tmp/daemon_pore_stream.ipc`)
+### 3.2 High-Throughput ZeroMQ PUB/SUB Socket (`ipc:///tmp/mr1_stream.ipc`)
 For low-latency scientific computing, C++ / Rust / Julia analytics, and real-time deep learning basecallers:
 - **Topic `raw_100k`:** Raw binary `StreamFrame` structs published directly without serialization overhead.
 - **Topic `events`:** Real-time detected translocation event objects.
 
-### 3.3 Named Pipe / Unix Domain Socket (`\\.\pipe\daemon_pore_daq`)
+### 3.3 Named Pipe / Unix Domain Socket (`\\.\pipe\mr1_daq`)
 Zero-configuration inter-process communication supported natively on Windows and POSIX platforms.
 
 ---
@@ -190,9 +190,9 @@ xychart-beta
 
 ## 5. Downstream Application Integration Guide
 
-### Step 1: Launch Daemon Pore Acquisition Bridge
+### Step 1: Launch MR1 Acquisition Bridge
 ```bash
-# In daemon-pore repository root:
+# In mr1 repository root:
 python scripts/daq_client.py --port COM5 --baud 2000000 --stream-ipc
 ```
 

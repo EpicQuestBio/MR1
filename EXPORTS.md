@@ -1,6 +1,6 @@
-# Project Deliverables & Export System ? Daemon Pore
+# Project Deliverables & Export System ? MR1
 
-This document details the automated export pipeline, deliverables inventory, manufacturing packages, and regression-tracking workflows for the **Sentinel Nanopore Reader (Daemon Pore)**.
+This document details the automated export pipeline, deliverables inventory, manufacturing packages, and regression-tracking workflows for the **MR1 Nanopore Reader (MR1)**.
 
 ---
 

@@ -1,6 +1,6 @@
-# Bill of Materials (BOM) — Sentinel Nanopore Reader
+# Bill of Materials (BOM) — MR1 Nanopore Reader
 
-This document provides the complete, authoritative Bill of Materials for the **Sentinel Nanopore Reader (Daemon Pore)** system, organized across mechanical components, fluidic fittings, raw stock materials, custom printed circuit boards, and key active electronic components.
+This document provides the complete, authoritative Bill of Materials for the **MR1 Nanopore Reader (MR1)** system, organized across mechanical components, fluidic fittings, raw stock materials, custom printed circuit boards, and key active electronic components.
 
 ---
 

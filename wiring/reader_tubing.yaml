@@ -1,7 +1,7 @@
 metadata:
-  title: Daemon Pore Reader - Microfluidic Tubing & Fittings Harness
+  title: MR1 Reader - Microfluidic Tubing & Fittings Harness
   description: Microbore fluidic interconnect between buffer reservoir, peristaltic pump, and dual-layer flowcell cartridge
-  author: OpenAuto-CFD / Daemon Pore Team
+  author: OpenAuto-CFD / MR1 Team
   version: 1.0.0
 
 options:

@@ -1,4 +1,4 @@
-# Sentinel Nanopore Reader (Daemon Pore)
+# MR1 Nanopore Reader (MR1)
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
@@ -6,7 +6,7 @@
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
 [![Tests](https://img.shields.io/badge/Tests-95%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
-The **Sentinel Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
+The **MR1 Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
 ## Architecture & Overview
 The system uses a complete **4-electrode topology** (Working Electrode `WE_POS`, Working Sense `WS_CIS`, Reference Electrode `RE_TRANS`, Counter Electrode `CE_GNDA`) combined with explicitly driven guards (`GUARD`, `GUARD_TRANS`) across a 12-pin interface to achieve sub-picoampere sensitivity while neutralizing the effects of stray capacitance and dielectric surface leakage.
@@ -134,7 +134,7 @@ See the `LICENSE` file for the full text.
 ## Project Structure
 
 ```
-daemon-pore/
+mr1/
 ├── src/                          # Parametric CAD models (build123d / Python)
 │   ├── cartridge.py              # Flow cell cartridge stack & PCB models
 │   ├── housing.py                # Reader and Pump housings, lids, mounting
@@ -317,7 +317,7 @@ Located in `MR1_firmware/` (ESP32-S3 Main Reader) and `Pump_firmware/` (STM32G43
 
 ### Host 100 kHz Streaming DAQ Client (`scripts/daq_client.py`)
 
-A high-performance Python client for acquiring continuous 100 kHz binary telemetry from the Sentinel Reader:
+A high-performance Python client for acquiring continuous 100 kHz binary telemetry from the MR1 Reader:
 
 ```bash
 # Live acquisition with terminal dashboard and CSV logging

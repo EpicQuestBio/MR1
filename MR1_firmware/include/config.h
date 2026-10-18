@@ -68,7 +68,7 @@
 // =============================================================================
 // Wi-Fi & Web Portal
 // =============================================================================
-#define WIFI_AP_SSID               "Sentinel-Nanopore"
+#define WIFI_AP_SSID               "MR1-Nanopore"
 #define WIFI_AP_PASS               "nanopore123"
 #define WEB_PORTAL_PORT                80
 #define WEBSOCKET_DECIMATION_FACTOR   100   // Downsample 100 kHz -> 1 kHz for UI

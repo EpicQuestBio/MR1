@@ -1,6 +1,6 @@
 # build123d Porting TODO List
 
-This document outlines the step-by-step strategy for porting the Sentinel Nanopore Reader project from OpenSCAD to `build123d` (Python).
+This document outlines the step-by-step strategy for porting the MR1 Nanopore Reader project from OpenSCAD to `build123d` (Python).
 
 ## 1. Constants & Core Utilities (`constants.py` and `common.py`)
 - [x] Define global parameter dictionaries/dataclasses mirroring `constants.scad`.
@@ -105,7 +105,7 @@ This document outlines the step-by-step strategy for porting the Sentinel Nanopo
 - [x] Add `JST_XH_2_Pin_Plug` to the export inventory.
 - [x] Wire `npm test` in `package.json` to `python run_tests.py`.
 - [x] Update `atlas.project.json` mechanical section:
-    - Replace monolithic `sentinel_nanopore_reader.stl` and `nanopore_wafer_mold.stl` references with per-part modular exports from `exports/`.
+    - Replace monolithic `mr1_nanopore_reader.stl` and `nanopore_wafer_mold.stl` references with per-part modular exports from `exports/`.
 - [x] Update `openauto.project.json`:
     - Ensure all 20+ Build123d parts are listed with correct relative paths in `exports/`.
     - Modularized mold references to point to `exports/Nanopore_Wafer_Mold_Left.stl` and `Right.stl`.

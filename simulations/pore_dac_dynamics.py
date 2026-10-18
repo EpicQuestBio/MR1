@@ -15,7 +15,7 @@ from typing import Dict, Any, List, Tuple
 
 class PoreDacDynamics:
     """
-    Physical dynamics and timing simulation for MCP4822 pore bias DAC on Sentinel Nanopore reader.
+    Physical dynamics and timing simulation for MCP4822 pore bias DAC on MR1 Nanopore reader.
     """
 
     # MCP4822 Datasheet Specifications (DS20002249B)

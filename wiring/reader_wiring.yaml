@@ -1,7 +1,7 @@
 metadata:
-  title: Daemon Pore Reader - Electrical Wiring Harness
+  title: MR1 Reader - Electrical Wiring Harness
   description: Internal DC power, digital USB-C, peristaltic motor, and shielded analog pogo-pin interconnect
-  author: OpenAuto-CFD / Daemon Pore Team
+  author: OpenAuto-CFD / MR1 Team
   version: 1.0.0
 
 options:

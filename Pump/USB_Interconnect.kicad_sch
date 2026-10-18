@@ -5,10 +5,10 @@
 	(uuid "a5000001-0001-4000-8000-000000000001")
 	(paper "A4")
 	(title_block
-		(title "Sentinel Pump Module - Dual USB-C Interconnect & High-Speed Pass-Through")
+		(title "MR1 Pump Module - Dual USB-C Interconnect & High-Speed Pass-Through")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Project")
+		(company "MR1 Open Source Project")
 		(comment 1 "Dual USB-C Receptacles aligned to Housing_Pump_Case cutouts (X = +/-15 mm)")
 		(comment 2 "J1_HOST: USB-PD Power Sink & Host Data Port")
 		(comment 3 "J2_MR1: Regulated Clean 5V Power Output & Bidirectional Data Port to MR1 Reader")
