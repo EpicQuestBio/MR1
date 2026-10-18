@@ -13,7 +13,7 @@
 
 ## 1. Problem Statement & Hazard Analysis
 
-In the **Sentinel Nanopore Reader**, the low-noise transimpedance amplifier and pore excitation stage (`PORE_amp`) deliver bidirectional voltages swinging up to $\pm 2.5\text{ V}$ across the working and counter electrodes. 
+In the **MR1 Nanopore Reader**, the low-noise transimpedance amplifier and pore excitation stage (`PORE_amp`) deliver bidirectional voltages swinging up to $\pm 2.5\text{ V}$ across the working and counter electrodes.
 
 The **Interposer** perimeter features a channel-contouring dual-conductor weep sense moat (`WEEP_SENSE` flanking the $1.4\text{ mm}$ fluid channels and separated by a $0.25\text{ mm}$ gap from the full-board `GNDA` copper flood). If electrolyte (1M KCl) breaches the cast silicone gasket seal, conductive fluid bridges the weep sense moat to `GNDA` or directly contacts the active pore excitation path.
 

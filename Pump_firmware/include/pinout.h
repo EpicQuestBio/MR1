@@ -19,7 +19,7 @@
 #include <Arduino.h>
 
 /**
- * Sentinel Pump & USB-PD Hub - Hardware Pinout Definitions
+ * MR1 Pump & USB-PD Hub - Hardware Pinout Definitions
  * Target MCU: STM32G431CBU6 (UFQFPN-48, 170 MHz ARM Cortex-M4)
  * Schematic Reference: Pump/MCU_STM32.kicad_sch
  */

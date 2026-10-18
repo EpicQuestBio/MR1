@@ -1,6 +1,6 @@
-# Contributing to Sentinel Nanopore Reader (Daemon Pore)
+# Contributing to MR1 Nanopore Reader (MR1)
 
-Thank you for your interest in contributing to the **Sentinel Nanopore Reader** project! We are building an open-source, reproducible, high-throughput solid-state and biological nanopore sequencer, low-noise analog transimpedance amplifier, and automated microfluidic control system.
+Thank you for your interest in contributing to the **MR1 Nanopore Reader** project! We are building an open-source, reproducible, high-throughput solid-state and biological nanopore sequencer, low-noise analog transimpedance amplifier, and automated microfluidic control system.
 
 We welcome contributions across mechanical engineering (CAD), analog and digital electronics (KiCad EDA), embedded firmware (ESP32-S3 / STM32), data acquisition software (Python / WebSockets), and documentation.
 
@@ -30,8 +30,8 @@ Clone your fork of the repository and initialize the Python virtual environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/daemon-pore.git
-cd daemon-pore
+git clone https://github.com/<your-username>/mr1.git
+cd mr1
 
 # Run the environment bootstrap script
 # On Linux / macOS / Git Bash:
@@ -164,6 +164,6 @@ make export-firmware   # Compile and stage firmware binaries
 
 ## Questions & Community
 
-- **Issue Tracker**: [GitHub Issues](https://github.com/LokiMetaSmith/daemon-pore/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/LokiMetaSmith/daemon-pore/discussions)
+- **Issue Tracker**: [GitHub Issues](https://github.com/LokiMetaSmith/mr1/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/LokiMetaSmith/mr1/discussions)
 - **Security Vulnerabilities**: Please review our [Security Policy](SECURITY.md) for reporting vulnerabilities.

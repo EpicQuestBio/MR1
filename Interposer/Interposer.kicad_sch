@@ -5,10 +5,10 @@
 	(uuid "7ad0d16f-2853-4935-9306-71d3e8db4555")
 	(paper "A4")
 	(title_block
-		(title "Daemon Pore - PTFE Microfluidic Interposer Board")
+		(title "MR1 - PTFE Microfluidic Interposer Board")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Nanopore Project")
+		(company "MR1 Open Source Nanopore Project")
 		(comment 1 "Passive Microfluidic Flow Cell Interposer & Electrode Pogo Interface")
 		(comment 2 "0.8mm Rogers RO4350B / PTFE Substrate (er=2.1, tan_delta=0.0002, ENIG Finish)")
 		(comment 3 "Mill-Max High Contact Force Spring Pin Landing Interface (Guarded Cis/Trans)")

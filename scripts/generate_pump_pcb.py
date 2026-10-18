@@ -1,5 +1,5 @@
 """
-Generates the KiCad PCB layout file for the Sentinel Pump & USB-PD Hub board (Pump/Pump.kicad_pcb).
+Generates the KiCad PCB layout file for the MR1 Pump & USB-PD Hub board (Pump/Pump.kicad_pcb).
 Matches physical housing constraints:
 - Board size: 88.0 x 88.0 mm (fitting within 89.0 x 89.0 mm Housing_Pump_Case bucket)
 - Mounting holes: 4x M3 at (+/-38.0, +/-38.0) mm from center
@@ -160,8 +160,8 @@ def generate_pcb():
     lines.append(f'\t(gr_line (start {x1} {y1 + corner_radius}) (end {x1 + corner_radius} {y1}) (stroke (width 0.15)) (layer "Edge.Cuts") (uuid "{gen_uuid()}"))')
 
     # Silk text
-    lines.append(f'\t(gr_text "SENTINEL PUMP & USB-PD HUB REV 1.0" (at {CX} {y1 + 4.0}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.5 1.5) (thickness 0.25))))')
-    lines.append(f'\t(gr_text "DAEMON PORE PROJECT" (at {CX} {y2 - 4.0}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.2 1.2) (thickness 0.2))))')
+    lines.append(f'\t(gr_text "MR1 PUMP & USB-PD HUB REV 1.0" (at {CX} {y1 + 4.0}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.5 1.5) (thickness 0.25))))')
+    lines.append(f'\t(gr_text "MR1 PROJECT" (at {CX} {y2 - 4.0}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.2 1.2) (thickness 0.2))))')
     lines.append(f'\t(gr_text "HOST USB-PD IN" (at {CX - 15.0} {y1 + 10.5}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.0 1.0) (thickness 0.18))))')
     lines.append(f'\t(gr_text "MR1 READER OUT" (at {CX + 15.0} {y1 + 10.5}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.0 1.0) (thickness 0.18))))')
     lines.append(f'\t(gr_text "PUMP 1 (CIS)" (at {CX - 25.0} {CY + 37.0}) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1.0 1.0) (thickness 0.18))))')

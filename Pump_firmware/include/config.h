@@ -19,7 +19,7 @@
 #include <stdint.h>
 
 /**
- * Sentinel Pump Controller - System Configuration & Safety Limits
+ * MR1 Pump Controller - System Configuration & Safety Limits
  */
 
 // Firmware Identification

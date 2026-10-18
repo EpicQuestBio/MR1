@@ -1,7 +1,7 @@
 import math
 
 # ==============================================================================
-# SENTINEL NANOPORE READER - Python Port Constants
+# MR1 NANOPORE READER - Python Port Constants
 # ==============================================================================
 
 # [View Settings]

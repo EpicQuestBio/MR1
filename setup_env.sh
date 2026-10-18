@@ -16,7 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # =============================================================================
-# Sentinel Nanopore Reader ? Python Virtual Environment Manager
+# MR1 Nanopore Reader ? Python Virtual Environment Manager
 # =============================================================================
 # Usage:
 #   ./setup_env.sh          # Setup or update .venv and install requirements
@@ -40,7 +40,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo -e "${BLUE}=================================================================${NC}"
-echo -e "${BLUE}  Sentinel Nanopore Reader ? Python VENV Setup & Manager${NC}"
+echo -e "${BLUE}  MR1 Nanopore Reader ? Python VENV Setup & Manager${NC}"
 echo -e "${BLUE}=================================================================${NC}"
 
 # Handle --recreate flag

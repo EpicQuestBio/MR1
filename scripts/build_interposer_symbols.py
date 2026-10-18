@@ -193,7 +193,7 @@ def update_sym_lib_table():
     table_path = Path("Interposer/sym-lib-table")
     content = """(sym_lib_table
   (version 7)
-  (lib (name "Interposer")(type "KiCad")(uri "${KIPRJMOD}/symbols/Interposer.kicad_sym")(options "")(descr "Daemon Pore Interposer Symbols"))
+  (lib (name "Interposer")(type "KiCad")(uri "${KIPRJMOD}/symbols/Interposer.kicad_sym")(options "")(descr "MR1 Interposer Symbols"))
   (lib (name "MR1")(type "KiCad")(uri "${KIPRJMOD}/footprints/MR1.kicad_sym")(options "")(descr ""))
 )
 """
@@ -218,10 +218,10 @@ def build_schematic():
 \t(uuid "{new_uuid()}")
 \t(paper "A3")
 \t(title_block
-\t\t(title "Daemon Pore - PTFE Microfluidic Interposer Board")
+\t\t(title "MR1 - PTFE Microfluidic Interposer Board")
 \t\t(date "2026-09-30")
 \t\t(rev "1.1")
-\t\t(company "Daemon Pore Open Source Nanopore Project")
+\t\t(company "MR1 Open Source Nanopore Project")
 \t\t(comment 1 "Dedicated Feature-Associated Schematic Architecture")
 \t\t(comment 2 "0.8mm Rogers RO4350B / PTFE Substrate (er=2.1, tan_delta=0.0002, ENIG Finish)")
 \t\t(comment 3 "Mill-Max High Contact Force Spring Pin Landing Interface (Guarded Cis/Trans)")

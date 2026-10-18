@@ -5,10 +5,10 @@
 	(uuid "a4000001-0001-4000-8000-000000000001")
 	(paper "A4")
 	(title_block
-		(title "Sentinel Pump Module - Dual Peristaltic Motor Drivers")
+		(title "MR1 Pump Module - Dual Peristaltic Motor Drivers")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Project")
+		(company "MR1 Open Source Project")
 		(comment 1 "Dual TI DRV8837C Low-Voltage H-Bridge Motor Drivers")
 		(comment 2 "Operating voltage VMOTOR = 9V to 12V from negotiated USB-PD rail")
 		(comment 3 "Independent PWM speed and direction control for Pump 1 & Pump 2")

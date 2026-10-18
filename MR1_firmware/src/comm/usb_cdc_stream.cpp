@@ -91,7 +91,7 @@ void UsbCdcStream::execute_command(const String& cmd) {
     if (trimmed.length() == 0) return;
 
     if (trimmed.equalsIgnoreCase("HELP")) {
-        Serial.println(F("=== Sentinel Nanopore Commands ==="));
+        Serial.println(F("=== MR1 Nanopore Commands ==="));
         Serial.println(F("SET:BIAS:<mv>          - Set pore bias (-1587 to +1587 mV)"));
         Serial.println(F("GET:BIAS               - Get current bias in mV"));
         Serial.println(F("CMD:PULSE:<mv>:<ms>    - Inject bias pulse"));

@@ -1,5 +1,5 @@
 # =============================================================================
-# Sentinel Nanopore Reader ? Windows PowerShell VENV Setup & Manager
+# MR1 Nanopore Reader ? Windows PowerShell VENV Setup & Manager
 # =============================================================================
 param (
     [switch]$Recreate,
@@ -12,7 +12,7 @@ $VenvDir = Join-Path $RepoRoot ".venv"
 $ReqFile = Join-Path $RepoRoot "requirements.txt"
 
 Write-Host "=================================================================" -ForegroundColor Cyan
-Write-Host "  Sentinel Nanopore Reader - Python VENV Setup (Windows)" -ForegroundColor Cyan
+Write-Host "  MR1 Nanopore Reader - Python VENV Setup (Windows)" -ForegroundColor Cyan
 Write-Host "=================================================================" -ForegroundColor Cyan
 
 if ($Recreate -and (Test-Path $VenvDir)) {

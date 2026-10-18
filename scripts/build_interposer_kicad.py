@@ -261,10 +261,10 @@ def build_interposer_sch(out_dir: Path = Path("Interposer")):
 \t(uuid "{new_uuid()}")
 \t(paper "A4")
 \t(title_block
-\t\t(title "Daemon Pore - PTFE Microfluidic Interposer Board")
+\t\t(title "MR1 - PTFE Microfluidic Interposer Board")
 \t\t(date "2026-09-30")
 \t\t(rev "1.0")
-\t\t(company "Daemon Pore Open Source Nanopore Project")
+\t\t(company "MR1 Open Source Nanopore Project")
 \t\t(comment 1 "Passive Microfluidic Flow Cell Interposer & Electrode Pogo Interface")
 \t\t(comment 2 "0.8mm Rogers RO4350B / PTFE Substrate (er=2.1, tan_delta=0.0002, ENIG Finish)")
 \t\t(comment 3 "Mill-Max High Contact Force Spring Pin Landing Interface (Guarded Cis/Trans)")
@@ -367,7 +367,7 @@ def build_interposer_sch(out_dir: Path = Path("Interposer")):
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
-        description="Daemon Pore Interposer KiCad Synchronization Utility.\n"
+        description="MR1 Interposer KiCad Synchronization Utility.\n"
                     "NOTE: 'Interposer/' contains authoritative production design files."
     )
     parser.add_argument(

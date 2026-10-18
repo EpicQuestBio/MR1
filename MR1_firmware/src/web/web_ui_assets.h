@@ -30,7 +30,7 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sentinel Nanopore Reader</title>
+<title>MR1 Nanopore Reader</title>
 <style>
   :root {
     --bg: #0f141c;
@@ -96,7 +96,7 @@ static const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <body>
 <header>
   <div>
-    <h1>Sentinel Nanopore Reader</h1>
+    <h1>MR1 Nanopore Reader</h1>
     <small style="color:#64748b">ESP32-S3 + AD40xx (100 kSPS) + MCP4822</small>
   </div>
   <div class="badges">

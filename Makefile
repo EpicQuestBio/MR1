@@ -1,5 +1,5 @@
 # =============================================================================
-# Sentinel Nanopore Reader ? Project Makefile
+# MR1 Nanopore Reader ? Project Makefile
 # =============================================================================
 
 # Detect virtual environment Python if present
@@ -50,7 +50,7 @@ clean:
 	git clean -fxd exports/ firmware/.pio/
 
 help:
-	@echo "Sentinel Nanopore Reader ? Build & Export Commands:"
+	@echo "MR1 Nanopore Reader ? Build & Export Commands:"
 	@echo "  make export          Export all deliverables (CAD, KiCad, Wiring, Firmware)"
 	@echo "  make export-cad      Export 3D solids (STEP, STL) & 2D profiles (DXF)"
 	@echo "  make export-kicad    Export KiCad Gerbers, Drill, POS, BOM, and PDF schematics"

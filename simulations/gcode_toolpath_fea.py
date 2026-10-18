@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader — G-Code Toolpath-Informed FEA & Simulated Execution Engine
+MR1 Nanopore Reader — G-Code Toolpath-Informed FEA & Simulated Execution Engine
 
 Analyzes the as-printed, toolpath-level structural integrity of FDM 3D prints:
 1. G-code Parser: Reads G1 moves, extrusion amounts (E), layer heights (Z),

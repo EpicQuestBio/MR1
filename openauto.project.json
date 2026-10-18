@@ -1,6 +1,6 @@
 {
-  "project_id": "daemon-pore",
-  "name": "Daemon Pore Nanopore Sequencing Reader",
+  "project_id": "mr1",
+  "name": "MR1 Nanopore Sequencing Reader",
   "version": "1.0.0",
   "description": "High-throughput solid-state and biological nanopore sensing platform combining ultra-low noise analog front-end TIA, digital motherboard, and PDMS microfluidic flowcells.",
   "root_path": ".",
@@ -45,7 +45,7 @@
       }
     },
     "pump": {
-      "name": "Sentinel Pump & USB-PD Hub",
+      "name": "MR1 Pump & USB-PD Hub",
       "path": "Pump/Pump.kicad_pcb",
       "schematic_path": "Pump/Pump.kicad_sch",
       "role": "USB Power Delivery Sink, Clean 5V Output, STM32 Fluidic Pump Controller & Pressure Monitoring",

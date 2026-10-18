@@ -54,7 +54,7 @@ flowchart TD
 
 ### Standardized Electrochemical Terminology (Gamry Standards)
 
-| Terminal | Standard Symbol | Physical Role in Daemon Pore | Potential / Connection |
+| Terminal | Standard Symbol | Physical Role in MR1 | Potential / Connection |
 | :--- | :--- | :--- | :--- |
 | **Working Electrode** | **`WE`** | Current delivery electrode in Cis chamber. Forces electrophoretic flux toward pore. | **Positive Terminal ($+V_{bias}$)** |
 | **Working Sense** | **`WS` / `PS1`** | High-impedance potential sensing probe located in Cis electrolyte immediately adjacent to the pore. | Non-inverting electrometer buffer ($I_{sense} \approx 0\text{ fA}$) |

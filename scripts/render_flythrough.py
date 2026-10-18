@@ -188,7 +188,7 @@ def build_exploded_cartridge_components():
     return components
 
 def build_assembled_device_components():
-    """Builds fully assembled Sentinel Nanopore Reader device for Shot 2."""
+    """Builds fully assembled MR1 Nanopore Reader device for Shot 2."""
     components = []
 
     # Pump Case & Lid
@@ -310,8 +310,8 @@ def render_shot1_exploded_flythrough(output_webm, output_gif, num_frames=300):
     print("Shot 1 Complete!\n")
 
 def render_shot2_assembled_orbit(output_webm, output_gif, num_frames=300):
-    """Renders Shot 2: Assembled Sentinel Nanopore Reader 360 Orbit."""
-    print("Generating Shot 2: Assembled Sentinel Device 360 Orbit...")
+    """Renders Shot 2: Assembled MR1 Nanopore Reader 360 Orbit."""
+    print("Generating Shot 2: Assembled MR1 Device 360 Orbit...")
     components = build_assembled_device_components()
     plotter = setup_plotter()
 
@@ -364,8 +364,8 @@ def main():
     shot1_webm = "renders/nanopore_exploded_flythrough.webm"
     shot1_gif = "renders/nanopore_exploded_flythrough.gif"
 
-    shot2_webm = "renders/sentinel_device_assembled_orbit.webm"
-    shot2_gif = "renders/sentinel_device_assembled_orbit.gif"
+    shot2_webm = "renders/mr1_device_assembled_orbit.webm"
+    shot2_gif = "renders/mr1_device_assembled_orbit.gif"
 
     render_shot1_exploded_flythrough(shot1_webm, shot1_gif, num_frames=300)
     render_shot2_assembled_orbit(shot2_webm, shot2_gif, num_frames=300)

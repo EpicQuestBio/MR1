@@ -5,10 +5,10 @@
 	(uuid "cc93d521-16a7-4cfb-bf6e-12e26615f249")
 	(paper "A3")
 	(title_block
-		(title "Sentinel Nanopore Reader - Peristaltic Pump & USB-PD Power Hub")
+		(title "MR1 Nanopore Reader - Peristaltic Pump & USB-PD Power Hub")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Project")
+		(company "MR1 Open Source Project")
 		(comment 1 "Dual USB-C Interface (Host USB-PD Sink + Regulated Clean 5V Output to MR1)")
 		(comment 2 "STM32G431 Control Processor + Dual Honeywell TruStability Pressure Transducers")
 		(comment 3 "Dual DRV8837C Peristaltic Pump Motor Drivers with Hardware Emergency Cutoff")
@@ -741,7 +741,7 @@
 			(page "1")
 		)
 	)
-	(text "=== SENTINEL PERISTALTIC PUMP & USB-PD HUB ARCHITECTURE ===\n1. Dual USB-C Receptacles aligned to Housing_Pump_Case back-wall cutouts (X = +/-15 mm)\n2. STUSB4500 USB-PD Sink negotiates high-power 9V/12V VBUS for peristaltic pump motors\n3. High-efficiency synchronous buck converter outputs clean +5V power to MR1 Nanopore Reader\n4. TI TS3USB221 USB 2.0 switch passes 100 kHz streaming data straight through to Host laptop\n5. USB-C SBU1/SBU2 lines provide bidirectional I2C control link with auto-polarity detection\n6. Dual Honeywell TruStability / ABP2 microfluidic pressure transducers monitor Cis and Trans lines\n7. Hardware emergency cutoff gate immediately shuts down pumps upon leak detection"
+	(text "=== MR1 PERISTALTIC PUMP & USB-PD HUB ARCHITECTURE ===\n1. Dual USB-C Receptacles aligned to Housing_Pump_Case back-wall cutouts (X = +/-15 mm)\n2. STUSB4500 USB-PD Sink negotiates high-power 9V/12V VBUS for peristaltic pump motors\n3. High-efficiency synchronous buck converter outputs clean +5V power to MR1 Nanopore Reader\n4. TI TS3USB221 USB 2.0 switch passes 100 kHz streaming data straight through to Host laptop\n5. USB-C SBU1/SBU2 lines provide bidirectional I2C control link with auto-polarity detection\n6. Dual Honeywell TruStability / ABP2 microfluidic pressure transducers monitor Cis and Trans lines\n7. Hardware emergency cutoff gate immediately shuts down pumps upon leak detection"
 		(at 30.0 180.0 0)
 		(effects (font (size 1.5 1.5)) (justify left))
 		(uuid "cc000001-0000-4000-8000-000000000001")

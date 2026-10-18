@@ -17,7 +17,7 @@ const importOpenSCAD = async () => {
     return mod.default || mod.createOpenSCAD || mod;
 };
 
-const SCAD_FILE = 'sentinel_nanopore_reader.scad';
+const SCAD_FILE = 'mr1_nanopore_reader.scad';
 const CONSTANTS_FILE = 'constants.scad';
 const OUTPUT_DIR = 'exports';
 

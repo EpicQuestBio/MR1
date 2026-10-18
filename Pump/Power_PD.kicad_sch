@@ -5,10 +5,10 @@
 	(uuid "a1000001-0001-4000-8000-000000000001")
 	(paper "A4")
 	(title_block
-		(title "Sentinel Pump Module - USB-PD Sink & Regulated Power Subsystem")
+		(title "MR1 Pump Module - USB-PD Sink & Regulated Power Subsystem")
 		(date "2026-09-30")
 		(rev "1.0")
-		(company "Daemon Pore Open Source Project")
+		(company "MR1 Open Source Project")
 		(comment 1 "STUSB4500 autonomous USB-PD Sink (negotiates 9V/12V/15V/20V)")
 		(comment 2 "Synchronous Buck Converter (36V/3A) stepping down to clean +5V")
 		(comment 3 "Filtered +5V_MR1_CLEAN output rail to MR1 Nanopore Reader via USB-C")

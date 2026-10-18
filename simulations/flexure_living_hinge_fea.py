@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader — Compliant Flexure & Living Hinge FEA Simulation
+MR1 Nanopore Reader — Compliant Flexure & Living Hinge FEA Simulation
 
 Models the structural mechanics, non-linear large deflection, stress concentration,
 and cyclic fatigue life of the 3D-printed torque cap ratchet spring flexures:

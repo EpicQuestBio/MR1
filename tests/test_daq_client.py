@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit and Integration Tests for Sentinel Nanopore DAQ Client
+Unit and Integration Tests for MR1 Nanopore DAQ Client
 ===========================================================
 Validates:
 - CRC-16-CCITT packet checksum computation.

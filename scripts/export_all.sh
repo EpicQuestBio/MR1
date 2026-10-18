@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Sentinel Nanopore Reader ? Universal Project Export Script
+# MR1 Nanopore Reader ? Universal Project Export Script
 # =============================================================================
 # Usage:
 #   ./scripts/export_all.sh [options]
@@ -29,7 +29,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}=================================================================${NC}"
-echo -e "${BLUE}  Sentinel Nanopore Reader ? Project Export System${NC}"
+echo -e "${BLUE}  MR1 Nanopore Reader ? Project Export System${NC}"
 echo -e "${BLUE}=================================================================${NC}"
 
 # Find Python (prefer .venv)

@@ -1,6 +1,6 @@
 Output_Mode = "Housing_Reader_Lid_STL";
 // ==============================================================================
-// SENTINEL NANOPORE READER - REV 12 (Modular Split)
+// MR1 NANOPORE READER - REV 12 (Modular Split)
 // Features: Torque-Lock Cap + Round Stack + Bottom Integration + Internal Layout
 // ==============================================================================
 

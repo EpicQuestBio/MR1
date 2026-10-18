@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader - Project Export Manager
+MR1 Nanopore Reader - Project Export Manager
 Orchestrates all project deliverable exports:
 - 3D Solids (STEP, STL) & 2D Profiles (DXF) via build123d
 - KiCad Gerbers, drill files, BOMs, Pick & Place (POS), and PDF schematics
@@ -289,7 +289,7 @@ def generate_manifest(verbose=True):
         print("\n[5/5] Generating Exports Manifest (SHA-256 Tracking)...")
 
     manifest = {
-        "project": "Daemon Pore / Sentinel Nanopore Reader",
+        "project": "MR1 / MR1 Nanopore Reader",
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "deliverables": {}
     }
@@ -347,7 +347,7 @@ def generate_manifest(verbose=True):
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Daemon Pore Deliverables Export Manager")
+    parser = argparse.ArgumentParser(description="MR1 Deliverables Export Manager")
     parser.add_argument("--all", action="store_true", help="Run all export targets")
     parser.add_argument("--cad", action="store_true", help="Export 3D STL/STEP and 2D DXF models")
     parser.add_argument("--kicad", action="store_true", help="Export KiCad Gerbers, BOM, POS, and PDFs")
@@ -365,7 +365,7 @@ def main():
     EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
     print("=================================================================")
-    print("  Sentinel Nanopore Reader - Project Deliverables Exporter")
+    print("  MR1 Nanopore Reader - Project Deliverables Exporter")
     print("=================================================================")
 
     if args.all or args.cad:

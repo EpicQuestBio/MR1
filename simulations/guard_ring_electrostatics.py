@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sentinel Nanopore Reader — Guard Ring & Guard Trace Electrostatic Simulation
+MR1 Nanopore Reader — Guard Ring & Guard Trace Electrostatic Simulation
 
 Models the physics of ultra-low leakage transimpedance amplifier (TIA) guarding
 on Rogers RO4350B / PTFE substrate:

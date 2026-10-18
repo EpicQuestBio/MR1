@@ -1,6 +1,6 @@
 # ESP32-S3 Nanopore Firmware Stack
 
-This directory contains the production C++ firmware for the **Sentinel Nanopore Reader (MR1 Main Board)** running on an **ESP32-S3** microcontroller.
+This directory contains the production C++ firmware for the **MR1 Nanopore Reader (MR1 Main Board)** running on an **ESP32-S3** microcontroller.
 
 ---
 
