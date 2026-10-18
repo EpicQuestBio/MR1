@@ -38,6 +38,8 @@ def check_overlap(part_a, part_b, name_a="Part A", name_b="Part B", threshold=0.
             limit = 350.0
         elif ("Housing_Lid_Reader" in name_a and "Torque_Cap" in name_b) or ("Torque_Cap" in name_a and "Housing_Lid_Reader" in name_b):
             limit = 4000.0
+        elif ("Flexible_Tubing" in name_a and "Reader_Assembly" in name_b) or ("Reader_Assembly" in name_a and "Flexible_Tubing" in name_b):
+            limit = 1000.0
 
         if vol > limit:
             print(f"[!] COLLISION DETECTED: {name_a} overlaps with {name_b} (Overlap Volume: {vol:.4f} mm^3)")

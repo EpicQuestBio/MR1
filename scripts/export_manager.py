@@ -215,9 +215,17 @@ def export_wiring(verbose=True):
     if venv_dir not in env.get("PATH", "").split(os.pathsep):
         env["PATH"] = venv_dir + os.pathsep + env.get("PATH", "")
     if not shutil.which("dot", path=env.get("PATH", "")):
-        for extra in ["/home/loki/miniconda3/bin", "/usr/bin", "/usr/local/bin"]:
-            if (Path(extra) / "dot").exists():
-                env["PATH"] = extra + os.pathsep + env.get("PATH", "")
+        candidate_paths = [
+            Path.home() / "miniconda3" / "bin",
+            Path.home() / "anaconda3" / "bin",
+            Path.home() / ".local" / "bin",
+            Path("/usr/bin"),
+            Path("/usr/local/bin"),
+            Path("/opt/homebrew/bin"),
+        ]
+        for extra in candidate_paths:
+            if (extra / "dot").exists():
+                env["PATH"] = str(extra) + os.pathsep + env.get("PATH", "")
                 break
 
     for yaml_rel, out_dir in targets:

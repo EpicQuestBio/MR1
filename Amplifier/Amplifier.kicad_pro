@@ -511,11 +511,29 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.2,
+        "track_width": 0.3,
         "tuning_profile": "",
         "via_diameter": 0.6,
         "via_drill": 0.3,
-        "wire_width": 6
+        "wire_width": 12
+      },
+      {
+        "bus_width": 24,
+        "clearance": 0.3,
+        "diff_pair_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Low_impedance",
+        "pcb_color": "rgb(42, 25, 255)",
+        "priority": 0,
+        "schematic_color": "rgb(15, 0, 255)",
+        "track_width": 0.6,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.3,
+        "wire_width": 24
       }
     ],
     "meta": {
@@ -523,14 +541,31 @@
     },
     "net_colors": {},
     "netclass_assignments": {},
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "Default",
+        "pattern": ""
+      },
+      {
+        "netclass": "Low_impedance",
+        "pattern": "GUARD"
+      },
+      {
+        "netclass": "Low_impedance",
+        "pattern": "Vbias"
+      },
+      {
+        "netclass": "Low_impedance",
+        "pattern": "/Vbias"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "/home/loki/Projects/daemon-pore/Amplifier/",
+      "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",

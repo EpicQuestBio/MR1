@@ -968,7 +968,7 @@
 	)
 	(text "TODO List :\n\nDone:\nupdate ADC with correct library part and footprint\nadd voltage reference, \nLook at Insturmentation amplifiers\nRemaining:\nflip board around, route tubing on the underside of the board.\npunch through the back side with a via to the sensitized silver chloride pad, which reduces a potential liquid contact point over solder mask/conformal. \n"
 		(exclude_from_sim no)
-		(at 95.25 151.13 0)
+		(at -55.88 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -989,7 +989,7 @@
 	)
 	(text "Error: Cannot add SW1 (footprint 'Custom Footprints:SW_SPST_6mm_gull wing' not found).\nError: Cannot add E1 (no footprint assigned).\nError: Cannot add E2 (no footprint assigned).\nError: Cannot add C40 (no footprint assigned).\nError: Cannot add SW2 (footprint 'Custom Footprints:SW_SPST_6mm_gull wing' not found).\nError: Cannot add C42 (no footprint assigned).\nTotal warnings: 10, errors: 6."
 		(exclude_from_sim no)
-		(at 99.06 168.91 0)
+		(at -49.53 129.794 0)
 		(effects
 			(font
 				(size 1.27 1.27)

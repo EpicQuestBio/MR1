@@ -64,5 +64,21 @@ __pycache__/
 
 # PlatformIO & Embedded Builds
 .pio/
+**/.pio/
 firmware/.pio/
 MR1_firmware/.pio/
+Pump_firmware/.pio/
+
+# OS and Editor Metadata
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# AI & Agent Scaffolding
+.agents/
+
+# Miscellaneous Local Artifacts
+*.gpg
+*.sources
+
