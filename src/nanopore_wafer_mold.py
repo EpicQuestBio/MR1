@@ -155,7 +155,8 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
                     Cylinder(radius=0.6, height=MOLD_T + 2.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
             # 4. Passive Port Core Pins (D=2.0mm, height 0.8mm from X = -GASKET_THICK/2 up to X = 0)
-            for port in PASS_PORTS_NANO:
+            pass_ports = [P_TRANS_IN, P_TRANS_OUT] if gasket_type == "top" else [P_CIS_IN, P_CIS_OUT]
+            for port in pass_ports:
                 with Locations((-GASKET_THICK / 4.0, port[0], port[1])):
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
@@ -164,16 +165,17 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
 
         else:
             # Amplifier mold (is_nanopore=False)
-            cutouts = Circuitry_Cutouts(height=GASKET_THICK * 2.0)
-            cutouts = cutouts.rotate(Axis.Y, -90).move(Location((-GASKET_THICK / 2.0, 0, CAVITY_Z)))
-            add(cutouts, mode=Mode.SUBTRACT)
+            cutouts = Circuitry_Cutouts(height=GASKET_THICK / 2.0)
+            cutouts = cutouts.rotate(Axis.Y, -90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z)))
+            add(cutouts, mode=Mode.ADD)
 
             # Central square plug (3.0 x 3.0 mm from X = -GASKET_THICK/2 to X = 0)
             with Locations((-GASKET_THICK / 4.0, 0, CAVITY_Z)):
                 Box(GASKET_THICK / 2.0, WAFER_SIZE, WAFER_SIZE, mode=Mode.ADD)
 
-            # Port core pins for passive Cis ports on amplifier gasket
-            for port in [P_CIS_IN, P_CIS_OUT]:
+            # Port core pins for passive ports on amplifier gasket
+            pass_ports = [P_TRANS_IN, P_TRANS_OUT] if gasket_type == "top" else [P_CIS_IN, P_CIS_OUT]
+            for port in pass_ports:
                 with Locations((-GASKET_THICK / 4.0, port[0], port[1])):
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
@@ -206,10 +208,11 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
                 with Locations((GASKET_THICK / 4.0, port[0], port[1])):
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
-            # 3. Cis Active Microfluidic Flow Channel Ridge (1.4mm wide, height 0.8mm from X = 0 to X = 0.8)
-            # Extends from cavity floor towards parting plane X=0 to mold open channel in gasket
+            # 3. Active Microfluidic Flow Channel Ridge (1.4mm wide, height 0.8mm from X = 0 to X = 0.8)
+            active_in = P_CIS_IN if gasket_type == "top" else P_TRANS_IN
+            active_out = P_CIS_OUT if gasket_type == "top" else P_TRANS_OUT
             with BuildSketch(Plane.YZ.offset(0)):
-                with Locations(P_CIS_IN, (0, CAVITY_Z), P_CIS_OUT):
+                with Locations(active_in, (0, CAVITY_Z), active_out):
                     Circle(FLUID_CHANNEL_W / 2.0)
                 make_hull()
                 with Locations((0, CAVITY_Z)):
@@ -226,9 +229,11 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
             with Locations((GASKET_THICK / 4.0, 0, CAVITY_Z)):
                 Box(GASKET_THICK / 2.0, WAFER_SIZE, WAFER_SIZE, mode=Mode.ADD)
 
-            # 2. Trans Active Microfluidic Channel Ridge (330 deg -> Center -> 150 deg)
+            # 2. Active Microfluidic Channel Ridge
+            active_in = P_CIS_IN if gasket_type == "top" else P_TRANS_IN
+            active_out = P_CIS_OUT if gasket_type == "top" else P_TRANS_OUT
             with BuildSketch(Plane.YZ.offset(0)):
-                with Locations(P_TRANS_IN, (0, CAVITY_Z), P_TRANS_OUT):
+                with Locations(active_in, (0, CAVITY_Z), active_out):
                     Circle(FLUID_CHANNEL_W / 2.0)
                 make_hull()
                 with Locations((0, CAVITY_Z)):

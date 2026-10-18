@@ -4,12 +4,67 @@ from src.constants import *
 from src.common import Circuitry_Cutouts, Finger_Grip_Cutout, Hex_Base_Sketch, Weep_Duct_Holes, Weep_Trench_Cutout
 
 def PogoPinHoles():
-    """Returns a sketch containing the pogo pin holes."""
-    with BuildSketch(mode=Mode.PRIVATE) as p:
+    '''Returns a sketch containing the pogo pin holes parsed dynamically.'''
+    import os, re
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    pcb_path = os.path.join(repo_root, 'Interposer', 'Interposer.kicad_pcb')
+    pads = []
+    if os.path.exists(pcb_path):
+        try:
+            with open(pcb_path, 'r', encoding='utf-8') as f: pcb_data = f.read()
+            def manual_parse(name, data):
+                import re
+                pads = []
+                start = data.find('(footprint "' + name + '"')
+                if start == -1: return pads
+                paren_count = 0
+                end = start
+                for i in range(start, len(data)):
+                    if data[i] == '(': paren_count += 1
+                    elif data[i] == ')':
+                        paren_count -= 1
+                        if paren_count == 0:
+                            end = i + 1
+                            break
+                if end == start: return pads
+                fp_text = data[start:end]
+
+                at_match = re.search(r'\(at ([0-9\.\-]+) ([0-9\.\-]+)(?: ([0-9\.\-]+))?\)', fp_text)
+                if not at_match: return pads
+                at_x = float(at_match.group(1))
+                at_y = float(at_match.group(2))
+                rot = float(at_match.group(3)) if at_match.group(3) else 0.0
+
+                pad_matches = re.finditer(r'\(pad \"[0-9]+\" (?:smd|thru_hole) (?:circle|roundrect|oval).*?\(at ([0-9\.\-]+) ([0-9\.\-]+)', fp_text, re.DOTALL)
+                for pad_match in pad_matches:
+                    px = float(pad_match.group(1))
+                    py = float(pad_match.group(2))
+                    if rot == 180:
+                        px = -px
+                        py = -py
+                    abs_x = at_x + px
+                    abs_y = at_y + py
+                    cad_x = abs_x - 164.5
+                    cad_y = -(abs_y - 58.5)
+                    pads.append((round(cad_x, 3), round(cad_y, 3)))
+                return pads
+
+            pads.extend(manual_parse('footprints:PogoPin_Target_6Pin_Array', pcb_data))
+            pads.extend(manual_parse('footprints:PogoPin_Target_6Pin_Distributed', pcb_data))
+            unique_pads = []
+            for p in pads:
+                if p not in unique_pads: unique_pads.append(p)
+            pads = unique_pads
+        except Exception as e:
+            print(f'Error parsing pogo pins: {e}')
+    if not pads:
         for x_sign in [1, -1]:
-            for x_offset in [1.5, 6.5, 11.5]: # Hardcoded from original OpenSCAD
-                with Locations((x_sign * x_offset, POGO_Y)):
-                    Circle(0.5)
+            for x_offset in [1.5, 6.5, 11.5]:
+                pads.append((x_sign * x_offset, POGO_Y))
+    with BuildSketch(mode=Mode.PRIVATE) as p:
+        for pad in pads:
+            with Locations(pad):
+                Circle(0.5)
     return p.sketch
 
 def PCB_Main_Reader_2D():
@@ -364,6 +419,13 @@ def Bottom_Pusher_Plate():
         with Locations((0, 0, PP_H/2.0)):
             add(Weep_Duct_Holes(height=PP_H + 2.0), mode=Mode.SUBTRACT)
 
+        # Pogo Pin Clearance
+        with Locations((0, 0, height/2.0)):
+            with BuildSketch():
+                add(PogoPinHoles())
+                offset(amount=0.5) # Expand holes slightly for tolerance/clearance
+            extrude(amount=height + 2.0, mode=Mode.SUBTRACT)
+
     return p.part
 
 def Plate_1_Base_Hex():
@@ -385,6 +447,13 @@ def Plate_1_Base_Hex():
         # Weep duct pass-through
         with Locations((0, 0, PLATE_THICK/2.0)):
             add(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
+
+        # Pogo Pin Clearance
+        with Locations((0, 0, PLATE_THICK/2.0)):
+            with BuildSketch():
+                add(PogoPinHoles())
+                offset(amount=0.5) # clearance
+            extrude(amount=PLATE_THICK + 2.0, mode=Mode.SUBTRACT)
 
     return p.part
 
@@ -408,6 +477,13 @@ def Plate_3_Top_Hex():
         # Weep duct pass-through
         with Locations((0, 0, PLATE_THICK/2.0)):
             add(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
+
+        # Pogo Pin Clearance
+        with Locations((0, 0, PLATE_THICK/2.0)):
+            with BuildSketch():
+                add(PogoPinHoles())
+                offset(amount=0.5) # clearance
+            extrude(amount=PLATE_THICK + 2.0, mode=Mode.SUBTRACT)
 
     return p.part
 
