@@ -57,10 +57,12 @@ def PogoPinHoles():
             pads = unique_pads
         except Exception as e:
             print(f'Error parsing pogo pins: {e}')
-    if not pads:
-        for x_sign in [1, -1]:
-            for x_offset in [1.5, 6.5, 11.5]:
-                pads.append((x_sign * x_offset, POGO_Y))
+    # Ensure baseline pogo pin landing locations are present
+    for x_sign in [1, -1]:
+        for x_offset in [1.5, 6.5, 11.5]:
+            pt = (x_sign * x_offset, POGO_Y)
+            if pt not in pads:
+                pads.append(pt)
     with BuildSketch(mode=Mode.PRIVATE) as p:
         for pad in pads:
             with Locations(pad):

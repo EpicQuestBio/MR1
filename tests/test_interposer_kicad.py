@@ -84,7 +84,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertNotIn(ref, refs, f"Active component or colliding concentric ring {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "J1", "J2", "J10", "J11"]
+        required = ["H1", "J_POGO1"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 

@@ -2,7 +2,7 @@
 
 **Document Version:** 1.0.0  
 **Framework:** OpenAuto-CFD (Universal Configuration-Driven Multiphysics & CFD Optimizer)  
-**System Target:** Sentinel Nanopore Reader (Daemon Pore)  
+**System Target:** MR1 Nanopore Reader (Daemon Pore)  
 **Primary Manifests:** [`openauto.project.json`](file:///home/loki/Projects/daemon-pore/openauto.project.json) / [`atlas.project.json`](file:///home/loki/Projects/daemon-pore/atlas.project.json)  
 **KiCad Plugin & CLI Tool:** [`plugins/openauto_cfd_plugin.py`](file:///home/loki/Projects/daemon-pore/plugins/openauto_cfd_plugin.py)  
 **3D Interactive Assembly Visualizer:** [`src/assembly.py`](file:///home/loki/Projects/daemon-pore/src/assembly.py)  
@@ -12,7 +12,7 @@
 
 ## 1. Executive Summary
 
-Solid-state and biological nanopore sequencing systems operate at the extreme boundary between nanoscale electrochemistry and microscale fluid dynamics. In the Sentinel Nanopore Reader, a $10 - 20\text{ nm}$ thin silicon nitride ($\text{SiN}_x$) membrane is subjected to picoampere-level ionic current sensing while simultaneously enduring microfluidic buffer exchange, sample injection, and waste aspiration.
+Solid-state and biological nanopore sequencing systems operate at the extreme boundary between nanoscale electrochemistry and microscale fluid dynamics. In the MR1 Nanopore Reader, a $10 - 20\text{ nm}$ thin silicon nitride ($\text{SiN}_x$) membrane is subjected to picoampere-level ionic current sensing while simultaneously enduring microfluidic buffer exchange, sample injection, and waste aspiration.
 
 Historically, hardware development for such instruments suffers from severe engineering silos:
 - **Electrical Engineers (ECAD)** design high-bandwidth, ultra-low-noise transimpedance amplifiers (TIAs) and multi-electrode Kelvin sensing arrays in KiCad without real-time awareness of mechanical channel dimensions, gasket squeeze, or port keep-outs.
@@ -65,7 +65,7 @@ flowchart TD
 
 ### 2.1 Hagen-Poiseuille Hydrodynamics & Low Reynolds Flow
 
-Microfluidic flow in the Sentinel cartridge operates deep in the creeping Stokes flow regime ($\text{Re} \ll 1$):
+Microfluidic flow in the MR1 cartridge operates deep in the creeping Stokes flow regime ($\text{Re} \ll 1$):
 $$\text{Re} = \frac{\rho \cdot v \cdot D_h}{\mu} \approx \frac{1000\text{ kg/m}^3 \cdot 0.133\text{ m/s} \cdot 33.3\mu\text{m}}{1.0 \times 10^{-3}\text{ Pa}\cdot\text{s}} \approx 4.4 \times 10^{-3}$$
 
 For rectangular microchannels ($w = 50\,\mu\text{m}$, $h = 25\,\mu\text{m}$, aspect ratio $\alpha = h/w = 0.5$):

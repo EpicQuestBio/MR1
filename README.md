@@ -248,7 +248,7 @@ See [EXPORTS.md](EXPORTS.md) for full details and PCB fabrication recommendation
 
 ## OpenAuto-CFD & Co-Design
 
-The **Sentinel Nanopore Reader** incorporates the **OpenAuto-CFD** co-design framework ([`openauto.project.json`](openauto.project.json) / [`atlas.project.json`](atlas.project.json)) to bridge Electrical CAD (KiCad), Mechanical CAD (Build123d / OpenSCAD), and Microfluidic Multiphysics into a single automated pipeline.
+The **MR1 Nanopore Reader** incorporates the **OpenAuto-CFD** co-design framework ([`openauto.project.json`](openauto.project.json) / [`atlas.project.json`](atlas.project.json)) to bridge Electrical CAD (KiCad), Mechanical CAD (Build123d / OpenSCAD), and Microfluidic Multiphysics into a single automated pipeline.
 
 ### Why OpenAuto-CFD?
 Nanopore sensing demands precise hydrodynamic and electro-chemical alignment:
