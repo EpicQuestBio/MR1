@@ -149,15 +149,16 @@ def Housing_Case_Reader():
             fillet(t_edges, radius=1.0)
 
         # Feet Dimples (Truncated sphere)
-        with Locations((0, 0, -READER_LID_THICK/2.0)):
-            for x_sign in [-1, 1]:
-                for y_sign in [-1, 1]:
-                    with Locations((x_sign * (BASE_W/2.0 - FEET_INSET), y_sign * (BASE_L/2.0 - FEET_INSET), 0)):
-                        with BuildPart(mode=Mode.PRIVATE) as dimple:
-                            Sphere(radius=13.0/2.0)
-                            with Locations((0, 0, -3.5/2.0 + 0.1/2.0)):
-                                Cylinder(radius=15.0/2.0, height=3.5 + 0.1, mode=Mode.INTERSECT)
-                        add(dimple.part, mode=Mode.ADD)
+        with BuildPart(mode=Mode.PRIVATE) as dimple_tpl:
+            Sphere(radius=13.0/2.0)
+            with Locations((0, 0, -3.5/2.0 + 0.1/2.0)):
+                Cylinder(radius=15.0/2.0, height=3.5 + 0.1, mode=Mode.INTERSECT)
+        dimple_shape = dimple_tpl.part
+
+        for x_sign in [-1, 1]:
+            for y_sign in [-1, 1]:
+                loc = Location((x_sign * (BASE_W/2.0 - FEET_INSET), y_sign * (BASE_L/2.0 - FEET_INSET), -READER_LID_THICK/2.0))
+                add(dimple_shape.moved(loc), mode=Mode.ADD)
 
         # PCB Standoffs (Floor / Bottom Lid)
         standoff_h = 5.0
