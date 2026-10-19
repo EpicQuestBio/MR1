@@ -87,7 +87,7 @@ def get_wiring_routes():
     """
     pump_z = PUMP_H / 2.0
     reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
-    reader_z = reader_z_base + READER_LID_THICK / 2.0
+    reader_z = reader_z_base + READER_CASE_H / 2.0
 
     return {
         "W_USB": (
@@ -131,17 +131,17 @@ def route_wiring():
 
 def Reader_Module_Assembly():
     """Assembles the full Reader Module (Housings + Cartridge Stack + Cap) matching OpenSCAD truth.
-    Housing_Lid_Reader sits on Housing_Case_Reader, with its top plate surface at z=30.0.
+    Housing_Lid_Reader sits on Housing_Case_Reader, with its top plate surface at z=32.5.
     The cartridge stack rests directly on the lid ceiling inside the M75 neck socket,
     with the Torque-Lock Cap threaded onto the neck.
     """
     parts = []
 
-    # Base Case (height 25mm, centered at Z=0)
+    # Base Case (height 15mm, centered at Z=0)
     parts.append(Housing_Case_Reader())
 
-    # Lid sits on Base Case (top plate surface at Z = 30.0, neck extending to 60.2mm)
-    z_lid = 30.0
+    # Lid sits on Base Case (top plate surface at Z = 25.0 + READER_CASE_H / 2.0 = 32.5mm)
+    z_lid = 25.0 + READER_CASE_H / 2.0
     parts.append(Housing_Lid_Reader().move(Location((0, 0, z_lid))))
 
     # 4x Luer Bulkhead Panel Mounts at the side fluid ports

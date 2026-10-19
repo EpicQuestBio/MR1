@@ -121,30 +121,47 @@ def Housing_Pump_Lid():
 
 def Housing_Case_Reader():
     """Reader module base case."""
+    case_h = READER_CASE_H
     inset_depth = 2.5
+
+    # Pre-construct dimple solid at origin
+    s = Solid.make_sphere(radius=13.0/2.0)
+    c = Solid.make_cylinder(radius=15.0/2.0, height=3.5 + 0.1).move(Location((0, 0, -3.5/2.0 + 0.1/2.0)))
+    inter = s.intersect(c)
+    dimple_solid = inter[0] if isinstance(inter, ShapeList) else inter
+
     with BuildPart(mode=Mode.PRIVATE) as p:
         # Base
-        Box(BASE_W + 2*(WALL - inset_depth), BASE_L + 2*(WALL - inset_depth), READER_LID_THICK)
+        Box(BASE_W + 2*(WALL - inset_depth), BASE_L + 2*(WALL - inset_depth), case_h)
         edges = p.edges().filter_by(Axis.Z)
         if edges:
             fillet(edges, radius=WALL - inset_depth)
 
         # Bottom edges fillet for rounded corners
-        b_edges = [e for e in p.edges() if abs(e.center().Z - (-READER_LID_THICK/2.0)) < 0.01 and e.geom_type == GeomType.LINE]
+        b_edges = [e for e in p.edges() if abs(e.center().Z - (-case_h/2.0)) < 0.01 and e.geom_type == GeomType.LINE]
         if b_edges:
             fillet(b_edges, radius=2.0)
 
+        # Feet Dimples (Truncated sphere)
+        for x_sign in [-1, 1]:
+            for y_sign in [-1, 1]:
+                fx = x_sign * (BASE_W/2.0 - FEET_INSET)
+                fy = y_sign * (BASE_L/2.0 - FEET_INSET)
+                fz = -case_h/2.0
+                with Locations((fx, fy, fz)):
+                    insert(dimple_solid, mode=Mode.ADD)
+
         # Hollow out
         with BuildPart(mode=Mode.PRIVATE) as bucket:
-            Box(BASE_W - 2*WALL, BASE_L - 2*WALL, READER_LID_THICK)
+            Box(BASE_W - 2*WALL, BASE_L - 2*WALL, case_h)
             bedges = bucket.edges().filter_by(Axis.Z)
             if bedges:
                 fillet(bedges, radius=2.0)
         with Locations((0, 0, WALL)):
-            add(bucket.part, mode=Mode.SUBTRACT)
+            insert(bucket.part, mode=Mode.SUBTRACT)
 
         # Top outer rim fillet
-        t_edges = [e for e in p.edges() if abs(e.center().Z - (READER_LID_THICK/2.0)) < 0.01 and e.geom_type == GeomType.LINE and (abs(e.center().X) > 40 or abs(e.center().Y) > 40)]
+        t_edges = [e for e in p.edges() if abs(e.center().Z - (case_h/2.0)) < 0.01 and e.geom_type == GeomType.LINE and (abs(e.center().X) > 40 or abs(e.center().Y) > 40)]
         if t_edges:
             fillet(t_edges, radius=1.0)
 
@@ -162,32 +179,30 @@ def Housing_Case_Reader():
 
         # PCB Standoffs (Floor / Bottom Lid)
         standoff_h = 5.0
-        with Locations((0, 0, -READER_LID_THICK/2.0 + WALL + standoff_h/2.0)):
-            for mx in [-35.0, 35.0]:
-                for my in [-25.0, 25.0]:
-                    with Locations((mx, my, 0)):
-                        Cylinder(radius=6.0/2.0, height=standoff_h, mode=Mode.ADD)
-                        Cylinder(radius=(2.5 - TOLERANCE)/2.0, height=standoff_h + 2.0, mode=Mode.SUBTRACT)
+        standoff_center_z = -case_h/2.0 + WALL + standoff_h/2.0
+        for mx in [-35.0, 35.0]:
+            for my in [-25.0, 25.0]:
+                with Locations((mx, my, standoff_center_z)):
+                    Cylinder(radius=6.0/2.0, height=standoff_h, mode=Mode.ADD)
+                    Cylinder(radius=(2.5 - TOLERANCE)/2.0, height=standoff_h + 2.0, mode=Mode.SUBTRACT)
 
         # Back Wall Connectivity (USB-C cutout for Main Reader PCB)
-        with Locations((0, BASE_L/2.0 + WALL, 0)):
-            with Locations((USB_OFFSET_X, 0, 0)):
-                Box(12, WALL*10, 6, mode=Mode.SUBTRACT)
+        usb_z = -case_h/2.0 + WALL + standoff_h + 1.0
+        with Locations((USB_OFFSET_X, BASE_L/2.0 + WALL - inset_depth, usb_z)):
+            Box(12, WALL*10, 6, mode=Mode.SUBTRACT)
 
         # Corner Lid Mounting Screw Holes
         for x_sign in [-1, 1]:
             for y_sign in [-1, 1]:
                 with Locations((x_sign * (BASE_W/2.0 - 2.0), y_sign * (BASE_L/2.0 - 2.0), 0)):
-                    Cylinder(radius=3.2/2.0, height=READER_LID_THICK*3.0, mode=Mode.SUBTRACT)
+                    Cylinder(radius=3.2/2.0, height=case_h*3.0, mode=Mode.SUBTRACT)
 
         # Top Knife-Edge Seal
-        with Locations((0, 0, READER_LID_THICK/2.0 + SEAL_RADIUS/2.0)):
-            with BuildPart(mode=Mode.PRIVATE) as seal:
-                with BuildSketch():
-                    Rectangle(BASE_W - 8.0 + SEAL_RADIUS*2, BASE_L - 8.0 + SEAL_RADIUS*2)
-                    Rectangle(BASE_W - 8.0 - SEAL_RADIUS*2, BASE_L - 8.0 - SEAL_RADIUS*2, mode=Mode.SUBTRACT)
-                extrude(amount=SEAL_RADIUS)
-            add(seal.part, mode=Mode.ADD)
+        with Locations((0, 0, case_h/2.0)):
+            with BuildSketch():
+                Rectangle(BASE_W - 8.0 + SEAL_RADIUS*2, BASE_L - 8.0 + SEAL_RADIUS*2)
+                Rectangle(BASE_W - 8.0 - SEAL_RADIUS*2, BASE_L - 8.0 - SEAL_RADIUS*2, mode=Mode.SUBTRACT)
+            extrude(amount=SEAL_RADIUS, mode=Mode.ADD)
 
         # Wire clearance cutouts for internal reader wiring harness
         try:
@@ -195,7 +210,7 @@ def Housing_Case_Reader():
             for name, (pts, radius) in get_wiring_routes().items():
                 pts_local = [(x, y, z - (PUMP_H + PUMP_LID_THICK + 5.0)) for x, y, z in pts]
                 w_cut = route_spline(pts_local, radius + 0.1)
-                add(w_cut, mode=Mode.SUBTRACT)
+                insert(w_cut, mode=Mode.SUBTRACT)
         except Exception:
             pass
 

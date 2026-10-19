@@ -245,8 +245,8 @@ class TestLegacyFeatureParity(unittest.TestCase):
         case = Housing_Case_Reader()
         self.assertTrue(case.is_valid)
         bb = case.bounding_box()
-        # Top knife-edge seal should extend slightly above READER_LID_THICK/2
-        self.assertGreater(bb.max.Z, READER_LID_THICK / 2.0 - 0.01)
+        # Top knife-edge seal should extend slightly above READER_CASE_H/2
+        self.assertGreater(bb.max.Z, READER_CASE_H / 2.0 - 0.01)
 
         # Base case footprint width/length must not exceed 115.0mm (no feet sticking out past -57.5 or +57.5)
         self.assertLessEqual(bb.size.X, 115.1, "Housing_Case_Reader X width exceeds 115mm (feet floating outside)")

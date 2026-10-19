@@ -261,13 +261,12 @@ def run_standoff_clearance_check():
     from src.assembly import route_tubing
 
     # Recreate the 4 standoff cylinders at their assembly positions
-    # From housing.py: standoff_h=20, radius=3.0, at corners of PCB_W x PCB_L inset 2mm
     # Housing_Case_Reader is placed at Z = PUMP_H + PUMP_LID_THICK + 5.0 in full assembly
     reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
-    standoff_h = 20.0
+    standoff_h = 5.0
     standoff_r = 6.0 / 2.0
-    # Z origin in Housing_Case_Reader: base at -READER_LID_THICK/2.0 + WALL
-    standoff_z = reader_z_base + (-READER_LID_THICK / 2.0 + WALL + standoff_h / 2.0)
+    # Z origin in Housing_Case_Reader: base at -READER_CASE_H/2.0 + WALL
+    standoff_z = reader_z_base + (-READER_CASE_H / 2.0 + WALL + standoff_h / 2.0)
 
     standoff_positions = []
     for mx in [-35.0, 35.0]:
@@ -306,7 +305,7 @@ def run_internal_clearance_check():
 
     # Position the cartridge stack at its assembly location inside the reader
     reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
-    z_lid = 30.0  # From assembly.py: lid top surface
+    z_lid = 25.0 + READER_CASE_H / 2.0  # From assembly.py: lid top surface
     z_stack = reader_z_base + z_lid
 
     # Build the cartridge stack at assembly position
