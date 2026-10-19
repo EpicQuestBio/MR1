@@ -244,8 +244,8 @@ class TestLegacyFeatureParity(unittest.TestCase):
         case = Housing_Case_Reader()
         self.assertTrue(case.is_valid)
         bb = case.bounding_box()
-        # Top knife-edge seal should extend slightly above READER_LID_THICK/2
-        self.assertGreater(bb.max.Z, READER_LID_THICK / 2.0 - 0.01)
+        # Top knife-edge seal should extend slightly above READER_CASE_H/2
+        self.assertGreater(bb.max.Z, READER_CASE_H / 2.0 - 0.01)
 
     def test_ptfe_interposer_features(self):
         """
