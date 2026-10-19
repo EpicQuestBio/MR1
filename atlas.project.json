@@ -66,7 +66,7 @@
       },
       "pogo_interface": {
         "target_ref": "J_POGO1",
-        "pin_count": 6,
+        "pin_count": 12,
         "pitch_mm": 5.0,
         "contact_force_n": 0.8,
         "gold_plating_microinches": 50,

@@ -58,7 +58,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertEqual(int_atlas.get("path"), "Interposer/Interposer.kicad_pcb")
         self.assertEqual(int_atlas.get("schematic_path"), "Interposer/Interposer.kicad_sch")
         self.assertIn("pogo_interface", int_atlas)
-        self.assertEqual(int_atlas["pogo_interface"]["pin_count"], 6)
+        self.assertEqual(int_atlas["pogo_interface"]["pin_count"], 12)
         self.assertIn("electrochemical_cell", int_atlas)
         self.assertIn("4-electrode", int_atlas["electrochemical_cell"]["configuration"])
         self.assertIn("positive", int_atlas["electrochemical_cell"]["working_terminal"])
@@ -84,7 +84,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertNotIn(ref, refs, f"Active component or colliding concentric ring {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "J_POGO1"]
+        required = ["H1", "H2", "H3", "H4", "J_POGO1"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 
@@ -159,12 +159,17 @@ class TestInterposerKiCad(unittest.TestCase):
         pass
 
         self.assertIn("J_POGO1", sch_txt)
-        self.assertIn("H1", sch_txt)
+        for h in ["H1", "H2", "H3", "H4"]:
+            self.assertIn(f'"{h}"', sch_txt, f"Mounting / fluid hole {h} must be in Interposer schematic")
         self.assertNotIn("E1", sch_txt)
         self.assertIn("J1", sch_txt)
         self.assertIn("J2", sch_txt)
         self.assertIn("J10", sch_txt)
         self.assertIn("J11", sch_txt)
+
+        # Check all 12 pins of J_POGO1 in Interposer schematic
+        for pin_num in range(1, 13):
+            self.assertIn(f'(pin "{pin_num}"', sch_txt, f"Pin {pin_num} must be in J_POGO1 in Interposer schematic")
         pass
         pass
         pass # pass # self.assertIn("WE_POS", sch_txt)

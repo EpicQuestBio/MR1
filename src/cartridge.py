@@ -51,18 +51,18 @@ def PogoPinHoles():
 
             pads.extend(manual_parse('footprints:PogoPin_Target_6Pin_Array', pcb_data))
             pads.extend(manual_parse('footprints:PogoPin_Target_6Pin_Distributed', pcb_data))
+            pads.extend(manual_parse('footprints:PogoPin_Target_12Pin_Distributed', pcb_data))
             unique_pads = []
             for p in pads:
                 if p not in unique_pads: unique_pads.append(p)
             pads = unique_pads
         except Exception as e:
             print(f'Error parsing pogo pins: {e}')
-    # Ensure baseline pogo pin landing locations are present
-    for x_sign in [1, -1]:
-        for x_offset in [1.5, 6.5, 11.5]:
-            pt = (x_sign * x_offset, POGO_Y)
-            if pt not in pads:
-                pads.append(pt)
+    # Ensure baseline 12 pogo pin landing locations are present
+    for x in [-11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0]:
+        pt = (x, POGO_Y)
+        if pt not in pads:
+            pads.append(pt)
     with BuildSketch(mode=Mode.PRIVATE) as p:
         for pad in pads:
             with Locations(pad):
