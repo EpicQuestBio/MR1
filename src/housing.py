@@ -165,6 +165,18 @@ def Housing_Case_Reader():
         if t_edges:
             fillet(t_edges, radius=1.0)
 
+        # Feet Dimples (Truncated sphere)
+        with BuildPart(mode=Mode.PRIVATE) as dimple_tpl:
+            Sphere(radius=13.0/2.0)
+            with Locations((0, 0, -3.5/2.0 + 0.1/2.0)):
+                Cylinder(radius=15.0/2.0, height=3.5 + 0.1, mode=Mode.INTERSECT)
+        dimple_shape = dimple_tpl.part
+
+        for x_sign in [-1, 1]:
+            for y_sign in [-1, 1]:
+                loc = Location((x_sign * (BASE_W/2.0 - FEET_INSET), y_sign * (BASE_L/2.0 - FEET_INSET), -READER_LID_THICK/2.0))
+                add(dimple_shape.moved(loc), mode=Mode.ADD)
+
         # PCB Standoffs (Floor / Bottom Lid)
         standoff_h = 5.0
         standoff_center_z = -case_h/2.0 + WALL + standoff_h/2.0
@@ -221,9 +233,11 @@ def Housing_Lid_Reader():
     lid_thick = 25.0
     ceiling_thick = 5 # Thin ceiling under hex socket leaves 24mm tall hollow bucket
     neck_length = 25.2
-    neck_r = NECK_OD / 2.0
+    outer_thread_od = 74.5
+    depth = THREAD_DEPTH # 4.75 mm depth
+    neck_r = outer_thread_od / 2.0 # 37.25 mm (outer thread radius)
+    neck_core_r = neck_r - depth   # 32.5 mm (core neck radius)
     pitch = CAP_THREAD_PITCH
-    depth = 1.6
     inset_depth = 2.5
     inset_height = 15.0
 
@@ -259,21 +273,21 @@ def Housing_Lid_Reader():
         with Locations((0, 0, 2.5)):
             Cone(bottom_radius=neck_r + 2.5, top_radius=neck_r, height=5.0)
 
-        # 6. Neck cylinder (Z: 5 to 5 + neck_length)
+        # 6. Neck cylinder core (Z: 5 to 5 + neck_length)
         with Locations((0, 0, 5.0 + neck_length / 2.0)):
-            Cylinder(radius=neck_r, height=neck_length)
+            Cylinder(radius=neck_core_r, height=neck_length)
 
-        # 7. External Helical Thread (M75 x 8mm pitch)
+        # 7. External Helical Thread (74.5mm outer OD x 4.75mm depth x 8mm pitch)
         with BuildLine():
             path = Helix(pitch=pitch, height=neck_length, radius=neck_r)
         with Locations((0, 0, 5.0)):
             with BuildSketch(Plane.XZ) as s:
                 with Locations((neck_r, 0)):
                     pts = [
-                        (-depth / 2.0, -pitch * 0.22),
-                        (depth / 2.0, -pitch * 0.10),
-                        (depth / 2.0, pitch * 0.10),
-                        (-depth / 2.0, pitch * 0.22)
+                        (-depth, -pitch * 0.22),
+                        (0, -pitch * 0.10),
+                        (0, pitch * 0.10),
+                        (-depth, pitch * 0.22)
                     ]
                     Polygon(pts)
             sweep(sections=s.sketch, path=path, mode=Mode.ADD)
