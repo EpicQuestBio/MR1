@@ -11,9 +11,9 @@ def Torque_Cap_Inner():
     retention_h = CAP_RETENTION_H # 2.0
     flange_r = INNER_CAP_OD / 2.0 # 40.7 (D = 81.4)
     body_r = (NECK_OD + 4.0) / 2.0 # 39.5 (D = 79.0)
-    thread_r = (NECK_OD + 1.0) / 2.0 # 38.0 (D = 76.0)
+    thread_r = 37.75 # (74.5 + 1.0) / 2.0 = 37.75 mm (ID = 75.5mm)
     pitch = CAP_THREAD_PITCH # 8.0
-    depth = 1.6
+    depth = THREAD_DEPTH # 4.75 mm
     pipette_d = PIPETTE_HOLE_D # 25.0
     teeth_count = TORQUE_TEETH_COUNT # 24
 
@@ -48,10 +48,10 @@ def Torque_Cap_Inner():
         with BuildSketch(Plane.XZ) as s:
             with Locations((thread_r, 0)):
                 pts = [
-                    (0, -pitch * 0.25),
-                    (-depth, -pitch * 0.12),
-                    (-depth, pitch * 0.12),
-                    (0, pitch * 0.25)
+                    (0, -pitch * 0.22),
+                    (-depth, -pitch * 0.10),
+                    (-depth, pitch * 0.10),
+                    (0, pitch * 0.22)
                 ]
                 Polygon(pts)
         sweep(sections=s.sketch, path=path, mode=Mode.ADD)
