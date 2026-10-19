@@ -240,12 +240,27 @@ class TestLegacyFeatureParity(unittest.TestCase):
         Verify Housing_Case_Reader features:
         1. Top knife-edge seal matching lid groove
         2. Corner mounting screw holes
+        3. Feet dimples located at ±(BASE_W/2 - FEET_INSET) = ±42.5mm and bounds within 115x115mm
         """
         case = Housing_Case_Reader()
         self.assertTrue(case.is_valid)
         bb = case.bounding_box()
         # Top knife-edge seal should extend slightly above READER_LID_THICK/2
         self.assertGreater(bb.max.Z, READER_LID_THICK / 2.0 - 0.01)
+
+        # Base case footprint width/length must not exceed 115.0mm (no feet sticking out past -57.5 or +57.5)
+        self.assertLessEqual(bb.size.X, 115.1, "Housing_Case_Reader X width exceeds 115mm (feet floating outside)")
+        self.assertLessEqual(bb.size.Y, 115.1, "Housing_Case_Reader Y length exceeds 115mm (feet floating outside)")
+
+        # Verify 4 feet dimples exist at (±42.5, ±42.5) on the bottom face
+        feet_x = BASE_W / 2.0 - FEET_INSET  # 42.5 mm
+        feet_y = BASE_L / 2.0 - FEET_INSET  # 42.5 mm
+        for xs in [-feet_x, feet_x]:
+            for ys in [-feet_y, feet_y]:
+                probe = Solid.make_cylinder(1.0, 2.0).move(Location((xs, ys, -READER_LID_THICK / 2.0 - 1.0)))
+                inter = case.intersect(probe)
+                vol = inter.volume if hasattr(inter, "volume") else sum(s.volume for s in inter)
+                self.assertGreater(vol, 0.1, f"Foot dimple not found at ({xs}, {ys}) on bottom face")
 
     def test_ptfe_interposer_features(self):
         """
