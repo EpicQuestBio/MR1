@@ -1,5 +1,6 @@
 from build123d import *
 from src.constants import *
+from src.common import generate_helical_thread
 import math
 
 def Threaded_Luer_Adapter(render_threads=False):
@@ -15,14 +16,15 @@ def Threaded_Luer_Adapter(render_threads=False):
             h = 5.0
             r = 9.4 / 2.0
             depth = 0.5
-            with BuildLine():
-                path = Helix(pitch=pitch, height=h, radius=r)
+            thread = generate_helical_thread(
+                pitch=pitch,
+                depth=depth,
+                length=h,
+                core_radius=r - depth,
+                is_internal=False
+            )
             with Locations((0, 0, 0.5)):
-                with BuildSketch(Plane.XZ) as s:
-                    with Locations((r, 0)):
-                        pts = [(-depth / 2.0, -pitch * 0.25), (depth / 2.0, 0), (-depth / 2.0, pitch * 0.25)]
-                        Polygon(pts)
-                sweep(sections=s.sketch, path=path, mode=Mode.ADD)
+                insert(thread, mode=Mode.ADD)
 
         # Hex Flange
         with Locations((0, 0, 6.0)):

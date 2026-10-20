@@ -1,6 +1,6 @@
 from build123d import *
 from src.constants import *
-from src.common import Weep_Duct_Holes
+from src.common import Weep_Duct_Holes, generate_helical_thread
 import math
 
 def Housing_Pump_Case(pump_type=PUMP_TYPE):
@@ -278,19 +278,15 @@ def Housing_Lid_Reader():
             Cylinder(radius=neck_core_r, height=neck_length)
 
         # 7. External Helical Thread (74.5mm outer OD x 4.75mm depth x 8mm pitch)
-        with BuildLine():
-            path = Helix(pitch=pitch, height=neck_length, radius=neck_r)
+        thread = generate_helical_thread(
+            pitch=pitch,
+            depth=depth,
+            length=neck_length,
+            core_radius=neck_core_r,
+            is_internal=False
+        )
         with Locations((0, 0, 5.0)):
-            with BuildSketch(Plane.XZ) as s:
-                with Locations((neck_r, 0)):
-                    pts = [
-                        (-depth, -pitch * 0.22),
-                        (0, -pitch * 0.10),
-                        (0, pitch * 0.10),
-                        (-depth, pitch * 0.22)
-                    ]
-                    Polygon(pts)
-            sweep(sections=s.sketch, path=path, mode=Mode.ADD)
+            insert(thread, mode=Mode.ADD)
 
         # 8. Inner Hex Socket Cutout (61mm across corners) starting cleanly at Z = 0.0
         with Locations((0, 0, 0.0)):
