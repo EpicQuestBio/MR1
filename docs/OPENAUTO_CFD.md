@@ -22,7 +22,7 @@ Historically, hardware development for such instruments suffers from severe engi
 **OpenAuto-CFD** bridges these disparate domains into a unified, automated co-design framework. By centralizing all physical specifications into a structured project manifest ([`openauto.project.json`](file:///home/loki/Projects/daemon-pore/openauto.project.json)), OpenAuto-CFD drives:
 1. **Multiphysics Co-Simulation:** Verifying fluid transport, hydrodynamic shear stress, trans-membrane burst pressures, and electrical translocation current.
 2. **KiCad Action Plugin & CLI Verification:** Directly inspecting KiCad PCB Editor projects (`pcbnew`) and CI/CD pipelines to guarantee closed Edge.Cuts continuity, dimensional envelope limits, footprint net mappings, and port keep-outs.
-3. **Interactive 3D Visualizer:** Providing real-time 3D CadQuery/Build123d visualization (`ocp_vscode`), photorealistic 360° orbital animations (`scripts/render_flythrough.py`), WireViz wiring/tubing schematics, and live browser oscilloscope telemetry.
+3. **Interactive 3D Visualizer:** Providing real-time 3D CadQuery/Build123d visualization (`ocp_viewer`), photorealistic 360° orbital animations (`scripts/render_flythrough.py`), WireViz wiring/tubing schematics, and live browser oscilloscope telemetry.
 
 ```mermaid
 flowchart TD
@@ -35,7 +35,7 @@ flowchart TD
 
     subgraph Engines ["OpenAuto-CFD Engine & Tooling"]
         KP["KiCad Action Plugin & CLI<br>(plugins/openauto_cfd_plugin.py)"]
-        VIS["3D Visualizer & Inspector<br>(src/assembly.py + ocp_vscode)"]
+        VIS["3D Visualizer & Inspector<br>(src/assembly.py + ocp_viewer)"]
         COSIM["CFD & Multiphysics Co-Sim<br>(Hagen-Poiseuille, Membrane Safety)"]
         WV["WireViz Harness Generator<br>(scripts/export_manager.py)"]
     end
@@ -118,9 +118,9 @@ OpenAuto-CFD enforces co-design clearance between the electrochemical sensing el
 
 The repository includes a complete 3D visualization and simulation suite, enabling developers to interactively inspect mechanical clearances, fluidic tubing paths, and electrical interconnects before manufacturing.
 
-### 3.1 Interactive 3D CadQuery / Build123d Visualizer (`ocp_vscode`)
+### 3.1 Interactive 3D CadQuery / Build123d Visualizer (`ocp_viewer`)
 
-The primary interactive 3D visualizer is implemented in [`src/assembly.py`](file:///home/loki/Projects/daemon-pore/src/assembly.py) using `ocp_vscode`.
+The primary interactive 3D visualizer is implemented in [`src/assembly.py`](file:///home/loki/Projects/daemon-pore/src/assembly.py) using `ocp_viewer`.
 
 #### How to Launch the Visualizer
 You can launch the visualizer through any of the following convenient commands:

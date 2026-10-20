@@ -4,7 +4,7 @@
 
 # Parametric 3D CAD & 2D Profile Generation
 build123d>=0.5.0
-ocp_vscode
+ocp_viewer
 
 # Electrical Wiring Harness & Fluidic Tubing Documentation
 wireviz>=0.4.1

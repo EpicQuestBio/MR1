@@ -75,7 +75,7 @@ fi
 PY_VER=$(${PYTHON_CMD} -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')")
 echo -e "${GREEN}[OK]${NC} (${PYTHON_CMD} v${PY_VER})"
 
-# 2. Python Packages Verification (build123d, ocp_vscode, wireviz)
+# 2. Python Packages Verification (build123d, ocp_viewer, wireviz)
 echo -n "Checking build123d in environment... "
 if ${PYTHON_CMD} -c "import build123d" >/dev/null 2>&1; then
     echo -e "${GREEN}[OK]${NC}"
@@ -84,8 +84,8 @@ else
     ${PYTHON_CMD} -m pip install -q -r "${REPO_ROOT}/requirements.txt"
 fi
 
-echo -n "Checking ocp_vscode in environment... "
-if ${PYTHON_CMD} -c "import ocp_vscode" >/dev/null 2>&1; then
+echo -n "Checking ocp_viewer in environment... "
+if ${PYTHON_CMD} -c "import ocp_viewer" >/dev/null 2>&1; then
     echo -e "${GREEN}[OK]${NC}"
 else
     echo -e "${YELLOW}[NOT FOUND]${NC} Installing via requirements.txt..."
@@ -145,6 +145,6 @@ echo -e "\n${GREEN}Environment verification completed successfully.${NC}"
 echo "You can now run: ./scripts/export_all.sh --all"
 
 if [ "${LAUNCH_VIEWER}" = "yes" ]; then
-    echo -e "\n${BLUE}>> Launching ocp_vscode standalone viewer...${NC}"
-    ${PYTHON_CMD} -m ocp_vscode &
+    echo -e "\n${BLUE}>> Launching ocp_viewer standalone viewer...${NC}"
+    ${PYTHON_CMD} -m ocp_viewer &
 fi

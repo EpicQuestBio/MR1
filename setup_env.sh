@@ -104,7 +104,7 @@ fi
 echo -e "\n${BLUE}--- Installed Packages in VENV ---${NC}"
 "${VENV_PYTHON}" -c "
 import sys
-for pkg in ['build123d', 'ocp_vscode', 'wireviz', 'platformio']:
+for pkg in ['build123d', 'ocp_viewer', 'wireviz', 'platformio']:
     try:
         mod = __import__(pkg)
         ver = getattr(mod, '__version__', 'installed')
