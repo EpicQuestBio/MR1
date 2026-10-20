@@ -1,5 +1,89 @@
 from build123d import *
 from src.constants import *
+import math
+
+def generate_helical_thread(
+    pitch: float,
+    depth: float,
+    length: float,
+    core_radius: float,
+    is_internal: bool = False,
+    flank_angle: float = 60.0,
+    overlap: float = 0.3,
+    taper_length: float | None = None
+) -> Part:
+    """Generates a perfectly formed helical thread (trapezoidal profile with smooth
+    lead-in/lead-out tapers and solid core overlap).
+
+    Args:
+        pitch: Thread pitch in mm.
+        depth: Radial depth/height of the thread profile (mm).
+        length: Total axial height of the threaded section (mm).
+        core_radius: Radius of the core shaft cylinder (for external threads) or inner bore (for internal threads).
+        is_internal: If True, sweeps thread ridge inward from core_radius. If False, sweeps outward.
+        flank_angle: Included angle of trapezoidal thread profile in degrees (default 60 deg).
+        overlap: Radial penetration depth into the core cylinder (mm) to guarantee seamless boolean union.
+        taper_length: Axial distance at top and bottom over which threads taper smoothly into the core shaft.
+                     Defaults to pitch / 2.0.
+
+    Returns:
+        Part: The swept and tapered helical thread solid (aligned Z: 0 to length).
+    """
+    if taper_length is None:
+        taper_length = pitch / 2.0
+
+    ext_length = length + 2.0 * pitch
+
+    with BuildPart(mode=Mode.PRIVATE) as thread_builder:
+        with BuildPart(mode=Mode.PRIVATE) as ridge_builder:
+            with BuildLine() as path:
+                Helix(pitch=pitch, height=ext_length, radius=core_radius)
+
+            path_wire = path.wire().move(Location((0, 0, -pitch)))
+
+            # Cross-sectional trapezoidal thread profile parameters:
+            root_w = pitch * 0.44
+            crest_w = pitch * 0.20
+
+            # Points defined in local XZ plane relative to core_radius
+            if is_internal:
+                pts = [
+                    (overlap, -root_w / 2.0),
+                    (-depth, -crest_w / 2.0),
+                    (-depth, crest_w / 2.0),
+                    (overlap, root_w / 2.0)
+                ]
+            else:
+                pts = [
+                    (-overlap, -root_w / 2.0),
+                    (depth, -crest_w / 2.0),
+                    (depth, crest_w / 2.0),
+                    (-overlap, root_w / 2.0)
+                ]
+
+            with BuildSketch(Plane.XZ) as s:
+                with Locations((core_radius, 0)):
+                    Polygon(pts)
+
+            thread_ridge = sweep(sections=s.sketch, path=path_wire)
+
+        # Conical trimming body for smooth lead-in and lead-out tapers within [0, length]
+        with BuildPart(mode=Mode.PRIVATE) as cutter:
+            r_inner = core_radius - depth - 0.1 if is_internal else core_radius - overlap - 0.1
+            r_outer = core_radius + overlap + 1.0 if is_internal else core_radius + depth + 1.0
+
+            with Locations((0, 0, 0)):
+                Cone(bottom_radius=r_inner, top_radius=r_outer, height=taper_length, align=(Align.CENTER, Align.CENTER, Align.MIN))
+            with Locations((0, 0, taper_length)):
+                Cylinder(radius=r_outer, height=length - 2.0 * taper_length, align=(Align.CENTER, Align.CENTER, Align.MIN))
+            with Locations((0, 0, length - taper_length)):
+                Cone(bottom_radius=r_outer, top_radius=r_inner, height=taper_length, align=(Align.CENTER, Align.CENTER, Align.MIN))
+
+        trimmed_ridge = thread_ridge.intersect(cutter.part)
+        res = trimmed_ridge[0] if isinstance(trimmed_ridge, ShapeList) else trimmed_ridge
+        insert(res)
+
+    return thread_builder.part
 
 def Circuitry_Cutouts(height=10.0):
     """
@@ -88,4 +172,3 @@ def Weep_Trench_Cutout(height=WEEP_MOAT_DEPTH):
                     make_face()
                 extrude(amount=length/2.0, both=True)
     return p.part
-

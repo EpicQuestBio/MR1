@@ -1,6 +1,7 @@
 from build123d import *
 import math
 from src.constants import *
+from src.common import generate_helical_thread
 
 
 def Torque_Cap_Inner():
@@ -43,18 +44,14 @@ def Torque_Cap_Inner():
             Cylinder(radius=thread_r, height=cap_h + 2.0, mode=Mode.SUBTRACT)
 
         # 5. Helical Internal Thread Ridge (swept inward)
-        with BuildLine():
-            path = Helix(pitch=pitch, height=cap_h, radius=thread_r)
-        with BuildSketch(Plane.XZ) as s:
-            with Locations((thread_r, 0)):
-                pts = [
-                    (0, -pitch * 0.22),
-                    (-depth, -pitch * 0.10),
-                    (-depth, pitch * 0.10),
-                    (0, pitch * 0.22)
-                ]
-                Polygon(pts)
-        sweep(sections=s.sketch, path=path, mode=Mode.ADD)
+        thread = generate_helical_thread(
+            pitch=pitch,
+            depth=depth,
+            length=cap_h,
+            core_radius=thread_r,
+            is_internal=True
+        )
+        insert(thread, mode=Mode.ADD)
 
         # 6. Central pipette access hole
         Cylinder(radius=pipette_d / 2.0, height=cap_h * 3.0, mode=Mode.SUBTRACT)
