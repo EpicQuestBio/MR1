@@ -145,10 +145,14 @@ echo -e "\n${GREEN}Environment verification completed successfully.${NC}"
 echo "You can now run: ./scripts/export_all.sh --all"
 
 if [ "${LAUNCH_VIEWER}" = "yes" ]; then
-    echo -e "\n${BLUE}>> Launching ocp_viewer standalone viewer...${NC}"
-    ${PYTHON_CMD} -m ocp_viewer &
-    echo "Waiting for ocp_viewer server to initialize on port 3939..."
-    sleep 2
+    echo -e "\n${BLUE}>> Preparing ocp_viewer standalone server...${NC}"
+    if ${PYTHON_CMD} -c "import sys, ocp_viewer_core.websocket as ws; sys.exit(0 if ws.port_check(3939) else 1)" 2>/dev/null; then
+        echo -e "${GREEN}[OK]${NC} ocp_viewer server is already running on port 3939."
+    else
+        echo -e "${BLUE}>> Launching ocp_viewer server background process...${NC}"
+        nohup ${PYTHON_CMD} -m ocp_viewer > /dev/null 2>&1 &
+        sleep 2
+    fi
     echo -e "${BLUE}>> Loading MR1 Assembly model into ocp_viewer...${NC}"
     PYTHONPATH="${REPO_ROOT}" ${PYTHON_CMD} "${REPO_ROOT}/src/assembly.py" || true
 fi
