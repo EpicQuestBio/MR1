@@ -263,7 +263,7 @@ See the comprehensive [OpenAuto-CFD Guide](docs/OPENAUTO_CFD.md) for full physic
 
 ## 3D Visualizer & Interactive Inspection
 
-The repository provides a rich multi-layer 3D visualizer powered by `build123d` and `ocp_vscode`:
+The repository provides a rich multi-layer 3D visualizer powered by `build123d` and `ocp_viewer`:
 
 ```bash
 # Launch interactive 3D assembly visualizer
@@ -443,5 +443,5 @@ python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
 - [Weep Moat Interlock Spec](docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md): Leak detection sensor and hardware power cutoff circuitry.
 
 ### Co-Design, Simulation & Tools
-- [OpenAuto-CFD & 3D Visualizer Guide](docs/OPENAUTO_CFD.md): Multiphysics co-simulation, interactive 3D assembly visualizer (`ocp_vscode`), and KiCad action plugin documentation.
+- [OpenAuto-CFD & 3D Visualizer Guide](docs/OPENAUTO_CFD.md): Multiphysics co-simulation, interactive 3D assembly visualizer (`ocp_viewer`), and KiCad action plugin documentation.
 - [OpenAuto Project Manifest](openauto.project.json): Single-source-of-truth hardware manifest linking ECAD, MCAD, fluidics, and harnesses.

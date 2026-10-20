@@ -57,7 +57,7 @@ if (Test-Path $ReqFile) {
 # 5. Check packages
 Write-Host "`n--- Installed Packages in VENV ---" -ForegroundColor Cyan
 & $VenvPython -c "
-for pkg in ['build123d', 'ocp_vscode', 'wireviz', 'platformio']:
+for pkg in ['build123d', 'ocp_viewer', 'wireviz', 'platformio']:
     try:
         mod = __import__(pkg)
         ver = getattr(mod, '__version__', 'installed')

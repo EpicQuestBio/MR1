@@ -184,7 +184,7 @@ def Pump_Module_Assembly():
 
 if __name__ == "__main__":
     try:
-        from ocp_vscode import show
+        from ocp_viewer import show
         reader = Reader_Module_Assembly()
         pump = Pump_Module_Assembly()
         tubes = route_tubing()
@@ -199,5 +199,5 @@ if __name__ == "__main__":
         ])
         show(full_assembly, transparent=True)
     except ImportError:
-        print("ocp_vscode is not installed. To view interactively, run: pip install ocp_vscode")
+        print("ocp_viewer is not installed. To view interactively, run: pip install ocp_viewer")
         print("Assembly generation passed without errors.")

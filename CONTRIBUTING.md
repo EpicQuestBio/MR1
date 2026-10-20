@@ -84,7 +84,7 @@ The project spans five tightly coupled engineering domains. When contributing, p
 ### 5. OpenAuto-CFD & Multiphysics Co-Design (`openauto.project.json`, `plugins/`)
 - **Single Source of Truth**: All PCB dimensions, fluidic channel geometries ($50\,\mu\text{m} \times 25\,\mu\text{m}$), and CAD parts are cataloged in [`openauto.project.json`](openauto.project.json).
 - **KiCad Action Plugin & CLI**: Run `npm run openauto:validate` before committing changes to any `.kicad_pcb` layout. Use `npm run openauto:sync` to reconcile Edge.Cuts dimensions back into the project manifest.
-- **3D Visualizer**: Inspect the complete mechanical, fluidic, and harness assembly interactively via `npm run visualize` or `python src/assembly.py` using `ocp_vscode`.
+- **3D Visualizer**: Inspect the complete mechanical, fluidic, and harness assembly interactively via `npm run visualize` or `python src/assembly.py` using `ocp_viewer`.
 - See [`docs/OPENAUTO_CFD.md`](docs/OPENAUTO_CFD.md) for detailed co-design and CFD documentation.
 
 ---
