@@ -171,6 +171,7 @@ module Housing_Pump_Case(pump_type=Pump_Type) {
     }
 }
 
+// Lid for the pump case - solid top face (no center pass-through hole)
 module Housing_Pump_Lid() {
     lid_thick = pump_lid_thick; // Thicker lid to clear foot dimples
     local_seal_lip_h = 5; // Increased from 2.5 to 5.0 for better engagement

@@ -77,14 +77,12 @@ def Housing_Pump_Case(pump_type=PUMP_TYPE):
 def Housing_Pump_Lid():
     """Lid for the pump case."""
     lid_thick = PUMP_LID_THICK
+    local_seal_lip_h = 5.0
     with BuildPart(mode=Mode.PRIVATE) as p:
         Box(BASE_W + 2*WALL, BASE_L + 2*WALL, lid_thick)
         edges = p.edges().filter_by(Axis.Z)
         if edges:
             fillet(edges, radius=WALL)
-
-        # Center pass-through
-        Cylinder(radius=20.0, height=lid_thick + 2.0, mode=Mode.SUBTRACT)
 
         # Dimples for sensor enclosures (top surface)
         with Locations((0, 0, lid_thick/2.0)):
@@ -102,11 +100,11 @@ def Housing_Pump_Lid():
                     Cylinder(radius=6.0/2.0, height=4.1, mode=Mode.SUBTRACT)
 
         # Bottom Indexing Lip
-        with Locations((0, 0, -lid_thick/2.0 - 2.5)):
-            with BuildPart(mode=Mode.PRIVATE) as lip:
-                Box(BASE_W - 2*WALL - 0.4, BASE_L - 2*WALL - 0.4, 5.0)
-                Box(BASE_W - 2*WALL - 0.4 - 3.0, BASE_L - 2*WALL - 0.4 - 3.0, 5.1, mode=Mode.SUBTRACT)
-            add(lip.part, mode=Mode.ADD)
+        with BuildPart(mode=Mode.PRIVATE) as lip:
+            Box(BASE_W - 2*WALL - 0.4, BASE_L - 2*WALL - 0.4, local_seal_lip_h)
+            Box(BASE_W - 2*WALL - 0.4 - 3.0, BASE_L - 2*WALL - 0.4 - 3.0, local_seal_lip_h + 0.1, mode=Mode.SUBTRACT)
+        with Locations((0, 0, -lid_thick/2.0 - local_seal_lip_h/2.0 + 0.1)):
+            insert(lip.part, mode=Mode.ADD)
 
         # Bottom O-Ring Groove
         with Locations((0, 0, -lid_thick/2.0)):
@@ -115,7 +113,7 @@ def Housing_Pump_Lid():
                     Rectangle(BASE_W - 8.0 + 1.0, BASE_L - 8.0 + 1.0)
                     Rectangle(BASE_W - 8.0 - 1.0, BASE_L - 8.0 - 1.0, mode=Mode.SUBTRACT)
                 extrude(amount=1.5)
-            add(groove.part, mode=Mode.SUBTRACT)
+            insert(groove.part, mode=Mode.SUBTRACT)
 
     return p.part
 
@@ -175,7 +173,7 @@ def Housing_Case_Reader():
         for x_sign in [-1, 1]:
             for y_sign in [-1, 1]:
                 loc = Location((x_sign * (BASE_W/2.0 - FEET_INSET), y_sign * (BASE_L/2.0 - FEET_INSET), -READER_LID_THICK/2.0))
-                add(dimple_shape.moved(loc), mode=Mode.ADD)
+                insert(dimple_shape.moved(loc), mode=Mode.ADD)
 
         # PCB Standoffs (Floor / Bottom Lid)
         standoff_h = 5.0
