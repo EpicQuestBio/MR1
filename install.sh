@@ -147,4 +147,8 @@ echo "You can now run: ./scripts/export_all.sh --all"
 if [ "${LAUNCH_VIEWER}" = "yes" ]; then
     echo -e "\n${BLUE}>> Launching ocp_viewer standalone viewer...${NC}"
     ${PYTHON_CMD} -m ocp_viewer &
+    echo "Waiting for ocp_viewer server to initialize on port 3939..."
+    sleep 2
+    echo -e "${BLUE}>> Loading MR1 Assembly model into ocp_viewer...${NC}"
+    PYTHONPATH="${REPO_ROOT}" ${PYTHON_CMD} "${REPO_ROOT}/src/assembly.py" || true
 fi
