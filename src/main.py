@@ -79,8 +79,9 @@ def export_all():
         "Gasket_Main_DXF": parts_3d["Cast_Nanopore_Wafer_Gasket"],
     }
 
-    # Optional argument to filter parts
-    target = sys.argv[1] if len(sys.argv) > 1 else "all"
+    enable_viewer = any(arg in sys.argv for arg in ("--viewer", "--show", "-v"))
+    cli_args = [arg for arg in sys.argv[1:] if arg not in ("--viewer", "--show", "-v")]
+    target = cli_args[0] if len(cli_args) > 0 else "all"
 
     # Export 3D Solids
     for name, part in parts_3d.items():
@@ -114,6 +115,22 @@ def export_all():
                 print(f"Failed to export DXF {name}: {e}")
 
     print("Export Complete.")
+
+    if enable_viewer:
+        try:
+            from ocp_viewer import show, show_object, set_port
+            set_port(3939)
+            if target in parts_3d:
+                show_object(parts_3d[target], name=target)
+                print(f"Pushed '{target}' to ocp_viewer on port 3939.")
+            else:
+                assembly = Compound(children=list(parts_3d.values()))
+                show(assembly, names=["MR1 Parts Inventory"], transparent=True)
+                print("Pushed 3D parts to ocp_viewer on port 3939.")
+        except ImportError:
+            print("ocp_viewer is not installed. To view interactively, run: pip install ocp_viewer")
+        except Exception as e:
+            print(f"Could not push to ocp_viewer: {e}")
 
 if __name__ == "__main__":
     export_all()

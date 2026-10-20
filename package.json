@@ -18,7 +18,7 @@
     "openauto:validate": "python plugins/openauto_cfd_plugin.py --validate-all",
     "openauto:sync": "python plugins/openauto_cfd_plugin.py --sync",
     "openauto:install-plugin": "python plugins/openauto_cfd_plugin.py --install",
-    "visualize": "python src/assembly.py",
+    "visualize": "bash -c 'if [ -f .venv/bin/python ]; then PYTHONPATH=. .venv/bin/python src/assembly.py; else PYTHONPATH=. python3 src/assembly.py; fi'",
     "render:flythrough": "xvfb-run python3 scripts/render_flythrough.py"
   },
   "repository": {
