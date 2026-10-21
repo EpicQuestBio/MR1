@@ -355,20 +355,5 @@ def Housing_Lid_Reader():
         except Exception:
             pass
 
-        # 16. Internal microfluidic conduit guide channels routing from side ports up into cartridge stack
-        try:
-            from src.assembly import route_spline, get_tubing_routes
-            reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
-            z_stack = reader_z_base + 30.0
-            for name, pts in get_tubing_routes().items():
-                if name == "TUBE_PUMP":
-                    continue
-                # Slice only the internal routing between the bulkhead panel mount and the cartridge stack
-                pts_inside = pts[:4] if name.startswith("TUBE_WASTE") else pts[3:]
-                pts_local = [(x, y, z - z_stack) for x, y, z in pts_inside]
-                t_conduit = route_spline(pts_local, (TUBE_OD / 2.0) + 0.3)
-                add(t_conduit, mode=Mode.SUBTRACT)
-        except Exception:
-            pass
 
     return p.part
