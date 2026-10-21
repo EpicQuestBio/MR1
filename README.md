@@ -60,9 +60,9 @@ pio run --target upload
 
 ## License
 
-This project is released under the **GNU Affero General Public License v3.0 (AGPLv3)**.
+This project is dedicated to the public domain under the **CC0 1.0 Universal (CC0 1.0) Public Domain Dedication**.
 
-Copyright (C) 2026 Lawrence R. Kincheloe III / Molecular Reality Corp.
+Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
 See the `LICENSE` file for the full text.
 
 
@@ -425,7 +425,7 @@ python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Contributor Covenant v2.1 standards and pledge.
 - [SECURITY.md](SECURITY.md): Security vulnerability reporting policy and electrical safety bounds.
 - [CITATION.cff](CITATION.cff): Academic citation metadata for research and publications.
-- [LICENSE](LICENSE): GNU Affero General Public License v3.0 (AGPLv3).
+- [LICENSE](LICENSE): CC0 1.0 Universal (CC0-1.0) Public Domain Dedication.
 
 ### Hardware & Manufacturing Specifications
 - [BOM.md](BOM.md): Complete mechanical, fluidic, PCB, and active electronic bill of materials with sourcing links.
