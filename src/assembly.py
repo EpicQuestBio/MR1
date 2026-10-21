@@ -30,10 +30,12 @@ def get_tubing_routes():
     conduit channels in the housing lid, and up into the hexagonal cartridge stack ports.
     """
     pump_z = PUMP_H / 2.0
-    reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
-    z_lid = 30.0
-    z_stack = reader_z_base + z_lid
-    z_port = z_stack - 13.0
+    reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0  # 77.0 mm
+    z_lid_local = 25.0 + READER_CASE_H / 2.0      # 32.5 mm
+    z_lid = reader_z_base + z_lid_local            # 109.5 mm
+    z_stack = z_lid                                # 109.5 mm
+    z_port = z_lid - 13.0                          # 96.5 mm
+    lid_half_w = BASE_W / 2.0 + (WALL - 2.5)       # 57.5 mm
 
     return {
         # 1. TUBE_PUMP: Buffer reservoir -> Peristaltic pump intake (PharMed BPT, 0.12 m)
@@ -46,41 +48,45 @@ def get_tubing_routes():
         # 2. TUBE_FEED: Pump discharge -> Right-Front bulkhead -> Cartridge Trans inlet (330 deg)
         "TUBE_FEED": [
             (BASE_W / 2.0 + 8.0, -10.0, pump_z),
-            (BASE_W / 2.0 + 26.0, -10.0, pump_z),
-            (BASE_W / 2.0 + 26.0, -20.0, z_port),
-            (BASE_W / 2.0 + 2.5, -20.0, z_port),
-            (42.0, -17.0, 100.5),
-            (22.0, -12.0, 103.0),
-            (17.32, -10.0, z_stack - 0.2),
+            (BASE_W / 2.0 + 35.0, -10.0, pump_z),
+            (BASE_W / 2.0 + 35.0, -20.0, z_port),
+            (lid_half_w + 12.0, -20.0, z_port),
+            (lid_half_w - 20.0, -20.0, z_port),
+            (25.0, -15.0, z_port + 2.0),
+            (19.0, -11.0, z_lid - 5.0),
+            (17.32, -10.0, z_lid - 0.2),
         ],
         # 3. TUBE_TRANS_LINE: Buffer reservoir -> Left-Front bulkhead -> Cartridge Cis inlet (210 deg)
         "TUBE_TRANS_LINE": [
             (-BASE_W / 2.0 - 8.0, -10.0, pump_z + 10.0),
-            (-BASE_W / 2.0 - 26.0, -10.0, pump_z + 10.0),
-            (-BASE_W / 2.0 - 26.0, -20.0, z_port),
-            (-BASE_W / 2.0 - 2.5, -20.0, z_port),
-            (-42.0, -17.0, 100.5),
-            (-22.0, -12.0, 103.0),
-            (-17.32, -10.0, z_stack - 0.2),
+            (-BASE_W / 2.0 - 35.0, -10.0, pump_z + 10.0),
+            (-BASE_W / 2.0 - 35.0, -20.0, z_port),
+            (-(lid_half_w + 12.0), -20.0, z_port),
+            (-(lid_half_w - 20.0), -20.0, z_port),
+            (-25.0, -15.0, z_port + 2.0),
+            (-19.0, -11.0, z_lid - 5.0),
+            (-17.32, -10.0, z_lid - 0.2),
         ],
         # 4. TUBE_WASTE_1: Cis outlet (30 deg) -> Right-Back bulkhead -> Waste vessel
         "TUBE_WASTE_1": [
-            (17.32, 10.0, z_stack - 0.2),
-            (22.0, 12.0, 103.0),
-            (42.0, 17.0, 100.5),
-            (BASE_W / 2.0 + 2.5, 20.0, z_port),
-            (BASE_W / 2.0 + 26.0, 20.0, z_port),
-            (BASE_W / 2.0 + 26.0, 20.0, pump_z),
+            (17.32, 10.0, z_lid - 0.2),
+            (19.0, 11.0, z_lid - 5.0),
+            (25.0, 15.0, z_port + 2.0),
+            (lid_half_w - 20.0, 20.0, z_port),
+            (lid_half_w + 12.0, 20.0, z_port),
+            (BASE_W / 2.0 + 35.0, 20.0, z_port),
+            (BASE_W / 2.0 + 35.0, 20.0, pump_z),
             (BASE_W / 2.0 + 8.0, 20.0, pump_z),
         ],
         # 5. TUBE_WASTE_2: Trans outlet (150 deg) -> Left-Back bulkhead -> Waste vessel
         "TUBE_WASTE_2": [
-            (-17.32, 10.0, z_stack - 0.2),
-            (-22.0, 12.0, 103.0),
-            (-42.0, 17.0, 100.5),
-            (-BASE_W / 2.0 - 2.5, 20.0, z_port),
-            (-BASE_W / 2.0 - 26.0, 20.0, z_port),
-            (-BASE_W / 2.0 - 26.0, 20.0, pump_z),
+            (-17.32, 10.0, z_lid - 0.2),
+            (-19.0, 11.0, z_lid - 5.0),
+            (-25.0, 15.0, z_port + 2.0),
+            (-(lid_half_w - 20.0), 20.0, z_port),
+            (-(lid_half_w + 12.0), 20.0, z_port),
+            (-BASE_W / 2.0 - 35.0, 20.0, z_port),
+            (-BASE_W / 2.0 - 35.0, 20.0, pump_z),
             (-BASE_W / 2.0 - 8.0, 20.0, pump_z),
         ],
     }
