@@ -1,3 +1,7 @@
+# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
+# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
+# SPDX-License-Identifier: CC0-1.0
+
 from build123d import *
 import math
 from src.constants import *
@@ -66,7 +70,7 @@ def PogoPinHoles():
     with BuildSketch(mode=Mode.PRIVATE) as p:
         for pad in pads:
             with Locations(pad):
-                Circle(0.5)
+                Circle(0.9)
     return p.sketch
 
 def PCB_Main_Reader_2D():
