@@ -73,16 +73,24 @@ def find_wireviz():
 
 
 def find_pio():
-    """Locate PlatformIO core on PATH or in Python Scripts/venv."""
-    on_path = shutil.which("pio") or shutil.which("pio.exe")
-    if on_path:
-        return on_path
+    """Locate PlatformIO core in Python venv or on PATH."""
     venv_bin = Path(sys.executable).parent / "pio"
     if venv_bin.exists():
         return str(venv_bin)
     venv_exe = Path(sys.executable).parent / "pio.exe"
     if venv_exe.exists():
         return str(venv_exe)
+
+    root_venv_bin = REPO_ROOT / ".venv" / "bin" / "pio"
+    if root_venv_bin.exists():
+        return str(root_venv_bin)
+    root_venv_exe = REPO_ROOT / ".venv" / "Scripts" / "pio.exe"
+    if root_venv_exe.exists():
+        return str(root_venv_exe)
+
+    on_path = shutil.which("pio") or shutil.which("pio.exe")
+    if on_path:
+        return on_path
     return None
 
 
