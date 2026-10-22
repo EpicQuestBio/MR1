@@ -66,6 +66,8 @@ The project spans five tightly coupled engineering domains. When contributing, p
 
 ### 2. Electronics & Printed Circuit Boards (`MR1/`, `Amplifier/`, `Interposer/`, `Pump/`)
 - Schematics and layouts are authored in **KiCad**.
+- **Dynamic Gerber Generation**: Board files and fabrication deliverables are generated dynamically via `scripts/export_manager.py`. Raw Gerber zip files are not committed during active development on every minor change.
+- **Artifact & Gerber Release Policy**: When creating hardware releases or physical fabrication runs, use `make release-gerbers VERSION=vX.Y.Z` or `python scripts/export_manager.py --release-tag vX.Y.Z` to generate tagged release bundles. See [`EXPORTS.md`](EXPORTS.md#artifact--gerber-release-policy) for full details.
 - **Edge.Cuts Topology**: All PCB board outlines must form strictly continuous, closed 2-regular loops (0 endpoints with degree $\ne 2$, 0 floating lines).
 - **Ultra-Low Leakage**: The LMP7721 transimpedance amplifier input node operates at femtoampere current levels ($10^{-15}\text{ A}$). High-impedance traces (`WS_CIS`, `>PORE_AMP`) must be surrounded by driven `GUARD` rings on all layers without solder mask apertures over guarded areas.
 - **Paths**: Never save hardcoded absolute machine paths (`/home/...` or `C:\...`) in `.kicad_pcb` or `.kicad_pro` project settings.

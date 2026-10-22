@@ -1,3 +1,7 @@
+# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
+# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
+# SPDX-License-Identifier: CC0-1.0
+
 """
 build_interposer_kicad.py
 
@@ -123,10 +127,7 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
                 pogo_added = True
             continue
 
-        if ref in active_refs:
-            for u in re.findall(r'\(uuid\s+"([^"]+)"\)', fp_txt):
-                removed_fp_uuids.add(u)
-        elif ref in retained_refs:
+        if ref in retained_refs:
             if ref in ("J1", "J2"):
                 fp_txt = re.sub(r'\(net\s+"[^"]*"\)', '(net "GNDA")', fp_txt)
                 fp_txt = re.sub(r'(\(pad\s+"1"[\s\S]*?\(net\s+)"[^"]*"', r'\1">PORE_AMP"', fp_txt)
@@ -137,7 +138,8 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
                 fp_txt = re.sub(r'(\(pad\s+"2"[\s\S]*?\(net\s+)"[^"]*"', r'\1"GUARD_TRANS"', fp_txt)
             retained_fp_blocks.append(fp_txt)
         else:
-            retained_fp_blocks.append(fp_txt)
+            for u in re.findall(r'\(uuid\s+"([^"]+)"\)', fp_txt):
+                removed_fp_uuids.add(u)
 
     if not pogo_added:
         retained_fp_blocks.append(POGO_12PIN_PCB_FP)
