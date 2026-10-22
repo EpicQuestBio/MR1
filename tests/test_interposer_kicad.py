@@ -129,7 +129,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertIn(f'(symbol "{s}"', sym_txt, f"Symbol {s} must be defined in Interposer.kicad_sym")
 
         # Validate 4-electrode Gamry pin names in PogoPin_Target_12Pin_Distributed
-        for pin_name in ["WE_POS", "WS_CIS", "RE_TRANS", "CE_GNDA", "GNDA", "GUARD_TRANS", "GUARD"]:
+        for pin_name in ["CE_GNDA", "RE_TRANS", ">PORE", "GNDA", "GUARD", "WS_CIS", "GUARD_WIDE", "WS_CIS_WIDE", "WEEP_SENSE"]:
             self.assertIn(f'(name "{pin_name}"', sym_txt, f"Pin {pin_name} must be in PogoPin_Target_12Pin_Distributed")
 
         table_txt = table_file.read_text(encoding="utf-8")
