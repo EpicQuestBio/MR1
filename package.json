@@ -38,7 +38,7 @@
     "transimpedance-amplifier"
   ],
   "author": "Lawrence R. Kincheloe III / Molecular Reality Corp.",
-  "license": "CC0-1.0",
+  "license": "AGPL-3.0-or-later",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/LokiMetaSmith/mr1/issues"

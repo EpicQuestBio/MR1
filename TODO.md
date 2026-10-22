@@ -309,10 +309,6 @@ This document outlines the step-by-step strategy for porting the MR1 Nanopore Re
 ## 22. External Pump Controller KiCad Board Architecture (Stretch Goal Roadmap)
 - [ ] Mechanical Form Factor:
     - Sized to fit `Housing_Pump_Case` floor plate ($68.0 \times 88.0\text{ mm}$) with M3 mounting holes matching internal standoffs.
-- [ ] Footprint Generator & Component Completion:
-    - Fix generated STM32 QFN-48 stub (currently a 1-pad placeholder) to expand full 48-lead QFN pad array and exposed thermal ground pad.
-    - Add missing passive component footprints (0603/0402 decoupling caps, pull-up resistors, crystal oscillators) and U5 active regulator footprint.
-    - Associate 3D STEP/WRL models with all Pump board footprints for CAD collision verification.
 - [ ] USB-C Cable Interface & Power Delivery:
     - USB-C receptacle accepting power and data from Reader module.
     - SBU1 / SBU2 lines routed to local I2C slave interface.
@@ -323,10 +319,4 @@ This document outlines the step-by-step strategy for porting the MR1 Nanopore Re
 - [ ] Peripheral Sensors:
     - I2C pressure transducer / bubble sensor interfaces.
 
-## 23. PCB Routing & Fabrication Milestones
-- [ ] Complete copper trace routing and ground plane pours for `MR1` Main Reader Board (111 footprints, placement complete).
-- [ ] Complete copper trace routing and ground plane pours for `Amplifier` Cartridge Board (48 footprints, placement complete).
-- [ ] Complete remaining copper trace routing segments for `Interposer` PTFE Board (33 footprints, 9 segments routed).
-- [ ] Complete copper trace routing and ground plane pours for `Pump` Controller Board (18 footprints).
-- [ ] Execute tagged Gerber release workflow (`python scripts/export_manager.py --release-tag <version>` / `make release-gerbers VERSION=<version>`) prior to first physical fabrication run.
 

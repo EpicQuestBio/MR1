@@ -107,33 +107,7 @@ exports/
 
 ---
 
-## 3. Artifact & Gerber Release Policy
-
-To prevent binary bloat and git repository bloat while ensuring complete reproducibility and historical recovery of physical PCB manufacturing files, the MR1 project enforces a two-tier artifact management policy:
-
-### Active Development Policy (`main` branch)
-* **Dynamic Generation On-Demand**: Gerber packages (`*_Gerbers.zip`), NC drill files, BOMs, Pick & Place coordinates, and 3D CAD models are dynamically generated on-demand using `python scripts/export_manager.py --all` or `make export`.
-* **Transient Local Artifacts**: Raw generated Gerber zips and layer files in `exports/` are generated dynamically. Developers and CI pipelines verify hardware changes via `python scripts/export_manager.py --check` and `python tests/test_exports_e2e.py` without committing binary Gerber diffs on every minor commit.
-
-### Hardware Release Milestone & Fabrication Policy
-* **Milestone Releases & Physical Fab Runs**: Whenever a board revision is finalized for fabrication or a project version milestone is cut, the release manager executes the automated release export command:
-  ```bash
-  # Generate deterministic release artifacts and tag instructions
-  python scripts/export_manager.py --release-tag v1.0.0
-  # Or via Makefile:
-  make release-gerbers VERSION=v1.0.0
-  ```
-* **Deterministic Release Bundles**: The release command executes the full export suite and stages deterministic release archives in `releases/<version>/`:
-  - `releases/<version>/MR1_Gerbers_<sha>.zip`
-  - `releases/<version>/Amplifier_Gerbers_<sha>.zip`
-  - `releases/<version>/Pump_Gerbers_<sha>.zip`
-  - `releases/<version>/Interposer_Gerbers_<sha>.zip`
-  - `releases/<version>/SHA256SUMS.txt` (Cryptographic verification manifest)
-* **Git Tagging & Release Recovery**: The release manager applies an annotated git release tag (e.g., `git tag -a hw-v1.0.0-revA -m "Hardware Fabrication Release v1.0.0"`). The exact fab-ready files are attached to the GitHub Release and saved in the release bundle, guaranteeing that every physical circuit board ever manufactured can be recovered alongside its exact generating source commit.
-
----
-
-## 4. Detecting Breaking Changes (For Agents & Humans)
+## 3. Detecting Breaking Changes (For Agents & Humans)
 
 The repository maintains an automated drift detection mechanism using `exports/manifest.json`.
 
@@ -158,7 +132,7 @@ python tests/test_exports_e2e.py
 
 ---
 
-## 5. Manufacturing & Ordering Guides
+## 4. Manufacturing & Ordering Guides
 
 ### PCB Fabrication (JLCPCB / PCBWay / OSHPark)
 * **MR1 Main Board**:

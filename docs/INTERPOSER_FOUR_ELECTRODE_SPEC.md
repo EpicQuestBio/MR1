@@ -4,7 +4,7 @@
 **References:**
 - ACS Journal of Physical Chemistry C: *"Method of the Four-Electrode Electrochemical Cell"* (J. Phys. Chem. C 2017, 121, 8, 4112–4119) [DOI: 10.1021/acs.jpcc.6b12543]
 - Gamry Instruments: *"Two-, Three-, and Four-Electrode Experiments"* (Application Note)
-- Target Substrate: 0.8 mm Rogers RO4350B ($\epsilon_r \approx 3.48$, $\tan\delta = 0.0037$) or PTFE ($\epsilon_r = 2.1$, $\tan\delta = 0.0002$, ENIG Finish)
+- Target Substrate: 0.8 mm Rogers RO4350B / PTFE ($\epsilon_r = 2.1$, $\tan\delta = 0.0002$, ENIG Finish)
 
 ---
 
@@ -130,7 +130,7 @@ classDiagram
 
 ---
 
-## 5. 12-Pin Pogo Interface Pinout Mapping
+## 5. 6-Pin Pogo Interface Pinout Mapping
 
 To mate with the Mill-Max spring pin array header on the Amplifier board, the Interposer's 6 gold target pads (`J_POGO1`, rotated $180^\circ$ at $Y=73.5\text{ mm}$) map symmetrically to the Cis and Trans channels:
 
@@ -198,18 +198,10 @@ See `docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md` for complete rework directives and
 
 ## 7. Manufacturing & Cleaning Specifications
 
-1. **Substrate Material**: Rogers RO4350B ($\epsilon_r \approx 3.48$) or pure PTFE laminate ($0.8\text{ mm}$ thickness, $\epsilon_r = 2.1$, surface resistivity $> 10^{14}\,\Omega/\Box$).
+1. **Substrate Material**: Rogers RO4350B or pure PTFE laminate ($0.8\text{ mm}$ thickness, $\epsilon_r = 2.1$, surface resistivity $> 10^{14}\,\Omega/\Box$).
 2. **Plating**: Electroless Nickel Immersion Gold (**ENIG**), minimum $50\,\mu\text{in}$ soft gold over $150\,\mu\text{in}$ nickel to resist 1M KCl chlorination and corrosion.
 3. **Solder Mask**: Top and bottom annular rings and diamond pocket must be **free of solder mask** (mask-defined or metal-defined with $0.1\text{ mm}$ expansion) to prevent polymer outgassing and bio-fouling.
 4. **Plasma / Solvent Cleaning**: Prior to chip insertion, interposer must undergo:
    - 10 min sonication in HPLC-grade isopropanol.
    - 10 min sonication in $18.2\text{ M}\Omega\cdot\text{cm}$ Milli-Q water.
    - 3 min air/oxygen plasma etching at $30\text{ W}$ to render the PTFE and gold surfaces hydrophilically active for bubble-free priming.
-
----
-
-## 8. Operational Range & Pore Selection Guidelines
-
-- **Default High-Gain Configuration:** The default ultra-high-gain TIA configuration ($R_{f,\text{eff}} = 1\text{ G}\Omega$, $V_{\text{max}} = \pm 2.048\text{ V}$) is engineered specifically for sub-$5\text{ nm}$ apertures drawing under $\pm 2.048\text{ nA}$ of total baseline current.
-- **Pores Drawing $> 2\text{ nA}$:** Operating pores larger than $5\text{ nm}$ at standard bias voltages ($> 100\text{ mV}$) will exceed the $\pm 2.048\text{ nA}$ dynamic threshold, causing the front-end amplifier to saturate against the power rails.
-- **Scaling To Larger Pores:** To measure larger apertures ($5\text{ nm} - 100\text{ nm}$) or higher currents ($\mu\text{A}$ to $\text{mA}$ regime), developers must either lower the applied transmembrane bias voltage or swap/switch the primary feedback resistor to a lower value ($100\text{ M}\Omega$, $10\text{ M}\Omega$, or $1\text{ M}\Omega$), or use external gain adjustment resistors.

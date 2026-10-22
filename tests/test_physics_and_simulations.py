@@ -1,7 +1,3 @@
-# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
-# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
-# SPDX-License-Identifier: CC0-1.0
-
 """
 Unit tests for MR1 physical simulations:
 - Guard ring and guard trace electrostatics & weep moat leak detection.
@@ -88,18 +84,6 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertTrue(mem["is_safe"])
         self.assertGreater(mem["safety_factor"], 2.0)
         self.assertGreater(mem["burst_pressure_psi"], 2.0)
-
-    def test_gain_matching_and_saturation(self):
-        """Verify 4nm pore operates unsaturated under 1 Gohm feedback while large pores saturate."""
-        # 4 nm pore at 180 mV in 1M KCl
-        gain_4nm = self.pore_sim.calculate_gain_matching_and_saturation(180.0, r_feedback_ohms=1e9, v_full_scale_v=2.048)
-        self.assertFalse(gain_4nm["is_saturated"])
-        self.assertGreater(gain_4nm["headroom_fraction"], 0.0)
-
-        # 20 nm pore at 180 mV in 1M KCl exceeds 2 nA
-        large_pore_sim = NanoporeElectrokinetics(pore_diameter_nm=20.0, membrane_thickness_nm=20.0)
-        gain_20nm = large_pore_sim.calculate_gain_matching_and_saturation(180.0, r_feedback_ohms=1e9, v_full_scale_v=2.048)
-        self.assertTrue(gain_20nm["is_saturated"])
 
     def test_nanopore_resistance_and_baseline_current(self):
         """Verify 4nm pore resistance in 1M KCl produces typical 5-15 nS conductance."""

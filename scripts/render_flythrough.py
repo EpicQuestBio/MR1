@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
-# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
-# SPDX-License-Identifier: CC0-1.0
-
 import os
 import sys
 import math
@@ -412,19 +408,47 @@ def build_assembled_device_components():
     return components
 
 def setup_plotter():
-    """Configures PyVista Plotter with studio PBR lighting and background."""
-    plotter = pv.Plotter(off_screen=True, window_size=[1280, 720])
-    plotter.set_background('#1A1D20', top='#2D3238')  # Studio dark gradient background
+    """Configures PyVista Plotter with multi-point PBR studio lighting and 1080p canvas."""
+    plotter = pv.Plotter(off_screen=True, window_size=[1920, 1080])
+    plotter.set_background('#0E1114', top='#1B2026')  # Deep studio gradient background
     plotter.enable_anti_aliasing('ssaa')
 
-    # Studio Lighting Setup
+    # Enhanced Multi-Point Studio Lighting Setup
     plotter.remove_all_lights()
-    key_light = pv.Light(position=(200, 200, 300), focal_point=(0, 0, 50), intensity=1.2, color='white')
-    fill_light = pv.Light(position=(-200, -150, 150), focal_point=(0, 0, 50), intensity=0.5, color='#B0C4DE')
-    rim_light = pv.Light(position=(0, -300, -100), focal_point=(0, 0, 50), intensity=0.8, color='#4682B4')
+
+    key_light = pv.Light(
+        position=(250, 250, 350),
+        focal_point=(0, 0, 30),
+        intensity=1.5,
+        color='#FFF9F2',
+        light_type='scenelight'
+    )
+    fill_light = pv.Light(
+        position=(-250, -200, 200),
+        focal_point=(0, 0, 30),
+        intensity=0.8,
+        color='#8CB4F8',
+        light_type='scenelight'
+    )
+    rim_light = pv.Light(
+        position=(0, -350, 250),
+        focal_point=(0, 0, 30),
+        intensity=1.2,
+        color='#E2E8F0',
+        light_type='scenelight'
+    )
+    overhead_light = pv.Light(
+        position=(0, 0, 450),
+        focal_point=(0, 0, 0),
+        intensity=0.6,
+        color='#FFFFFF',
+        light_type='scenelight'
+    )
+
     plotter.add_light(key_light)
     plotter.add_light(fill_light)
     plotter.add_light(rim_light)
+    plotter.add_light(overhead_light)
 
     return plotter
 
@@ -548,7 +572,7 @@ def render_shot1_reverse_explosion(output_webm, output_gif, num_frames=120):
 
     plotter.close()
 
-    imageio.mimsave(output_webm, frames, fps=30, codec='vp9')
+    imageio.mimsave(output_webm, frames, fps=30, codec='vp9', macro_block_size=1)
     imageio.mimsave(output_gif, frames, fps=30)
     print("Shot 1 Complete!\n")
 
@@ -591,7 +615,7 @@ def render_shot2_nanopore_zoom(output_webm, output_gif, num_frames=120):
 
     plotter.close()
 
-    imageio.mimsave(output_webm, frames, fps=30, codec='vp9')
+    imageio.mimsave(output_webm, frames, fps=30, codec='vp9', macro_block_size=1)
     imageio.mimsave(output_gif, frames, fps=30)
     print("Shot 2 Complete!\n")
 
@@ -640,7 +664,7 @@ def render_shot3_scale_showcase(output_webm, output_gif, num_frames=120):
         plotter.close()
         print(f"  Shot 3: Completed scale {scale_idx + 1}/{len(scales)} ({title})")
 
-    imageio.mimsave(output_webm, frames, fps=30, codec='vp9')
+    imageio.mimsave(output_webm, frames, fps=30, codec='vp9', macro_block_size=1)
     imageio.mimsave(output_gif, frames, fps=30)
     print("Shot 3 Complete!\n")
 
@@ -648,7 +672,7 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="MR1 Photorealistic Fly-Through & Multi-Scale Renderer")
     parser.add_argument("--test", action="store_true", help="Run fast dry-run test (10 frames/shot)")
-    parser.add_argument("--frames", type=int, default=120, help="Frames per shot (default: 120)")
+    parser.add_argument("--frames", type=int, default=240, help="Frames per shot (default: 240)")
     args = parser.parse_args()
 
     num_frames = 10 if args.test else args.frames

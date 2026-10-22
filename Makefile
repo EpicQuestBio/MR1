@@ -15,17 +15,12 @@ else
     PYTHON ?= python
 endif
 
-VERSION ?= v1.0.0
-
-.PHONY: all export export-cad export-kicad export-wiring export-firmware release-gerbers manifest check test test-e2e clean help
+.PHONY: all export export-cad export-kicad export-wiring export-firmware manifest check test test-e2e clean help
 
 all: export
 
 export:
 	$(PYTHON) scripts/export_manager.py --all
-
-release-gerbers:
-	$(PYTHON) scripts/export_manager.py --release-tag $(VERSION)
 
 export-cad:
 	$(PYTHON) scripts/export_manager.py --cad
@@ -61,7 +56,6 @@ help:
 	@echo "  make export-kicad    Export KiCad Gerbers, Drill, POS, BOM, and PDF schematics"
 	@echo "  make export-wiring   Export WireViz wiring harness and fluid tubing diagrams"
 	@echo "  make export-firmware Compile and stage ESP32-S3 firmware binaries"
-	@echo "  make release-gerbers Bundle release Gerbers into releases/\$$(VERSION)/"
 	@echo "  make manifest        Generate exports/manifest.json with SHA-256 hashes"
 	@echo "  make check           Verify that all indexed deliverables exist on disk"
 	@echo "  make test            Run unit tests and CAD collision clearance checks"
