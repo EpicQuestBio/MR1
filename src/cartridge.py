@@ -396,16 +396,52 @@ def Fitted_Amplifier_Gasket():
 
     return p.part
 
+def Rigid_Backing_Anvil(thickness=ANVIL_THICK):
+    """Rigid Delrin / Anodized Aluminum Backing Anvil (55.0 x 51.962 x 6.0 mm).
+    Clamps the 2-layer PTFE interposer directly against point loads from the 12 pogo pins
+    (~0.8 N per pin, ~9.6 N total load) to prevent viscoelastic cold flow (creep)
+    and copper trace fatigue or microcracking over time.
+    Provides uniform distributed clamping pressure across the interposer.
+    """
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        with BuildSketch():
+            insert(Hex_Base_Sketch())
+        extrude(amount=thickness)
+
+        # Subtract Cutouts
+        insert(Circuitry_Cutouts(height=thickness * 3.0), mode=Mode.SUBTRACT)
+
+        # Ports (4x)
+        for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
+            ang_rad = math.radians(a)
+            px = PORT_RADIUS * math.cos(ang_rad)
+            py = PORT_RADIUS * math.sin(ang_rad)
+            with Locations((px, py, thickness / 2.0)):
+                Cylinder(radius=NPT_1_8_TAP_D / 2.0, height=thickness + 1.0, mode=Mode.SUBTRACT)
+
+        # Weep duct pass-through
+        with Locations((0, 0, thickness / 2.0)):
+            insert(Weep_Duct_Holes(height=thickness + 2.0), mode=Mode.SUBTRACT)
+
+        # Pogo Pin Clearance
+        with Locations((0, 0, thickness / 2.0)):
+            with BuildSketch():
+                insert(PogoPinHoles())
+                offset(amount=0.5)
+            extrude(amount=thickness + 2.0, mode=Mode.SUBTRACT)
+
+    return p.part
+
 def Bottom_Pusher_Plate():
     """Bottom TPU Seal plate. Exact match to golden STL (55.0 x 51.962 x 3.0 mm)."""
     height = 3.0
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
         extrude(amount=height)
 
         # Subtract Cutouts
-        add(Circuitry_Cutouts(height=height*3.0), mode=Mode.SUBTRACT)
+        insert(Circuitry_Cutouts(height=height*3.0), mode=Mode.SUBTRACT)
 
         # Ports (4x)
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
@@ -419,12 +455,12 @@ def Bottom_Pusher_Plate():
 
         # Weep duct pass-through
         with Locations((0, 0, PP_H/2.0)):
-            add(Weep_Duct_Holes(height=PP_H + 2.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=PP_H + 2.0), mode=Mode.SUBTRACT)
 
         # Pogo Pin Clearance
         with Locations((0, 0, height/2.0)):
             with BuildSketch():
-                add(PogoPinHoles())
+                insert(PogoPinHoles())
                 offset(amount=0.5) # Expand holes slightly for tolerance/clearance
             extrude(amount=height + 2.0, mode=Mode.SUBTRACT)
 

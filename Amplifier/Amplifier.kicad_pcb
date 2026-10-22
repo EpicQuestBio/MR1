@@ -52,8 +52,8 @@
 			(layer "dielectric 1"
 				(type "core")
 				(color "PTFE natural")
-				(thickness 0.71)
-				(material "PTFE")
+				(thickness 1.5)
+				(material "Rogers RO3003 / PTFE")
 				(epsilon_r 2.1)
 				(loss_tangent 0.0002)
 			)
@@ -60087,4 +60087,67 @@
 		)
 	)
 	(embedded_fonts no)
+
+	(gr_poly
+		(pts
+			(xy 159.0 56.0) (xy 171.0 56.0) (xy 171.0 63.0) (xy 159.0 63.0)
+		)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Mask")
+		(uuid "c3d4e5f6-a7b8-9012-cdef-123456789012")
+	)
+	(gr_poly
+		(pts
+			(xy 159.0 56.0) (xy 171.0 56.0) (xy 171.0 63.0) (xy 159.0 63.0)
+		)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill yes)
+		(layer "B.Mask")
+		(uuid "d4e5f6a7-b8c9-0123-def1-234567890123")
+	)
+	(zone
+		(keepout
+			(tracks allowed)
+			(vias allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints allowed)
+		)
+		(layers "B.Cu")
+		(uuid "a1b2c3d4-e5f6-7890-abcd-ef1234567890")
+		(hatch edge 0.5)
+		(polygon
+			(pts
+				(xy 159.0 56.0) (xy 171.0 56.0) (xy 171.0 63.0) (xy 159.0 63.0)
+			)
+		)
+	)
+	(zone
+		(net "/GUARD")
+		(layers "B.Cu")
+		(uuid "b2c3d4e5-f6a7-8901-bcde-f12345678901")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0.15)
+		)
+		(min_thickness 0.15)
+		(filled_polygon
+			(layer "B.Cu")
+			(pts
+				(xy 159.5 56.5) (xy 170.5 56.5) (xy 170.5 62.5) (xy 159.5 62.5)
+			)
+		)
+		(polygon
+			(pts
+				(xy 159.5 56.5) (xy 170.5 56.5) (xy 170.5 62.5) (xy 159.5 62.5)
+			)
+		)
+	)
 )
