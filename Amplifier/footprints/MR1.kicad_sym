@@ -999,6 +999,32 @@
 		)
 		(embedded_fonts no)
 	)
+		(symbol "PogoPin_SpringHeader_12Pin_Distributed"
+		(pin_names (offset 1.016))
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
+		(property "Reference" "J_POGO1" (at 0 20.32 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "PogoPin_SpringHeader_12Pin_Distributed" (at 0 17.78 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "footprints:PogoPin_SpringHeader_12Pin_Distributed" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "https://www.mill-max.com" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "Description" "Mill-Max Precision Spring-Loaded Target Header (12-Pin Distributed Array, 0.8N contact force)" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(symbol "PogoPin_SpringHeader_12Pin_Distributed_0_1"
+			(rectangle (start -10.16 16.51) (end 10.16 -16.51) (stroke (width 0.254) (type default)) (fill (type background)))
+		)
+		(symbol "PogoPin_SpringHeader_12Pin_Distributed_1_1"
+			(pin passive line (at -15.24 13.97 0) (length 5.08) (name "CE_GNDA" (effects (font (size 1.0 1.0)))) (number "1" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 11.43 0) (length 5.08) (name "RE_TRANS" (effects (font (size 1.0 1.0)))) (number "2" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 8.89 0) (length 5.08) (name ">PORE" (effects (font (size 1.0 1.0)))) (number "3" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 6.35 0) (length 5.08) (name "GNDA" (effects (font (size 1.0 1.0)))) (number "4" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 3.81 0) (length 5.08) (name "GUARD" (effects (font (size 1.0 1.0)))) (number "5" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 1.27 0) (length 5.08) (name "WS_CIS" (effects (font (size 1.0 1.0)))) (number "6" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 -1.27 0) (length 5.08) (name "GUARD" (effects (font (size 1.0 1.0)))) (number "7" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 -3.81 0) (length 5.08) (name "GNDA" (effects (font (size 1.0 1.0)))) (number "8" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 -6.35 0) (length 5.08) (name "GUARD_WIDE" (effects (font (size 1.0 1.0)))) (number "9" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 -8.89 0) (length 5.08) (name "WS_CIS_WIDE" (effects (font (size 1.0 1.0)))) (number "10" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 -11.43 0) (length 5.08) (name "GNDA" (effects (font (size 1.0 1.0)))) (number "11" (effects (font (size 1.0 1.0)))))
+			(pin passive line (at -15.24 -13.97 0) (length 5.08) (name "WEEP_SENSE" (effects (font (size 1.0 1.0)))) (number "12" (effects (font (size 1.0 1.0)))))
+		)
+	)
 	(symbol "PogoPin_SpringHeader_6Pin_Array"
 		(pin_names
 			(offset 1.016)

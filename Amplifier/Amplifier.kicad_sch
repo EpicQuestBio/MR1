@@ -2951,7 +2951,7 @@
 					)
 				)
 			)
-			(property "Value" "PogoPin_SpringHeader_6Pin_Array"
+			(property "Value" "PogoPin_SpringHeader_12Pin_Distributed"
 				(at 0 11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2961,7 +2961,7 @@
 					)
 				)
 			)
-			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Array"
+			(property "Footprint" "footprints:PogoPin_SpringHeader_12Pin_Distributed"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -17610,7 +17610,7 @@
 		)
 	)
 	(symbol
-		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Array")
+		(lib_id "MR1:PogoPin_SpringHeader_12Pin_Distributed")
 		(at 46.99 30.48 0)
 		(unit 1)
 		(body_style 1)
@@ -17632,7 +17632,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "PogoPin_SpringHeader_6Pin_Array"
+		(property "Value" "PogoPin_SpringHeader_12Pin_Distributed"
 			(at 58.42 31.7499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17643,7 +17643,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "footprints:PogoPin_Target_6Pin_Distributed"
+		(property "Footprint" "footprints:PogoPin_SpringHeader_12Pin_Distributed"
 			(at 46.99 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -17694,6 +17694,12 @@
 		(pin "6"
 			(uuid "0596123b-74f6-44b6-a00d-ffb2904bdc37")
 		)
+		(pin "7" (uuid "c1234567-0007-4000-8000-000000000007"))
+		(pin "8" (uuid "c1234567-0008-4000-8000-000000000008"))
+		(pin "9" (uuid "c1234567-0009-4000-8000-000000000009"))
+		(pin "10" (uuid "c1234567-0010-4000-8000-000000000010"))
+		(pin "11" (uuid "c1234567-0011-4000-8000-000000000011"))
+		(pin "12" (uuid "c1234567-0012-4000-8000-000000000012"))
 		(instances
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
@@ -19501,3 +19507,33 @@
 	)
 	(embedded_fonts no)
 )
+
+	(label "WS_CIS_WIDE" (at 40.64 125.0 180) (effects (font (size 1.27 1.27))) (uuid "d1234567-0001-4000-8000-000000000001"))
+	(label "GUARD_WIDE" (at 40.64 130.0 180) (effects (font (size 1.27 1.27))) (uuid "d1234567-0002-4000-8000-000000000002"))
+	(symbol (lib_id "Amplifier_Operational:OPA192") (at 100.0 125.0 0) (unit 1)
+		(uuid "d1234567-0003-4000-8000-000000000003")
+		(property "Reference" "U17" (at 101.6 120.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "OPA192" (at 101.6 122.5 0) (effects (font (size 1.27 1.27))))
+	)
+	(symbol (lib_id "Device:R") (at 100.0 115.0 90) (unit 1)
+		(uuid "d1234567-0004-4000-8000-000000000004")
+		(property "Reference" "Rf2" (at 100.0 112.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100k" (at 100.0 118.0 0) (effects (font (size 1.27 1.27))))
+	)
+	(symbol (lib_id "Device:C") (at 100.0 110.0 90) (unit 1)
+		(uuid "d1234567-0005-4000-8000-000000000005")
+		(property "Reference" "Cf2" (at 100.0 107.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "15pF" (at 100.0 109.0 0) (effects (font (size 1.27 1.27))))
+	)
+
+	(wire (pts (xy 40.64 125.0) (xy 90.0 125.0)) (stroke (width 0) (type default)) (uuid "e1234567-0001-4000-8000-000000000001"))
+	(wire (pts (xy 90.0 125.0) (xy 90.0 115.0)) (stroke (width 0) (type default)) (uuid "e1234567-0002-4000-8000-000000000002"))
+	(wire (pts (xy 90.0 115.0) (xy 95.0 115.0)) (stroke (width 0) (type default)) (uuid "e1234567-0003-4000-8000-000000000003"))
+	(wire (pts (xy 90.0 115.0) (xy 90.0 110.0)) (stroke (width 0) (type default)) (uuid "e1234567-0004-4000-8000-000000000004"))
+	(wire (pts (xy 90.0 110.0) (xy 95.0 110.0)) (stroke (width 0) (type default)) (uuid "e1234567-0005-4000-8000-000000000005"))
+	(wire (pts (xy 105.0 115.0) (xy 110.0 115.0)) (stroke (width 0) (type default)) (uuid "e1234567-0006-4000-8000-000000000006"))
+	(wire (pts (xy 105.0 110.0) (xy 110.0 110.0)) (stroke (width 0) (type default)) (uuid "e1234567-0007-4000-8000-000000000007"))
+	(wire (pts (xy 110.0 115.0) (xy 110.0 125.0)) (stroke (width 0) (type default)) (uuid "e1234567-0008-4000-8000-000000000008"))
+	(wire (pts (xy 110.0 110.0) (xy 110.0 115.0)) (stroke (width 0) (type default)) (uuid "e1234567-0009-4000-8000-000000000009"))
+	(wire (pts (xy 110.0 125.0) (xy 120.0 125.0)) (stroke (width 0) (type default)) (uuid "e1234567-0010-4000-8000-000000000010"))
+	(label "Path2_OUT" (at 120.0 125.0 0) (effects (font (size 1.27 1.27))) (uuid "e1234567-0011-4000-8000-000000000011"))

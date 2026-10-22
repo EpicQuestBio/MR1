@@ -167,6 +167,50 @@ class NanoporeElectrokinetics:
             "is_saturated": is_saturated,
             "headroom_fraction": max(0.0, 1.0 - (abs(i_base_na) / i_max_na)),
         }
+    def calculate_dual_path_performance(
+        self,
+        bias_voltage_mv: float = 100.0,
+        r_f1_ohms: float = 1e9,
+        r_f2_ohms: float = 100e3,
+        c_f2_farads: float = 15e-12,
+        stage2_gain_path1: float = 11.0,
+        stage2_gain_path2: float = 1.0,
+        v_full_scale_v: float = 2.048,
+    ) -> Dict[str, float]:
+        """
+        Calculates dual-path performance (Path 1 Sub-5nm LMP7721 vs Path 2 200nm OPA192 Wideband).
+        """
+        import math
+        res = self.calculate_pore_resistance()
+        base = self.calculate_baseline_current(bias_voltage_mv)
+        i_pore_a = base["i_baseline_na"] * 1e-9
+
+        # Path 1 (LMP7721)
+        v_tia_path1 = abs(i_pore_a) * r_f1_ohms
+        v_stage2_path1 = v_tia_path1 * stage2_gain_path1
+        sat_path1 = (v_tia_path1 > v_full_scale_v) or (v_stage2_path1 > v_full_scale_v)
+
+        # Path 2 (OPA192 / Wideband)
+        v_tia_path2 = abs(i_pore_a) * r_f2_ohms
+        v_stage2_path2 = v_tia_path2 * stage2_gain_path2
+        sat_path2 = v_stage2_path2 > v_full_scale_v
+        headroom_path2 = max(0.0, 1.0 - (v_stage2_path2 / v_full_scale_v))
+        f_3db_path2_hz = 1.0 / (2.0 * math.pi * r_f2_ohms * c_f2_farads)
+
+        return {
+            "pore_diameter_nm": self.d_p,
+            "bias_mv": bias_voltage_mv,
+            "r_pore_ohms": res["r_total_mohm"] * 1e6,
+            "i_pore_na": base["i_baseline_na"],
+            "v_tia_path1_v": v_tia_path1,
+            "v_stage2_path1_v": v_stage2_path1,
+            "sat_path1": sat_path1,
+            "v_tia_path2_v": v_tia_path2,
+            "v_stage2_path2_v": v_stage2_path2,
+            "sat_path2": sat_path2,
+            "headroom_path2": headroom_path2,
+            "f_3db_path2_hz": f_3db_path2_hz,
+        }
 
 
 if __name__ == "__main__":
@@ -174,21 +218,12 @@ if __name__ == "__main__":
     print("=== Nanopore Electrical Properties ===")
     res = sim.calculate_pore_resistance()
     print(f"Lumen Resistance:  {res['r_lumen_mohm']:.2f} MOhm")
-    print(f"Access Resistance: {res['r_access_total_mohm']:.2f} MOhm (Fraction: {res['access_resistance_fraction'] * 100:.1f}%)")
+    print(f"Access Resistance: {res['r_access_total_mohm']:.2f} MOhm")
     print(f"Total Resistance:  {res['r_total_mohm']:.2f} MOhm | Conductance: {res['conductance_ns']:.2f} nS")
 
-    print("\n=== Baseline Current & Field (V_bias = 180 mV) ===")
-    base = sim.calculate_baseline_current(180.0)
-    print(f"Baseline Current:  {base['i_baseline_pa']:.1f} pA ({base['i_baseline_na']:.3f} nA)")
-    print(f"Lumen E-Field:     {base['e_field_v_m'] / 1e6:.2f} MV/m ({base['e_field_mv_nm']:.2f} mV/nm)")
-
-    print("\n=== DNA Translocation Blockades ===")
-    ds = sim.calculate_dna_blockade(180.0, "dsDNA")
-    print(f"dsDNA Blockade:    Delta I = {ds['blockade_depth_pa']:.1f} pA ({(ds['fractional_blockade'] * 100):.1f}% reduction) -> Residual = {ds['residual_current_pa']:.1f} pA")
-    ss = sim.calculate_dna_blockade(180.0, "ssDNA")
-    print(f"ssDNA Blockade:    Delta I = {ss['blockade_depth_pa']:.1f} pA ({(ss['fractional_blockade'] * 100):.1f}% reduction) -> Residual = {ss['residual_current_pa']:.1f} pA")
-
-    print("\n=== Electrophoretic Capture Dynamics ===")
-    cap = sim.calculate_capture_radius_and_rate(180.0, 10.0)
-    print(f"Capture Radius:    {cap['capture_radius_um']:.1f} um")
-    print(f"Capture Frequency: {cap['capture_rate_hz']:.1f} events/s (Inter-event time: {cap['mean_inter_event_time_ms']:.1f} ms)")
+    print("=== Dual-Path Wide-Pore Performance (200 nm Pore) ===")
+    sim_200 = NanoporeElectrokinetics(pore_diameter_nm=200.0, membrane_thickness_nm=40.0)
+    perf = sim_200.calculate_dual_path_performance(bias_voltage_mv=100.0)
+    print(f"200 nm Open Pore Current: {perf['i_pore_na']:.1f} nA")
+    print(f"Path 1 Saturation: {perf['sat_path1']} | Path 2 Saturation: {perf['sat_path2']}")
+    print(f"Path 2 -3dB Bandwidth: {perf['f_3db_path2_hz']/1000.0:.1f} kHz")

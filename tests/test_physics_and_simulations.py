@@ -89,6 +89,39 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertGreater(mem["safety_factor"], 2.0)
         self.assertGreater(mem["burst_pressure_psi"], 2.0)
 
+
+    def test_wide_pore_200nm_dual_path_performance(self):
+        """Verify 200 nm pore operates unsaturated on Path 2 (Wideband 100k TIA) while saturating Path 1."""
+        wide_pore_sim = NanoporeElectrokinetics(pore_diameter_nm=200.0, membrane_thickness_nm=40.0)
+
+        # 1. 200 nm pore resistance in 1M KCl (500 kohm - 1 Mohm)
+        res_200 = wide_pore_sim.calculate_pore_resistance()
+        self.assertGreaterEqual(res_200["r_total_mohm"] * 1e6, 300e3)
+        self.assertLessEqual(res_200["r_total_mohm"] * 1e6, 1.5e6)
+
+        # 2. At 100 mV bias, open pore current is ~200 nA
+        perf_100mv = wide_pore_sim.calculate_dual_path_performance(bias_voltage_mv=100.0)
+        self.assertGreaterEqual(perf_100mv["i_pore_na"], 100.0)
+        self.assertLessEqual(perf_100mv["i_pore_na"], 500.0)
+
+        # Path 1 saturates on 200 nm pore
+        self.assertTrue(perf_100mv["sat_path1"])
+
+        # Path 2 operates unsaturated with > 90% headroom
+        self.assertFalse(perf_100mv["sat_path2"])
+        self.assertGreater(perf_100mv["headroom_path2"], 0.90)
+
+        # Path 2 output voltage at 200 nA is 20 mV
+        self.assertAlmostEqual(perf_100mv["v_stage2_path2_v"], perf_100mv["i_pore_na"] * 1e-9 * 100e3, delta=0.005)
+
+        # Path 2 bandwidth (-3dB) at Rf=100k, Cf=15pF is ~106 kHz
+        self.assertAlmostEqual(perf_100mv["f_3db_path2_hz"], 106103.0, delta=1000.0)
+
+        # 3. At 1.0V bias, open pore current is ~1-2 uA
+        perf_1v = wide_pore_sim.calculate_dual_path_performance(bias_voltage_mv=1000.0)
+        self.assertGreaterEqual(perf_1v["i_pore_na"], 1000.0)
+        self.assertFalse(perf_1v["sat_path2"])
+
     def test_gain_matching_and_saturation(self):
         """Verify 4nm pore operates unsaturated under 1 Gohm feedback while large pores saturate."""
         # 4 nm pore at 180 mV in 1M KCl
