@@ -60,9 +60,9 @@ pio run --target upload
 
 ## License
 
-This project is released under the **GNU Affero General Public License v3.0 (AGPLv3)**.
+This project is dedicated to the public domain under the **CC0 1.0 Universal (CC0 1.0) Public Domain Dedication**.
 
-Copyright (C) 2026 Lawrence R. Kincheloe III / Molecular Reality Corp.
+Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
 See the `LICENSE` file for the full text.
 
 
@@ -149,7 +149,7 @@ mr1/
 │   ├── assembly.py               # Full 3D assembly & 3D spline routing sweeps
 │   ├── collision_check.py        # Automated 3D BREP collision & clearance checker
 │   └── constants.py              # Central engineering & physical parameters
-├── MR1/                          # KiCad 10.0 project for Main Reader Board (6-Layer)
+├── MR1/                          # KiCad 10.0 project for Main Reader Board (4-Layer)
 ├── Amplifier/                    # KiCad 10.0 project for Cartridge Transimpedance Amp (2-Layer)
 ├── Pump/                         # KiCad 10.0 project for Pump Controller & USB-PD Hub (4-Layer)
 ├── MR1_firmware/                 # ESP32-S3 C++ firmware (PlatformIO)
@@ -237,7 +237,7 @@ make test-e2e          # Run end-to-end deliverables validation test
 - **30 STL Meshes**: Ready for 3D printing (SLA resin molds, TPU pusher plates, PETG housings, and PTFE interposer models).
 - **22 STEP Models**: Parametric BREP solids for mechanical assembly and CAD exchange.
 - **13 DXF Profiles**: 2D profiles for CNC milling polypropylene sheet stock and synchronizing KiCad PCB `Edge.Cuts` (including `Interposer_DXF.dxf` and `Plate_2_Channel_DXF.dxf`).
-- **Fab-Ready PCB Archives**: `MR1_Gerbers.zip` (6-layer main board) and `Amplifier_Gerbers.zip` (2-layer amplifier).
+- **Fab-Ready PCB Archives**: `MR1_Gerbers.zip` (4-layer main board) and `Amplifier_Gerbers.zip` (2-layer amplifier).
 - **Manufacturing Documentation**: Pick-and-Place (POS) coordinates, BOM CSVs, and multi-sheet schematic PDFs.
 - **Harness Documentation**: WireViz diagrams for internal wiring and 1/8" barb fluidic tubing.
 - **ESP32-S3 Firmware**: Staged `firmware.bin`, `bootloader.bin`, and `partitions.bin`.
@@ -358,8 +358,12 @@ python run_tests.py
 ## Hardware & Electronics
 
 - **MR1 Main Controller Board** (`MR1/`):
-  - 6-Layer stackup with dedicated ground and power planes.
-  - ESP32-S3-WROOM-1 MCU with native high-speed USB CDC.
+  - 4-Layer stackup:
+    - Layer 1 (Top Signal): Component placement, USB D+/D-, SPI traces to FPC, DAC outputs
+    - Layer 2 (Ground Plane): Split into GNDA (Quiet Analog Ground) and GND (Digital Ground)
+    - Layer 3 (Power Plane): Split into Analog Power (VDDA, VSSA) and Digital Power (+3V3, VBUS)
+    - Layer 4 (Bottom Signal): Secondary routing, low-speed housekeeping, and auxiliary pours
+  - ESP32-S3-MINI-1U MCU with native high-speed USB CDC.
   - Dedicated SPI bus for high-speed ADC sampling.
   - Dual MCP4822 12-bit DACs providing bipolar pore bias voltages (-1.587V to +1.587V) and unblocking pulses.
   - Conductive weep-hole leak detection sensing on GPIO1.
@@ -443,7 +447,7 @@ python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Contributor Covenant v2.1 standards and pledge.
 - [SECURITY.md](SECURITY.md): Security vulnerability reporting policy and electrical safety bounds.
 - [CITATION.cff](CITATION.cff): Academic citation metadata for research and publications.
-- [LICENSE](LICENSE): GNU Affero General Public License v3.0 (AGPLv3).
+- [LICENSE](LICENSE): CC0 1.0 Universal (CC0-1.0) Public Domain Dedication.
 
 ### Hardware & Manufacturing Specifications
 - [BOM.md](BOM.md): Complete mechanical, fluidic, PCB, and active electronic bill of materials with sourcing links.
