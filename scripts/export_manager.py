@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
+# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
+# SPDX-License-Identifier: CC0-1.0
+
 """
 MR1 Nanopore Reader - Project Export Manager
 Orchestrates all project deliverable exports:
@@ -283,6 +287,79 @@ def export_firmware(verbose=True):
     return True
 
 
+def get_git_short_sha():
+    """Retrieve git short commit SHA or 'unknown' if not a git repo."""
+    try:
+        res = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True)
+        if res.returncode == 0:
+            return res.stdout.strip()
+    except Exception:
+        pass
+    return "unknown"
+
+
+def archive_release(version, verbose=True):
+    """Bundle board Gerbers, drill, and BOM into a release archive with SHA256SUMS.txt."""
+    if verbose:
+        print(f"\n[RELEASE] Archiving Hardware Release Artifacts for version: {version}...")
+
+    # Ensure KiCad exports are built
+    export_kicad(verbose=verbose)
+
+    sha = get_git_short_sha()
+    release_dir = REPO_ROOT / "releases" / version
+    release_dir.mkdir(parents=True, exist_ok=True)
+
+    boards = ["MR1", "Amplifier", "Pump", "Interposer"]
+    release_files = []
+
+    for b_name in boards:
+        src_zip = EXPORTS_DIR / f"{b_name}_Gerbers.zip"
+        dst_zip_name = f"{b_name}_Gerbers_{sha}.zip"
+        dst_zip = release_dir / dst_zip_name
+
+        if src_zip.exists():
+            shutil.copy2(src_zip, dst_zip)
+            release_files.append(dst_zip)
+            if verbose:
+                print(f"  [OK] Bundled {b_name} -> releases/{version}/{dst_zip_name}")
+        else:
+            print(f"  [WARN] Source Gerber zip {src_zip.name} not found!")
+
+        bom_src = EXPORTS_DIR / "bom" / f"{b_name}_BOM.csv"
+        if bom_src.exists():
+            dst_bom = release_dir / f"{b_name}_BOM_{sha}.csv"
+            shutil.copy2(bom_src, dst_bom)
+            release_files.append(dst_bom)
+
+        sch_src = EXPORTS_DIR / "schematics" / f"{b_name}.pdf"
+        if sch_src.exists():
+            dst_sch = release_dir / f"{b_name}_Schematic_{sha}.pdf"
+            shutil.copy2(sch_src, dst_sch)
+            release_files.append(dst_sch)
+
+    # Generate SHA256SUMS.txt
+    sha256_path = release_dir / "SHA256SUMS.txt"
+    with open(sha256_path, "w", encoding="utf-8") as fh:
+        for fpath in sorted(release_files):
+            h = hashlib.sha256()
+            with open(fpath, "rb") as sf:
+                while chunk := sf.read(65536):
+                    h.update(chunk)
+            fh.write(f"{h.hexdigest()}  {fpath.name}\n")
+
+    if verbose:
+        print(f"  [OK] Created {sha256_path.relative_to(REPO_ROOT)}")
+        print("\n=================================================================")
+        print(f"  [RELEASE BUNDLE CREATED] -> releases/{version}/")
+        print("  To lock this hardware fabrication bundle in Git, execute:")
+        print(f"    git tag -a hw-{version}-revA -m \"Hardware Fabrication Release {version} (commit {sha})\"")
+        print(f"    git push origin hw-{version}-revA")
+        print("=================================================================\n")
+
+    return True
+
+
 def generate_manifest(verbose=True):
     """Generate SHA-256 integrity manifest for all files in exports/."""
     if verbose:
@@ -355,8 +432,14 @@ def main():
     parser.add_argument("--firmware", action="store_true", help="Build and stage ESP32-S3 firmware")
     parser.add_argument("--manifest", action="store_true", help="Generate exports/manifest.json")
     parser.add_argument("--check", action="store_true", help="Validate existing exports integrity")
+    parser.add_argument("--release-tag", "--archive-release", dest="release_tag", metavar="VERSION", type=str, help="Bundle and lock release Gerbers in releases/<version>/")
 
     args = parser.parse_args()
+
+    if args.release_tag:
+        EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        archive_release(args.release_tag)
+        sys.exit(0)
 
     # Default to all if no specific target selected
     if not (args.all or args.cad or args.kicad or args.wiring or args.firmware or args.manifest or args.check):

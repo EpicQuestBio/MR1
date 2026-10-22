@@ -1,3 +1,7 @@
+# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
+# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
+# SPDX-License-Identifier: CC0-1.0
+
 import math
 
 # ==============================================================================
@@ -90,12 +94,19 @@ CARRIER_DIAM = 20.0
 # [Nanopore Wafer / Mold Settings]
 USE_NANOPORE_WAFER_GASKET = True
 SHOW_MOLD = False
-WAFER_SIZE = 4.0
-WAFER_THICK = 0.5
+WAFER_SIZE = 4.0      # Silicon die width (4.0 x 4.0 mm square)
+WAFER_THICK = 0.5     # Silicon die thickness (0.5 mm / 500 um die thickness)
 WAFER_RECESS = 0.15
 WAFER_ROTATION = 45.0
 WAFER_HOLE_SIZE = 3.0
 PCB_WAFER_HOLE_SIZE = 6.20  # Opened 45-deg square hole matching KiCad Edge.Cuts (6.20 x 6.20 mm diamond)
+
+# Reference Nanopore Chip Specifications:
+# 1. Commercial SiNx Chips: 10-50 nm membrane, 2-10 nm pore, 10-50 um window
+# 2. Kent Nanopore Die Configuration Option: 200 nm membrane, 10 um window, 100 nm pore
+KENT_MEMBRANE_THICK_NM = 200.0
+KENT_WINDOW_SIZE_UM = 10.0
+KENT_PORE_DIAMETER_NM = 100.0
 PLUG_DIAMETER = 2.0         # Central nanopore sensing aperture
 PRIMARY_GASKET_DIAM = 60.0  # Full 60mm corner-to-corner hex matching PCB & DXF
 PCB_THICKNESS = 0.8

@@ -39,7 +39,7 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | **Polypropylene (PP) Sheet** | 1/4" (6.35 mm) x 12" x 12" Natural PP | 1 | CNC milled into Plate 1 Base Hex and Plate 3 Top Hex |
 | **Translucent Silicone Sheet** | 1/16" (1.5875 mm) x 3" x 9", 50A Durometer | 1 | Laser-cut / punch-cut into intermediate sealing gaskets |
 | **PDMS Casting Kit** | Dow Sylgard 184 (Base + Curing Agent) | 0.5 kg | Casts high-precision `Cast_Nanopore_Wafer_Gasket` in SLA mold |
-| **Solid-State Nanopore Chips** | 4x4 mm SiNx membrane window (10-50 nm thick) | As needed | Central sensing element with 2-10 nm nanopore aperture |
+| **Solid-State Nanopore Chips** | 4x4 x 0.5 mm Silicon die. Options: (a) Commercial SiNx (10-50 nm membrane, 2-10 nm pore); (b) Kent reference die (200 nm membrane, 10 µm window, 100 nm pore) | As needed | Central sensing element with sub-10 nm or 100 nm nanopore aperture |
 | **Ag/AgCl Ribbon Electrode Foil** | 0.25 mm x 1.0 mm Silver/Silver Chloride | 0.5 m | Dual-sided Cis and Trans internal chamber electrodes |
 
 ---
@@ -48,8 +48,8 @@ This document provides the complete, authoritative Bill of Materials for the **M
 
 | Board Name | Substrate & Layer Stackup | Dimensions | Description & Role | Fabrication Package |
 | :--- | :--- | :---: | :--- | :--- |
-| **MR1 Main Board** | 6-Layer FR4 High-TG, ENIG finish, 1.6 mm | 80.0 x 60.0 mm | Core ESP32-S3 DAQ motherboard, 100 kHz SPI ADC, dual DACs, USB-C | `exports/MR1_Gerbers.zip` |
-| **Cartridge Amplifier** | 2-Layer 1.5 mm Rogers PTFE (RO3003/ZYF255DA), ENIG, bare PTFE solder mask exclusions, B.Cu Z-axis GUARD island | 55.0 x 51.96 mm | Sub-femtoampere LMP7721 transimpedance amplifier mounted beneath cell on 1.5mm PTFE core | `exports/Amplifier_Gerbers.zip` |
+| **MR1 Main Board** | 4-Layer FR4 High-TG, ENIG finish, 1.6 mm | 80.0 x 60.0 mm | Core ESP32-S3 DAQ motherboard with split GNDA/GND & VDDA/3V3 planes, dual DAC, USB-C | `exports/MR1_Gerbers.zip` |
+| **Cartridge Amplifier** | 2-Layer 0.8 mm FR4/Rogers, ENIG, guarded | 55.0 x 51.96 mm | Femtoampere LMP7721 transimpedance amplifier mounted beneath cell | `exports/Amplifier_Gerbers.zip` |
 | **PTFE Interposer** | 2-Layer Rogers RO4350B / PTFE (0.8 mm, er=2.1) | 55.0 x 51.96 mm | Passive microfluidic flowcell barrier with 12-pin guarded pogo target | `Interposer/Interposer.kicad_pcb` |
 | **Rigid Backing Anvil** | 6.0 mm Delrin (POM-H) / Anodized Aluminum 6061-T6 | 55.0 x 51.96 mm | Clamps 2-layer PTFE interposer against 12 pogo spring loads (~9.6 N total load) preventing viscoelastic creep | `exports/Bottom_Pusher_Plate.step` |
 | **Pump Controller Hub** | 4-Layer FR4 High-TG, 1.6 mm, 2 oz copper | 88.0 x 88.0 mm | STM32G431 MCU, STUSB4500 USB-PD sink, dual DRV8837C, ABP2 sensors | `Pump/Pump.kicad_pcb` |
@@ -61,9 +61,9 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | Component Reference | Manufacturer & Part Number | Package | Qty | Subsystem & Function |
 | :--- | :--- | :---: | :---: | :--- |
 | **U2 (Amplifier)** | TI LMP7721MA/NOPB | SOIC-8 | 1 | 3 fA ultra-low input bias current precision amplifier |
-| **U10 (MR1)** | Analog Devices AD4000BCPZ / AD4020 | LFCSP-10 | 1 | 16/18-Bit 2 MSPS pseudo-differential SAR ADC |
-| **U11, U12 (MR1)** | Microchip MCP4822-E/MS | MSOP-8 | 2 | Dual 12-bit SPI DACs with internal 2.048V bandgap reference |
-| **U1 (MR1)** | Espressif ESP32-S3-WROOM-1-N16R8 | Module | 1 | 240 MHz dual-core MCU with native USB CDC-ACM and Wi-Fi |
+| **U13 (Amplifier)** | Analog Devices AD4000BCPZ / AD4020 | MSOP-10 | 1 | 16/18-Bit 2 MSPS pseudo-differential SAR ADC mounted on Amplifier board |
+| **U9 (MR1)** | Microchip MCP4822-E/MS | MSOP-8 | 1 | Dual 12-bit SPI DAC with internal 2.048V bandgap reference for pore bias |
+| **U1 (MR1)** | Espressif ESP32-S3-MINI-1U | Module | 1 | 240 MHz dual-core MCU with native USB CDC-ACM and Wi-Fi |
 | **U1 (Pump)** | STMicroelectronics STM32G431CBU6 | UFQFPN-48 | 1 | 170 MHz ARM Cortex-M4 motor control & pressure telemetry MCU |
 | **U2 (Pump)** | STMicroelectronics STUSB4500QTR | QFN-24 | 1 | Autonomous USB-PD Sink controller (negotiates 9V/12V/15V/20V) |
 | **U3, U4 (Pump)** | Texas Instruments DRV8837CDSGR | WSON-8 | 2 | 1.8A low-voltage H-bridge motor drivers with PWM interface |
