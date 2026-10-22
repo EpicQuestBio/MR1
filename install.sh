@@ -106,10 +106,25 @@ fi
 
 # 4. PlatformIO Core Check
 echo -n "Checking PlatformIO (pio)... "
-if command -v pio >/dev/null 2>&1 || command -v pio.exe >/dev/null 2>&1; then
+PIO_FOUND="no"
+if [ -f "${REPO_ROOT}/.venv/bin/pio" ] || [ -f "${REPO_ROOT}/.venv/Scripts/pio.exe" ]; then
+    PIO_FOUND="yes"
+elif command -v pio >/dev/null 2>&1 || command -v pio.exe >/dev/null 2>&1; then
+    PIO_FOUND="yes"
+elif ${PYTHON_CMD} -m platformio --version >/dev/null 2>&1; then
+    PIO_FOUND="yes"
+fi
+
+if [ "${PIO_FOUND}" = "yes" ]; then
     echo -e "${GREEN}[OK]${NC}"
 else
-    echo -e "${YELLOW}[WARNING]${NC} PlatformIO not found. Firmware compilation will be skipped."
+    echo -e "${YELLOW}[NOT FOUND]${NC} Installing platformio into virtual environment..."
+    ${PYTHON_CMD} -m pip install -q platformio
+    if [ -f "${REPO_ROOT}/.venv/bin/pio" ] || [ -f "${REPO_ROOT}/.venv/Scripts/pio.exe" ] || ${PYTHON_CMD} -m platformio --version >/dev/null 2>&1; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC} Failed to install PlatformIO."
+    fi
 fi
 
 # 5. Node.js Check
