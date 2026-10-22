@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
-# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
-# SPDX-License-Identifier: CC0-1.0
+# MR1 Nanopore Reader — Photorealistic Fly-Through & Multi-Scale Renderer
+# Copyright (C) 2026 Lawrence R. Kincheloe III / Molecular Reality Corp
+# Released under GNU AGPLv3. See LICENSE for full details.
 
 import os
 import sys
@@ -9,6 +9,8 @@ import math
 import numpy as np
 import pyvista as pv
 import imageio.v2 as imageio
+import matplotlib.pyplot as plt
+from PIL import Image
 from build123d import *
 
 # Ensure src import path
@@ -187,9 +189,7 @@ MATERIALS = {
 def create_lmp7721_ic_mesh():
     """Creates LMP7721 SOIC-8 low-leakage amplifier IC package."""
     with BuildPart(mode=Mode.PRIVATE) as p:
-        # Main SOIC-8 body: 4.9 x 3.9 x 1.5 mm
         Box(4.9, 3.9, 1.5)
-        # Pins (8 pins total, 4 on each long side)
         for side in [-1, 1]:
             for x in [-1.905, -0.635, 0.635, 1.905]:
                 with Locations((x, side * 2.4, -0.4)):
@@ -225,7 +225,6 @@ def create_silicon_die_500um_mesh():
     """500 um thick Silicon Die (4.0 x 4.0 x 0.5 mm) with central thinned window relief."""
     with BuildPart(mode=Mode.PRIVATE) as p:
         Box(4.0, 4.0, 0.5)
-        # Pyramidal / tapered etch pit relief leading down to membrane window
         with Locations((0, 0, -0.1)):
             Cone(bottom_radius=0.8, top_radius=0.05, height=0.4, mode=Mode.SUBTRACT)
     return shape_to_pv_mesh(p.part)
@@ -233,7 +232,6 @@ def create_silicon_die_500um_mesh():
 def create_thinned_membrane_200nm_mesh():
     """10x10 um x 200 nm Silicon Nitride (SiNx) thinned membrane window with 100 nm central nanopore."""
     with BuildPart(mode=Mode.PRIVATE) as p:
-        # Scale magnified for PyVista visibility: 1.0 x 1.0 x 0.05 mm mesh representation
         Box(1.2, 1.2, 0.06)
         Cylinder(radius=0.15, height=0.1, mode=Mode.SUBTRACT)
     return shape_to_pv_mesh(p.part)
@@ -248,9 +246,7 @@ def create_pore_100um_mesh():
 def create_pore_1nm_mesh():
     """1 nm sub-nanometer / biological channel substrate model embedded in lipid membrane."""
     with BuildPart(mode=Mode.PRIVATE) as p:
-        # Lipid bilayer disk
         Cylinder(radius=1.5, height=0.1)
-        # Alpha-hemolysin / MspA barrel pore geometry
         Cylinder(radius=0.35, height=0.25)
         Cylinder(radius=0.08, height=0.4, mode=Mode.SUBTRACT)
     return shape_to_pv_mesh(p.part)
@@ -287,7 +283,6 @@ def build_reverse_explosion_scene(progress):
     """
     components = []
 
-    # Pre-mesh components
     pump_case_m = shape_to_pv_mesh(Housing_Pump_Case())
     pump_lid_m = shape_to_pv_mesh(Housing_Pump_Lid())
     reader_case_m = shape_to_pv_mesh(Housing_Case_Reader())
@@ -305,11 +300,9 @@ def build_reverse_explosion_scene(progress):
     puck_m = shape_to_pv_mesh(Pressure_Puck())
     wafer_m = create_nanopore_wafer_mesh()
 
-    # PCB components
     ic_m = create_lmp7721_ic_mesh()
     pogo_m = create_pogo_pin_mesh()
     usbc_m = create_usbc_receptacle_mesh()
-    smt_m = create_smt_passive_mesh()
 
     reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
     z_cap = reader_z_base + READER_LID_THICK + READER_LID_THICK/2.0 + NECK_H - 10.0
@@ -332,12 +325,10 @@ def build_reverse_explosion_scene(progress):
     components.append((transform_mesh(p1_m, (0, 0, z_stack + PP_H + PLATE_THICK/2.0), (120, -60, 60), explode_rot=-120, progress=progress), MATERIALS['polypropylene_grey']))
     components.append((transform_mesh(g1_m, (0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK/2.0), (-120, 60, 80), explode_rot=180, progress=progress), MATERIALS['silicone_translucent']))
 
-    # Amplifier Interposer PCB & ICs/Pogo pins
     pcb_z = z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS/2.0
     components.append((transform_mesh(pcb_amp_m, (0, 0, pcb_z), (140, 0, 100), explode_rot=-180, progress=progress), MATERIALS['pcb_fr4_green']))
     components.append((transform_mesh(ic_m, (0, -5.0, pcb_z + 1.2), (180, 40, 120), explode_rot=270, progress=progress), MATERIALS['chip_black']))
 
-    # 12 Mill-Max Gold Pogo Pins flying into place
     for x in [-11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0]:
         components.append((transform_mesh(pogo_m, (x, POGO_Y, pcb_z - 2.0), (x * 12, 100, 150), explode_rot=360, progress=progress), MATERIALS['gold_metal']))
 
@@ -345,10 +336,8 @@ def build_reverse_explosion_scene(progress):
     components.append((transform_mesh(p3_m, (0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK/2.0), (100, 100, 160), explode_rot=-180, progress=progress), MATERIALS['polypropylene_grey']))
     components.append((transform_mesh(puck_m, (0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK + PUCK_H/2.0), (0, 0, 200), explode_rot=360, progress=progress), MATERIALS['tpu_black']))
 
-    # Silicon Nanopore Wafer
     components.append((transform_mesh(wafer_m, (0, 0, pcb_z + 0.4), (0, 0, 250), explode_rot=720, progress=progress), MATERIALS['silicon_wafer']))
 
-    # 4. Routing Harnesses (appear as stack finishes assembling, progress > 0.6)
     if progress > 0.6:
         tubes_m = shape_to_pv_mesh(route_tubing())
         wires_m = shape_to_pv_mesh(route_wiring())
@@ -362,27 +351,23 @@ def build_assembled_device_components():
     """Builds fully assembled MR1 Nanopore Reader device for Shot 2."""
     components = []
 
-    # Pump Case & Lid
     pump_case = Housing_Pump_Case().move(Location((0, 0, 0)))
     pump_lid = Housing_Pump_Lid().move(Location((0, 0, PUMP_H/2.0 + PUMP_LID_THICK/2.0)))
     components.append((shape_to_pv_mesh(pump_case), MATERIALS['housing_dark']))
     components.append((shape_to_pv_mesh(pump_lid), MATERIALS['housing_dark']))
 
-    # Reader Case & Lid
     reader_z_base = PUMP_H + PUMP_LID_THICK + 5.0
     reader_case = Housing_Case_Reader().move(Location((0, 0, reader_z_base)))
     reader_lid = Housing_Lid_Reader().move(Location((0, 0, reader_z_base + READER_LID_THICK)))
     components.append((shape_to_pv_mesh(reader_case), MATERIALS['housing_dark']))
     components.append((shape_to_pv_mesh(reader_lid), MATERIALS['housing_dark']))
 
-    # Torque Cap
     z_cap = reader_z_base + READER_LID_THICK + READER_LID_THICK/2.0 + NECK_H - 10.0
     cap_inner = Torque_Cap_Inner().move(Location((0, 0, z_cap)))
     cap_outer = Torque_Cap_Outer().move(Location((0, 0, z_cap)))
     components.append((shape_to_pv_mesh(cap_inner), MATERIALS['housing_dark']))
     components.append((shape_to_pv_mesh(cap_outer), MATERIALS['cap_blue']))
 
-    # Internal Stack
     z_stack = reader_z_base + READER_LID_THICK/2.0 + 10.0
     stack_parts = [
         (Bottom_Pusher_Plate().move(Location((0, 0, z_stack))), MATERIALS['tpu_black']),
@@ -397,13 +382,11 @@ def build_assembled_device_components():
     for part, mat in stack_parts:
         components.append((shape_to_pv_mesh(part), mat))
 
-    # Nanopore Wafer
     wafer_mesh = create_nanopore_wafer_mesh()
     if wafer_mesh:
         wafer_mesh.translate((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS/2.0 + 0.4), inplace=True)
         components.append((wafer_mesh, MATERIALS['silicon_wafer']))
 
-    # Tubing and Wiring
     tubes = route_tubing()
     wires = route_wiring()
     components.append((shape_to_pv_mesh(tubes), MATERIALS['tubing_clear']))
@@ -412,24 +395,48 @@ def build_assembled_device_components():
     return components
 
 def setup_plotter():
-    """Configures PyVista Plotter with studio PBR lighting and background."""
-    plotter = pv.Plotter(off_screen=True, window_size=[1280, 720])
-    plotter.set_background('#1A1D20', top='#2D3238')  # Studio dark gradient background
+    """Configures PyVista Plotter with multi-point PBR studio lighting and 1080p canvas."""
+    plotter = pv.Plotter(off_screen=True, window_size=[1920, 1080])
+    plotter.set_background('#0E1114', top='#1B2026')  # Deep studio gradient background
     plotter.enable_anti_aliasing('ssaa')
 
-    # Studio Lighting Setup
     plotter.remove_all_lights()
-    key_light = pv.Light(position=(200, 200, 300), focal_point=(0, 0, 50), intensity=1.2, color='white')
-    fill_light = pv.Light(position=(-200, -150, 150), focal_point=(0, 0, 50), intensity=0.5, color='#B0C4DE')
-    rim_light = pv.Light(position=(0, -300, -100), focal_point=(0, 0, 50), intensity=0.8, color='#4682B4')
+
+    key_light = pv.Light(
+        position=(250, 250, 350),
+        focal_point=(0, 0, 30),
+        intensity=1.5,
+        color='#FFF9F2',
+        light_type='scenelight'
+    )
+    fill_light = pv.Light(
+        position=(-250, -200, 200),
+        focal_point=(0, 0, 30),
+        intensity=0.8,
+        color='#8CB4F8',
+        light_type='scenelight'
+    )
+    rim_light = pv.Light(
+        position=(0, -350, 250),
+        focal_point=(0, 0, 30),
+        intensity=1.2,
+        color='#E2E8F0',
+        light_type='scenelight'
+    )
+    overhead_light = pv.Light(
+        position=(0, 0, 450),
+        focal_point=(0, 0, 0),
+        intensity=0.6,
+        color='#FFFFFF',
+        light_type='scenelight'
+    )
+
     plotter.add_light(key_light)
     plotter.add_light(fill_light)
     plotter.add_light(rim_light)
+    plotter.add_light(overhead_light)
 
     return plotter
-
-import matplotlib.pyplot as plt
-from PIL import Image
 
 def generate_simulated_signal_trace(pore_diam_nm, num_pts=200):
     """Generates time and current vectors with translocation events for given pore scale."""
@@ -438,7 +445,6 @@ def generate_simulated_signal_trace(pore_diam_nm, num_pts=200):
     i0 = base["i_baseline_pa"]
 
     time_ms = np.linspace(0, 10, num_pts)
-    # White noise ~ 2%
     noise = np.random.normal(0, i0 * 0.02, num_pts)
     current = i0 + noise
 
@@ -452,7 +458,6 @@ def generate_simulated_signal_trace(pore_diam_nm, num_pts=200):
         i0 /= 1000.0
         unit = "uA"
 
-    # Add translocation blockade pulses
     if pore_diam_nm <= 200.0:
         block = sim.calculate_dna_blockade(180.0, "dsDNA" if pore_diam_nm > 2.0 else "ssDNA")
         delta_i = block["blockade_depth_pa"]
@@ -461,7 +466,6 @@ def generate_simulated_signal_trace(pore_diam_nm, num_pts=200):
         elif unit == "uA":
             delta_i /= 1e6
 
-        # Inject 2 translocation events
         current[40:55] -= delta_i
         current[120:140] -= delta_i
 
@@ -517,7 +521,6 @@ def render_shot1_reverse_explosion(output_webm, output_gif, num_frames=120):
         t = frame / (num_frames - 1)
         plotter.clear()
 
-        # Build reverse explosion components at progress t
         components = build_reverse_explosion_scene(progress=t)
         for mesh, mat in components:
             if mesh is not None:
@@ -548,7 +551,7 @@ def render_shot1_reverse_explosion(output_webm, output_gif, num_frames=120):
 
     plotter.close()
 
-    imageio.mimsave(output_webm, frames, fps=30, codec='vp9')
+    imageio.mimsave(output_webm, frames, fps=30, codec='vp9', macro_block_size=1)
     imageio.mimsave(output_gif, frames, fps=30)
     print("Shot 1 Complete!\n")
 
@@ -569,7 +572,6 @@ def render_shot2_nanopore_zoom(output_webm, output_gif, num_frames=120):
     for frame in range(num_frames):
         t = frame / (num_frames - 1)
 
-        # Exponential camera zoom from 15 mm down to 0.8 mm
         dist = 15.0 * (0.05 ** t)
         angle = math.pi / 4 + math.pi * 0.5 * t
 
@@ -582,7 +584,6 @@ def render_shot2_nanopore_zoom(output_webm, output_gif, num_frames=120):
 
         img = plotter.screenshot(return_img=True)
 
-        # Add simulated signal HUD overlay for 100 nm solid-state pore
         img_overlay = draw_signal_overlay(img, "100 nm Pore in 200 nm Membrane", pore_diam_nm=100.0)
         frames.append(img_overlay)
 
@@ -591,7 +592,7 @@ def render_shot2_nanopore_zoom(output_webm, output_gif, num_frames=120):
 
     plotter.close()
 
-    imageio.mimsave(output_webm, frames, fps=30, codec='vp9')
+    imageio.mimsave(output_webm, frames, fps=30, codec='vp9', macro_block_size=1)
     imageio.mimsave(output_gif, frames, fps=30)
     print("Shot 2 Complete!\n")
 
@@ -640,7 +641,7 @@ def render_shot3_scale_showcase(output_webm, output_gif, num_frames=120):
         plotter.close()
         print(f"  Shot 3: Completed scale {scale_idx + 1}/{len(scales)} ({title})")
 
-    imageio.mimsave(output_webm, frames, fps=30, codec='vp9')
+    imageio.mimsave(output_webm, frames, fps=30, codec='vp9', macro_block_size=1)
     imageio.mimsave(output_gif, frames, fps=30)
     print("Shot 3 Complete!\n")
 
@@ -648,7 +649,7 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="MR1 Photorealistic Fly-Through & Multi-Scale Renderer")
     parser.add_argument("--test", action="store_true", help="Run fast dry-run test (10 frames/shot)")
-    parser.add_argument("--frames", type=int, default=120, help="Frames per shot (default: 120)")
+    parser.add_argument("--frames", type=int, default=240, help="Frames per shot (default: 240)")
     args = parser.parse_args()
 
     num_frames = 10 if args.test else args.frames
