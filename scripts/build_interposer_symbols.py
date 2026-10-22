@@ -9,7 +9,7 @@ Generates dedicated, high-fidelity symbols for all physical and electrical featu
 of the PTFE Microfluidic Interposer Board:
 1. Interposer/symbols/Interposer.kicad_sym:
    - Dedicated symbols with custom graphics:
-     * PogoPin_Target_6Pin_Array (6-pin precision gold landing target array)
+     * PogoPin_Target_12Pin_Distributed (12-pin precision gold landing target array)
      * Electrode_Guard_Shield (Ag/AgCl ribbon electrode pad with driven guard shield)
      * Nanopore_Wafer_Aperture (central silicon chip carrier well & diamond fluidic aperture)
      * Weep_Moat_Sensor (leak-detection perimeter moisture moat)
@@ -227,7 +227,7 @@ def build_schematic():
 \t\t(rev "1.1")
 \t\t(company "MR1 Open Source Nanopore Project")
 \t\t(comment 1 "Dedicated Feature-Associated Schematic Architecture")
-\t\t(comment 2 "0.8mm Rogers RO4350B / PTFE Substrate (er=2.1, tan_delta=0.0002, ENIG Finish)")
+\t\t(comment 2 "0.8mm Rogers RO4350B (er=3.48) / PTFE Substrate (er=2.1, tan_delta=0.0002, ENIG Finish)")
 \t\t(comment 3 "Mill-Max High Contact Force Spring Pin Landing Interface (Guarded Cis/Trans)")
 \t\t(comment 4 "Dual-Sided Ag/AgCl Ribbon Electrode Contacts & Moisture Leak Moat Detection")
 \t)

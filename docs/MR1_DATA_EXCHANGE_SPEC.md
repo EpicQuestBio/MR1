@@ -106,7 +106,8 @@ $$V_{adc} = S_{adc} \cdot \left(\frac{2.048\text{ V}}{32768}\right) = S_{adc} \c
 
 $$I_{pore} = \frac{V_{adc}}{R_{feedback}} = \frac{S_{adc} \cdot 62.5 \times 10^{-6}\text{ V}}{1.0 \times 10^9\,\Omega} = S_{adc} \cdot \mathbf{62.5\text{ fA}}$$
 
-- **Dynamic Range:** $-2.048\text{ nA}$ to $+2.048\text{ nA}$ (for $1\text{ G}\Omega$ TIA feedback resistor).
+- **Dynamic Range:** $-2.048\text{ nA}$ to $+2.048\text{ nA}$ (for $1\text{ G}\Omega$ TIA feedback resistor; max range scales linearly with lower feedback resistor choices such as $100\text{ M}\Omega$, $10\text{ M}\Omega$, or $1\text{ M}\Omega$ or external gain attenuation).
+- **Pore Size Operational Limits:** Default $1\text{ G}\Omega$ feedback supports sub-$5\text{ nm}$ apertures. Apertures larger than $5\text{ nm}$ or drawing $> 2\text{ nA}$ require reduced bias voltage or smaller feedback resistance values ($100\text{ M}\Omega - 1\text{ M}\Omega$) to prevent amplifier rail saturation.
 
 ---
 

@@ -143,6 +143,31 @@ class NanoporeElectrokinetics:
             "mean_inter_event_time_ms": (1.0 / max(capture_rate_hz, 1e-6)) * 1000.0,
         }
 
+    def calculate_gain_matching_and_saturation(
+        self,
+        bias_voltage_mv: float = 180.0,
+        r_feedback_ohms: float = 1e9,
+        v_full_scale_v: float = 2.048,
+    ) -> Dict[str, float]:
+        """
+        Calculates TIA headroom and saturation status for current pore diameter:
+        Default 1 Gohm feedback gives +-2.048 nA dynamic range at +-2.048V full scale.
+        """
+        base = self.calculate_baseline_current(bias_voltage_mv)
+        i_base_na = base["i_baseline_na"]
+        i_max_na = (v_full_scale_v / r_feedback_ohms) * 1e9
+        is_saturated = abs(i_base_na) > i_max_na
+
+        return {
+            "bias_mv": bias_voltage_mv,
+            "r_feedback_ohms": r_feedback_ohms,
+            "v_full_scale_v": v_full_scale_v,
+            "i_baseline_na": i_base_na,
+            "i_max_measurable_na": i_max_na,
+            "is_saturated": is_saturated,
+            "headroom_fraction": max(0.0, 1.0 - (abs(i_base_na) / i_max_na)),
+        }
+
 
 if __name__ == "__main__":
     sim = NanoporeElectrokinetics(kcl_molarity=1.0, temperature_c=25.0, pore_diameter_nm=4.0, membrane_thickness_nm=20.0)
