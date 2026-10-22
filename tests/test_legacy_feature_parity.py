@@ -307,7 +307,7 @@ class TestLegacyFeatureParity(unittest.TestCase):
         vol_c = get_vol(inter_c)
         self.assertAlmostEqual(vol_c, 0.0, delta=0.01, msg="Interposer center must have wafer protrusion cutout.")
 
-        # 3. Pogo pin landing holes at POGO_Y
+        # 3. Pogo pin landing holes at Y=POGO_Y
         for px in [-11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0]:
             pogo_probe = Solid.make_cylinder(0.3, 4.0).move(Location((px, POGO_Y, -1.0)))
             inter_p = interposer.intersect(pogo_probe)

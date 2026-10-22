@@ -79,6 +79,7 @@ See the `LICENSE` file for the full text.
 - [Project Structure](#project-structure)
 - [Quick Start & Environment Setup](#quick-start--environment-setup)
 - [Deliverables & Export System](#deliverables--export-system)
+- [Hardware Build Pipeline & Board Status](#hardware-build-pipeline--board-status)
 - [OpenAuto-CFD & Co-Design](#openauto-cfd--co-design)
 - [3D Visualizer & Interactive Inspection](#3d-visualizer--interactive-inspection)
 - [KiCad Action Plugin & CLI](#kicad-action-plugin--cli)
@@ -243,6 +244,23 @@ make test-e2e          # Run end-to-end deliverables validation test
 - **SHA-256 Manifest**: `exports/manifest.json` tracks file sizes and cryptographic hashes for all 159 files for drift detection.
 
 See [EXPORTS.md](EXPORTS.md) for full details and PCB fabrication recommendations.
+
+---
+
+## Hardware Build Pipeline & Board Status
+
+Automated code scanners and reviewers sometimes mistake the repository's PCB source files for static production-ready layouts. The MR1 hardware design pipeline relies on two fundamental principles:
+
+1. **Dynamic Artifact Generation**:
+   The `.kicad_pcb` layout files and downstream fabrication deliverables (Gerber layers, NC drill files, BOMs, Pick and Place POS files, multi-sheet PDF schematics) are dynamically generated and reconciled via the repository's automation pipeline (`scripts/export_manager.py`, Python footprint/layout generators, and `kicad-cli`), rather than being maintained as static hand-edited binaries in the working tree.
+
+2. **Current Board Layout & Routing Status**:
+   - **`MR1` Main Reader Board** (`MR1/`): 111 footprints placed, placement complete, 0 routed copper tracks.
+   - **`Amplifier` Cartridge Board** (`Amplifier/`): 48 footprints placed, placement complete, 0 routed copper tracks.
+   - **`Interposer` Microfluidic Board** (`Interposer/`): 33 footprints placed, 9 routed segments.
+   - **`Pump` Controller Board** (`Pump/`): 18 footprints placed, procedurally generated stubs — STM32 QFN-48 currently a 1-pad stub with passives and 3D models pending per [`TODO.md`](TODO.md) §22.
+
+For details on Gerber archiving, dynamic export workflows, and hardware version tags, see the [Artifact & Gerber Release Policy in EXPORTS.md](EXPORTS.md#artifact--gerber-release-policy).
 
 ---
 
