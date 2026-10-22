@@ -51,6 +51,7 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | **MR1 Main Board** | 4-Layer FR4 High-TG, ENIG finish, 1.6 mm | 80.0 x 60.0 mm | Core ESP32-S3 DAQ motherboard with split GNDA/GND & VDDA/3V3 planes, dual DAC, USB-C | `exports/MR1_Gerbers.zip` |
 | **Cartridge Amplifier** | 2-Layer 0.8 mm FR4/Rogers, ENIG, guarded | 55.0 x 51.96 mm | Femtoampere LMP7721 transimpedance amplifier mounted beneath cell | `exports/Amplifier_Gerbers.zip` |
 | **PTFE Interposer** | 2-Layer Rogers RO4350B / PTFE (0.8 mm, er=2.1) | 55.0 x 51.96 mm | Passive microfluidic flowcell barrier with 12-pin guarded pogo target | `Interposer/Interposer.kicad_pcb` |
+| **Rigid Backing Anvil** | 6.0 mm Delrin (POM-H) / Anodized Aluminum 6061-T6 | 55.0 x 51.96 mm | Clamps 2-layer PTFE interposer against 12 pogo spring loads (~9.6 N total load) preventing viscoelastic creep | `exports/Bottom_Pusher_Plate.step` |
 | **Pump Controller Hub** | 4-Layer FR4 High-TG, 1.6 mm, 2 oz copper | 88.0 x 88.0 mm | STM32G431 MCU, STUSB4500 USB-PD sink, dual DRV8837C, ABP2 sensors | `Pump/Pump.kicad_pcb` |
 
 ---

@@ -11,6 +11,7 @@
 |---|---------|-------------|-----------|--------|
 | 1 | Ribbon Cable Cavity Integration & Geometric Clearance | Housing lid reader, cartridge plates, and gaskets accommodate 13.5mm x 3.0mm cavity recessed into hexagon wall at Y = -27.5mm with 0 collisions. Fix ShapeList volume check in collision_check.py and hex socket Z-origin in housing.py. | M1 | ORIGINAL_REQUEST §R1 |
 | 2 | PCB Edge.Cuts Geometry Alignment & Validation | Ensure `Amplifier/Amplifier.kicad_pcb` Edge.Cuts is a continuous closed loop with 0 vertices of degree != 2, 0 floating lines, and matching 13.5mm x 3.0mm cavity. Fix casing bug in `scripts/build_interposer_kicad.py` and add explicit unit test for Edge.Cuts continuity. | M1 | ORIGINAL_REQUEST §R1 |
+| 5 | 2-Layer PTFE Substrate & 3D Guarding for Amplifier Board | Configure Amplifier/Amplifier.kicad_pcb for 1.5mm Rogers PTFE core, strip solder mask over LMP7721 guarded region on F_Mask/B_Mask, define B_Cu solid GUARD island and GNDA keepout, and integrate rigid Delrin/Aluminum backing anvil in src/cartridge.py. | M1 | FEAT_AMPLIFIER_PTFE |
 | 3 | Staged Exports & Documentation Deliverables | Staged ESP32-S3 firmware image (`exports/firmware/firmware.bin`), WireViz diagrams (`exports/reader_wiring/`), regenerated CAD STEP/STL exports, and full SHA-256 indexing in `exports/manifest.json`. | M2 | ORIGINAL_REQUEST §R2 |
 | 4 | Automated Test Suite Verification | Verify all 92 tests in `.venv/bin/python run_tests.py` pass with zero failures, zero regressions, and zero CAD collisions. | M3 | ORIGINAL_REQUEST §R3 |
 

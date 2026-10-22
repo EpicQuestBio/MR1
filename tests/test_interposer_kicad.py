@@ -270,6 +270,30 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue('"Q_WEEP"' in txt or '"Q3"' in txt, "Q_WEEP / Q3 must be present")
         self.assertIn('"R_WEEP_PULL"', txt)
 
+    def test_amplifier_ptfe_stackup_and_3d_guarding(self):
+        """Verify that Amplifier/Amplifier.kicad_pcb is configured for 1.5mm Rogers PTFE core,
+        strips solder mask on F.Mask and B.Mask over the LMP7721 guarded region, excludes GNDA
+        beneath the input node, and defines a solid copper B.Cu GUARD island."""
+        amp_pcb_path = REPO_ROOT / "Amplifier" / "Amplifier.kicad_pcb"
+        self.assertTrue(amp_pcb_path.exists(), "Amplifier.kicad_pcb must exist")
+
+        text = amp_pcb_path.read_text(encoding="utf-8")
+
+        # 1. Substrate check: 1.5mm Rogers PTFE laminate core
+        self.assertIn('(thickness 1.5)', text, "Amplifier PCB stackup core thickness must be 1.5 mm")
+        self.assertIn('Rogers RO3003 / PTFE', text, "Amplifier PCB dielectric material must specify Rogers RO3003 / PTFE")
+
+        # 2. Solder mask exclusion checks on F.Mask and B.Mask
+        self.assertIn('(layer "F.Mask")', text, "Amplifier PCB must contain F.Mask layer exclusion shapes")
+        self.assertIn('(layer "B.Mask")', text, "Amplifier PCB must contain B.Mask layer exclusion shapes")
+
+        # 3. GNDA Keepout / Exclusion beneath input node
+        self.assertIn('(keepout', text, "Amplifier PCB must contain keepout zone beneath input node")
+        self.assertIn('(copperpour not_allowed)', text, "GNDA copper pour must be forbidden in keepout zone")
+
+        # 4. Solid B.Cu GUARD island
+        self.assertIn('(net "/GUARD")', text, "Amplifier PCB must define /GUARD net zone on B.Cu")
+
     def test_amplifier_pcb_edge_cuts_continuity(self):
         """Verify that Amplifier/Amplifier.kicad_pcb Edge.Cuts forms a continuous closed loop
         with 0 vertices of degree != 2, 0 floating lines, and matches the 13.5x3.0mm cavity."""

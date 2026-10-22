@@ -30,6 +30,11 @@ SEALED_TOP_MODE = False
 
 # [Stack Dimensions & Modularity]
 PP_H = 3.0           # Bottom Pusher Plate (TPU/Seal) - matches golden STL bounds
+ANVIL_THICK = 6.0    # Rigid Delrin/Aluminum Backing Anvil thickness (6.0 mm)
+ANVIL_MATERIAL = "Delrin / Anodized Aluminum 6061-T6" # Rigid anvil backer material
+POGO_SPRING_FORCE = 0.8 # Spring force per pogo pin in N (~0.5N to 1.5N)
+NUM_POGO_PINS = 12
+TOTAL_POGO_CLAMP_FORCE = NUM_POGO_PINS * POGO_SPRING_FORCE # Total spring load (~9.6 N)
 PLATE_THICK = 4.0    # Plate 1 (Base) & Plate 3 (Top), 4mm PP Sheet
 GASKET_THICK = 1.5875 # Gaskets (1/16")
 PTFE_THICK = 1.6     # PCB/PTFE assembly thickness

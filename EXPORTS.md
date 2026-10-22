@@ -171,9 +171,11 @@ python tests/test_exports_e2e.py
 
 * **Amplifier Board**:
   - File: `exports/Amplifier_Gerbers.zip`
-  - Layers: **2 Layers** (F_Cu, B_Cu)
-  - PCB Thickness: **0.8 mm** (Critical for stack elevation in the cartridge!).
-  - Surface Finish: **ENIG** (Mandatory for direct contact with golden pogo pins).
+  - Substrate & Thickness: **2-Layer 1.5 mm Rogers PTFE core** (RO3003 / ZYF255DA, $\varepsilon_r = 2.1$).
+  - Top/Bottom Solder Mask: **Stripped on F_Mask and B_Mask** over the LMP7721 guarded region to expose bare ENIG gold over virgin PTFE.
+  - Z-Axis Guarding: Ground plane (`GNDA`) excluded beneath input node with solid copper `GUARD` island on `B_Cu` maintaining $\Delta V = 0\text{ V}$.
+  - Surface Finish: **ENIG** (Electroless Nickel Immersion Gold over virgin PTFE).
+  - Mechanical Backer: Clamped against 6.0 mm rigid Delrin or anodized aluminum anvil to prevent viscoelastic cold flow.
 
 ### 3D Printing Specifications
 * **Nanopore Silicone Wafer Molds** (`Nanopore_Wafer_Mold_Left.stl`, `Right.stl`):

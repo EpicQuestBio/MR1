@@ -219,6 +219,9 @@ class TestExportsE2E(unittest.TestCase):
 
     def test_wiring_and_tubing_documentation(self):
         """Verify WireViz diagram outputs for wiring harness and fluid tubing."""
+        import shutil
+        if shutil.which("dot") is None:
+            self.skipTest("Graphviz 'dot' executable not installed in environment")
         for sub_dir in ["reader_wiring", "reader_tubing"]:
             d = EXPORTS_DIR / sub_dir
             if not d.exists():
