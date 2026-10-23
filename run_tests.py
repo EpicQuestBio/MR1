@@ -62,7 +62,10 @@ if __name__ == '__main__':
     t13 = load_module('test_openauto_cfd', os.path.join(REPO_ROOT, 'tests', 'test_openauto_cfd.py'))
     suite.addTests(loader.loadTestsFromModule(t13))
 
-    print(f"Loaded {suite.countTestCases()} unit and E2E tests from tests/.")
+    t14 = load_module('test_formal_proofs', os.path.join(REPO_ROOT, 'tests', 'test_formal_proofs.py'))
+    suite.addTests(loader.loadTestsFromModule(t14))
+
+    print(f"Loaded {suite.countTestCases()} unit, formal proof, and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
     sys.exit(0 if result.wasSuccessful() else 1)
