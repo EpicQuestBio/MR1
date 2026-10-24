@@ -22,19 +22,37 @@ from typing import Dict, List, Tuple
 class NanoporeElectrokinetics:
     def __init__(
         self,
-        kcl_molarity: float = 1.0,           # 1.0 M KCl
+        kcl_molarity: float = 1.0,           # 1.0 M KCl (or default salt concentration)
         temperature_c: float = 25.0,         # 25.0 C
         pore_diameter_nm: float = 4.0,       # 4.0 nm pore lumen
         membrane_thickness_nm: float = 20.0, # 20.0 nm SiNx membrane
+        salt_type: str = "KCl",              # "KCl" or "NaCl"
+        salt_molarity: float = None,         # Explicit salt molarity (overrides kcl_molarity)
+        electrolyte_conductivity_s_m: float = None, # Explicit conductivity override (S/m)
     ):
-        self.c_kcl = kcl_molarity
+        self.salt_type = salt_type.upper()
+        self.c_salt = salt_molarity if salt_molarity is not None else kcl_molarity
+        self.c_kcl = self.c_salt  # Backwards compatibility alias
         self.temp_c = temperature_c
         self.d_p = pore_diameter_nm * 1e-9
         self.l_p = membrane_thickness_nm * 1e-9
 
         # Calculate electrolyte resistivity rho_elec [ohm*m]
-        # At 25C: 1M KCl ~ 10.5 S/m, temp coefficient ~ +2.1%/C
-        sigma_25 = 10.5 * (self.c_kcl / 1.0)
+        # At 25C: 1M KCl ~ 10.5 S/m, 1M NaCl ~ 8.5 S/m, temp coefficient ~ +2.1%/C
+        if electrolyte_conductivity_s_m is not None:
+            sigma_25 = electrolyte_conductivity_s_m
+        elif self.salt_type == "NACL":
+            # 1.0 M NaCl = 8.5 S/m, 0.154 M (physiological saline) = 1.54 S/m, 3.0 M = 20.0 S/m
+            if abs(self.c_salt - 0.154) < 0.01:
+                sigma_25 = 1.54
+            elif abs(self.c_salt - 3.0) < 0.01:
+                sigma_25 = 20.0
+            else:
+                sigma_25 = 8.5 * (self.c_salt / 1.0)
+        else:
+            # Default KCl
+            sigma_25 = 10.5 * (self.c_salt / 1.0)
+
         sigma_t = sigma_25 * (1.0 + 0.021 * (self.temp_c - 25.0))
         self.sigma = max(sigma_t, 0.01)
         self.rho = 1.0 / self.sigma
@@ -109,6 +127,49 @@ class NanoporeElectrokinetics:
             "fractional_blockade": fractional_blockade,
             "blockade_depth_pa": delta_i_pa,
             "residual_current_pa": i_residual_pa,
+        }
+
+    def calculate_coulter_blockade(
+        self,
+        particle_diameter_um: float = 2.0,
+        bias_voltage_mv: float = 20.0,
+    ) -> Dict[str, float]:
+        """
+        Calculates Coulter counter particle translocation blockade for micro-scale apertures
+        using the DeBlois & Bean / Gregg & Steidley access-corrected relation:
+        Delta_R / R = (d_particle^3 / (D_pore^2 * L_eff)) * F(d/D)
+        where L_eff = L_pore + 0.8 * D_pore
+        """
+        d_particle = particle_diameter_um * 1e-6
+        d_pore = self.d_p
+        l_pore = self.l_p
+        l_eff = l_pore + 0.8 * d_pore
+
+        ratio = d_particle / d_pore
+        if ratio >= 1.0:
+            fractional_dr = 1.0
+        else:
+            # Correction factor F(d/D) ~ 1 + 0.8*(d/D)^2
+            corr = 1.0 + 0.8 * (ratio ** 2)
+            fractional_dr = min(0.99, ((d_particle ** 3) / ((d_pore ** 2) * l_eff)) * corr)
+
+        base = self.calculate_baseline_current(bias_voltage_mv)
+        i_0_pa = base["i_baseline_pa"]
+        fractional_di = fractional_dr / (1.0 + fractional_dr)
+        delta_i_pa = i_0_pa * fractional_di
+        i_residual_pa = i_0_pa - delta_i_pa
+
+        return {
+            "particle_diameter_um": particle_diameter_um,
+            "pore_diameter_um": self.d_p * 1e6,
+            "bias_mv": bias_voltage_mv,
+            "fractional_resistance_change": fractional_dr,
+            "fractional_current_blockade": fractional_di,
+            "delta_i_pa": delta_i_pa,
+            "delta_i_na": delta_i_pa / 1000.0,
+            "delta_i_ua": delta_i_pa / 1e6,
+            "i_residual_pa": i_residual_pa,
+            "i_baseline_ua": i_0_pa / 1e6,
         }
 
     def calculate_capture_radius_and_rate(

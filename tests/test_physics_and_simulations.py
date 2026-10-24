@@ -192,6 +192,78 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertGreaterEqual(row_1k["samples_per_cycle"], 800.0)
         self.assertTrue(row_1k["analog_ok"])
 
+    def test_micropore_10um_nacl_simulation(self):
+        """Verify 10 micron pore simulation in 1M NaCl under Path 2 wideband TIA."""
+        from simulations.micropore_configuration_table import simulate_pore_configuration
+
+        cfg_10um = simulate_pore_configuration(
+            pore_diameter_um=10.0,
+            membrane_length_um=10.0,
+            electrolyte_key="1.0M NaCl",
+            bias_mv=20.0,
+        )
+        # 1. Total resistance should be ~25-30 kOhm
+        self.assertGreaterEqual(cfg_10um["r_total_ohms"], 20e3)
+        self.assertLessEqual(cfg_10um["r_total_ohms"], 35e3)
+
+        # 2. Path 1 (1 Gohm) saturates
+        self.assertTrue(cfg_10um["sat_path1"])
+
+        # 3. Path 2 (100 kohm) operates unsaturated with > 90% headroom at 20 mV
+        self.assertFalse(cfg_10um["sat_path2"])
+        self.assertGreater(cfg_10um["headroom_path2_pct"], 90.0)
+        self.assertAlmostEqual(cfg_10um["v_out_path2_v"], 0.075, delta=0.01)
+
+        # 4. 4-Electrode concentric sensing eliminates uncompensated solution drop (< 0.1% error)
+        self.assertLess(cfg_10um["voltage_error_4e_pct"], 0.1)
+        self.assertGreater(cfg_10um["voltage_error_2e_pct"], 20.0)
+
+        # 5. Coulter particle blockade (2 um particle in 10 um pore gives ~3.4 nA pulse at 20 mV)
+        self.assertGreater(cfg_10um["coulter_delta_i_na"], 2.0)
+
+    def test_micropore_100um_nacl_simulation(self):
+        """Verify 100 micron pore simulation in 1M NaCl: Path 2 saturation limits and 4-electrode requirement."""
+        from simulations.micropore_configuration_table import simulate_pore_configuration
+
+        # At low bias (10 mV), Path 2 operates unsaturated
+        cfg_100um_low = simulate_pore_configuration(
+            pore_diameter_um=100.0,
+            membrane_length_um=10.0,
+            electrolyte_key="1.0M NaCl",
+            bias_mv=10.0,
+        )
+        self.assertFalse(cfg_100um_low["sat_path2"])
+        self.assertLess(cfg_100um_low["v_out_path2_v"], 1.0)
+
+        # At higher bias (50 mV), Path 2 (100k) saturates, but 10k feedback operates cleanly
+        cfg_100um_high = simulate_pore_configuration(
+            pore_diameter_um=100.0,
+            membrane_length_um=10.0,
+            electrolyte_key="1.0M NaCl",
+            bias_mv=50.0,
+        )
+        self.assertTrue(cfg_100um_high["sat_path2"])
+        self.assertFalse(cfg_100um_high["sat_10k"])
+        self.assertLess(cfg_100um_high["v_out_10k_v"], 1.0)
+
+        # 2-Electrode mode loses > 80% of voltage in remote solution channels
+        self.assertGreater(cfg_100um_high["voltage_error_2e_pct"], 80.0)
+        # 4-Electrode concentric keeps voltage error under 1.0%
+        self.assertLess(cfg_100um_high["voltage_error_4e_pct"], 1.0)
+
+    def test_micropore_matrix_generation(self):
+        """Verify complete matrix generator and markdown table formatting."""
+        from simulations.micropore_configuration_table import (
+            generate_configuration_matrix,
+            format_markdown_table,
+        )
+
+        matrix = generate_configuration_matrix()
+        self.assertGreater(len(matrix), 50)
+        md = format_markdown_table(matrix[:5])
+        self.assertIn("10 $\\mu\\text{m}$", md)
+        self.assertIn("Path 2", md)
+
 
 if __name__ == "__main__":
     unittest.main()

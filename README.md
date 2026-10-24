@@ -465,5 +465,7 @@ python scripts/daq_client.py --port COM3 --sbu-detect --pump 60
 - [Weep Moat Interlock Spec](docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md): Leak detection sensor and hardware power cutoff circuitry.
 
 ### Co-Design, Simulation & Tools
+- [Micropore & Salt Aperture Configurations](docs/MICROPORE_NACL_CONFIGURATIONS.md): Working configuration matrix and simulation analysis for 10 µm and 100 µm pores in NaCl.
+- [Dual-Route TIA Netlist & BOM](docs/DUAL_ROUTE_AMPLIFIER_NETLIST_BOM.md): Complete point-to-point netlist, component tolerances, and recommended manufacturer BOM for Route 1 (LMP7721) and Route 2 (OPA192).
 - [OpenAuto-CFD & 3D Visualizer Guide](docs/OPENAUTO_CFD.md): Multiphysics co-simulation, interactive 3D assembly visualizer (`ocp_viewer`), and KiCad action plugin documentation.
 - [OpenAuto Project Manifest](openauto.project.json): Single-source-of-truth hardware manifest linking ECAD, MCAD, fluidics, and harnesses.
