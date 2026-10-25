@@ -3481,7 +3481,7 @@
 		(uuid "7db43eb5-abdd-4aac-9068-e33c5f190f87")
 	)
 	(junction
-		(at 123.19 57.15)
+		(at 123.19 54.61)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8659dd6b-08c9-4574-ae20-f7cf84b9507a")
@@ -3506,7 +3506,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 62.23) (xy 123.19 64.77)
+			(xy 123.19 59.69) (xy 123.19 62.23)
 		)
 		(stroke
 			(width 0)
@@ -3536,7 +3536,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 57.15) (xy 123.19 57.15)
+			(xy 146.05 54.61) (xy 123.19 54.61)
 		)
 		(stroke
 			(width 0)
@@ -3826,7 +3826,7 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 58.42) (xy 180.34 58.42)
+			(xy 167.64 58.42) (xy 180.34 58.42)
 		)
 		(stroke
 			(width 0)
@@ -4043,6 +4043,16 @@
 			(type default)
 		)
 		(uuid "6a83eb59-7ff5-4c18-a146-2eb453a4fce5")
+	)
+	(wire
+		(pts
+			(xy 142.24 66.04) (xy 162.56 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ba8de8e-e5c9-4038-877b-9e02e0de04c3")
 	)
 	(wire
 		(pts
@@ -4416,7 +4426,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 66.04) (xy 162.56 66.04)
+			(xy 142.24 63.5) (xy 162.56 63.5)
 		)
 		(stroke
 			(width 0)
@@ -4436,7 +4446,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 57.15) (xy 146.05 43.18)
+			(xy 146.05 54.61) (xy 146.05 43.18)
 		)
 		(stroke
 			(width 0)
@@ -4526,7 +4536,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 57.15) (xy 123.19 54.61)
+			(xy 123.19 54.61) (xy 123.19 52.07)
 		)
 		(stroke
 			(width 0)
@@ -4556,7 +4566,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 63.5) (xy 162.56 63.5)
+			(xy 142.24 60.96) (xy 162.56 60.96)
 		)
 		(stroke
 			(width 0)
@@ -4576,7 +4586,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 60.96) (xy 162.56 60.96)
+			(xy 142.24 58.42) (xy 162.56 58.42)
 		)
 		(stroke
 			(width 0)
@@ -5237,7 +5247,7 @@
 	)
 	(hierarchical_label "ADC_SDI"
 		(shape input)
-		(at 142.24 60.96 180)
+		(at 142.24 58.42 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5257,6 +5267,17 @@
 		)
 		(uuid "2ff0632c-8ba2-41e1-84ea-b0f2ee12abef")
 	)
+	(hierarchical_label "ROUTE_SEL"
+		(shape input)
+		(at 142.24 66.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "32058613-bf1a-47a5-83e0-1756e8d47ff5")
+	)
 	(hierarchical_label "USB_SDA"
 		(shape input)
 		(at 233.68 55.88 0)
@@ -5270,7 +5291,7 @@
 	)
 	(hierarchical_label "ADC_EN"
 		(shape input)
-		(at 142.24 63.5 180)
+		(at 142.24 60.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5358,7 +5379,7 @@
 	)
 	(hierarchical_label "ADC_SDO"
 		(shape input)
-		(at 142.24 66.04 180)
+		(at 142.24 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6066,7 +6087,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 123.19 49.53 0)
+		(at 123.19 46.99 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6077,7 +6098,7 @@
 		(fields_autoplaced yes)
 		(uuid "0a6159c4-e543-4512-a1f1-84e7ca50e5d3")
 		(property "Reference" "#PWR055"
-			(at 123.19 53.34 0)
+			(at 123.19 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6088,7 +6109,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 123.19 44.45 0)
+			(at 123.19 41.91 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6098,7 +6119,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 123.19 49.53 0)
+			(at 123.19 46.99 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6109,7 +6130,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 123.19 49.53 0)
+			(at 123.19 46.99 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6120,7 +6141,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 123.19 49.53 0)
+			(at 123.19 46.99 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6339,6 +6360,195 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176/b0133be5-0ca1-4cad-9af2-c75cc57c3e3e"
 					(reference "C7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 165.1 66.04 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "177528c5-2ada-4504-b76d-82efd0ec1331")
+		(property "Reference" "R27"
+			(at 160.02 64.77 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "27"
+			(at 168.275 64.77 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "AssemblyType" "SMT"
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Distributor 2" "Mouser"
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Distributor 2 PN" "603-RC0402JR-0727RL"
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0402JR-0727RL"
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Quantity" ""
+			(at 165.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PARTREV" ""
+			(at 165.1 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ALT_Part_Number" ""
+			(at 165.1 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Cost" ""
+			(at 165.1 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "80703cf0-03e6-4513-87c5-4a2ab6d76fc4")
+		)
+		(pin "2"
+			(uuid "e9ef9849-d185-4c69-83cd-9466bf8548c6")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176/b0133be5-0ca1-4cad-9af2-c75cc57c3e3e"
+					(reference "R27")
 					(unit 1)
 				)
 			)
@@ -6983,7 +7193,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 123.19 52.07 0)
+		(at 123.19 49.53 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6994,7 +7204,7 @@
 		(fields_autoplaced yes)
 		(uuid "227929b6-7a1c-44f7-8a0e-2a24290deabc")
 		(property "Reference" "R9"
-			(at 125.73 50.7999 0)
+			(at 125.73 48.2599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7005,7 +7215,7 @@
 			)
 		)
 		(property "Value" "10k 1%"
-			(at 125.73 53.3399 0)
+			(at 125.73 50.7999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7016,7 +7226,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7027,7 +7237,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7038,7 +7248,7 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7049,7 +7259,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7060,7 +7270,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7071,7 +7281,7 @@
 			)
 		)
 		(property "AssemblyType" "SMT"
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7082,7 +7292,7 @@
 			)
 		)
 		(property "Distributor 2" "Mouser"
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7093,7 +7303,7 @@
 			)
 		)
 		(property "Distributor 2 PN" "660-RK73H1ETTPB1002F"
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7104,7 +7314,7 @@
 			)
 		)
 		(property "MPN" "RK73H1ETTPB1002F"
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7115,7 +7325,7 @@
 			)
 		)
 		(property "Quantity" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7126,7 +7336,7 @@
 			)
 		)
 		(property "PARTREV" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7137,7 +7347,7 @@
 			)
 		)
 		(property "ALT_Part_Number" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7148,7 +7358,7 @@
 			)
 		)
 		(property "Cost" ""
-			(at 123.19 52.07 0)
+			(at 123.19 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7418,7 +7628,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 123.19 59.69 0)
+		(at 123.19 57.15 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7429,7 +7639,7 @@
 		(fields_autoplaced yes)
 		(uuid "310b9b20-7b3d-4ed1-9ba6-f0c84b610dfd")
 		(property "Reference" "C9"
-			(at 125.73 58.4262 0)
+			(at 125.73 55.8862 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7440,7 +7650,7 @@
 			)
 		)
 		(property "Value" "4.7u"
-			(at 125.73 60.9662 0)
+			(at 125.73 58.4262 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7451,7 +7661,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7462,7 +7672,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7473,7 +7683,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7484,7 +7694,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7495,7 +7705,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7506,7 +7716,7 @@
 			)
 		)
 		(property "AssemblyType" "SMT"
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7517,7 +7727,7 @@
 			)
 		)
 		(property "Distributor 2" "Mouser"
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7528,7 +7738,7 @@
 			)
 		)
 		(property "Distributor 2 PN" "963-LMK107BJ475KA-T"
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7539,7 +7749,7 @@
 			)
 		)
 		(property "MPN" "LMK107BJ475KA-T"
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7550,7 +7760,7 @@
 			)
 		)
 		(property "Quantity" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7561,7 +7771,7 @@
 			)
 		)
 		(property "PARTREV" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7572,7 +7782,7 @@
 			)
 		)
 		(property "ALT_Part_Number" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7583,7 +7793,7 @@
 			)
 		)
 		(property "Cost" ""
-			(at 123.19 59.69 0)
+			(at 123.19 57.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8182,7 +8392,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 165.1 66.04 90)
+		(at 165.1 63.5 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8192,7 +8402,7 @@
 		(dnp no)
 		(uuid "4ecb89f5-548b-4079-a5bf-89de17d68159")
 		(property "Reference" "R10"
-			(at 160.02 64.77 90)
+			(at 160.02 62.23 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8202,7 +8412,7 @@
 			)
 		)
 		(property "Value" "27"
-			(at 168.275 64.77 90)
+			(at 168.275 62.23 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8212,7 +8422,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8223,7 +8433,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8234,7 +8444,7 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8245,7 +8455,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8256,7 +8466,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8267,7 +8477,7 @@
 			)
 		)
 		(property "AssemblyType" "SMT"
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8278,7 +8488,7 @@
 			)
 		)
 		(property "Distributor 2" "Mouser"
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8289,7 +8499,7 @@
 			)
 		)
 		(property "Distributor 2 PN" "603-RC0402JR-0727RL"
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8300,7 +8510,7 @@
 			)
 		)
 		(property "MPN" "RC0402JR-0727RL"
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8311,7 +8521,7 @@
 			)
 		)
 		(property "Quantity" ""
-			(at 165.1 66.04 0)
+			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8322,7 +8532,7 @@
 			)
 		)
 		(property "PARTREV" ""
-			(at 165.1 66.04 90)
+			(at 165.1 63.5 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8333,7 +8543,7 @@
 			)
 		)
 		(property "ALT_Part_Number" ""
-			(at 165.1 66.04 90)
+			(at 165.1 63.5 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8344,7 +8554,7 @@
 			)
 		)
 		(property "Cost" ""
-			(at 165.1 66.04 90)
+			(at 165.1 63.5 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10060,7 +10270,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 123.19 64.77 0)
+		(at 123.19 62.23 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10071,7 +10281,7 @@
 		(fields_autoplaced yes)
 		(uuid "9ddd3749-23ce-47a4-9a61-d844d6df8ce7")
 		(property "Reference" "#PWR06"
-			(at 123.19 71.12 0)
+			(at 123.19 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10082,7 +10292,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 123.19 69.85 0)
+			(at 123.19 67.31 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10092,7 +10302,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 123.19 64.77 0)
+			(at 123.19 62.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10103,7 +10313,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 123.19 64.77 0)
+			(at 123.19 62.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10114,7 +10324,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 123.19 64.77 0)
+			(at 123.19 62.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10406,7 +10616,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 165.1 63.5 90)
+		(at 165.1 60.96 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10416,195 +10626,6 @@
 		(dnp no)
 		(uuid "a98f5339-8fc9-49a5-a7fa-02f6e3305103")
 		(property "Reference" "R36"
-			(at 160.02 62.23 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "27"
-			(at 168.275 62.23 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "AssemblyType" "SMT"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2" "Mouser"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2 PN" "603-RC0402JR-0727RL"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "RC0402JR-0727RL"
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Quantity" ""
-			(at 165.1 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "PARTREV" ""
-			(at 165.1 63.5 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ALT_Part_Number" ""
-			(at 165.1 63.5 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Cost" ""
-			(at 165.1 63.5 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5801aaab-d0ac-44be-a9d7-49c6f4bdd061")
-		)
-		(pin "2"
-			(uuid "41b2942b-c817-4fd5-a339-1c7521ba7ee2")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176/b0133be5-0ca1-4cad-9af2-c75cc57c3e3e"
-					(reference "R36")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 165.1 60.96 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "adef778e-2a37-4d53-88d2-8ed38b72e844")
-		(property "Reference" "R33"
 			(at 160.02 59.69 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10758,6 +10779,195 @@
 		)
 		(property "Cost" ""
 			(at 165.1 60.96 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5801aaab-d0ac-44be-a9d7-49c6f4bdd061")
+		)
+		(pin "2"
+			(uuid "41b2942b-c817-4fd5-a339-1c7521ba7ee2")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176/b0133be5-0ca1-4cad-9af2-c75cc57c3e3e"
+					(reference "R36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 165.1 58.42 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "adef778e-2a37-4d53-88d2-8ed38b72e844")
+		(property "Reference" "R33"
+			(at 160.02 57.15 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "27"
+			(at 168.275 57.15 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "AssemblyType" "SMT"
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Distributor 2" "Mouser"
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Distributor 2 PN" "603-RC0402JR-0727RL"
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0402JR-0727RL"
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Quantity" ""
+			(at 165.1 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "PARTREV" ""
+			(at 165.1 58.42 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ALT_Part_Number" ""
+			(at 165.1 58.42 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Cost" ""
+			(at 165.1 58.42 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

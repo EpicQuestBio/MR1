@@ -1,0 +1,97 @@
+(footprint "Electrode"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -0.5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "9ee076f1-4991-4593-9c69-92111788df06")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "electrode"
+		(at 0 1 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "a468856c-fd4c-4d05-a969-b1ae3e0abb09")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a84c645d-750e-4054-b857-da7d282ca155")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8f16f92c-309e-4d07-8413-4c6118174951")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.25 1.85)
+		(end 1.26 1.85)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "369b7097-9a14-4f4e-8a00-fe7e27ade609")
+	)
+	(fp_line
+		(start -1.24 0.05)
+		(end 1.2 0.05)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "4935197e-bf28-4ac0-a01d-db4cf45b8ac5")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 2.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "11192b18-a818-44e5-9e49-f7ce315ae7d2")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -0.01 1)
+		(size 1.905 1.27)
+		(layers "F.Cu" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "f8c6a5e7-4342-4e71-af8e-2eb8112e1928")
+	)
+	(embedded_fonts no)
+)

@@ -68,7 +68,7 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 | :--- | :--- | :--- | :--- |
 | **`WS_CIS_WIDE`** | `J_POGO1.10` | `U17.2` (`-IN`), `Rf2.1`, `Cf2.1` | **Micropore Current Node:** Carries microampere currents from $10\,\mu\text{m}$ / $100\,\mu\text{m}$ pores. Short direct trace. |
 | **`GUARD_WIDE`** | `J_POGO1.9` | Coplanar Shield Traces | **Wideband Shield:** Flanks `WS_CIS_WIDE` to prevent high-frequency capacitive crosstalk. |
-| **`GNDA`** | Star Ground | `U17.3` (`+IN`) | **Virtual Ground Reference:** Non-inverting input tied to analog ground. |
+| **`Vbias`** | MCP4822 / Summer | `U17.3` (`+IN`), `R_bias2` (1k) | **Non-Inverting Bias Reference:** Defines cell potential (trans referenced to GNDA) or virtual ground; decoupled with C0G cap to GNDA. |
 | **`Path2_OUT`** | `U17.6` (`VOUT`) | `Rf2.2`, `Cf2.2`, ADC Input / Mux | **Route 2 Output:** Voltage scaled at $100\text{ mV}/\mu\text{A}$ ($V_{\text{out}} = -I_{\text{pore}} \times 100\text{ k}\Omega$). |
 | **`VDDA`** | Positive Rail | `U17.7` (`V+`), `C19.1` | Positive Supply ($+2.5\text{V}$ / $+5.0\text{V}$). |
 | **`VSSA`** | Negative Rail | `U17.4` (`V-`), `C20.1` | Negative Supply ($-2.5\text{V}$ / $-5.0\text{V}$). |

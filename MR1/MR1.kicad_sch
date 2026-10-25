@@ -1157,6 +1157,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 100.33) (xy 93.98 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3a50548d-99de-4900-b427-44600e991448")
+	)
+	(wire
+		(pts
 			(xy 151.13 78.74) (xy 151.13 96.52)
 		)
 		(stroke
@@ -1217,6 +1227,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 66.04) (xy 109.22 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79413231-db71-4f38-b46a-be3f905bbf75")
+	)
+	(wire
+		(pts
 			(xy 210.82 113.03) (xy 204.47 113.03)
 		)
 		(stroke
@@ -1234,6 +1254,16 @@
 			(type default)
 		)
 		(uuid "7f9d5c0c-cd9d-40e2-a08a-e19261cdfc1b")
+	)
+	(wire
+		(pts
+			(xy 93.98 100.33) (xy 93.98 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "80fcac7d-8c0a-4fe2-b23f-161bb004ee0d")
 	)
 	(wire
 		(pts
@@ -3017,6 +3047,16 @@
 				(justify right)
 			)
 		)
+		(pin "ROUTE_SEL" input
+			(at 91.44 100.33 0)
+			(uuid "a2622f4d-bede-41df-924b-802876c21101")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
@@ -3378,6 +3418,16 @@
 		(pin "ADC_SDO" input
 			(at 109.22 76.2 180)
 			(uuid "e6878578-27d2-4b9a-b19d-89118debad93")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ROUTE_SEL" input
+			(at 109.22 66.04 180)
+			(uuid "e62329d5-19dc-4f96-9bea-4ded6fda7e16")
 			(effects
 				(font
 					(size 1.27 1.27)

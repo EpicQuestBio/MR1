@@ -459,6 +459,36 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertAlmostEqual(x_max - x_min, 13.5, delta=0.01, msg=f"Cavity width must be 13.5mm, got {x_max - x_min}")
         self.assertAlmostEqual((x_min + x_max) / 2.0, 164.5, delta=0.01, msg="Cavity must be centered at X=164.5mm")
 
+    def test_amplifier_opa192_symbol_and_footprint(self):
+        """Ensure OPA192IDR symbol and SOIC-8 footprint exist in Amplifier project."""
+        # 1. Symbol in MR1.kicad_sym
+        sym_file = REPO_ROOT / "Amplifier" / "footprints" / "MR1.kicad_sym"
+        self.assertTrue(sym_file.exists(), "Amplifier MR1.kicad_sym must exist")
+        sym_txt = sym_file.read_text(encoding="utf-8")
+        self.assertIn('(symbol "OPA192IDR"', sym_txt, "OPA192IDR symbol must be in MR1.kicad_sym")
+        
+        # Check all 8 pins are present
+        for pin_num in range(1, 9):
+            self.assertIn(f'(number "{pin_num}"', sym_txt, f"Pin {pin_num} must exist in OPA192IDR symbol")
+
+        # 2. Footprint in footprints.pretty
+        fp_soic = REPO_ROOT / "Amplifier" / "footprints.pretty" / "SOIC-8_3.9x4.9mm_P1.27mm.kicad_mod"
+        fp_opa = REPO_ROOT / "Amplifier" / "footprints.pretty" / "OPA192IDR.kicad_mod"
+        self.assertTrue(fp_soic.exists(), "SOIC-8_3.9x4.9mm_P1.27mm.kicad_mod must exist")
+        self.assertTrue(fp_opa.exists(), "OPA192IDR.kicad_mod must exist")
+
+        soic_txt = fp_soic.read_text(encoding="utf-8")
+        for p in range(1, 9):
+            self.assertIn(f'(pad "{p}" smd', soic_txt, f"Pad {p} must exist in SOIC-8 footprint")
+        self.assertIn('(size 1.95 0.6)', soic_txt, "Pad dimensions must be 1.95 x 0.6 mm")
+
+        # 3. Schematic references
+        sch_file = REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch"
+        sch_txt = sch_file.read_text(encoding="utf-8")
+        self.assertIn('"MR1:OPA192IDR"', sch_txt, "Amplifier.kicad_sch must reference MR1:OPA192IDR")
+        self.assertIn('"OPA192IDR"', sch_txt)
+        self.assertIn('"U17"', sch_txt)
+
 if __name__ == "__main__":
     unittest.main()
 

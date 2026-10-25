@@ -1755,6 +1755,16 @@
 	)
 	(wire
 		(pts
+			(xy 43.18 57.15) (xy 48.26 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d099d4c5-0169-4601-917a-196797d1ea8c")
+	)
+	(wire
+		(pts
 			(xy 43.18 62.23) (xy 48.26 62.23)
 		)
 		(stroke
@@ -3470,6 +3480,17 @@
 		)
 		(uuid "c61d26a0-ec9d-4cd4-8ee1-bdfee9fb79ab")
 	)
+	(hierarchical_label "ROUTE_SEL"
+		(shape input)
+		(at 43.18 57.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "04bae9ba-956e-4d2b-9a60-3c9e6ab0f37e")
+	)
 	(hierarchical_label "ADC_SDI"
 		(shape input)
 		(at 43.18 64.77 180)
@@ -4363,6 +4384,82 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176/38d1a3ed-811f-4f3b-80a2-5ae77b649a51"
 					(reference "#PWR012")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
+		(at 180.34 91.44 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "37d03b84-30c9-4343-bfcb-468d7943dd85")
+		(property "Reference" "#PWR0142"
+			(at 180.34 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 180.34 97.282 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 180.34 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 180.34 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 180.34 91.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ad6bfb61-b0ac-4d9f-9a82-23ccaeefcc80")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176/38d1a3ed-811f-4f3b-80a2-5ae77b649a51"
+					(reference "#PWR0142")
 					(unit 1)
 				)
 			)
@@ -5521,82 +5618,6 @@
 		)
 	)
 	(symbol
-		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
-		(at 48.26 57.15 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a316f46f-de0e-438f-b0f5-64d4bba6d7ad")
-		(property "Reference" "#PWR0140"
-			(at 41.91 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 42.418 57.15 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 48.26 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 48.26 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 48.26 57.15 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6c543069-3ec9-46b9-aa19-9de49192a143")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176/38d1a3ed-811f-4f3b-80a2-5ae77b649a51"
-					(reference "#PWR0140")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3V3")
 		(at 180.34 83.82 0)
 		(unit 1)
@@ -6239,84 +6260,6 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176/38d1a3ed-811f-4f3b-80a2-5ae77b649a51"
 					(reference "#PWR0108")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 180.34 91.44 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e619496a-8505-421d-8c26-ee7ee1939917")
-		(property "Reference" "#PWR0110"
-			(at 180.34 97.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 180.34 97.155 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 180.34 91.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 180.34 91.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 180.34 91.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7a54bdcb-658c-454e-bb3e-a37f6e4e4fee")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176/38d1a3ed-811f-4f3b-80a2-5ae77b649a51"
-					(reference "#PWR0110")
 					(unit 1)
 				)
 			)

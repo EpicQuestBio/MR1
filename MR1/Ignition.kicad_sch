@@ -2531,7 +2531,7 @@
 	)
 	(wire
 		(pts
-			(xy 138.43 83.82) (xy 138.43 85.09)
+			(xy 138.43 85.09) (xy 138.43 86.36)
 		)
 		(stroke
 			(width 0)
@@ -2571,7 +2571,7 @@
 	)
 	(wire
 		(pts
-			(xy 138.43 74.93) (xy 138.43 76.2)
+			(xy 138.43 74.93) (xy 138.43 77.47)
 		)
 		(stroke
 			(width 0)
@@ -6235,7 +6235,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 138.43 85.09 0)
+		(at 138.43 86.36 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6246,7 +6246,7 @@
 		(fields_autoplaced yes)
 		(uuid "a50c2395-f2a9-457e-9648-25adf1dd1a70")
 		(property "Reference" "#PWR0116"
-			(at 138.43 91.44 0)
+			(at 138.43 92.71 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6257,7 +6257,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 138.43 90.805 0)
+			(at 138.43 92.075 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6267,7 +6267,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 85.09 0)
+			(at 138.43 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6278,7 +6278,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 85.09 0)
+			(at 138.43 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6289,7 +6289,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 138.43 85.09 0)
+			(at 138.43 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6391,7 +6391,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 138.43 80.01 0)
+		(at 138.43 81.28 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6401,7 +6401,7 @@
 		(dnp no)
 		(uuid "ae1701be-3d76-46fb-bab0-27a9c046b880")
 		(property "Reference" "C29"
-			(at 141.351 78.8416 0)
+			(at 141.351 80.1116 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6412,7 +6412,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 141.351 81.153 0)
+			(at 141.351 82.423 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6423,7 +6423,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 139.3952 83.82 0)
+			(at 139.3952 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6434,7 +6434,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 80.01 0)
+			(at 138.43 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6445,7 +6445,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 138.43 80.01 0)
+			(at 138.43 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6455,7 +6455,7 @@
 			)
 		)
 		(property "Mouser PN" ""
-			(at 138.43 80.01 0)
+			(at 138.43 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

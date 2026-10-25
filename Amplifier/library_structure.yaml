@@ -1,0 +1,46 @@
+# KiCad Library Structure Definition
+version: "1.0"
+description: "Precision Analog Front-End Nanopore Amplifier Library"
+
+# Library organization
+library:
+  prefix: "MR1"
+  description: "MR1 Precision Nanopore Front-End Component Library"
+  maintainer: "Daemon Pore Engineering <support@daemon.bio>"
+  license: "MIT"
+  website: "https://github.com/Aharoni-Lab/kicad-library-validator"
+  repository: "https://github.com/Aharoni-Lab/kicad-library-validator"
+
+  # Directory structure
+  directories:
+    symbols: "symbols"
+    footprints: "footprints"
+    models_3d: "3dmodels"
+    documentation: "docs"
+    tables: "tables"
+
+  # Naming conventions
+  naming:
+    symbols:
+      prefix: true
+      separator: "_"
+      case: "upper"
+      include_categories: false
+      category_separator: "_"
+    footprints:
+      prefix: true
+      separator: "_"
+      case: "upper"
+      include_categories: false
+      category_separator: "_"
+    models_3d:
+      prefix: false
+      separator: "_"
+      case: "lower"
+      include_categories: false
+      category_separator: "_"
+
+symbols: {}
+footprints: {}
+models_3d: {}
+documentation: {}

@@ -1,0 +1,76 @@
+(footprint "PogoPin_TargetPad_1.8mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Ultra-Low-Noise ENIG Target Disc for Spring-Loaded Pogo Pin (Mill-Max 821/824 series, 1.8mm Dia, Driven Guard Collar)")
+	(tags "pogo target pad enig low-leakage femtoamp")
+	(property "Reference" "TP**"
+		(at 0 -2.2 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "a1b2c3d4-0001-4000-8000-000000000001")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "PogoPin_TargetPad_1.8mm"
+		(at 0 2.2 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "a1b2c3d4-0002-4000-8000-000000000002")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.mill-max.com"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a1b2c3d4-0003-4000-8000-000000000003")
+	)
+	(property "Description" "Precision Gold Target Disc for Ultra-Low Leakage Nanopore Sensing"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a1b2c3d4-0004-4000-8000-000000000004")
+	)
+	(attr smd)
+	(fp_circle
+		(center 0 0)
+		(end 1.1 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "a1b2c3d4-0005-4000-8000-000000000005")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 0.9 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "a1b2c3d4-0006-4000-8000-000000000006")
+	)
+	(pad "1" smd circle
+		(at 0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.3)
+		(zone_connect 0)
+		(uuid "a1b2c3d4-0007-4000-8000-000000000007")
+	)
+	(embedded_fonts no)
+)
