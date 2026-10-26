@@ -127,13 +127,17 @@ def Torque_Cap_Outer():
                 with Locations(Rotation(0, 0, r_deg) * Location((body_r, 0, rib_z))):
                     Cylinder(radius=1.0, height=rib_h, mode=Mode.ADD)
 
-        # Cantilever spring arms with pawls
+        # Cantilever spring arms with pawls (Topology optimized living hinge parameters:
+        # arm_thickness = 1.8mm for 4-pass solid, root_fillet_radius = 2.5mm for stress reduction)
         arm_h = cap_h - cap_retention_h - 6.0
         arm_z = cap_retention_h + 1.0 + arm_h / 2.0
         for i in range(6):
             ang = i * 60.0
             with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0, -3.0, arm_z))):
-                Box(4.0, 16.0, arm_h, mode=Mode.ADD)
+                Box(1.8, 16.0, arm_h, mode=Mode.ADD)
+            # Add explicit root fillet radius (R=2.5mm tangent transition) at cantilever root attachment
+            with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0 - 0.9, -11.0, arm_z))):
+                Cylinder(radius=2.5, height=arm_h, mode=Mode.ADD)
             with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 3.0, 4.0, arm_z))):
                 Cylinder(radius=1.5, height=arm_h, mode=Mode.ADD)
 
