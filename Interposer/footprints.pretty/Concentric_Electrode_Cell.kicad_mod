@@ -27,7 +27,7 @@
 			)
 		)
 	)
-	(property "Datasheet" "https://pubs.acs.org/doi/10.1021/acs.jpcc.6b12543"
+	(property "Datasheet" "https://doi.org/10.1021/acs.jpcc.6b11501"
 		(at 0 0 0)
 		(unlocked yes)
 		(layer "F.Fab")

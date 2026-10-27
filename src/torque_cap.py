@@ -1,7 +1,3 @@
-# Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
-# Dedicated to the public domain under CC0 1.0 Universal (CC0-1.0).
-# SPDX-License-Identifier: CC0-1.0
-
 from build123d import *
 import math
 from src.constants import *
@@ -102,15 +98,16 @@ def Torque_Cap_Outer():
         cavity_z = (cap_retention_h - 0.5) + cavity_h / 2.0
         with Locations((0, 0, cavity_z)):
             Cylinder(radius=(NECK_OD + 9.0) / 2.0, height=cavity_h, mode=Mode.SUBTRACT)
-
+        
         # Pipette hole in top ceiling
-        with Locations((0, 0, cap_h - cap_top_thick / 2.0)):
-            Cylinder(radius=pipette_d / 2.0, height=cap_top_thick + 2.0, mode=Mode.SUBTRACT)
+        if (pipette_d > 0.0):
+            with Locations((0, 0, cap_h - cap_top_thick / 2.0)):
+                Cylinder(radius=pipette_d / 2.0, height=cap_top_thick + 2.0, mode=Mode.SUBTRACT)
 
         # 6 Flex ratchet windows
-        slot_w = 30.0
-        slot_l = 20.0
-        slot_h = cap_h - cap_retention_h - 2.0
+        slot_w = 23.0
+        slot_l = slot_w / 2.0
+        slot_h = cap_h - cap_retention_h - cap_top_thick - 2.0
         slot_z = (cap_h + cap_retention_h - 1.0) / 2.0
         for i in range(6):
             ang = i * 60.0
@@ -119,7 +116,7 @@ def Torque_Cap_Outer():
 
         # Textured Finger Knurling Ribs (Cap_Ribs)
         # Vertical ribs around perimeter at 5 deg steps where deg % 60 in [25, 30, 35]
-        rib_h = cap_h - cap_retention_h - 4.0
+        rib_h = cap_h - cap_retention_h - 5.0
         rib_z = cap_retention_h + rib_h / 2.0
         for r_deg in range(0, 360, 5):
             check = r_deg % 60
@@ -128,12 +125,12 @@ def Torque_Cap_Outer():
                     Cylinder(radius=1.0, height=rib_h, mode=Mode.ADD)
 
         # Cantilever spring arms with pawls
-        arm_h = cap_h - cap_retention_h - 6.0
-        arm_z = cap_retention_h + 1.0 + arm_h / 2.0
+        arm_h = slot_h - 2.0
+        arm_z = slot_z
         for i in range(6):
             ang = i * 60.0
             with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0, -3.0, arm_z))):
-                Box(4.0, 16.0, arm_h, mode=Mode.ADD)
+                Box(4.0, slot_l-1.0, arm_h, mode=Mode.ADD)
             with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 3.0, 4.0, arm_z))):
                 Cylinder(radius=1.5, height=arm_h, mode=Mode.ADD)
 

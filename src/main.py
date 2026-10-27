@@ -11,7 +11,13 @@ from build123d.exporters3d import export_step, export_stl
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.constants import *
-from src.nanopore_wafer_mold import Nanopore_Wafer_Mold_Left, Nanopore_Wafer_Mold_Right
+from src.nanopore_wafer_mold import (
+    Nanopore_Wafer_Mold_Left,
+    Nanopore_Wafer_Mold_Right,
+    Concentric_Guard_Mold_Plate_Top,
+    Bottom_Fluidic_Electrode_Mold_Plate,
+    MidLayer_PVA_Alignment_Frame
+)
 from src.cartridge import (
     PCB_Rigid_Active, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket,
     Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck,
@@ -36,6 +42,9 @@ def export_all():
         "Nanopore_Wafer_Mold_Right": Nanopore_Wafer_Mold_Right(),
         "Amplifier_Gasket_Mold_Left": Nanopore_Wafer_Mold_Left(is_nanopore=False),
         "Amplifier_Gasket_Mold_Right": Nanopore_Wafer_Mold_Right(is_nanopore=False),
+        "Concentric_Guard_Mold_Plate_Top": Concentric_Guard_Mold_Plate_Top(),
+        "Bottom_Fluidic_Electrode_Mold_Plate": Bottom_Fluidic_Electrode_Mold_Plate(),
+        "MidLayer_PVA_Alignment_Frame": MidLayer_PVA_Alignment_Frame(),
         "PCB_Rigid_Active": PCB_Rigid_Active(),
         "PTFE_Interposer": PTFE_Interposer(render_electrodes=True),
         "Silver_Chloride_Ribbon_Pads_Top": Silver_Chloride_Ribbon_Pads(top=True),

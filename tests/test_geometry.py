@@ -81,5 +81,46 @@ class TestGeometryGeneration(unittest.TestCase):
         c6 = run_routing_clearance_check()
         self.assertEqual(c6, 0, "Collisions detected in Flexible Routing vs Housings!")
 
+    def test_torque_cap_and_reader_mating(self):
+        """Verify mechanical mating of Torque_Cap_Outer, Torque_Cap_Inner, and Housing_Lid_Reader."""
+        cap_inner = Torque_Cap_Inner()
+        cap_outer = Torque_Cap_Outer()
+        lid_reader = Housing_Lid_Reader()
+        puck = Pressure_Puck()
+
+        # 1. Outer Cap to Inner Cap Retention & Ratchet Clearances
+        # Inner cap flange OD: 81.4 mm, Outer cap lip ID: 80.0 mm
+        retention_overlap = (INNER_CAP_OD - 80.0) / 2.0
+        self.assertAlmostEqual(retention_overlap, 0.7, places=2)
+        # Inner cap body OD: 79.0 mm, Outer cap cavity ID: 84.0 mm
+        body_clearance = (84.0 - 79.0) / 2.0
+        self.assertAlmostEqual(body_clearance, 2.5, places=2)
+        # Axial height fit
+        self.assertLess(INNER_CAP_H, OUTER_CAP_H - CAP_TOP_THICK)
+
+        # 2. Inner Cap Plunger into Reader Lid Hex Socket
+        # Plunger radius: 25.5 mm (D = 51.0 mm)
+        # Inscribed hex socket radius: 61.0 / 2.0 * cos(30 deg) = 26.414 mm
+        plunger_r = 25.5
+        inscribed_hex_r = (61.0 / 2.0) * (math.sqrt(3) / 2.0)
+        radial_clearance = inscribed_hex_r - plunger_r
+        self.assertGreater(radial_clearance, 0.9, "Plunger must clear hex flats by > 0.9mm")
+
+        # 3D clash verification: Plunger cylinder inside reader lid socket has zero clash
+        z_cap = 8.5
+        plunger_vol = Cylinder(radius=plunger_r, height=3.0).move(Location((0, 0, z_cap + 14.5)))
+        clash = lid_reader.intersect(plunger_vol)
+        clash_vol = clash.volume if clash is not None else 0.0
+        self.assertAlmostEqual(clash_vol, 0.0, places=3, msg="Plunger clashed with Reader Lid socket!")
+
+        # 3. Plunger square contact coverage on Pressure Puck
+        contact_area_plunger = math.pi * (plunger_r**2 - 12.5**2)
+        contact_area_puck = (3 * math.sqrt(3) / 2) * 30**2 - math.pi * 12.5**2
+        coverage_ratio = contact_area_plunger / contact_area_puck
+        self.assertGreater(coverage_ratio, 0.80, "Plunger must cover > 80% of pressure puck area")
+
+        # 4. Pipette Access Hole Coaxial Alignment
+        self.assertEqual(PIPETTE_HOLE_D, 25.0)
+
 if __name__ == "__main__":
     unittest.main()

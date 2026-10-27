@@ -460,22 +460,20 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertAlmostEqual((x_min + x_max) / 2.0, 164.5, delta=0.01, msg="Cavity must be centered at X=164.5mm")
 
     def test_amplifier_opa192_symbol_and_footprint(self):
-        """Ensure OPA192IDR symbol and SOIC-8 footprint exist in Amplifier project."""
+        """Ensure OPA2192IDR dual symbol and SOIC-8 footprint exist in Amplifier project."""
         # 1. Symbol in MR1.kicad_sym
         sym_file = REPO_ROOT / "Amplifier" / "footprints" / "MR1.kicad_sym"
         self.assertTrue(sym_file.exists(), "Amplifier MR1.kicad_sym must exist")
         sym_txt = sym_file.read_text(encoding="utf-8")
-        self.assertIn('(symbol "OPA192IDR"', sym_txt, "OPA192IDR symbol must be in MR1.kicad_sym")
+        self.assertIn('(symbol "OPA2192IDR"', sym_txt, "OPA2192IDR dual symbol must be in MR1.kicad_sym")
         
-        # Check all 8 pins are present
+        # Check all 8 pins are present across units
         for pin_num in range(1, 9):
-            self.assertIn(f'(number "{pin_num}"', sym_txt, f"Pin {pin_num} must exist in OPA192IDR symbol")
+            self.assertIn(f'(number "{pin_num}"', sym_txt, f"Pin {pin_num} must exist in OPA2192IDR symbol")
 
         # 2. Footprint in footprints.pretty
         fp_soic = REPO_ROOT / "Amplifier" / "footprints.pretty" / "SOIC-8_3.9x4.9mm_P1.27mm.kicad_mod"
-        fp_opa = REPO_ROOT / "Amplifier" / "footprints.pretty" / "OPA192IDR.kicad_mod"
         self.assertTrue(fp_soic.exists(), "SOIC-8_3.9x4.9mm_P1.27mm.kicad_mod must exist")
-        self.assertTrue(fp_opa.exists(), "OPA192IDR.kicad_mod must exist")
 
         soic_txt = fp_soic.read_text(encoding="utf-8")
         for p in range(1, 9):
@@ -485,10 +483,162 @@ class TestInterposerKiCad(unittest.TestCase):
         # 3. Schematic references
         sch_file = REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch"
         sch_txt = sch_file.read_text(encoding="utf-8")
-        self.assertIn('"MR1:OPA192IDR"', sch_txt, "Amplifier.kicad_sch must reference MR1:OPA192IDR")
-        self.assertIn('"OPA192IDR"', sch_txt)
-        self.assertIn('"U17"', sch_txt)
+        self.assertIn('"MR1:OPA2192IDR"', sch_txt, "Amplifier.kicad_sch must reference MR1:OPA2192IDR")
+        self.assertIn('"OPA2192IDR"', sch_txt)
+        self.assertIn('"U5"', sch_txt, "U5 dual OPA2192 must be instantiated in Amplifier.kicad_sch")
+
+    def test_concentric_interposer_mating_pad_footprint_and_schematic(self):
+        """Ensure Concentric_Interposer_Mating_Pad footprint and schematic symbol accurately
+        implement the concentric driven guard geometry: 0.7mm signal pad (0.2mm micro-via),
+        2.1mm ID to 3.0mm OD unbroken annular guard ring, 0.7mm bare PTFE gap, 4.0mm solder mask
+        keep-out zone, passive Vbias guard via NT3 for LMP7721, and active OPA2192 guard buffer
+        driving GUARD_WIDE."""
+        # 1. Footprint existence in Amplifier and Interposer libraries
+        amp_fp = REPO_ROOT / "Amplifier" / "footprints.pretty" / "Concentric_Interposer_Mating_Pad.kicad_mod"
+        int_fp = REPO_ROOT / "Interposer" / "footprints.pretty" / "Concentric_Interposer_Mating_Pad.kicad_mod"
+        self.assertTrue(amp_fp.exists(), "Concentric_Interposer_Mating_Pad.kicad_mod must exist in Amplifier footprints")
+        self.assertTrue(int_fp.exists(), "Concentric_Interposer_Mating_Pad.kicad_mod must exist in Interposer footprints")
+
+        amp_txt = amp_fp.read_text(encoding="utf-8")
+        # Pad 1: Signal contact pad (Ø0.7mm, drill 0.2mm via-in-pad)
+        self.assertIn('(pad "1" thru_hole circle', amp_txt)
+        self.assertIn('(size 0.7 0.7)', amp_txt)
+        self.assertIn('(drill 0.2)', amp_txt)
+
+        # Pad 2: Unbroken annular guard ring (0.45mm trace, ID=2.1mm, OD=3.0mm)
+        self.assertIn('(pad "2" smd custom', amp_txt)
+        self.assertIn('(end 1.275 0)', amp_txt)
+        self.assertIn('(width 0.45)', amp_txt)
+
+        # Solder mask keepout (Ø4.0mm on B.Mask)
+        self.assertIn('(layer "B.Mask")', amp_txt)
+        self.assertIn('(end 2.0 0)', amp_txt)
+
+        # Stroke syntax validity: must use KiCad valid line types (e.g. "dash", not "dashed")
+        self.assertNotIn('(type dashed)', amp_txt, "KiCad does not recognize 'dashed'; must use 'dash'")
+        self.assertIn('(type dash)', amp_txt)
+
+        # 2. Symbol in MR1.kicad_sym
+        sym_file = REPO_ROOT / "Amplifier" / "symbols" / "MR1.kicad_sym"
+        sym_txt = sym_file.read_text(encoding="utf-8")
+        self.assertIn('(symbol "Concentric_Interposer_Mating_Pad"', sym_txt)
+
+        # 3. Schematic instantiation in Amplifier.kicad_sch
+        sch_file = REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch"
+        sch_txt = sch_file.read_text(encoding="utf-8")
+        self.assertIn('"MR1:Concentric_Interposer_Mating_Pad"', sch_txt)
+        self.assertIn('"J_PAD1"', sch_txt)
+
+        # 4. Independent guard architecture:
+        # Route 1: Passive quiet guard for LMP7721 via NT3
+        self.assertIn('(label "GUARD"', sch_txt)
+        self.assertIn('(xy 63.5 60.96) (xy 72.39 60.96)', sch_txt, "NT3 Pin 1 must connect directly to GUARD net for LMP7721")
+        # Route 2: Active guard buffer for GUARD_WIDE using OPA2192 Unit 2
+        self.assertIn('(label "GUARD_WIDE"', sch_txt)
+        self.assertNotIn('"NT6"', sch_txt, "NT6 must be removed so active GUARD_WIDE is not shorted to Vbias")
+        # U16 LTC6268 Gain Stage: R3 feedback restored, R4 tied to Vbias
+        self.assertIn('(xy 153.67 59.69) (xy 153.67 62.23)', sch_txt, "R3 feedback loop must be closed across U16")
+        self.assertIn('(label "Vbias"\n\t\t(at 153.67 69.85 270)', sch_txt, "R4 must connect to Vbias")
+
+    def test_amplifier_route2_adg1219_multiplexer_integration(self):
+        """Ensure ADG1219BRMZ 2:1 precision SPDT analog switch is properly integrated into
+        Route 2 (U5 TIA feedback loop) for programmable dual-gain switching (100kΩ / 10kΩ)
+        controlled by ROUTE_SEL from MCU."""
+        import subprocess
+        # 1. Symbol existence & validation in MR1.kicad_sym
+        sym_file = REPO_ROOT / "Amplifier" / "symbols" / "MR1.kicad_sym"
+        self.assertTrue(sym_file.exists(), "Amplifier MR1.kicad_sym must exist")
+        sym_txt = sym_file.read_text(encoding="utf-8")
+        self.assertIn('(symbol "ADG1219BRMZ"', sym_txt, "ADG1219BRMZ symbol must exist in MR1.kicad_sym")
+        for pin_num in range(1, 9):
+            self.assertIn(f'(number "{pin_num}"', sym_txt, f"Pin {pin_num} must exist in ADG1219BRMZ symbol")
+        self.assertIn('(property "ki_keywords"', sym_txt)
+        self.assertIn('584-ADG1219BRMZ', sym_txt)
+
+        # 2. Footprint in footprints.pretty
+        fp_file = REPO_ROOT / "Amplifier" / "footprints.pretty" / "MSOP-8_3x3mm_P0.65mm.kicad_mod"
+        self.assertTrue(fp_file.exists(), "MSOP-8 footprint must exist in footprints.pretty")
+        fp_txt = fp_file.read_text(encoding="utf-8")
+        for p in range(1, 9):
+            self.assertIn(f'(pad "{p}" smd', fp_txt, f"Pad {p} must exist in MSOP-8 footprint")
+
+        # 3. Schematic component references
+        sch_file = REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch"
+        sch_txt = sch_file.read_text(encoding="utf-8")
+        self.assertIn('"MR1:ADG1219BRMZ"', sch_txt)
+        self.assertIn('"U17"', sch_txt, "U17 multiplexer must be instantiated in Amplifier.kicad_sch")
+
+        # 4. Netlist verification using kicad-cli
+        net_path = REPO_ROOT / "build" / "test_amp_netlist.net"
+        net_path.parent.mkdir(parents=True, exist_ok=True)
+        res = subprocess.run(
+            ["kicad-cli", "sch", "export", "netlist", "-o", str(net_path), str(sch_file)],
+            capture_output=True, text=True
+        )
+        self.assertEqual(res.returncode, 0, f"Netlist export failed: {res.stderr}")
+        net_txt = net_path.read_text(encoding="utf-8")
+
+        # Extract net blocks
+        import re
+        nets = {}
+        for m in re.finditer(r'\(net\s+\(code\s+\"[^\"]+\"\)\s+\(name\s+\"([^\"]+)\"\)[\s\S]*?\n\t\t\)', net_txt):
+            net_name = m.group(1)
+            nodes = re.findall(r'\(node\s+\(ref\s+\"([^\"]+)\"\)\s+\(pin\s+\"([^\"]+)\"\)', m.group(0))
+            nets[net_name] = nodes
+
+        # Verify U17 drain connects to Signal_Return (driving R45 differential ADC driver input)
+        d_net = [n for n, nodes in nets.items() if ('U17', '6') in nodes]
+        self.assertEqual(len(d_net), 1, "U17 pin 6 (D) must belong to exactly one net")
+        self.assertEqual(d_net[0], "/Signal_Return", "U17 Drain (pin 6) must connect to Signal_Return")
+        self.assertIn(('R45', '1'), nets[d_net[0]], "Signal_Return must feed R45 ADC driver resistor")
+        # Ensure U16 (Route 1) and U5 (Route 2) do NOT connect directly to Signal_Return
+        self.assertNotIn(('U16', '6'), nets[d_net[0]], "U16.6 must NOT short directly to Signal_Return")
+        self.assertNotIn(('U5', '1'), nets[d_net[0]], "U5.1 must NOT short directly to Signal_Return")
+        self.assertNotIn(('R32', '2'), nets[d_net[0]], "R32.2 must NOT short directly to Signal_Return")
+
+        # Verify U17 SA (pin 7) connects to Route 1 output (U16.6 post-gain stage)
+        sa_net = [n for n, nodes in nets.items() if ('U17', '7') in nodes]
+        self.assertEqual(len(sa_net), 1, "U17 pin 7 (SA) must belong to exactly one net")
+        self.assertIn(('U16', '6'), nets[sa_net[0]], "U17 SA (pin 7) must connect to Route 1 OUT (U16 pin 6)")
+        self.assertIn(('R3', '1'), nets[sa_net[0]], "U17 SA must connect to U16 feedback resistor R3")
+        self.assertIn(('C9', '1'), nets[sa_net[0]], "U17 SA must connect to U16 feedback capacitor C9")
+
+        # Verify U17 SB (pin 5) connects to Route 2 output (U5.1 micropore TIA via R32)
+        sb_net = [n for n, nodes in nets.items() if ('U17', '5') in nodes]
+        self.assertEqual(len(sb_net), 1, "U17 pin 5 (SB) must belong to exactly one net")
+        self.assertIn(('R32', '2'), nets[sb_net[0]], "U17 SB (pin 5) must connect to Route 2 OUT via R32")
+
+        # Verify U5 TIA local feedback loop (R10 100k, C3 15pF)
+        u5_out_net = [n for n, nodes in nets.items() if ('U5', '1') in nodes]
+        self.assertEqual(len(u5_out_net), 1)
+        self.assertIn(('R10', '1'), nets[u5_out_net[0]], "U5 pin 1 must connect to R10 (100k)")
+        self.assertIn(('C3', '1'), nets[u5_out_net[0]], "U5 pin 1 must connect to C3 (15pF)")
+        self.assertIn(('R32', '1'), nets[u5_out_net[0]], "U5 pin 1 must connect to R32 (49.9R)")
+
+        # Verify summing node WS_CIS_WIDE
+        wide_net = nets.get("/WS_CIS_WIDE", [])
+        self.assertIn(('U5', '2'), wide_net, "U5 pin 2 (-IN) must connect to WS_CIS_WIDE")
+        self.assertIn(('R10', '2'), wide_net, "R10 pin 2 must connect to WS_CIS_WIDE")
+        self.assertIn(('C3', '2'), wide_net, "C3 pin 2 must connect to WS_CIS_WIDE")
+        self.assertIn(('J_POGO2', '10'), wide_net, "J_POGO2 pin 10 must connect to WS_CIS_WIDE")
+
+        # Verify control line ROUTE_SEL
+        route_net = nets.get("/ROUTE_SEL", [])
+        self.assertIn(('U17', '8'), route_net, "U17 IN (pin 8) must connect to /ROUTE_SEL")
+
+        # Verify enable line
+        p3v3_net = nets.get("+3V3", [])
+        self.assertIn(('U17', '1'), p3v3_net, "U17 EN (pin 1) must be tied to +3V3")
+
+        # Verify dual power supplies
+        vdda_net = nets.get("VDDA", [])
+        vssa_net = nets.get("VSSA", [])
+        gnda_net = nets.get("GNDA", [])
+        self.assertIn(('U17', '2'), vdda_net, "U17 VDD must connect to VDDA")
+        self.assertIn(('U17', '4'), vssa_net, "U17 VSS must connect to VSSA")
+        self.assertIn(('U17', '3'), gnda_net, "U17 GND must connect to GNDA")
 
 if __name__ == "__main__":
     unittest.main()
+
 

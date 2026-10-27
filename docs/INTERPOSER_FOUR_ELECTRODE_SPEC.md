@@ -2,7 +2,7 @@
 
 **Document Version:** 1.0.0  
 **References:**
-- ACS Journal of Physical Chemistry C: *"Method of the Four-Electrode Electrochemical Cell"* (J. Phys. Chem. C 2017, 121, 8, 4112–4119) [DOI: 10.1021/acs.jpcc.6b12543]
+- ACS Journal of Physical Chemistry C: *"Method of the Four-Electrode Electrochemical Cell for the Characterization of Concentrated Binary Electrolytes: Theory and Application"* (J. Phys. Chem. C 2017, 121, 8, 4112–4129) [DOI: 10.1021/acs.jpcc.6b11501]
 - Gamry Instruments: *"Two-, Three-, and Four-Electrode Experiments"* (Application Note)
 - Target Substrate: 0.8 mm Rogers RO4350B ($\epsilon_r \approx 3.48$, $\tan\delta = 0.0037$) or PTFE ($\epsilon_r = 2.1$, $\tan\delta = 0.0002$, ENIG Finish)
 

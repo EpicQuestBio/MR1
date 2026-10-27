@@ -77,7 +77,7 @@
 		(property "Reference" "E" (at 0 11.43 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "Concentric_Electrode_Cell" (at 0 -11.43 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "footprints:Nanopore holder_recessed" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-		(property "Datasheet" "https://pubs.acs.org/doi/10.1021/acs.jpcc.6b12543" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "https://doi.org/10.1021/acs.jpcc.6b11501" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Description" "Four-Electrode Concentric Kelvin Electrochemical Cell (WE, WS, RE, CE, Guard)" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "ki_keywords" "four-electrode kelvin concentric we ws re ce electrochemical" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(symbol "Concentric_Electrode_Cell_0_1"

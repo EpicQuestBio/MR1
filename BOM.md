@@ -63,9 +63,10 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | **U2 (Amplifier)** | TI LMP7721MA/NOPB | SOIC-8 | 1 | Route 1 (Path 1): 3 fA ultra-low input bias current precision TIA for sub-5 nm pores |
 | **R1 (Amplifier)** | Ohmite MOX-300001007FE / TE HB1100MFZRE | 0805/1206 | 1 | Route 1 (Path 1): 1.0 GΩ ±1.0% precision high-megohm TIA feedback resistor |
 | **C1 (Amplifier)** | Murata GJM1555C1H2R0BB01D | 0402 | 1 | Route 1 (Path 1): 2.0 pF ±0.1 pF C0G/NP0 non-piezoelectric feedback capacitor |
-| **U17 (Amplifier)** | TI OPA192IDR | SOIC-8 | 1 | Route 2 (Path 2): 10 MHz rail-to-rail precision wideband TIA for 10 µm - 100 µm micropores |
-| **Rf2 (Amplifier)** | Susumu RG1608P-104-B-T5 / Panasonic ERA-3AEB104V | 0603/0805 | 1 | Route 2 (Path 2): 100.0 kΩ ±0.1%, 25 ppm/°C thin film feedback resistor (±20.48 µA full scale) |
-| **Cf2 (Amplifier)** | TDK / KEMET C0603C150J5GACTU | 0603 | 1 | Route 2 (Path 2): 15.0 pF ±1.0% C0G/NP0 feedback capacitor (106.1 kHz bandwidth cutoff) |
+| **U5 (Amplifier)** | TI OPA2192IDR | SOIC-8 | 1 | Route 2 (Path 2): Dual precision op-amp (Unit 1 = Micropore TIA, Unit 2 = Low-Z Guard Buffer driving GUARD_WIDE) |
+| **U17 (Amplifier)** | ADI ADG1219BRMZ | MSOP-8 | 1 | Precision low-leakage SPDT analog multiplexer switching Route 1 (LMP7721+LTC6268) vs Route 2 (OPA2192) into ADC (`Signal_Return`) |
+| **R10 (Amplifier)** | Yageo RC0402FR-07100KL | 0402 | 1 | Route 2 Micropore TIA: 100.0 kΩ ±1.0% thin film feedback resistor (±20.48 µA full scale) |
+| **C3 (Amplifier)** | Wurth 885012005058 | 0402 | 1 | Route 2 Micropore TIA: 15.0 pF ±5% C0G/NP0 feedback capacitor (106.1 kHz bandwidth) |
 | **U13 (Amplifier)** | Analog Devices AD4000BCPZ / AD4020 | MSOP-10 | 1 | 16/18-Bit 2 MSPS pseudo-differential SAR ADC mounted on Amplifier board |
 | **U9 (MR1)** | Microchip MCP4822-E/MS | MSOP-8 | 1 | Dual 12-bit SPI DAC with internal 2.048V bandgap reference for pore bias |
 | **U1 (MR1)** | Espressif ESP32-S3-MINI-1U | Module | 1 | 240 MHz dual-core MCU with native USB CDC-ACM and Wi-Fi |

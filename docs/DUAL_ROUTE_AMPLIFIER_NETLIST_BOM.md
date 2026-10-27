@@ -62,16 +62,22 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 
 ---
 
-### B. Route Two Netlist (OPA192 Wideband & Micropore TIA)
+### B. Route Two Netlist (OPA2192 Dual Micropore TIA & Active Guard Buffer) and Route Multiplexer (ADG1219)
 
 | Net Name | Origin Pin | Destination Pins | Function / Routing Rule |
 | :--- | :--- | :--- | :--- |
-| **`WS_CIS_WIDE`** | `J_POGO1.10` | `U17.2` (`-IN`), `Rf2.1`, `Cf2.1` | **Micropore Current Node:** Carries microampere currents from $10\,\mu\text{m}$ / $100\,\mu\text{m}$ pores. Short direct trace. |
-| **`GUARD_WIDE`** | `J_POGO1.9` | Coplanar Shield Traces | **Wideband Shield:** Flanks `WS_CIS_WIDE` to prevent high-frequency capacitive crosstalk. |
-| **`Vbias`** | MCP4822 / Summer | `U17.3` (`+IN`), `R_bias2` (1k) | **Non-Inverting Bias Reference:** Defines cell potential (trans referenced to GNDA) or virtual ground; decoupled with C0G cap to GNDA. |
-| **`Path2_OUT`** | `U17.6` (`VOUT`) | `Rf2.2`, `Cf2.2`, ADC Input / Mux | **Route 2 Output:** Voltage scaled at $100\text{ mV}/\mu\text{A}$ ($V_{\text{out}} = -I_{\text{pore}} \times 100\text{ k}\Omega$). |
-| **`VDDA`** | Positive Rail | `U17.7` (`V+`), `C19.1` | Positive Supply ($+2.5\text{V}$ / $+5.0\text{V}$). |
-| **`VSSA`** | Negative Rail | `U17.4` (`V-`), `C20.1` | Negative Supply ($-2.5\text{V}$ / $-5.0\text{V}$). |
+| **`WS_CIS_WIDE`** | `J_POGO1.10` / `J_PAD1.1` | `U5.2` (`-IN`), `R10.2`, `C3.2` | **Micropore Current Summing Node:** Carries microampere currents from $10\,\mu\text{m}$ / $100\,\mu\text{m}$ pores into inverting input. Dedicated $100\text{ k}\Omega \parallel 15\text{ pF}$ feedback loop. |
+| **`GUARD_WIDE`** | `U5.7` (`OUT_B`) | `U5.6` (`-IN_B`), `J_POGO1.9`, `J_PAD1.2` | **Active Wideband Guard Shield:** Driven by low-impedance follower `U5B` ($< 0.1\,\Omega$) to eliminate capacitive crosstalk from microamp currents. Completely isolated from Route 1 passive guard. |
+| **`Vbias`** | MCP4822 / Summer | `U5.3` (`+IN_A`), `U5.5` (`+IN_B`), `R9.1` (1k) | **Quiet Non-Inverting Bias Reference:** Defines cell reference / virtual ground; decoupled with C0G cap `C14` to GNDA. |
+| **`Net-(U5A-~)`** | `U5.1` (`OUT_A`) | `R10.1`, `C3.1`, `R32.1` (49.9Ω) | **Route 2 Raw TIA Output:** Low-impedance op-amp output drives local feedback loop ($R_{10} \parallel C_3$) and isolation resistor `R32`. |
+| **`Route2_OUT`** | `R32.2` (49.9Ω) | `U17.5` (`SB`) | **Route 2 Mux Input:** Output of Route 2 OPA2192 TIA feeding Channel B (`SB`) of `U17`. Isolated from `Signal_Return`. |
+| **`Route1_OUT`** | `U16.6` (`OUT`) | `R3.1` (1k), `C9.1` (100nF), `U17.7` (`SA`) | **Route 1 Mux Input:** Output of Route 1 post-gain stage (`U16` LTC6268) feeding Channel A (`SA`) of `U17`. Isolated from `Signal_Return`. |
+| **`Signal_Return`**| `U17.6` (`D`) | `R45.1` (499Ω) | **Multiplexed ADC Input:** Multiplexer common drain output driving the `U6` differential ADC driver input resistor. |
+| **`/ROUTE_SEL`** | `J7.4` (via `R33` 27Ω) | `U17.8` (`IN`) | **Route Multiplexer Control:** 3.3V CMOS digital input from MCU/ESP32. Logic 0 (`ROUTE_SEL = 0`) = Route 1 (LMP7721 femtoamp TIA + LTC6268); Logic 1 (`ROUTE_SEL = 1`) = Route 2 (OPA2192 micropore TIA). |
+| **`+3V3`** | 3.3V Digital Rail | `U17.1` (`EN`) | **Switch Active-High Enable:** Permanently tied high to keep multiplexer active. |
+| **`VDDA`** | Positive Rail | `U5.8` (`V+`), `U17.2` (`VDD`), `C19.1`, `C40.1` | Positive Supply ($+2.5\text{V}$ / $+5.0\text{V}$). |
+| **`VSSA`** | Negative Rail | `U5.4` (`V-`), `U17.4` (`VSS`), `C20.1`, `C42.1` | Negative Supply ($-2.5\text{V}$ / $-5.0\text{V}$). |
+| **`GNDA`** | Main Star Ground | `U17.3` (`GND`), `C40.2`, `C42.2` | Clean analog ground return. |
 
 ---
 
@@ -105,11 +111,15 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 | **`C10`** | 1 | High-Frequency Rail Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
 | **`C11`** | 1 | Bulk Analog Rail Decoupling | **$4.7\,\mu\text{F}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0805 SMD |
 | **`C12`** | 1 | Negative Rail Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
-| **`U17`** | 2 | Precision Rail-to-Rail Op-Amp | **TI OPA192** | — | $\pm 18\text{V}$ | $5\,\mu\text{V}$ offset, $10\text{ MHz}$ GBW | SOIC-8 / MSOP-8 |
-| **`Rf2`** | 2 | Wideband Feedback Resistor | **$100.0\text{ k}\Omega$** | **$\pm 0.1\%$** | $50\text{V}$ | **$\pm 25\text{ ppm/}^\circ\text{C}$ Thin Film** | 0603 / 0805 SMD |
-| **`Cf2`** | 2 | Wideband Feedback Capacitor | **$15.0\text{ pF}$** | **$\pm 1.0\%$** | $50\text{V}$ | **C0G / NP0** ($Q > 1000$) | 0603 SMD |
+| **`U5`** | 2 | Dual Precision Rail-to-Rail Op-Amp | **TI OPA2192IDR** | — | $\pm 18\text{V}$ | $5\,\mu\text{V}$ offset, $10\text{ MHz}$ GBW | SOIC-8 |
+| **`U17`** | Both | Precision Low-Leakage SPDT Analog Switch | **ADI ADG1219BRMZ** | — | $\pm 16.5\text{V}$ | $< 1\text{ pA}$ leakage, $1.0\text{ pF}$ $C_\text{off}$, $< 1\text{ pC}$ $Q_\text{inj}$ | MSOP-8 |
+| **`R10`** | 2 | Wideband Micropore Feedback Resistor | **$100.0\text{ k}\Omega$** | **$\pm 1.0\%$** | $50\text{V}$ | **$\pm 25\text{ ppm/}^\circ\text{C}$ Thin Film** | 0402 SMD |
+| **`C3`** | 2 | Wideband Micropore Feedback Capacitor | **$15.0\text{ pF}$** | **$\pm 1.0\%$** | $50\text{V}$ | **C0G / NP0** ($Q > 1000$) | 0402 SMD |
+| **`R32`** | 2 | Output Isolation Damping Resistor | **$49.9\ \Omega$** | **$\pm 1.0\%$** | $50\text{V}$ | Thick Film | 0402 SMD |
 | **`C19`** | 2 | Positive Rail Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
 | **`C20`** | 2 | Negative Rail Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
+| **`C40`** | Both | Mux VDDA Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
+| **`C42`** | Both | Mux VSSA Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
 
 ---
 
@@ -120,10 +130,12 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 | **1** | **`U2`** | Texas Instruments | **`LMP7721MA/NOPB`** | Mouser: `926-LMP7721MA/NOPB`<br>DigiKey: `296-LMP7721MA/NOPB-ND` | Guaranteed $3\text{ fA}$ bias current; dedicated guard driver pins 2 and 7 flanking input pin 8. |
 | **2** | **`R1`** | Ohmite / TE Connectivity | **`MOX-300001007FE`** or **`HB1100MFZRE`** | Mouser: `588-MOX-300001007FE`<br>DigiKey: `A106041-ND` | $1\text{ G}\Omega \pm 1\%$, ultra-low shunt capacitance ($< 0.1\text{ pF}$), rated for high-impedance electrometer circuits. |
 | **3** | **`C1`** | Murata | **`GJM1555C1H2R0BB01D`** | Mouser: `81-GJM1555C1H2R0BB01D`<br>DigiKey: `490-GJM1555C1H2R0BB01D-ND` | $2\text{ pF} \pm 0.1\text{ pF}$, C0G/NP0 dielectric completely prevents piezoelectric pump vibration microphonics. |
-| **4** | **`U17`** | Texas Instruments | **`OPA192IDR`** | Mouser: `595-OPA192IDR`<br>DigiKey: `296-OPA192IDR-ND` | e-trim precision CMOS/Bipolar; $5\,\mu\text{V}$ offset, $10\text{ MHz}$ GBW, handles $\pm 20.48\,\mu\text{A}$ without distortion. |
-| **5** | **`Rf2`** | Susumu / Panasonic | **`RG1608P-104-B-T5`** or **`ERA-3AEB104V`** | Mouser: `754-RG1608P-104-B-T5`<br>DigiKey: `P100KBCT-ND` | $100\text{ k}\Omega \pm 0.1\%$, $\pm 25\text{ ppm/}^\circ\text{C}$ thin film prevents baseline gain drift during ambient temperature shifts. |
-| **6** | **`Cf2`** | TDK / KEMET | **`C0603C150J5GACTU`** | Mouser: `80-C0603C150J5G`<br>DigiKey: `399-C0603C150J5GACTU-ND` | $15\text{ pF} \pm 5\%$, C0G dielectric; sets exact $-3\text{dB}$ cutoff to $106.1\text{ kHz}$ ($f_c = \frac{1}{2\pi R_{f2} C_{f2}}$). |
-| **7** | **`J_POGO1`** | Mill-Max | **`821-22-012-10-000101`** | Mouser: `575-8212201210000101`<br>DigiKey: `ED1352-12-ND` | 12-Pin precision gold-plated beryllium copper spring-loaded header ($> 50\,\mu\text{in}$ Au over Ni). |
+| **4** | **`U5`** | Texas Instruments | **`OPA2192IDR`** | Mouser: `595-OPA2192IDR`<br>DigiKey: `296-48590-1-ND` | Dual precision e-trim op-amp (SOIC-8): Unit 1 = Micropore TIA; Unit 2 = Low-Z Guard Buffer driving `GUARD_WIDE`. |
+| **5** | **`U17`** | Analog Devices | **`ADG1219BRMZ`** | Mouser: `584-ADG1219BRMZ`<br>DigiKey: `ADG1219BRMZ-ND` | High-voltage iCMOS SPDT 2:1 precision switch (MSOP-8): $< 1\text{ pA}$ leakage, $1.0\text{ pF}$ $C_\text{off}$, selects Route 1 vs Route 2 into ADC. |
+| **6** | **`R10`** | Yageo / Susumu | **`RC0402FR-07100KL`** | Mouser: `603-RC0402FR-07100KL`<br>DigiKey: `311-100KLRTR-ND` | $100\text{ k}\Omega \pm 1\%$, micropore TIA feedback ($\pm 20.48\,\mu\text{A}$ range, $106.1\text{ kHz}$). |
+| **7** | **`C3`** | Wurth / Murata | **`885012005058`** | Mouser: `710-885012005058`<br>DigiKey: `732-885012005058-ND` | $15\text{ pF} \pm 5\%$ C0G 0402; sets exact $-3\text{dB}$ cutoff to $106.1\text{ kHz}$ for Route 2 TIA. |
+| **8** | **`R32`** | Yageo | **`RC0402FR-0749R9L`** | Mouser: `603-RC0402FR-0749R9L`<br>DigiKey: `311-49.9LRTR-ND` | $49.9\ \Omega \pm 1\%$ isolation and transmission damping resistor for Route 2 output. |
+| **9** | **`J_POGO1`** | Mill-Max | **`821-22-012-10-000101`** | Mouser: `575-8212201210000101`<br>DigiKey: `ED1352-12-ND` | 12-Pin precision gold-plated beryllium copper spring-loaded header ($> 50\,\mu\text{in}$ Au over Ni). |
 
 ---
 

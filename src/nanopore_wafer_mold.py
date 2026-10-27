@@ -26,20 +26,39 @@ def Rounded_Mold_Block(t, w, h, r=4.0):
             fillet(edges_to_fillet, radius=r)
     return p.part
 
-def Rounded_Reservoir_Block(t, w, h, r=2.0):
-    """Creates a reservoir cutout block with rounded corners."""
+def Rounded_Reservoir_Block(t, w, h, is_left=True, r_corner=3.0, r_floor=2.0):
+    """
+    Creates a smooth resin pouring reservoir cutout block with rounded vertical
+    corners and bottom transition, eliminating sharp corners that trap bubbles or resin.
+    """
     with BuildPart(mode=Mode.PRIVATE) as p:
         Box(t, w, h)
-        edges_to_fillet = p.edges().filter_by(Axis.X)
+        # Vertical edges at the back of the mold half (away from parting line X=0)
+        z_edges = p.edges().filter_by(Axis.Z)
+        if is_left:
+            back_z = [e for e in z_edges if e.center().X < 0]
+        else:
+            back_z = [e for e in z_edges if e.center().X > 0]
+        if back_z:
+            fillet(back_z, radius=r_corner)
+
+        # Bottom floor edges
+        bot_y = p.edges().filter_by(Axis.Y).sort_by(Axis.Z)[:2]
+        if is_left:
+            bot_back = [e for e in bot_y if e.center().X < 0]
+        else:
+            bot_back = [e for e in bot_y if e.center().X > 0]
+        bot_x = p.edges().filter_by(Axis.X).sort_by(Axis.Z)[:2]
+        edges_to_fillet = (bot_back if bot_back else bot_y[:1]) + bot_x
         if edges_to_fillet:
-            fillet(edges_to_fillet, radius=r)
+            fillet(edges_to_fillet, radius=r_floor)
     return p.part
 
 def build_base_mold_half(is_left=True):
     """
     Constructs the shared structural body of one mold half:
     - Base rounded block (80 x 90 x 15 mm)
-    - Top degassing/pouring reservoir (50 x 15 x 12 mm cut)
+    - Top degassing/pouring reservoir (50 x 15 x 12 mm cut with smooth filleted corners)
     - Tapered injection sprue runner (D=6mm -> 3mm down to hex cavity apex at Z=61)
     - Symmetric air bleed vents (1.5 x 1.5 mm up to Z=90)
     - 4 M4 clamping bolt through-holes with counterbores
@@ -56,13 +75,14 @@ def build_base_mold_half(is_left=True):
             if edges_to_fillet:
                 fillet(edges_to_fillet, radius=4.0)
 
-        # 2. Top Degassing & Pouring Reservoir (leaves 3mm back wall)
+        # 2. Top Degassing & Pouring Reservoir (leaves 3mm back wall, smooth rounded corners)
         res_w = HEX_DIAM - 10.0  # 50.0 mm
         res_d = 15.0             # 15.0 mm depth
         res_t = MOLD_T - 3.0     # 12.0 mm thickness cut
         res_x_center = -res_t / 2.0 if is_left else res_t / 2.0
-        with Locations((res_x_center, 0, MOLD_H - res_d / 2.0)):
-            Box(res_t + 0.1, res_w, res_d + 0.1, mode=Mode.SUBTRACT)
+        res_cut = Rounded_Reservoir_Block(res_t + 0.1, res_w, res_d + 0.1, is_left=is_left, r_corner=3.0, r_floor=2.0)
+        with Locations((res_x_center, 0, MOLD_H - res_d / 2.0 + 0.05)):
+            add(res_cut, mode=Mode.SUBTRACT)
 
         # 3. Tapered Sprue Channel (stops at hex cavity apex Z=61)
         with BuildSketch(Plane.YZ.offset(0)):
@@ -121,7 +141,7 @@ def build_base_mold_half(is_left=True):
 
     return p.part
 
-def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
+def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top", multi_stage_guard=False):
     """
     Left mold half (X < 0 in assembly).
     Forms the back face of the gasket where the diamond boss and wafer protrude into the PCB.
@@ -131,6 +151,7 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
     - 4 wafer corner guide pin holes (D=1.2mm)
     - Passive port core pins (D=2.0mm) for pass-through ports
     - Circuitry cutouts and square central plug (if is_nanopore=False)
+    - Multi-stage 3D driven guard coaxial wells (if multi_stage_guard=True)
     """
     base = build_base_mold_half(is_left=True)
     with BuildPart(mode=Mode.PRIVATE) as p:
@@ -167,6 +188,24 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
             # Weep Duct Pins
             add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
+            if multi_stage_guard:
+                # 3D Driven Guard Coaxial Wells:
+                # Central Signal Dot well (WS_CIS): D=1.2mm, depth 0.4mm into mold
+                with Locations((-GASKET_THICK / 2.0 - 0.2, 0, CAVITY_Z)):
+                    Cylinder(radius=0.6, height=0.4, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+                # Driven Guard Ring groove (GUARD): ID=2.8mm, OD=4.2mm, depth 0.4mm
+                with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+                    with Locations((0, CAVITY_Z)):
+                        Circle(2.1)
+                        Circle(1.4, mode=Mode.SUBTRACT)
+                extrude(amount=-0.4, mode=Mode.SUBTRACT)
+                # Outer Faraday Shield Ring groove (GNDA): ID=5.2mm, OD=6.5mm, depth 0.4mm
+                with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+                    with Locations((0, CAVITY_Z)):
+                        Circle(3.25)
+                        Circle(2.6, mode=Mode.SUBTRACT)
+                extrude(amount=-0.4, mode=Mode.SUBTRACT)
+
         else:
             # Amplifier mold (is_nanopore=False)
             cutouts = Circuitry_Cutouts(height=GASKET_THICK / 2.0)
@@ -186,9 +225,24 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top"):
             # Weep Duct Pins
             add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
+            if multi_stage_guard:
+                # 3D Driven Guard Coaxial Wells:
+                with Locations((-GASKET_THICK / 2.0 - 0.2, 0, CAVITY_Z)):
+                    Cylinder(radius=0.6, height=0.4, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+                with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+                    with Locations((0, CAVITY_Z)):
+                        Circle(2.1)
+                        Circle(1.4, mode=Mode.SUBTRACT)
+                extrude(amount=-0.4, mode=Mode.SUBTRACT)
+                with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+                    with Locations((0, CAVITY_Z)):
+                        Circle(3.25)
+                        Circle(2.6, mode=Mode.SUBTRACT)
+                extrude(amount=-0.4, mode=Mode.SUBTRACT)
+
     return p.part
 
-def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
+def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top", multi_stage_guard=False):
     """
     Right mold half (X > 0 in assembly).
     Forms the front channel face of the gasket sealed against Plate 3.
@@ -198,6 +252,7 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
     - Port core pins meeting Left half at X=0
     - Positive microfluidic channel ridge along Cis path for Nanopore mold
     - Positive microfluidic channel ridge along Trans path for Amplifier mold
+    - Compliant port crush-rib sealing grooves & electrode ring grooves (if multi_stage_guard=True)
     """
     base = build_base_mold_half(is_left=False)
     with BuildPart(mode=Mode.PRIVATE) as p:
@@ -227,6 +282,24 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
             add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
             add(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
+            if multi_stage_guard:
+                # 1. Port Crush-Rib Sealing Grooves (depth 0.4mm into mold face)
+                for port in ALL_PORTS:
+                    with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
+                        with Locations(port):
+                            Circle(2.2)
+                            Circle(1.4, mode=Mode.SUBTRACT)
+                    extrude(amount=0.4, mode=Mode.SUBTRACT)
+
+                # 2. Concentric Bottom Electrode Ring Grooves
+                with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
+                    with Locations((0, CAVITY_Z)):
+                        Circle(3.2)
+                        Circle(2.5, mode=Mode.SUBTRACT)
+                        Circle(5.0)
+                        Circle(4.0, mode=Mode.SUBTRACT)
+                extrude(amount=0.4, mode=Mode.SUBTRACT)
+
         else:
             # Amplifier mold (is_nanopore=False)
             # 1. Central square plug (3.0 x 3.0 mm from X = +0.8 down to X = 0)
@@ -253,6 +326,21 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top"):
             add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
             add(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
+            if multi_stage_guard:
+                for port in ALL_PORTS:
+                    with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
+                        with Locations(port):
+                            Circle(2.2)
+                            Circle(1.4, mode=Mode.SUBTRACT)
+                    extrude(amount=0.4, mode=Mode.SUBTRACT)
+                with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
+                    with Locations((0, CAVITY_Z)):
+                        Circle(3.2)
+                        Circle(2.5, mode=Mode.SUBTRACT)
+                        Circle(5.0)
+                        Circle(4.0, mode=Mode.SUBTRACT)
+                extrude(amount=0.4, mode=Mode.SUBTRACT)
+
     return p.part
 
 def Nanopore_Wafer_Mold_Assembly(explode=0.0, show_gasket=True, is_nanopore=True):
@@ -273,6 +361,135 @@ def Nanopore_Wafer_Mold_Assembly(explode=0.0, show_gasket=True, is_nanopore=True
             gasket = Fitted_Amplifier_Gasket().move(Location((0, 0, -GASKET_THICK / 2.0))).rotate(Axis.Y, 90).move(Location((0, 0, CAVITY_Z)))
             parts.append(gasket)
     return parts
+
+def Concentric_Guard_Mold_Plate_Top():
+    """
+    Dedicated SLA resin mold plate for casting the top interconnect face of the monolithic interposer.
+    Features negative coaxial cavities:
+    - Central Signal Dot well (WS_CIS, D=1.2mm, depth 0.4mm into mold)
+    - Wideband Signal Dot well (WS_CIS_WIDE, D=1.2mm, depth 0.4mm into mold)
+    - Concentric Driven Guard Ring groove (GUARD / GUARD_WIDE, ID=2.8mm, OD=4.2mm, depth 0.4mm)
+    - Outer Concentric Faraday Shield Ring groove (GNDA, ID=5.2mm, OD=6.5mm, depth 0.4mm)
+    - Degassing reservoir and alignment interlocks
+    """
+    base = build_base_mold_half(is_left=True)
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        add(base)
+        # 1. Central Signal Dot well (WS_CIS): D=1.2mm, depth 0.4mm into mold
+        with Locations((-GASKET_THICK / 2.0 - 0.2, 0, CAVITY_Z)):
+            Cylinder(radius=0.6, height=0.4, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+
+        # 2. Concentric Driven Guard Ring groove (GUARD): ID=2.8mm, OD=4.2mm, depth 0.4mm
+        with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+            with Locations((0, CAVITY_Z)):
+                Circle(2.1)
+                Circle(1.4, mode=Mode.SUBTRACT)
+        extrude(amount=-0.4, mode=Mode.SUBTRACT)
+
+        # 3. Outer Concentric Faraday Shield Ring groove (GNDA): ID=5.2mm, OD=6.5mm, depth 0.4mm
+        with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+            with Locations((0, CAVITY_Z)):
+                Circle(3.25)
+                Circle(2.6, mode=Mode.SUBTRACT)
+        extrude(amount=-0.4, mode=Mode.SUBTRACT)
+
+        # 4. Wideband Signal Dot well (WS_CIS_WIDE, offset 10mm along Y)
+        with Locations((-GASKET_THICK / 2.0 - 0.2, 10.0, CAVITY_Z)):
+            Cylinder(radius=0.6, height=0.4, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+        with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
+            with Locations((10.0, CAVITY_Z)):
+                Circle(2.1)
+                Circle(1.4, mode=Mode.SUBTRACT)
+        extrude(amount=-0.4, mode=Mode.SUBTRACT)
+
+        # Weep Duct Pins
+        add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+
+    return p.part
+
+def Bottom_Fluidic_Electrode_Mold_Plate():
+    """
+    Dedicated SLA resin mold plate for casting the bottom face of the monolithic interposer.
+    Features:
+    - 4 Port Crush-Rib Sealing Grooves (depth 0.4mm, width 0.8mm) around fluid ports for leak-free seal against unprimed PP.
+    - Annular Ag/AgCl pickoff ring grooves for RE_TRANS (ID 5.0mm, OD 6.4mm) and CE_GNDA (ID 8.0mm, OD 10.0mm).
+    - Port core pins, alignment dowels, and sprue runner.
+    """
+    base = build_base_mold_half(is_left=False)
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        add(base)
+        # 1. Port Crush-Rib Sealing Grooves (depth 0.4mm into mold face)
+        for port in ALL_PORTS:
+            with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
+                with Locations(port):
+                    Circle(2.2)
+                    Circle(1.4, mode=Mode.SUBTRACT)
+            extrude(amount=0.4, mode=Mode.SUBTRACT)
+
+        # 2. Concentric Bottom Electrode Ring Grooves (Ag/AgCl pickoff rings)
+        with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
+            with Locations((0, CAVITY_Z)):
+                # RE_TRANS ring (r: 2.5 to 3.2 mm -> D: 5.0 to 6.4 mm)
+                Circle(3.2)
+                Circle(2.5, mode=Mode.SUBTRACT)
+                # CE_GNDA ring (r: 4.0 to 5.0 mm -> D: 8.0 to 10.0 mm)
+                Circle(5.0)
+                Circle(4.0, mode=Mode.SUBTRACT)
+        extrude(amount=0.4, mode=Mode.SUBTRACT)
+
+        # 3. Port core pins
+        for port in ALL_PORTS:
+            with Locations((GASKET_THICK / 4.0, port[0], port[1])):
+                Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
+
+        # Weep Duct Pins and Trench Boss
+        add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+        add(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+
+    return p.part
+
+def MidLayer_PVA_Alignment_Frame():
+    """
+    Mid-layer alignment frame for positioning sacrificial PVA microfluidic cores
+    and the silicon nanopore chip during potting.
+    Features:
+    - Hexagonal carrier body (55.0 mm flat-to-flat, 0.8 mm thickness)
+    - Central 45-degree diamond chip pocket (4.0 x 4.0 mm)
+    - Fluid port pass-through collars
+    - Vertical Z-axis conductive via pilot holes (D=1.2mm)
+    """
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        with BuildSketch(Plane.XY):
+            RegularPolygon(radius=HEX_DIAM / 2.0, side_count=6, rotation=90)
+            # Central chip pocket cutout
+            with Locations((0, 0)):
+                Rectangle(WAFER_SIZE + 0.2, WAFER_SIZE + 0.2, rotation=45, mode=Mode.SUBTRACT)
+            # Port pass-throughs
+            for port in [(10.0, 17.32), (-10.0, 17.32), (10.0, -17.32), (-10.0, -17.32)]:
+                with Locations(port):
+                    Circle(1.5, mode=Mode.SUBTRACT)
+            # Z-axis conductive via holes
+            for via_r in [3.0, 4.5]:
+                for angle in [0, 90, 180, 270]:
+                    vx = via_r * math.cos(math.radians(angle))
+                    vy = via_r * math.sin(math.radians(angle))
+                    with Locations((vx, vy)):
+                        Circle(0.6, mode=Mode.SUBTRACT)
+        extrude(amount=0.8)
+    return p.part
+
+def MultiStage_Interposer_Mold_Assembly(explode=0.0):
+    """
+    Returns the complete 3-part multi-stage casting mold assembly:
+    1. Top Concentric Guard Mold Plate
+    2. Mid-Layer PVA Alignment Frame
+    3. Bottom Fluidic / Electrode Mold Plate
+    """
+    exp = max(0.0, float(explode))
+    bot = Bottom_Fluidic_Electrode_Mold_Plate().move(Location((exp, 0, 0)))
+    top = Concentric_Guard_Mold_Plate_Top().move(Location((-exp, 0, 0)))
+    frame = MidLayer_PVA_Alignment_Frame().rotate(Axis.Y, 90).move(Location((0, 0, CAVITY_Z)))
+    return [top, frame, bot]
 
 def Multi_Mold_Visualizer(explode=0.0):
     """
@@ -298,11 +515,19 @@ if __name__ == "__main__":
 
     left_nano = Nanopore_Wafer_Mold_Left(is_nanopore=True)
     right_nano = Nanopore_Wafer_Mold_Right(is_nanopore=True)
+    top_guard = Concentric_Guard_Mold_Plate_Top()
+    bot_electrode = Bottom_Fluidic_Electrode_Mold_Plate()
+    mid_frame = MidLayer_PVA_Alignment_Frame()
 
     # Orient flat for 3D printing (parting face pointing up at Z=15mm)
     left_flat = left_nano.move(Rotation(0, -90, 0)).move(Location((0, 0, MOLD_T / 2.0)))
     right_flat = right_nano.move(Rotation(0, 90, 0)).move(Location((0, 0, MOLD_T / 2.0)))
+    top_guard_flat = top_guard.move(Rotation(0, -90, 0)).move(Location((0, 0, MOLD_T / 2.0)))
+    bot_electrode_flat = bot_electrode.move(Rotation(0, 90, 0)).move(Location((0, 0, MOLD_T / 2.0)))
 
     export_step(left_flat, "Nanopore_Wafer_Mold_Left.step")
     export_step(right_flat, "Nanopore_Wafer_Mold_Right.step")
-    print("Exported Left and Right Molds as STEP files.")
+    export_step(top_guard_flat, "Concentric_Guard_Mold_Plate_Top.step")
+    export_step(bot_electrode_flat, "Bottom_Fluidic_Electrode_Mold_Plate.step")
+    export_step(mid_frame, "MidLayer_PVA_Alignment_Frame.step")
+    print("Exported standard and multi-stage concentric guard molds as STEP files.")
