@@ -248,6 +248,7 @@
 		(property "Reference" "U1" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "STM32G431CBU6" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C529356" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -268,6 +269,7 @@
 		(property "Reference" "U2" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "STUSB4500" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C2678061" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -288,6 +290,7 @@
 		(property "Reference" "U3" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "TPS54302" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C9864" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -308,6 +311,7 @@
 		(property "Reference" "U4" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "LD39050_3V3" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C91206" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -328,6 +332,7 @@
 		(property "Reference" "U5" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "TPS22916" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_CSP:WLCSP-4_0.78x0.78mm_P0.4mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C131941" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -348,6 +353,7 @@
 		(property "Reference" "U6" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "TS3USB221" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_DFN_QFN:QFN-10_1.5x2mm_P0.4mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C130085" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -368,6 +374,7 @@
 		(property "Reference" "U7" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "DRV8837C" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_SON:WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C191000" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -388,6 +395,7 @@
 		(property "Reference" "U8" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "DRV8837C" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_SON:WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C191000" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -408,6 +416,7 @@
 		(property "Reference" "U9" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "ABP2_015PG_CIS" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Sensor_Pressure:Honeywell_ABP_SMD" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "GZP6847D-C100KPP" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -428,6 +437,7 @@
 		(property "Reference" "U10" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "ABP2_005PG_TRANS" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Sensor_Pressure:Honeywell_ABP_SMD" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "GZP6847D-C040KPP" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -448,6 +458,7 @@
 		(property "Reference" "J1" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "USB_C_HOST" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4085" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C7095263" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -468,6 +479,7 @@
 		(property "Reference" "J2" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "USB_C_MR1_OUT" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4085" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C7095263" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -488,6 +500,7 @@
 		(property "Reference" "J3" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "PUMP1_MOTOR" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C158012" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -508,6 +521,7 @@
 		(property "Reference" "J4" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "PUMP2_MOTOR" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C158012" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -528,6 +542,7 @@
 		(property "Reference" "J5" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "SWD_DEBUG" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C2337" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -548,6 +563,7 @@
 		(property "Reference" "C1" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "10uF" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C15850" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -568,6 +584,7 @@
 		(property "Reference" "C2" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "10uF" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C15850" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -588,6 +605,7 @@
 		(property "Reference" "C3" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "22uF" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C45783" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -608,6 +626,7 @@
 		(property "Reference" "C4" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "100nF" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C15255" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -628,6 +647,7 @@
 		(property "Reference" "C5" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "100nF" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C15255" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -648,6 +668,7 @@
 		(property "Reference" "L1" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "4.7uH" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Inductor_SMD:L_Bourns_SRR4018" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C87642" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -668,6 +689,7 @@
 		(property "Reference" "R1" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "100k" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C60491" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -688,6 +710,7 @@
 		(property "Reference" "R2" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "32.4k" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C25363" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -708,6 +731,7 @@
 		(property "Reference" "R3" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "4.7k" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C25900" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"
@@ -728,6 +752,7 @@
 		(property "Reference" "R4" (at 100 97.46 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "4.7k" (at 100 102.54 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C25900" (at 100 105.08 0) (hide yes) (effects (font (size 1.27 1.27))))
 		(instances
 			(project "Pump"
 				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249"

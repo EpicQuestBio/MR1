@@ -246,6 +246,15 @@ class TestExportsE2E(unittest.TestCase):
             # ESP32 image magic byte is 0xE9
             self.assertEqual(magic_byte, b"\xe9", "firmware.bin does not have ESP32 magic byte 0xE9")
 
+    def test_kicad_footprint_deliverables(self):
+        """Verify CAD-generated KiCad footprint deliverable in exports/footprints/."""
+        fp_path = EXPORTS_DIR / "footprints" / "PogoPin_Target_6Pin_Distributed.kicad_mod"
+        self.assertTrue(fp_path.exists(), "Missing exported footprint: exports/footprints/PogoPin_Target_6Pin_Distributed.kicad_mod")
+        content = fp_path.read_text(encoding="utf-8")
+        self.assertIn('(footprint "PogoPin_Target_6Pin_Distributed"', content)
+        self.assertIn('(pad "H1" np_thru_hole circle', content)
+        self.assertIn('(pad "12" smd circle', content)
+
     def test_manifest_integrity(self):
         """Verify exports/manifest.json tracks all files with accurate SHA-256 hashes."""
         manifest_path = EXPORTS_DIR / "manifest.json"

@@ -100,9 +100,9 @@ def Circuitry_Cutouts(height=10.0):
         # LMP7721 OpAmp
         with Locations((0, -13, 0)):
             Box(6, 7, height)
-        # Ribbon Cable Clearance Channel against hexagon wall
-        with Locations((0, -27.5, 0)):
-            Box(13.5, 3.0, height)
+        # Ribbon Cable Clearance Channel against hexagon wall (cuts 3.0mm into Y=-25.9808 hex edge to Y=-22.9808)
+        with Locations((0, -25.9808, 0)):
+            Box(13.5, 6.0, height)
         # V+ Rail Filtering
         with Locations((-10, -18, 0)):
             Box(4, 4, height)
@@ -124,17 +124,18 @@ def Circuitry_Cutouts(height=10.0):
 def Finger_Grip_Cutout(height=10.0):
     """
     Returns a Part representing the side notches for finger grips.
-    Placed at X = +/- FINGER_GRIP_NOTCH_X.
+    Placed at X = +/- HEX_CORNER_RADIUS (30.0mm) so the R=5mm notch reaches X = +/- 25.0mm.
     """
     with BuildPart(mode=Mode.PRIVATE) as p:
-        with Locations((FINGER_GRIP_NOTCH_X, 0, 0), (-FINGER_GRIP_NOTCH_X, 0, 0)):
+        with Locations((HEX_CORNER_RADIUS, 0, 0), (-HEX_CORNER_RADIUS, 0, 0)):
             Cylinder(radius=FINGER_GRIP_NOTCH_R, height=height)
     return p.part
 
-def Hex_Base_Sketch(diam=HEX_DIAM, notch_r=FINGER_GRIP_NOTCH_R, notch_x=FINGER_GRIP_NOTCH_X):
+def Hex_Base_Sketch(diam=HEX_DIAM, notch_r=FINGER_GRIP_NOTCH_R, notch_x=HEX_CORNER_RADIUS):
     """
-    Returns a BuildSketch for the 60mm Hex with R=5mm finger notches.
-    Produces exact bounds matching KiCad amplifier.kicad_pcb:
+    Returns a BuildSketch for the 60mm Hex with R=5mm finger notches centered at the
+    X = +/- 30mm hex corners (reaching X = +/- 25mm at Y = 0).
+    Produces exact bounds matching KiCad amplifier.kicad_pcb Edge.Cuts:
     Width = 55.0mm, Height = 51.9615mm.
     """
     with BuildSketch(mode=Mode.PRIVATE) as s:

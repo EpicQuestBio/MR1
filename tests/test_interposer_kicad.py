@@ -529,16 +529,31 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn('"MR1:Concentric_Interposer_Mating_Pad"', sch_txt)
         self.assertIn('"J_PAD1"', sch_txt)
 
-        # 4. Independent guard architecture:
+        # 4. Independent guard architecture (verified via exported KiCad netlist):
+        import subprocess, re
+        net_path = REPO_ROOT / "build" / "test_amp_guard_netlist.net"
+        net_path.parent.mkdir(parents=True, exist_ok=True)
+        res = subprocess.run(
+            ["kicad-cli", "sch", "export", "netlist", "-o", str(net_path), str(sch_file)],
+            capture_output=True, text=True
+        )
+        self.assertEqual(res.returncode, 0, f"Netlist export failed: {res.stderr}")
+        net_txt = net_path.read_text(encoding="utf-8")
+        nets = {}
+        for m in re.finditer(r'\(net\s+\(code\s+\"[^\"]+\"\)\s+\(name\s+\"([^\"]+)\"\)[\s\S]*?\n\t\t\)', net_txt):
+            nets[m.group(1)] = re.findall(r'\(node\s+\(ref\s+\"([^\"]+)\"\)\s+\(pin\s+\"([^\"]+)\"\)', m.group(0))
+
         # Route 1: Passive quiet guard for LMP7721 via NT3
         self.assertIn('(label "GUARD"', sch_txt)
-        self.assertIn('(xy 63.5 60.96) (xy 72.39 60.96)', sch_txt, "NT3 Pin 1 must connect directly to GUARD net for LMP7721")
+        self.assertIn(('NT3', '1'), nets.get('/GUARD', []), "NT3 Pin 1 must connect directly to GUARD net for LMP7721")
+        self.assertIn(('NT3', '2'), nets.get('/Vbias', []), "NT3 Pin 2 must connect to Vbias")
         # Route 2: Active guard buffer for GUARD_WIDE using OPA2192 Unit 2
         self.assertIn('(label "GUARD_WIDE"', sch_txt)
         self.assertNotIn('"NT6"', sch_txt, "NT6 must be removed so active GUARD_WIDE is not shorted to Vbias")
         # U16 LTC6268 Gain Stage: R3 feedback restored, R4 tied to Vbias
-        self.assertIn('(xy 153.67 59.69) (xy 153.67 62.23)', sch_txt, "R3 feedback loop must be closed across U16")
-        self.assertIn('(label "Vbias"\n\t\t(at 153.67 69.85 270)', sch_txt, "R4 must connect to Vbias")
+        self.assertIn(('R3', '1'), nets.get('/Route1_OUT', []), "R3 feedback loop must connect to U16 output (Route1_OUT)")
+        self.assertIn(('R3', '2'), nets.get('/Virtual_Ground', []), "R3 pin 2 must connect to Virtual_Ground")
+        self.assertIn(('R4', '1'), nets.get('/Vbias', []), "R4 must connect to Vbias")
 
     def test_amplifier_route2_adg1219_multiplexer_integration(self):
         """Ensure ADG1219BRMZ 2:1 precision SPDT analog switch is properly integrated into
@@ -637,6 +652,48 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('U17', '2'), vdda_net, "U17 VDD must connect to VDDA")
         self.assertIn(('U17', '4'), vssa_net, "U17 VSS must connect to VSSA")
         self.assertIn(('U17', '3'), gnda_net, "U17 GND must connect to GNDA")
+
+    def test_generate_footprint_script_and_pogo_target_6pin_distributed(self):
+        """Verify that generate_footprint.py extracts CAD geometry from build123d
+        and generates PogoPin_Target_6Pin_Distributed.kicad_mod with 12 pogo pads,
+        4x 2.1mm fluid pass-through holes (H1..H4), concentric guard rings, and
+        4-decimal coordinate precision."""
+        import sys
+        if str(REPO_ROOT) not in sys.path:
+            sys.path.insert(0, str(REPO_ROOT))
+        from generate_footprint import (
+            PIN_NET_SEQUENCE,
+            extract_cad_geometry,
+            format_validation_table,
+            generate_kicad_footprint,
+        )
+
+        geom = extract_cad_geometry()
+        self.assertEqual(geom.datum, (0.0, 0.0))
+        self.assertEqual(len(geom.pogo_pads), 12)
+        self.assertEqual(len(geom.fluid_holes), 4)
+        self.assertEqual([h[0] for h in geom.fluid_holes], ["H1", "H2", "H3", "H4"])
+        for _, hx, hy, h_drill in geom.fluid_holes:
+            self.assertAlmostEqual(abs(hx), 17.3205, places=4)
+            self.assertAlmostEqual(abs(hy), 10.0, places=4)
+            self.assertAlmostEqual(h_drill, 2.1, places=4)
+
+        sexpr = generate_kicad_footprint(geom)
+        self.assertIn('(footprint "PogoPin_Target_6Pin_Distributed"', sexpr)
+        self.assertIn('(layer "Edge.Cuts")', sexpr)
+        self.assertIn('(fp_arc (start 27.5 -4.3301) (mid 25.0 0.0) (end 27.5 4.3301)', sexpr)
+        self.assertIn('(fp_arc (start -27.5 -4.3301) (mid -25.0 0.0) (end -27.5 4.3301)', sexpr)
+        self.assertIn('(start -6.75 22.9808) (end 6.75 22.9808)', sexpr)
+        for pin_num, net_name, _ in PIN_NET_SEQUENCE:
+            self.assertIn(f'(pad "{pin_num}" smd circle', sexpr)
+            self.assertIn(f'"{pin_num}:{net_name}"', sexpr)
+        for h_name in ["H1", "H2", "H3", "H4"]:
+            self.assertIn(f'(pad "{h_name}" np_thru_hole circle', sexpr)
+            self.assertIn("(size 2.1 2.1) (drill 2.1)", sexpr)
+
+        table = format_validation_table(geom)
+        self.assertIn("CE_GNDA", table)
+        self.assertIn("WEEP_SENSE", table)
 
 if __name__ == "__main__":
     unittest.main()

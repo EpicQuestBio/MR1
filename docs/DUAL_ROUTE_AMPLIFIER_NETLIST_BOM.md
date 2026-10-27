@@ -8,6 +8,7 @@
 - [`Amplifier/Amplifier.kicad_sch`](file:///home/loki/Projects/daemon-pore/Amplifier/Amplifier.kicad_sch)
 - [`Interposer/Interposer.kicad_sch`](file:///home/loki/Projects/daemon-pore/Interposer/Interposer.kicad_sch)
 - [`BOM.md`](file:///home/loki/Projects/daemon-pore/BOM.md)
+- [`docs/OPAMP_SIGNAL_CONDITIONING_SPEC.md`](file:///home/loki/Projects/daemon-pore/docs/OPAMP_SIGNAL_CONDITIONING_SPEC.md)
 
 ---
 
@@ -125,17 +126,21 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 
 ## 4. Recommended Manufacturer Parts List (BOM)
 
-| Item | Component | Manufacturer | Manufacturer Part Number (MPN) | Distributor Source | Function & Selection Notes |
-| :---: | :--- | :--- | :--- | :--- | :--- |
-| **1** | **`U2`** | Texas Instruments | **`LMP7721MA/NOPB`** | Mouser: `926-LMP7721MA/NOPB`<br>DigiKey: `296-LMP7721MA/NOPB-ND` | Guaranteed $3\text{ fA}$ bias current; dedicated guard driver pins 2 and 7 flanking input pin 8. |
-| **2** | **`R1`** | Ohmite / TE Connectivity | **`MOX-300001007FE`** or **`HB1100MFZRE`** | Mouser: `588-MOX-300001007FE`<br>DigiKey: `A106041-ND` | $1\text{ G}\Omega \pm 1\%$, ultra-low shunt capacitance ($< 0.1\text{ pF}$), rated for high-impedance electrometer circuits. |
-| **3** | **`C1`** | Murata | **`GJM1555C1H2R0BB01D`** | Mouser: `81-GJM1555C1H2R0BB01D`<br>DigiKey: `490-GJM1555C1H2R0BB01D-ND` | $2\text{ pF} \pm 0.1\text{ pF}$, C0G/NP0 dielectric completely prevents piezoelectric pump vibration microphonics. |
-| **4** | **`U5`** | Texas Instruments | **`OPA2192IDR`** | Mouser: `595-OPA2192IDR`<br>DigiKey: `296-48590-1-ND` | Dual precision e-trim op-amp (SOIC-8): Unit 1 = Micropore TIA; Unit 2 = Low-Z Guard Buffer driving `GUARD_WIDE`. |
-| **5** | **`U17`** | Analog Devices | **`ADG1219BRMZ`** | Mouser: `584-ADG1219BRMZ`<br>DigiKey: `ADG1219BRMZ-ND` | High-voltage iCMOS SPDT 2:1 precision switch (MSOP-8): $< 1\text{ pA}$ leakage, $1.0\text{ pF}$ $C_\text{off}$, selects Route 1 vs Route 2 into ADC. |
-| **6** | **`R10`** | Yageo / Susumu | **`RC0402FR-07100KL`** | Mouser: `603-RC0402FR-07100KL`<br>DigiKey: `311-100KLRTR-ND` | $100\text{ k}\Omega \pm 1\%$, micropore TIA feedback ($\pm 20.48\,\mu\text{A}$ range, $106.1\text{ kHz}$). |
-| **7** | **`C3`** | Wurth / Murata | **`885012005058`** | Mouser: `710-885012005058`<br>DigiKey: `732-885012005058-ND` | $15\text{ pF} \pm 5\%$ C0G 0402; sets exact $-3\text{dB}$ cutoff to $106.1\text{ kHz}$ for Route 2 TIA. |
-| **8** | **`R32`** | Yageo | **`RC0402FR-0749R9L`** | Mouser: `603-RC0402FR-0749R9L`<br>DigiKey: `311-49.9LRTR-ND` | $49.9\ \Omega \pm 1\%$ isolation and transmission damping resistor for Route 2 output. |
-| **9** | **`J_POGO1`** | Mill-Max | **`821-22-012-10-000101`** | Mouser: `575-8212201210000101`<br>DigiKey: `ED1352-12-ND` | 12-Pin precision gold-plated beryllium copper spring-loaded header ($> 50\,\mu\text{in}$ Au over Ni). |
+| Item | Component | Manufacturer | Manufacturer Part Number (MPN) | Distributor Source | LCSC Part # / Equivalent | Function & Selection Notes |
+| :---: | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | **`U2`** | Texas Instruments | **`LMP7721MA/NOPB`** | Mouser: `926-LMP7721MA/NOPB`<br>DigiKey: `296-LMP7721MA/NOPB-ND` | [`C124427`](https://www.lcsc.com/search?q=C124427) (`LMP7721MA/NOPB`) | Guaranteed $3\text{ fA}$ bias current; dedicated guard driver pins 2 and 7 flanking input pin 8. |
+| **2** | **`R1`** | Ohmite / TE Connectivity | **`MOX-300001007FE`** or **`HB1100MFZRE`** | Mouser: `588-MOX-300001007FE`<br>DigiKey: `A106041-ND` | `HVC0805T1007JET` / `CRHV1206AF1G00FKET`<br>(or 10× [`C25488`](https://www.lcsc.com/search?q=C25488)) | $1\text{ G}\Omega \pm 1\%$, ultra-low shunt capacitance ($< 0.1\text{ pF}$), rated for high-impedance electrometer circuits. |
+| **3** | **`C1`** | Murata | **`GJM1555C1H2R0BB01D`** | Mouser: `81-GJM1555C1H2R0BB01D`<br>DigiKey: `490-GJM1555C1H2R0BB01D-ND` | [`C161316`](https://www.lcsc.com/search?q=C161316) (`GJM1555C1H2R0BB01D`)<br>Basic: [`C1544`](https://www.lcsc.com/search?q=C1544) | $2\text{ pF} \pm 0.1\text{ pF}$, C0G/NP0 dielectric completely prevents piezoelectric pump vibration microphonics. |
+| **4** | **`U5`** | Texas Instruments | **`OPA2192IDR`** | Mouser: `595-OPA2192IDR`<br>DigiKey: `296-48590-1-ND` | [`C110074`](https://www.lcsc.com/search?q=C110074) (`OPA2192IDR`) | Dual precision e-trim op-amp (SOIC-8): Unit 1 = Micropore TIA; Unit 2 = Low-Z Guard Buffer driving `GUARD_WIDE`. |
+| **5** | **`U17`** | Analog Devices | **`ADG1219BRMZ`** | Mouser: `584-ADG1219BRMZ`<br>DigiKey: `ADG1219BRMZ-ND` | [`C206796`](https://www.lcsc.com/search?q=C206796) (`ADG419BRMZ-REEL` eq.)<br>[`C2879206`](https://www.lcsc.com/search?q=C2879206) (`TMUX1108RSVR`) | High-voltage iCMOS SPDT 2:1 precision switch (MSOP-8): $< 1\text{ pA}$ leakage, $1.0\text{ pF}$ $C_\text{off}$, selects Route 1 vs Route 2 into ADC. |
+| **6** | **`R10`** | Yageo / Susumu | **`RC0402FR-07100KL`** | Mouser: `603-RC0402FR-07100KL`<br>DigiKey: `311-100KLRTR-ND` | [`C60491`](https://www.lcsc.com/search?q=C60491) (`RC0402FR-07100KL`)<br>Basic: [`C25741`](https://www.lcsc.com/search?q=C25741) | $100\text{ k}\Omega \pm 1\%$, micropore TIA feedback ($\pm 20.48\,\mu\text{A}$ range, $106.1\text{ kHz}$). |
+| **7** | **`C3`** | Wurth / Murata | **`885012005058`** or **`GRM1555C1H150JA01D`** | Mouser: `710-885012005058`<br>DigiKey: `732-885012005058-ND` | [`C33148`](https://www.lcsc.com/search?q=C33148) (`GRM1555C1H150JA01D`)<br>Basic: [`C1556`](https://www.lcsc.com/search?q=C1556) | $15\text{ pF} \pm 5\%$ C0G 0402; sets exact $-3\text{dB}$ cutoff to $106.1\text{ kHz}$ for Route 2 TIA. |
+| **8** | **`R32`** | Yageo | **`RC0402FR-0749R9L`** | Mouser: `603-RC0402FR-0749R9L`<br>DigiKey: `311-49.9LRTR-ND` | [`C4074199`](https://www.lcsc.com/search?q=C4074199) (`RC0402FR-0749R9L`)<br>Basic: [`C25091`](https://www.lcsc.com/search?q=C25091) | $49.9\ \Omega \pm 1\%$ isolation and transmission damping resistor for Route 2 output. |
+| **9** | **`U16`** | Analog Devices | **`LTC6268IS8#TRPBF`** | Mouser: `584-LTC6268IS8#TRPBF`<br>DigiKey: `LTC6268IS8#TRPBFCT-ND` | [`C689169`](https://www.lcsc.com/search?q=C689169) (`LTC6268IS8#TRPBF`) | $500\text{ MHz}$ ultra-low bias current FET-input op-amp post-gain buffer for Route 1. |
+| **10** | **`U6`** | Analog Devices | **`ADA4940-1ACPZ-R7`** | Mouser: `584-ADA4940-1ACPZ-R7`<br>DigiKey: `ADA4940-1ACPZ-R7CT-ND` | [`C529241`](https://www.lcsc.com/search?q=C529241) (`ADA4940-1ACPZ-R7`) | Ultra-low power, low-distortion fully differential ADC driver (LFCSP-16). |
+| **11** | **`U13`** | Analog Devices | **`AD4000BRMZ-RL7`** | Mouser: `584-AD4000BRMZ-RL7`<br>DigiKey: `AD4000BRMZ-RL7CT-ND` | [`C539308`](https://www.lcsc.com/search?q=C539308) (`AD4000BRMZ-RL7`) | 16-Bit 2 MSPS Easy-Drive pseudo-differential SAR ADC (MSOP-10). |
+| **12** | **`U14`** | Texas Instruments | **`LP5907MFX-1.8/NOPB`** | Mouser: `595-LP5907MFX-1.8NPB`<br>DigiKey: `296-38552-1-ND` | [`C92498`](https://www.lcsc.com/search?q=C92498) (`LP5907MFX-1.8/NOPB`) | $250\text{ mA}$, $6.5\,\mu\text{V}_\text{RMS}$ ultra-low-noise 1.8V LDO regulator (SOT-23-5). |
+| **13** | **`J_POGO1`** | Mill-Max | **`821-22-012-10-000101`** | Mouser: `575-8212201210000101`<br>DigiKey: `ED1352-12-ND` | [`C49451500`](https://www.lcsc.com/search?q=C49451500) (`PG2541` series eq.) | 12-Pin precision gold-plated beryllium copper spring-loaded header ($> 50\,\mu\text{in}$ Au over Ni). |
 
 ---
 

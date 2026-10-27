@@ -2623,6 +2623,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C110074"
+			(at 0 0 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "ki_keywords" "dual opamp precision rrio 36V micropore wideband active guard"
 			(at 0 0 0)
 			(hide yes)
@@ -2886,6 +2895,15 @@
 			)
 		)
 		(property "Mouser PN" "584-ADG1219BRMZ"
+			(at 0 0 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C206796"
 			(at 0 0 0)
 			(hide yes)
 			(effects

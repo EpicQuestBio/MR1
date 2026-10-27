@@ -3263,6 +3263,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 100.0252 113.03 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 99.06 109.22 0)
 			(hide yes)
@@ -3503,6 +3512,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
+			(at 53.34 40.64 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3778,6 +3796,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 110.1852 113.03 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 109.22 109.22 0)
 			(hide yes)
@@ -3862,6 +3889,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25324"
+			(at 115.57 43.18 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4053,6 +4089,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 75.8952 113.03 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4304,6 +4349,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C25310"
+			(at 100.33 44.958 90)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 100.33 43.18 0)
 			(hide yes)
@@ -4378,6 +4432,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C133554"
+			(at 78.74 43.18 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4517,6 +4580,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C133554"
+			(at 154.94 95.25 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa2156.pdf"
 			(at 154.94 95.25 0)
 			(hide yes)
@@ -4642,6 +4714,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C133554"
+			(at 116.84 74.93 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4852,6 +4933,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
+			(at 59.69 45.72 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5073,6 +5163,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C659578"
+			(at 43.18 48.26 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADR4520_4525_4530_4533_4540_4550.pdf"
 			(at 43.18 49.53 0)
 			(hide yes)
@@ -5198,6 +5297,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
+			(at 82.55 74.168 90)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5355,6 +5463,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
+			(at 92.71 43.18 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5551,6 +5668,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C25488"
+			(at 88.9 80.01 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 88.9 80.01 0)
 			(hide yes)
@@ -5734,6 +5860,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
+			(at 134.62 74.93 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6009,6 +6144,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C16040"
+			(at 73.66 82.55 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/20002249B.pdf"
 			(at 73.66 82.55 0)
 			(hide yes)
@@ -6135,6 +6279,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
+			(at 74.93 34.29 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6427,6 +6580,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
+			(at 139.3952 85.09 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6757,6 +6919,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C1523"
+			(at 115.57 34.29 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 115.57 34.29 0)
 			(hide yes)
@@ -6993,6 +7164,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C60490"
+			(at 76.2 24.13 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 76.2 24.13 0)
 			(hide yes)
@@ -7178,6 +7358,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 88.5952 113.03 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -111,8 +111,37 @@ def export_cad(verbose=True):
     return True
 
 
+def export_footprints(verbose=True):
+    """Generate CAD-driven KiCad footprints (.kicad_mod) directly from build123d models."""
+    if verbose:
+        print("\n[Footprints] Generating CAD-Driven KiCad Footprints via build123d...")
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    try:
+        from generate_footprint import FOOTPRINT_NAME, build_footprint_file
+
+        footprints_export_dir = EXPORTS_DIR / "footprints"
+        footprints_export_dir.mkdir(parents=True, exist_ok=True)
+        export_fp_path = footprints_export_dir / f"{FOOTPRINT_NAME}.kicad_mod"
+        root_fp_path = REPO_ROOT / f"{FOOTPRINT_NAME}.kicad_mod"
+
+        _, sexpr = build_footprint_file(
+            output_path=export_fp_path,
+            sync_libraries=True,
+            verbose=verbose,
+        )
+        root_fp_path.write_text(sexpr, encoding="utf-8")
+        if verbose:
+            print(f"  [OK] Exported {export_fp_path.relative_to(REPO_ROOT)} and synced footprint libraries.")
+        return True
+    except Exception as exc:
+        print(f"  [FAIL] Error generating KiCad footprint from CAD: {exc}")
+        return False
+
+
 def export_kicad(verbose=True):
-    """Export Gerbers, drill, pos, BOM, and PDF schematics for MR1 and Amplifier."""
+    """Export CAD-driven footprints, Gerbers, drill, pos, BOM, and PDF schematics."""
+    export_footprints(verbose=verbose)
     if verbose:
         print("\n[2/5] Exporting KiCad Manufacturing Deliverables...")
     kicad_cli = find_kicad_cli()
@@ -192,7 +221,19 @@ def export_kicad(verbose=True):
 
         # 5. Bill of Materials CSV
         bom_out = bom_dir / f"{b_name}_BOM.csv"
-        b_cmd = [kicad_cli, "sch", "export", "bom", "--output", str(bom_out), str(b["sch"])]
+        b_cmd = [
+            kicad_cli,
+            "sch",
+            "export",
+            "bom",
+            "--fields",
+            "Reference,Value,Footprint,LCSC,QUANTITY,DNP",
+            "--labels",
+            "Refs,Value,Footprint,LCSC,Qty,DNP",
+            "--output",
+            str(bom_out),
+            str(b["sch"]),
+        ]
         subprocess.run(b_cmd, check=True, capture_output=True)
 
         # 6. Create ready-to-order Gerber ZIP archive
@@ -395,6 +436,7 @@ def generate_manifest(verbose=True):
         ".gbl": "gerber_layer",
         ".drl": "drill_file",
         ".pos": "pick_and_place_positions",
+        ".kicad_mod": "kicad_footprint",
     }
 
     for root, _, files in os.walk(EXPORTS_DIR):
@@ -435,7 +477,8 @@ def main():
     parser = argparse.ArgumentParser(description="MR1 Deliverables Export Manager")
     parser.add_argument("--all", action="store_true", help="Run all export targets")
     parser.add_argument("--cad", action="store_true", help="Export 3D STL/STEP and 2D DXF models")
-    parser.add_argument("--kicad", action="store_true", help="Export KiCad Gerbers, BOM, POS, and PDFs")
+    parser.add_argument("--footprints", action="store_true", help="Generate CAD-driven KiCad footprints (.kicad_mod)")
+    parser.add_argument("--kicad", action="store_true", help="Export KiCad Footprints, Gerbers, BOM, POS, and PDFs")
     parser.add_argument("--wiring", "--wireviz", dest="wiring", action="store_true", help="Export WireViz harness diagrams")
     parser.add_argument("--firmware", action="store_true", help="Build and stage ESP32-S3 firmware")
     parser.add_argument("--manifest", action="store_true", help="Generate exports/manifest.json")
@@ -450,7 +493,7 @@ def main():
         sys.exit(0)
 
     # Default to all if no specific target selected
-    if not (args.all or args.cad or args.kicad or args.wiring or args.firmware or args.manifest or args.check):
+    if not (args.all or args.cad or args.footprints or args.kicad or args.wiring or args.firmware or args.manifest or args.check):
         args.all = True
 
     EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -461,6 +504,8 @@ def main():
 
     if args.all or args.cad:
         export_cad()
+    if args.footprints and not (args.all or args.kicad):
+        export_footprints()
     if args.all or args.kicad:
         export_kicad()
     if args.all or args.wiring:

@@ -117,8 +117,10 @@ def export_all():
                 if isinstance(part, Sketch):
                     exporter.add_shape(part)
                 elif hasattr(part, "faces"):
+                    z_faces = part.faces().filter_by(Axis.Z)
+                    main_face = max(z_faces, key=lambda f: f.area) if z_faces else part.faces().sort_by(Axis.Z)[0]
                     with BuildSketch() as s:
-                        add(part.faces().sort_by(Axis.Z)[0])
+                        add(main_face)
                     exporter.add_shape(s.sketch)
                 else:
                     exporter.add_shape(part)

@@ -14,6 +14,7 @@ from simulations.guard_ring_electrostatics import GuardRingElectrostatics
 from simulations.fluidic_dynamics_nanopore import FluidicDynamicsNanopore
 from simulations.nanopore_electrokinetics import NanoporeElectrokinetics
 from simulations.pore_dac_dynamics import PoreDacDynamics
+from simulations.opamp_signal_conditioning import OpAmpSignalConditioningSimulation
 
 
 class TestPhysicsAndSimulations(unittest.TestCase):
@@ -24,6 +25,7 @@ class TestPhysicsAndSimulations(unittest.TestCase):
             kcl_molarity=1.0, temperature_c=25.0, pore_diameter_nm=4.0, membrane_thickness_nm=20.0
         )
         self.dac_sim = PoreDacDynamics()
+        self.opamp_sim = OpAmpSignalConditioningSimulation()
 
     def test_guard_ring_attenuation_and_leakage(self):
         """Verify driven guard ring provides > 20 dB of surface leakage suppression."""
@@ -263,6 +265,118 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         md = format_markdown_table(matrix[:5])
         self.assertIn("10 $\\mu\\text{m}$", md)
         self.assertIn("Path 2", md)
+
+    def test_mr1_composite_bipolar_dac_summing_amplifier(self):
+        """Verify MR1 U3A/U3B OPA2197 composite bipolar summing amplifier range, midscale 0V, and 100:1 vernier."""
+        # Midscale coarse (code_a=2048 -> 1.024V) and zero fine (code_b=0) produces 0.000V at >PORE
+        mid = self.opamp_sim.calculate_excitation_voltage(code_a=2048, code_b=0)
+        self.assertAlmostEqual(mid["v_u3b_ref_neg_v"], -2.048, places=4)
+        self.assertAlmostEqual(mid["v_pore_out_v"], 0.0, places=5)
+        self.assertAlmostEqual(mid["step_coarse_mv"], 1.20, places=3)
+        self.assertAlmostEqual(mid["step_fine_uv"], 12.0, places=2)
+        self.assertAlmostEqual(mid["vernier_ratio"], 100.0, places=2)
+        self.assertGreater(mid["effective_resolution_bits"], 18.5)
+
+        # Zero DAC codes (code_a=0, code_b=0) produce +2.4576V (within +2.49V LT3045 rail)
+        pos_max = self.opamp_sim.calculate_excitation_voltage(code_a=0, code_b=0)
+        self.assertAlmostEqual(pos_max["v_pore_out_v"], 2.4576, places=4)
+        self.assertFalse(pos_max["is_rail_saturated"])
+
+        # Fine vernier step of 100 LSBs on Ch B shifts output by exactly -1.20 mV (1 coarse LSB)
+        vernier_100 = self.opamp_sim.calculate_excitation_voltage(code_a=2048, code_b=100)
+        self.assertAlmostEqual(vernier_100["v_pore_out_v"], -0.0012, places=6)
+
+        # Verify PoreDacDynamics helper matches
+        dac_comp = self.dac_sim.calculate_composite_bipolar_driver(code_a=2048, code_b=0)
+        self.assertAlmostEqual(dac_comp["v_pore_out_v"], 0.0, places=5)
+        self.assertAlmostEqual(dac_comp["f_3db_u3a_feedback_hz"], 6631.46, delta=5.0)
+        self.assertAlmostEqual(dac_comp["f_3db_output_rc_hz"], 58946.3, delta=50.0)
+
+    def test_amplifier_route1_reference_cancellation_and_poles(self):
+        """Verify Amplifier Route 1 (U2 LMP7721 + U16 LTC6268) 10.0x stage-2 gain and exact Vbias cancellation."""
+        # Test at +180 mV bias and -500 mV bias with 100 pA pore current:
+        # Output at Route1_OUT must be -1.000V regardless of Vbias common-mode voltage!
+        r1_pos_bias = self.opamp_sim.calculate_route1_dc_transfer(i_pore_a=100e-12, v_bias_v=0.180)
+        r1_neg_bias = self.opamp_sim.calculate_route1_dc_transfer(i_pore_a=100e-12, v_bias_v=-0.500)
+        self.assertAlmostEqual(r1_pos_bias["stage2_effective_gain_v_v"], 10.0, places=5)
+        self.assertAlmostEqual(r1_pos_bias["common_mode_vbias_leakage_v_v"], 0.0, places=9)
+        self.assertAlmostEqual(r1_pos_bias["v_route1_out_v"], -1.000, places=5)
+        self.assertAlmostEqual(r1_neg_bias["v_route1_out_v"], -1.000, places=5)
+        self.assertAlmostEqual(r1_pos_bias["total_transimpedance_gohm"], -10.0, places=4)
+
+        # Verify cascaded poles: fc1 = 79.58 Hz (R1=1G || C1=2pF), fc2 = 1591.55 Hz (R3=1k || C9=100nF)
+        ac_fc1 = self.opamp_sim.route1_frequency_response(freq_hz=79.5775)
+        self.assertAlmostEqual(ac_fc1["f_3db_stage1_hz"], 79.5775, places=2)
+        self.assertAlmostEqual(ac_fc1["f_3db_stage2_hz"], 1591.55, places=1)
+        self.assertAlmostEqual(ac_fc1["relative_db"], -3.01, delta=0.05)
+
+        # Verify femtoampere noise model (1 GOhm thermal floor ~4.07 fA/rtHz)
+        noise = self.opamp_sim.calculate_route1_noise_psd(freq_hz=10.0, c_in_pf=15.0)
+        self.assertAlmostEqual(noise["i_thermal_r1_fa_rthz"], 4.07, delta=0.1)
+        self.assertLess(noise["i_rms_pa"], 0.5)  # Sub-500 fA RMS integrated over 79.6 Hz BW
+
+    def test_amplifier_route2_active_guard_and_full_adc_chain(self):
+        """Verify Route 2 U5B active guard impedance suppression and full U17 -> U6 -> AD4000 chain."""
+        guard_cmp = self.opamp_sim.compare_passive_vs_active_guard(freq_hz=10_000.0, r_vbias_source_ohm=200.0)
+        self.assertLess(guard_cmp["z_guard_active_ohm"], 0.1)
+        self.assertGreater(guard_cmp["active_suppression_improvement_db"], 60.0)
+
+        # Full chain on Route 1 at 100 pA -> Route1_OUT = -1.0V -> U17 (ADG1219) -> U6 (ADA4940-1) -> AD4000
+        chain_r1 = self.opamp_sim.simulate_full_readout_chain(i_pore_a=100e-12, route_sel=0, v_bias_v=0.180)
+        self.assertAlmostEqual(chain_r1["v_mux_in_v"], -1.0, places=4)
+        self.assertAlmostEqual(chain_r1["f_3db_antialiasing_hz"], 2_947_314.0, delta=1000.0)
+        self.assertAlmostEqual(chain_r1["mux_ron_attenuation_factor"], 499.0 / (499.0 + 150.0), places=4)
+        self.assertGreater(chain_r1["adc_signed_code_16bit"], 10000)
+
+        # Full chain on Route 2 at 5 uA -> Route2_OUT = -0.5V (at Vbias=0V)
+        chain_r2 = self.opamp_sim.simulate_full_readout_chain(i_pore_a=5e-6, route_sel=1, v_bias_v=0.0)
+        self.assertAlmostEqual(chain_r2["v_mux_in_v"], -0.5, places=4)
+        self.assertAlmostEqual(chain_r2["mux_ron_attenuation_factor"], 499.0 / (499.0 + 150.0 + 49.9), places=4)
+
+    def test_broad_range_5nm_to_200um_ionic_and_non_ionic_balancing(self):
+        """Verify V_PORE and dual TIA routes (Route 1 & Route 2) balance across 5 nm to 200 um in ionic & non-ionic liquids."""
+        # 1. Verify DAC solver achieves sub-6uV quantization error across bipolar range
+        for v_req in [1.80, 0.180, 0.01259, 0.00396, 0.0, -0.500]:
+            solved = self.opamp_sim.solve_dac_codes_for_vpore(v_req)
+            self.assertLessEqual(abs(solved["quantization_error_uv"]), 6.5)
+
+        # 2. Extreme high-conductance corner: 200 um pore in 3.0M NaCl (20 S/m, R_pore ~ 330 Ohm)
+        # Must select Route 2 (-100 kOhm) and use fine vernier V_PORE (~3.96 mV) to avoid saturation
+        hi_cond_200um = self.opamp_sim.balance_vpore_and_dual_tia(
+            pore_diameter_nm=200_000.0,
+            membrane_thickness_nm=50_000.0,
+            liquid_conductivity_s_m=20.0,
+            surface_charge_c_m2=-0.02,
+        )
+        self.assertEqual(hi_cond_200um["selected_route"], 1)
+        self.assertFalse(hi_cond_200um["is_saturated"])
+        self.assertTrue(hi_cond_200um["is_resolvable"])
+        self.assertAlmostEqual(hi_cond_200um["v_tia_mux_out_v"], -1.20, delta=0.02)
+        self.assertGreater(hi_cond_200um["snr_db"], 90.0)
+
+        # 3. Sub-5nm corner in 1.0M KCl: 5 nm pore (10.5 S/m, R_pore ~ 106 MOhm)
+        # Must select Route 1 (-10 GOhm) and scale V_PORE (~12.6 mV) so Stage 2 U16 does not saturate
+        nano_5nm_kcl = self.opamp_sim.balance_vpore_and_dual_tia(
+            pore_diameter_nm=5.0,
+            membrane_thickness_nm=20.0,
+            liquid_conductivity_s_m=10.5,
+            surface_charge_c_m2=-0.02,
+        )
+        self.assertEqual(nano_5nm_kcl["selected_route"], 0)
+        self.assertFalse(nano_5nm_kcl["is_saturated"])
+        self.assertTrue(nano_5nm_kcl["is_resolvable"])
+        self.assertAlmostEqual(nano_5nm_kcl["v_tia_mux_out_v"], -1.20, delta=0.02)
+        self.assertGreater(nano_5nm_kcl["snr_db"], 65.0)
+
+        # 4. Non-ionic / polar organic & DI water corners across 5 nm to 200 um:
+        # Notice that in low-conductivity / non-ionic liquids, even a 200 um micropore (R ~ 65 MOhm - 1 GOhm)
+        # switches to Route 1 (-10 GOhm femtoampere TIA) to maintain >70 dB SNR!
+        matrix = self.opamp_sim.evaluate_broad_range_sensing_matrix()
+        self.assertEqual(len(matrix), 42)
+        for row in matrix:
+            self.assertFalse(row["is_saturated"], f"Saturated on {row['liquid_name']} {row['pore_diameter_nm']} nm")
+            self.assertTrue(row["is_resolvable"], f"Unresolvable on {row['liquid_name']} {row['pore_diameter_nm']} nm")
+            self.assertGreaterEqual(row["snr_db"], 60.0)
 
 
 if __name__ == "__main__":

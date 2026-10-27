@@ -10,9 +10,10 @@
 #   ./scripts/export_all.sh [options]
 #
 # Options:
-#   --all       Export all deliverables (CAD, KiCad, Wiring, Firmware, Manifest)
-#   --cad       Export 3D STEP/STL and 2D DXF models via build123d
-#   --kicad     Export Gerbers, Drill, POS, BOM, and PDF schematics
+#   --all         Export all deliverables (CAD, Footprints, KiCad, Wiring, Firmware, Manifest)
+#   --cad         Export 3D STEP/STL and 2D DXF models via build123d
+#   --footprints  Generate CAD-driven KiCad footprints (.kicad_mod) via build123d
+#   --kicad       Export Footprints, Gerbers, Drill, POS, BOM, and PDF schematics
 #   --wiring    Export WireViz wiring harness and fluid tubing diagrams
 #   --firmware  Compile and stage ESP32-S3 firmware binaries
 #   --manifest  Generate/update exports/manifest.json with SHA-256 hashes

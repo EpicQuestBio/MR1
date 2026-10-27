@@ -3590,6 +3590,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 131.7752 88.9 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 130.81 85.09 0)
 			(hide yes)
@@ -3675,6 +3684,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
+			(at 141.9352 88.9 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3772,6 +3790,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C1525"
+			(at 107.6452 88.9 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 106.68 85.09 0)
 			(hide yes)
@@ -3857,6 +3884,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 120.3452 88.9 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4264,6 +4300,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 181.3052 91.44 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 180.34 87.63 0)
 			(hide yes)
@@ -4588,6 +4633,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C2856818"
+			(at 53.34 64.77 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 53.34 64.77 0)
 			(hide yes)
@@ -4780,6 +4834,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
+			(at 167.3352 87.63 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5815,6 +5878,15 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 111.4552 132.08 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Datasheet" ""
 			(at 110.49 128.27 0)
 			(hide yes)
@@ -6134,6 +6206,15 @@
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
+			(at 157.1752 87.63 0)
+			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)

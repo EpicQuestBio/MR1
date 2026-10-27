@@ -6151,7 +6151,7 @@
 		(uuid "98c152aa-1922-4aa3-8d37-21330000c2a8")
 	)
 	(junction
-		(at -223.52 200.66)
+		(at -223.52 198.12)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9fd988f1-42da-453b-bcb8-5a1923ddcc0b")
@@ -6436,6 +6436,16 @@
 	)
 	(wire
 		(pts
+			(xy -241.3 198.12) (xy -241.3 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c96bd6e-08e6-40a5-b131-9fd620d678bf")
+	)
+	(wire
+		(pts
 			(xy -186.69 139.7) (xy -176.53 139.7)
 		)
 		(stroke
@@ -6526,6 +6536,16 @@
 	)
 	(wire
 		(pts
+			(xy -223.52 181.61) (xy -223.52 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3caf5ec9-66ec-4645-850b-5b48e52fd9a0")
+	)
+	(wire
+		(pts
 			(xy 251.46 34.29) (xy 261.62 34.29)
 		)
 		(stroke
@@ -6606,7 +6626,7 @@
 	)
 	(wire
 		(pts
-			(xy -223.52 198.12) (xy -223.52 200.66)
+			(xy -223.52 193.04) (xy -223.52 199.39)
 		)
 		(stroke
 			(width 0)
@@ -6826,7 +6846,7 @@
 	)
 	(wire
 		(pts
-			(xy -241.3 200.66) (xy -223.52 200.66)
+			(xy -241.3 198.12) (xy -223.52 198.12)
 		)
 		(stroke
 			(width 0)
@@ -7046,6 +7066,16 @@
 	)
 	(wire
 		(pts
+			(xy -223.52 207.01) (xy -223.52 208.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9458e117-5b40-4d5e-9856-5f1a15468568")
+	)
+	(wire
+		(pts
 			(xy -201.93 57.15) (xy -201.93 62.23)
 		)
 		(stroke
@@ -7113,6 +7143,16 @@
 			(type default)
 		)
 		(uuid "9edca2f2-b0cf-4287-b3cb-d29247b7a0fd")
+	)
+	(wire
+		(pts
+			(xy -241.3 212.09) (xy -241.3 208.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a179e179-447f-49ca-91c2-8a77c98f98bf")
 	)
 	(wire
 		(pts
@@ -7663,6 +7703,16 @@
 			(type default)
 		)
 		(uuid "fbb8c534-b639-40f4-a6a5-ed46c6c0ecd6")
+	)
+	(wire
+		(pts
+			(xy -205.74 200.66) (xy -205.74 203.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbd8d4a9-f1cb-4dc4-9847-6ca763cef81c")
 	)
 	(wire
 		(pts
@@ -9452,7 +9502,7 @@
 		(uuid "1bcd62f0-327c-4905-93df-913584a484f5")
 	)
 	(label "R_WEEP_GATE"
-		(at -223.52 200.66 180)
+		(at -223.52 196.85 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9752,7 +9802,7 @@
 		(uuid "a2266cdd-4ab9-49cd-b01a-184ce5446ac5")
 	)
 	(label "R_WEEP_LIM"
-		(at -223.52 190.5 0)
+		(at -223.52 181.61 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10353,6 +10403,17 @@
 				)
 			)
 		)
+		(property "LCSC" "HVC0805T1007JET"
+			(at -198.12 60.452 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -198.12 62.23 90)
 			(hide yes)
@@ -10555,6 +10616,17 @@
 		)
 		(property "Description" ""
 			(at -198.12 57.15 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C161316"
+			(at -201.93 58.1152 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10773,6 +10845,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25149"
+			(at -220.98 83.312 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -220.98 85.09 90)
 			(hide yes)
@@ -10977,6 +11060,17 @@
 		)
 		(property "Description" ""
 			(at -207.01 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C49678"
+			(at -206.0448 92.71 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11274,6 +11368,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 185.1152 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 184.15 83.82 0)
 			(hide yes)
@@ -11356,6 +11461,17 @@
 			)
 		)
 		(property "Description" "Capacitor 0402 50V"
+			(at -93.98 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
 			(at -93.98 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -11528,6 +11644,17 @@
 		)
 		(property "Description" ""
 			(at -153.67 16.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C49678"
+			(at -152.7048 20.32 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11981,6 +12108,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1548"
+			(at 218.1352 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 217.17 45.72 0)
 			(hide yes)
@@ -12061,6 +12199,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at -189.23 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4074199"
 			(at -189.23 144.78 0)
 			(hide yes)
 			(show_name no)
@@ -12261,6 +12410,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25132"
+			(at 189.23 30.988 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 189.23 29.21 0)
 			(hide yes)
@@ -12432,6 +12592,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C539308"
+			(at 238.76 52.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "MPN" "AD4011BCPZ-RL7"
 			(at 238.76 39.37 0)
 			(hide yes)
@@ -12561,6 +12732,17 @@
 		)
 		(property "Description" ""
 			(at 138.43 242.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
+			(at 139.3952 246.38 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13050,6 +13232,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1525"
+			(at 105.1052 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 104.14 242.57 0)
 			(hide yes)
@@ -13131,6 +13324,17 @@
 		)
 		(property "Description" ""
 			(at -144.78 -10.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60491"
+			(at -144.78 -11.938 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13739,6 +13943,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 154.6352 250.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 153.67 246.38 0)
 			(hide yes)
@@ -13767,7 +13982,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at -241.3 208.28 0)
+		(at -241.3 212.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -13778,7 +13993,7 @@
 		(fields_autoplaced yes)
 		(uuid "36699257-2b32-4250-befe-d729b95177e3")
 		(property "Reference" "#PWR064"
-			(at -241.3 214.63 0)
+			(at -241.3 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13789,7 +14004,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at -241.3 214.63 0)
+			(at -241.3 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -13799,7 +14014,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at -241.3 208.28 0)
+			(at -241.3 212.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13810,7 +14025,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -241.3 208.28 0)
+			(at -241.3 212.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13821,7 +14036,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at -241.3 208.28 0)
+			(at -241.3 212.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13901,6 +14116,17 @@
 		)
 		(property "Description" "FERRITE BEAD 1.5 KOHM 0402 1LN"
 			(at 241.3 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C442654"
+			(at 239.522 71.12 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13991,6 +14217,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at -58.42 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" "710-885012205037"
 			(at -58.42 21.59 0)
 			(hide yes)
@@ -14071,6 +14308,17 @@
 			)
 		)
 		(property "Description" "Low Capacitance (1.0pF), Low Charge Injection (<1pC), 2:1 / SPDT Analog Switch, MSOP-8"
+			(at -85.09 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C206796"
 			(at -85.09 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -14393,7 +14641,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1713 "
+		(property "LCSC" "C1713"
 			(at 220.98 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -14786,6 +15034,17 @@
 		)
 		(property "Description" "250-mA Ultra-Low-Noise Low-IQ LDO, 1.8V, SOT-23"
 			(at -149.86 199.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C92498"
+			(at -149.86 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15505,6 +15764,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C689169"
+			(at -152.146 103.886 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "MPN" "LTC6268IS8#TRPBF"
 			(at -151.13 82.55 0)
 			(hide yes)
@@ -15628,6 +15898,17 @@
 		)
 		(property "Description" ""
 			(at 173.99 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15255"
+			(at 174.9552 87.63 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15807,6 +16088,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C60491"
+			(at -207.518 207.01 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "bbca81e8-edef-48ca-b8ec-0b720b762fd8")
 		)
@@ -15965,6 +16257,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 129.2352 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 128.27 242.57 0)
 			(hide yes)
@@ -16048,6 +16351,17 @@
 		)
 		(property "Description" ""
 			(at 180.34 29.21 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25132"
+			(at 180.34 30.988 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16385,6 +16699,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C8545"
+			(at -225.425 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "3"
 			(uuid "7a660dd7-f1c2-489c-82ce-ed6d18779704")
 		)
@@ -16405,7 +16730,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at -223.52 204.47 0)
+		(at -223.52 203.2 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -16416,7 +16741,7 @@
 		(fields_autoplaced yes)
 		(uuid "7249d110-2b43-447b-8faa-772295debe56")
 		(property "Reference" "R16"
-			(at -219.71 203.1999 0)
+			(at -219.71 201.9299 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16427,7 +16752,7 @@
 			)
 		)
 		(property "Value" "1M"
-			(at -219.71 205.7399 0)
+			(at -219.71 204.4699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16438,7 +16763,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at -225.298 204.47 90)
+			(at -225.298 203.2 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16449,7 +16774,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -223.52 204.47 0)
+			(at -223.52 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16460,7 +16785,18 @@
 			)
 		)
 		(property "Description" ""
-			(at -223.52 204.47 0)
+			(at -223.52 203.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25488"
+			(at -225.298 203.2 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -16470,7 +16806,7 @@
 			)
 		)
 		(property "Mouser PN" ""
-			(at -223.52 204.47 90)
+			(at -223.52 203.2 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16550,6 +16886,17 @@
 		)
 		(property "Description" ""
 			(at -163.83 68.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17513"
+			(at -162.052 68.58 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17081,6 +17428,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C4074199"
+			(at -128.27 7.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Sim.Device" ""
 			(at -128.27 7.62 0)
 			(hide yes)
@@ -17425,6 +17783,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C442654"
+			(at -184.15 198.628 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9e1d978c-946c-4cec-90f5-3e631e86583a")
 		)
@@ -17656,6 +18025,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C17408"
+			(at -175.26 78.232 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -175.26 80.01 90)
 			(hide yes)
@@ -17869,6 +18249,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C19702"
+			(at -137.16 200.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Manufacturer_Name" "Taiyo Yuden	"
 			(at -137.16 200.66 0)
 			(hide yes)
@@ -17996,6 +18387,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 217.17 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1523"
 			(at 217.17 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -18163,6 +18565,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C5204747"
+			(at -245.745 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "MPN" "MBR0540L-TP"
 			(at -241.3 204.47 0)
 			(hide yes)
@@ -18265,6 +18678,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 210.82 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
 			(at 210.82 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -18543,6 +18967,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at -176.8348 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -177.8 97.79 0)
 			(hide yes)
@@ -18626,6 +19061,17 @@
 		)
 		(property "Description" ""
 			(at -132.08 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C49678"
+			(at -131.1148 92.71 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18993,6 +19439,17 @@
 		)
 		(property "Description" ""
 			(at -143.51 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17513"
+			(at -145.288 88.9 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -19403,6 +19860,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1548"
+			(at 218.1352 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 217.17 33.02 0)
 			(hide yes)
@@ -19649,6 +20117,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C49678"
+			(at -165.4048 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -166.37 97.79 0)
 			(hide yes)
@@ -19807,6 +20286,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at -189.23 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4074199"
 			(at -189.23 134.62 0)
 			(hide yes)
 			(show_name no)
@@ -20007,6 +20497,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1525"
+			(at 117.8052 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 116.84 242.57 0)
 			(hide yes)
@@ -20113,7 +20614,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at -223.52 194.31 0)
+		(at -223.52 189.23 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -20124,7 +20625,7 @@
 		(fields_autoplaced yes)
 		(uuid "b1d0647f-d96b-4dd6-b14c-fac9caf5a039")
 		(property "Reference" "R15"
-			(at -219.71 193.0399 0)
+			(at -219.71 187.9599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -20135,7 +20636,7 @@
 			)
 		)
 		(property "Value" "100k"
-			(at -219.71 195.5799 0)
+			(at -219.71 190.4999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -20146,7 +20647,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at -225.298 194.31 90)
+			(at -225.298 189.23 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20157,7 +20658,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -223.52 194.31 0)
+			(at -223.52 189.23 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20168,7 +20669,18 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at -223.52 194.31 0)
+			(at -223.52 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60491"
+			(at -225.298 189.23 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20334,6 +20846,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25097"
+			(at -141.732 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -143.51 99.06 0)
 			(hide yes)
@@ -20414,6 +20937,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at -189.23 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4074199"
 			(at -189.23 139.7 0)
 			(hide yes)
 			(show_name no)
@@ -20847,6 +21381,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C4074199"
+			(at -189.23 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Sim.Device" ""
 			(at -189.23 142.24 0)
 			(hide yes)
@@ -21053,7 +21598,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at -205.74 203.2 0)
+		(at -205.74 200.66 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -21064,7 +21609,7 @@
 		(fields_autoplaced yes)
 		(uuid "c7b3cfca-1e92-408b-a177-b0662037186c")
 		(property "Reference" "#PWR0111"
-			(at -205.74 207.01 0)
+			(at -205.74 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21075,7 +21620,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at -205.74 198.12 0)
+			(at -205.74 195.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -21085,7 +21630,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at -205.74 203.2 0)
+			(at -205.74 200.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21096,7 +21641,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -205.74 203.2 0)
+			(at -205.74 200.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21107,7 +21652,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at -205.74 203.2 0)
+			(at -205.74 200.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21420,6 +21965,17 @@
 		)
 		(property "Description" ""
 			(at 181.61 49.53 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25132"
+			(at 181.61 51.308 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -21832,6 +22388,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C110074"
+			(at -140.97 7.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Manufacturer" "Texas Instruments"
 			(at -143.51 7.62 0)
 			(hide yes)
@@ -21953,6 +22520,17 @@
 		)
 		(property "Description" "Dual 36V, Precision, Rail-to-Rail Input/Output, Low Offset Voltage, Low Power Op Amp, SOIC-8"
 			(at -177.8 27.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C110074"
+			(at -180.34 27.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22682,6 +23260,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at 242.2652 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 241.3 81.28 0)
 			(hide yes)
@@ -22842,6 +23431,17 @@
 			)
 		)
 		(property "Description" "Mill-Max Precision Spring-Loaded Target Header (12-Pin Distributed Array, 0.8N contact force)"
+			(at -58.42 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C49451500"
 			(at -58.42 182.88 0)
 			(hide yes)
 			(show_name no)
@@ -23029,6 +23629,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at -189.23 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C4074199"
 			(at -189.23 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -23306,6 +23917,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25078"
+			(at 210.82 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Sim.Device" ""
 			(at 210.82 36.83 0)
 			(hide yes)
@@ -23498,6 +24120,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C529241"
+			(at 194.31 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "MPN" "ADA4940-1ACPZ-RL"
 			(at 194.31 39.37 0)
 			(hide yes)
@@ -23658,6 +24291,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C529241"
+			(at 201.93 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "MPN" "ADA4940-1ACPZ-RL"
 			(at 201.93 86.36 0)
 			(hide yes)
@@ -23806,6 +24450,17 @@
 		)
 		(property "Description" ""
 			(at -144.78 -15.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C33148"
+			(at -148.59 -14.2748 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -24026,6 +24681,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15255"
+			(at -176.8348 204.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at -177.8 200.66 0)
 			(hide yes)
@@ -24107,6 +24773,17 @@
 		)
 		(property "Description" ""
 			(at -167.64 12.7 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25149"
+			(at -167.64 10.922 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -24327,6 +25004,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25132"
+			(at 190.5 47.752 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Mouser PN" ""
 			(at 190.5 49.53 0)
 			(hide yes)
@@ -24410,6 +25098,17 @@
 			)
 		)
 		(property "Description" "Generic connectable mounting pin connector, single row, 01x14, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at -171.45 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2856818"
 			(at -171.45 144.78 0)
 			(hide yes)
 			(show_name no)

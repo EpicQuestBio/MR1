@@ -207,6 +207,61 @@ class PoreDacDynamics:
             })
         return table
 
+    def calculate_composite_bipolar_driver(
+        self,
+        code_a: int = 2048,
+        code_b: int = 0,
+        gain_2x: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Models the MR1 Ignition schematic (`MR1/Ignition.kicad_sch`) composite bipolar summing
+        amplifier (`U3A`/`U3B` OPA2197 + `U13` ADR4520 + `U9` MCP4822):
+        - `U3B` (OPA2197) inverts `U13` (+2.048V) via R13=10k, R22=10k -> -2.048V
+        - `U3A` (OPA2197) sums:
+          * Ch A (coarse) via R31 = 10 kOhm into R29 = 24 kOhm (Gain = -2.40 V/V)
+          * Ch B (100:1 vernier fine trim) via R21 = 1 MOhm into R29 = 24 kOhm (Gain = -0.024 V/V)
+          * Offset (-2.048V from U3B) via R35 = 20 kOhm into R29 = 24 kOhm (Gain = -1.20 V/V -> +2.4576V)
+        - Feedback compensation: C43 = 1 nF in parallel with R29 = 24 kOhm (f_-3dB = 6.631 kHz)
+        - Output isolation filter: R43 = 27 Ohm + C29 = 100 nF (f_-3dB = 58.95 kHz)
+        """
+        r13, r22 = 10_000.0, 10_000.0
+        r31, r21, r35, r29 = 10_000.0, 1_000_000.0, 20_000.0, 24_000.0
+        c43 = 1.0e-9
+        r43, c29 = 27.0, 100.0e-9
+        v_ref = 2.048
+
+        v_fs = self.VREF_2X_V if gain_2x else self.VREF_1X_V
+        v_a = (max(0, min(4095, int(code_a))) / 4096.0) * v_fs
+        v_b = (max(0, min(4095, int(code_b))) / 4096.0) * v_fs
+
+        v_u3b = -(r22 / r13) * v_ref  # -2.048 V
+        gain_a = -(r29 / r31)          # -2.40 V/V
+        gain_b = -(r29 / r21)          # -0.024 V/V
+        gain_off = -(r29 / r35)        # -1.20 V/V
+
+        v_pore = (gain_off * v_u3b) + (gain_a * v_a) + (gain_b * v_b)
+        f_3db_u3a_hz = 1.0 / (2.0 * math.pi * r29 * c43)
+        f_3db_rc_out_hz = 1.0 / (2.0 * math.pi * r43 * c29)
+
+        step_coarse_mv = abs(gain_a) * (v_fs / 4096.0) * 1e3
+        step_fine_uv = abs(gain_b) * (v_fs / 4096.0) * 1e6
+
+        return {
+            "code_a": code_a,
+            "code_b": code_b,
+            "v_dac_a_v": v_a,
+            "v_dac_b_v": v_b,
+            "v_u3b_neg_ref_v": v_u3b,
+            "v_pore_out_v": v_pore,
+            "gain_coarse_a": gain_a,
+            "gain_fine_b": gain_b,
+            "vernier_ratio": abs(gain_a / gain_b),
+            "step_coarse_mv": step_coarse_mv,
+            "step_fine_uv": step_fine_uv,
+            "f_3db_u3a_feedback_hz": f_3db_u3a_hz,
+            "f_3db_output_rc_hz": f_3db_rc_out_hz,
+        }
+
 
 if __name__ == "__main__":
     sim = PoreDacDynamics()

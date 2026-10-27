@@ -222,6 +222,9 @@ def PTFE_Interposer(render_electrodes=False):
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
             add(Hex_Base_Sketch())
+            # 13.5 x 3.0 mm ribbon cable clearance notch recessed into bottom hex flat (Y = -25.9808 to -22.9808)
+            with Locations((0.0, -25.9808)):
+                Rectangle(13.5, 6.0, mode=Mode.SUBTRACT)
             if USE_NANOPORE_WAFER_GASKET:
                 Rectangle(PCB_WAFER_HOLE_SIZE, PCB_WAFER_HOLE_SIZE, rotation=WAFER_ROTATION, mode=Mode.SUBTRACT)
             else:
