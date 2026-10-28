@@ -132,10 +132,10 @@ def Torque_Cap_Outer():
         arm_z = slot_z       #        arm_z = cap_retention_h + 1.0 + arm_h / 2.0
         for i in range(6):
             ang = i * 60.0
-            with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0, -3.0, arm_z))):
-                Box(4.0, slot_l-1.0, arm_h, mode=Mode.ADD) #                Box(1.8, 16.0, arm_h, mode=Mode.ADD)
+            with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0, -1.0, arm_z))):
+                Box(4.0, slot_l+1.0, arm_h, mode=Mode.ADD) #                Box(1.8, 16.0, arm_h, mode=Mode.ADD)
             # Add explicit root fillet radius (R=2.5mm tangent transition) at cantilever root attachment
-            with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0 - 0.9, -11.0, arm_z))):
+            with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 6.0 - 0.9, -5.5, arm_z))):
                 Cylinder(radius=2.5, height=arm_h, mode=Mode.ADD)
             with Locations(Rotation(0, 0, ang) * Location((NECK_OD / 2.0 + 3.0, 4.0, arm_z))):
                 Cylinder(radius=1.5, height=arm_h, mode=Mode.ADD)

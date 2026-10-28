@@ -7,66 +7,16 @@ import math
 from src.constants import *
 from src.common import Circuitry_Cutouts, Finger_Grip_Cutout, Hex_Base_Sketch, Weep_Duct_Holes, Weep_Trench_Cutout
 
+POGO_6PIN_X = [-11.5, -6.5, -1.5, 1.5, 6.5, 11.5]
+
 def PogoPinHoles():
-    '''Returns a sketch containing the pogo pin holes parsed dynamically.'''
-    import os, re
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    pcb_path = os.path.join(repo_root, 'Interposer', 'Interposer.kicad_pcb')
+    '''Returns a sketch with the two 6-pin pogo banks (Cis and Trans) on opposite dry perimeters.
+    Cis bank at CAD Y = +15 mm (KiCad Y = -15), Trans bank at CAD Y = POGO_Y = -15 mm (KiCad Y = +15).
+    '''
     pads = []
-    if os.path.exists(pcb_path):
-        try:
-            with open(pcb_path, 'r', encoding='utf-8') as f: pcb_data = f.read()
-            def manual_parse(name, data):
-                import re
-                pads = []
-                start = data.find('(footprint "' + name + '"')
-                if start == -1: return pads
-                paren_count = 0
-                end = start
-                for i in range(start, len(data)):
-                    if data[i] == '(': paren_count += 1
-                    elif data[i] == ')':
-                        paren_count -= 1
-                        if paren_count == 0:
-                            end = i + 1
-                            break
-                if end == start: return pads
-                fp_text = data[start:end]
-
-                at_match = re.search(r'\(at ([0-9\.\-]+) ([0-9\.\-]+)(?: ([0-9\.\-]+))?\)', fp_text)
-                if not at_match: return pads
-                at_x = float(at_match.group(1))
-                at_y = float(at_match.group(2))
-                rot = float(at_match.group(3)) if at_match.group(3) else 0.0
-
-                pad_matches = re.finditer(r'\(pad \"[0-9]+\" (?:smd|thru_hole) (?:circle|roundrect|oval).*?\(at ([0-9\.\-]+) ([0-9\.\-]+)', fp_text, re.DOTALL)
-                for pad_match in pad_matches:
-                    px = float(pad_match.group(1))
-                    py = float(pad_match.group(2))
-                    if rot == 180:
-                        px = -px
-                        py = -py
-                    abs_x = at_x + px
-                    abs_y = at_y + py
-                    cad_x = abs_x - 164.5
-                    cad_y = -(abs_y - 58.5)
-                    pads.append((round(cad_x, 3), round(cad_y, 3)))
-                return pads
-
-            pads.extend(manual_parse('footprints:PogoPin_Target_6Pin_Array', pcb_data))
-            pads.extend(manual_parse('footprints:PogoPin_Target_6Pin_Distributed', pcb_data))
-            pads.extend(manual_parse('footprints:PogoPin_Target_12Pin_Distributed', pcb_data))
-            unique_pads = []
-            for p in pads:
-                if p not in unique_pads: unique_pads.append(p)
-            pads = unique_pads
-        except Exception as e:
-            print(f'Error parsing pogo pins: {e}')
-    # Ensure baseline 12 pogo pin landing locations are present
-    for x in [-11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0]:
-        pt = (x, POGO_Y)
-        if pt not in pads:
-            pads.append(pt)
+    for x in POGO_6PIN_X:
+        pads.append((x, -POGO_Y))   # Cis bank
+        pads.append((x, POGO_Y))    # Trans bank
     with BuildSketch(mode=Mode.PRIVATE) as p:
         for pad in pads:
             with Locations(pad):

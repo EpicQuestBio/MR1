@@ -4073,6 +4073,198 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "MR1:PogoPin_SpringHeader_6Pin_Cis"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J_POGO_CIS"
+				(at 0 13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PogoPin_SpringHeader_6Pin_Cis"
+				(at 0 11.43 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Cis"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.mill-max.com"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Cis Spring Header Soldered to Bottom of Amplifier PCB (GNDA, >PORE_AMP, GNDA, GUARD, GNDA, WEEP_SENSE)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mill-max 09xx bias-tail ball-contact spring pogo cis low-leakage 6-pin"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Cis_0_1"
+				(rectangle
+					(start -10.16 10.16)
+					(end 10.16 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Cis_1_1"
+				(pin passive line (at -15.24 6.35 0) (length 5.08) (name "GNDA" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 3.81 0) (length 5.08) (name ">PORE_AMP" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 1.27 0) (length 5.08) (name "GNDA" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 -1.27 0) (length 5.08) (name "GUARD" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 -3.81 0) (length 5.08) (name "GNDA" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 -6.35 0) (length 5.08) (name "WEEP_SENSE" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+			)
+			(embedded_fonts no)
+		)
+		(symbol "MR1:PogoPin_SpringHeader_6Pin_Trans"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J_POGO_TRANS"
+				(at 0 13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PogoPin_SpringHeader_6Pin_Trans"
+				(at 0 11.43 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Trans"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.mill-max.com"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Trans Spring Header Soldered to Bottom of Amplifier PCB (CE_GNDA, RE_TRANS, GUARD_WIDE, WS_CIS_WIDE, GUARD, WS_CIS)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mill-max 09xx bias-tail ball-contact spring pogo trans low-leakage 6-pin"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Trans_0_1"
+				(rectangle
+					(start -10.16 10.16)
+					(end 10.16 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Trans_1_1"
+				(pin passive line (at -15.24 6.35 0) (length 5.08) (name "CE_GNDA" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 3.81 0) (length 5.08) (name "RE_TRANS" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 1.27 0) (length 5.08) (name "GUARD_WIDE" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 -1.27 0) (length 5.08) (name "WS_CIS_WIDE" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 -3.81 0) (length 5.08) (name "GUARD" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at -15.24 -6.35 0) (length 5.08) (name "WS_CIS" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+			)
+			(embedded_fonts no)
+		)
 		(symbol "MR1:PogoPin_SpringHeader_12Pin_Distributed"
 			(pin_names
 				(offset 1.016)
@@ -9431,26 +9623,6 @@
 		)
 		(uuid "00a2ee76-0efd-4eb4-ba87-ff99d3a1619f")
 	)
-	(label "GUARD"
-		(at -73.66 184.15 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "079a6c56-33ce-487c-9ad8-0d65e1492d53")
-	)
-	(label "GUARD"
-		(at -73.66 179.07 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "0834166e-a248-467b-bb2f-097ac31f7455")
-	)
 	(label "SHIELD_AMP"
 		(at -57.15 107.95 180)
 		(effects
@@ -9490,16 +9662,6 @@
 			(justify left bottom)
 		)
 		(uuid "1a2e6502-a1ce-4ad5-8461-e93064cafc15")
-	)
-	(label "WS_CIS"
-		(at -73.66 181.61 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "1bcd62f0-327c-4905-93df-913584a484f5")
 	)
 	(label "R_WEEP_GATE"
 		(at -223.52 196.85 180)
@@ -9551,16 +9713,6 @@
 		)
 		(uuid "37cd573e-d15a-474f-aaba-39e55c4a82f6")
 	)
-	(label "CE_GNDA"
-		(at -73.66 168.91 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "3c76fb33-0ca0-422f-aded-c92daecdaac9")
-	)
 	(label "Vbias"
 		(at -146.05 76.2 90)
 		(effects
@@ -9580,16 +9732,6 @@
 			(justify right bottom)
 		)
 		(uuid "3f10e2a5-af51-4837-96ee-0c1ff9ebe355")
-	)
-	(label "GNDA"
-		(at -73.66 186.69 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "41543d3b-4538-438c-8b55-75a019c4ebd5")
 	)
 	(label "GUARD"
 		(at -196.85 74.93 0)
@@ -9620,16 +9762,6 @@
 			(justify right bottom)
 		)
 		(uuid "51c06dd7-5bb2-4de2-8244-d004faeb4344")
-	)
-	(label "RE_TRANS"
-		(at -73.66 171.45 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "57b7b252-6ff9-4c3d-b0b7-64c25169bf43")
 	)
 	(label "ROUTE_SEL"
 		(at -72.39 31.75 0)
@@ -9771,16 +9903,6 @@
 		)
 		(uuid "9fae1fdb-ddf1-49ea-9477-819635f0c0ac")
 	)
-	(label "WS_CIS_WIDE"
-		(at -73.66 191.77 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a14dc0df-7938-4657-ad3f-854add73cf15")
-	)
 	(label "GUARD_WIDE"
 		(at -185.42 20.32 0)
 		(effects
@@ -9871,16 +9993,6 @@
 		)
 		(uuid "b1094c5c-1a6b-4f02-9b9f-2c94cbba9d9b")
 	)
-	(label ">PORE_AMP"
-		(at -73.66 173.99 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ba736b00-4c94-405f-96fd-c3f3d590d1ca")
-	)
 	(label "GDAC_EN"
 		(at -58.42 116.84 180)
 		(effects
@@ -9890,16 +10002,6 @@
 			(justify right bottom)
 		)
 		(uuid "bc700612-74ab-4594-a1e5-005ccdcba8c2")
-	)
-	(label "GNDA"
-		(at -73.66 194.31 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "bd1de1a3-f592-40ff-9d41-e29aaf05bf8d")
 	)
 	(label "Vbias"
 		(at 236.22 29.21 90)
@@ -9930,16 +10032,6 @@
 			(justify left bottom)
 		)
 		(uuid "c0171234-5206-4ddd-bb64-cb2382445be4")
-	)
-	(label "GUARD_WIDE"
-		(at -73.66 189.23 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c428ac3a-ac3d-43d7-8924-7173190c6c20")
 	)
 	(label "+3V3"
 		(at -176.53 129.54 180)
@@ -10021,16 +10113,6 @@
 		)
 		(uuid "d95d8972-740d-4200-82e3-520541e5eb04")
 	)
-	(label "WEEP_SENSE"
-		(at -73.66 196.85 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "dc545e08-15ee-48e9-8a66-365c86ca563e")
-	)
 	(label "GDAC_SDI"
 		(at -196.85 144.78 180)
 		(effects
@@ -10060,16 +10142,6 @@
 			(justify left bottom)
 		)
 		(uuid "efb691e6-d9aa-4075-b672-2ec36dbf63eb")
-	)
-	(label "GNDA"
-		(at -73.66 176.53 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f09b7ed0-cc85-4014-9ac9-f832d5683e73")
 	)
 	(label "SHIELD_AMP"
 		(at 146.05 284.48 0)
@@ -23375,129 +23447,6 @@
 		)
 	)
 	(symbol
-		(lib_id "MR1:PogoPin_SpringHeader_12Pin_Distributed")
-		(at -58.42 182.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ed5e2c8c-b104-4858-832c-d81bcdccf23d")
-		(property "Reference" "J_POGO2"
-			(at -46.99 181.6099 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "PogoPin_SpringHeader_12Pin_Distributed"
-			(at -46.99 184.1499 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "footprints:PogoPin_SpringHeader_12Pin_Distributed"
-			(at -58.42 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.mill-max.com"
-			(at -58.42 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mill-Max Precision Spring-Loaded Target Header (12-Pin Distributed Array, 0.8N contact force)"
-			(at -58.42 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C49451500"
-			(at -58.42 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6dbb6252-a7f7-4051-9279-fe05a5a770b1")
-		)
-		(pin "2"
-			(uuid "2e51d6a5-e97f-4b01-af36-095837144ccf")
-		)
-		(pin "3"
-			(uuid "7ba8f7fa-2d80-4f94-8fee-d1a0fd453f8c")
-		)
-		(pin "4"
-			(uuid "e2172850-43bd-45ec-a2b5-e23977d40f97")
-		)
-		(pin "5"
-			(uuid "b0129d1b-9763-4507-b536-24704df87c63")
-		)
-		(pin "6"
-			(uuid "af0ee3ec-56ee-4195-9647-69ddbc39cfed")
-		)
-		(pin "7"
-			(uuid "3c16ef4b-f446-4c1d-9b1e-2b883735dd4c")
-		)
-		(pin "8"
-			(uuid "b2a78c68-0be4-41d9-bb24-bf60fd08b310")
-		)
-		(pin "9"
-			(uuid "35ab73b3-5c20-4eee-b6d8-c0596d9c9af0")
-		)
-		(pin "10"
-			(uuid "975122fd-9444-4483-9dae-94b34c1d9adc")
-		)
-		(pin "11"
-			(uuid "dfc847c2-70f5-4ef8-b50f-d502c834b79f")
-		)
-		(pin "12"
-			(uuid "53196f51-b84a-449b-a07b-1b940505bdf2")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "J_POGO2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VSSA")
 		(at 201.93 92.71 180)
 		(unit 1)
@@ -25179,4 +25128,252 @@
 		)
 	)
 	(embedded_fonts no)
+	(symbol
+		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Cis")
+		(at -58.42 172.72 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "268ca0e3-2300-4a5e-a439-7171cca1ecca")
+		(property "Reference" "J_POGO1"
+			(at -46.99 171.45 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PogoPin_SpringHeader_6Pin_Cis"
+			(at -46.99 173.99 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Cis"
+			(at -58.42 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Datasheet" "https://www.mill-max.com"
+			(at -58.42 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(pin "1"
+			(uuid "83648501-31be-48c0-8a17-516c0aba7f93")
+		)
+		(pin "2"
+			(uuid "6b5a2a8c-2e88-48de-8173-4cc49c1af4fe")
+		)
+		(pin "3"
+			(uuid "7375231b-881f-4245-aa44-1cb66ef3e482")
+		)
+		(pin "4"
+			(uuid "4e524b2e-7ef9-4ad1-b71b-0cd46548e322")
+		)
+		(pin "5"
+			(uuid "a98d078b-533b-4c8c-8be0-c6b0a4a95f12")
+		)
+		(pin "6"
+			(uuid "06223944-da45-4298-abd8-1230998cf072")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "J_POGO1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "GNDA"
+		(at -73.66 166.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "eaf04769-e930-4fcf-8fd3-a2adc700b808")
+	)
+	(label ">PORE_AMP"
+		(at -73.66 168.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8d22ecc0-3e3d-4ba8-9037-71c1dc34abf0")
+	)
+	(label "GNDA"
+		(at -73.66 171.45 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5e25c0ba-62c5-4132-8c3e-200ea40f0cb7")
+	)
+	(label "GUARD"
+		(at -73.66 173.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "eea381fe-756e-424d-af15-f9a3246a82f7")
+	)
+	(label "GNDA"
+		(at -73.66 176.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "edea64c8-8479-44f6-8623-aeb98c12ce4d")
+	)
+	(label "WEEP_SENSE"
+		(at -73.66 179.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b8289d5c-639e-44e9-a097-0eed00648fe4")
+	)
+	(symbol
+		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Trans")
+		(at -58.42 198.12 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8b434888-d697-480c-816b-d0c50af943be")
+		(property "Reference" "J_POGO2"
+			(at -46.99 196.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "PogoPin_SpringHeader_6Pin_Trans"
+			(at -46.99 199.39000000000001 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Trans"
+			(at -58.42 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Datasheet" "https://www.mill-max.com"
+			(at -58.42 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(pin "1"
+			(uuid "a4ad2a47-b4b3-4288-83ab-56b96941d910")
+		)
+		(pin "2"
+			(uuid "7fe70bdf-6565-495c-a0a6-27e3c4d7cb41")
+		)
+		(pin "3"
+			(uuid "ded9a05c-53ef-444e-93b8-912cf94a83d2")
+		)
+		(pin "4"
+			(uuid "468c4424-fb8f-493a-8ab6-6731b23e6476")
+		)
+		(pin "5"
+			(uuid "deacd045-dbcc-4e40-ada8-8ca52784c1eb")
+		)
+		(pin "6"
+			(uuid "889b9283-c635-4ed7-aa0d-9af4f5eddf45")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "J_POGO2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "CE_GNDA"
+		(at -73.66 191.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f473db27-cf24-46e0-ab13-001d0378823b")
+	)
+	(label "RE_TRANS"
+		(at -73.66 194.31 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "71795cf0-7d2b-4759-b0c5-49d981c3b85d")
+	)
+	(label "GUARD_WIDE"
+		(at -73.66 196.85 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "99ee1797-1bf5-4fb5-8c01-472834b5de55")
+	)
+	(label "WS_CIS_WIDE"
+		(at -73.66 199.39 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8da63ae0-6d26-44a7-aa56-652a03f4dc90")
+	)
+	(label "GUARD"
+		(at -73.66 201.93 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6bece1e1-6b9f-4544-9e97-52d676d8bb57")
+	)
+	(label "WS_CIS"
+		(at -73.66 204.47 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c4a3b273-1c4b-4389-98e2-ccf2fd79f768")
+	)
 )

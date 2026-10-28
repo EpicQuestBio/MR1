@@ -308,12 +308,13 @@ class TestLegacyFeatureParity(unittest.TestCase):
         self.assertAlmostEqual(vol_c, 0.0, delta=0.01, msg="Interposer center must have wafer protrusion cutout.")
 
         # 3. Pogo pin landing holes at Y=-15.0mm (12-pin distributed array: -11.0 to +11.0mm in 2.0mm steps)
-        for px in [-11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0]:
-            pogo_probe = Solid.make_cylinder(0.3, 4.0).move(Location((px, POGO_Y, -1.0)))
-            inter_p = interposer.intersect(pogo_probe)
-            vol_p = get_vol(inter_p)
-            self.assertAlmostEqual(vol_p, 0.0, delta=0.01,
-                                   msg=f"Pogo contact at ({px}, {POGO_Y}) must be present.")
+        for py in [POGO_Y, -POGO_Y]:
+            for px in [-11.5, -6.5, -1.5, 1.5, 6.5, 11.5]:
+                pogo_probe = Solid.make_cylinder(0.3, 4.0).move(Location((px, py, -1.0)))
+                inter_p = interposer.intersect(pogo_probe)
+                vol_p = get_vol(inter_p)
+                self.assertAlmostEqual(vol_p, 0.0, delta=0.01,
+                                       msg=f"Pogo contact at ({px}, {py}) must be present.")
 
         # 4. Fluid pass-throughs at r=20mm
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:

@@ -73,7 +73,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertNotIn(ref, refs, f"Active component or colliding concentric ring {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "H2", "H3", "H4", "J_POGO1"]
+        required = ["H1", "H2", "H3", "H4", "J_POGO1", "J_POGO2"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 
@@ -141,7 +141,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(sch_path.exists(), "Interposer.kicad_sch must exist")
 
         sch_txt = sch_path.read_text(encoding="utf-8")
-        self.assertIn('lib_id "Connector_Generic:Conn_01x12"', sch_txt)
+        self.assertIn('lib_id "Connector_Generic:Conn_01x06"', sch_txt)
         self.assertIn('lib_id "Mechanical:MountingHole"', sch_txt)
         self.assertIn('lib_id "Connector_Generic:Conn_01x02"', sch_txt)
         pass
@@ -156,9 +156,10 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn("J10", sch_txt)
         self.assertIn("J11", sch_txt)
 
-        # Check all 12 pins of J_POGO1 in Interposer schematic
-        for pin_num in range(1, 13):
-            self.assertIn(f'(pin "{pin_num}"', sch_txt, f"Pin {pin_num} must be in J_POGO1 in Interposer schematic")
+        self.assertIn("J_POGO2", sch_txt)
+        # Check all 6 pins of each bank (J_POGO1 = Cis, J_POGO2 = Trans)
+        for pin_num in range(1, 7):
+            self.assertIn(f'(pin "{pin_num}"', sch_txt, f"Pin {pin_num} must be in the Interposer pogo banks")
         pass
         pass
         pass # pass # self.assertIn("WE_POS", sch_txt)
@@ -635,7 +636,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('U5', '2'), wide_net, "U5 pin 2 (-IN) must connect to WS_CIS_WIDE")
         self.assertIn(('R10', '2'), wide_net, "R10 pin 2 must connect to WS_CIS_WIDE")
         self.assertIn(('C3', '2'), wide_net, "C3 pin 2 must connect to WS_CIS_WIDE")
-        self.assertIn(('J_POGO2', '10'), wide_net, "J_POGO2 pin 10 must connect to WS_CIS_WIDE")
+        self.assertIn(('J_POGO2', '4'), wide_net, "J_POGO2 pin 4 must connect to WS_CIS_WIDE")
 
         # Verify control line ROUTE_SEL
         route_net = nets.get("/ROUTE_SEL", [])
@@ -694,6 +695,47 @@ class TestInterposerKiCad(unittest.TestCase):
         table = format_validation_table(geom)
         self.assertIn("CE_GNDA", table)
         self.assertIn("WEEP_SENSE", table)
+
+    def test_6pin_millmax_09xx_bias_tail_footprints_and_guarding(self):
+        """Dual 6-pin banks: Cis (Y=-15) and Trans (Y=+15) Mill-Max 09xx footprints."""
+        from generate_footprint import (
+            PIN_NET_SEQUENCE_6PIN_CIS,
+            PIN_NET_SEQUENCE_6PIN_TRANS,
+            extract_cad_geometry,
+            generate_6pin_spring_header_sexpr,
+            generate_6pin_target_array_sexpr,
+            generate_kicad_footprint,
+        )
+
+        cis = [n for _, n, _ in PIN_NET_SEQUENCE_6PIN_CIS]
+        trans = [n for _, n, _ in PIN_NET_SEQUENCE_6PIN_TRANS]
+        self.assertEqual(cis, ["GNDA", ">PORE_AMP", "GNDA", "GUARD", "GNDA", "WEEP_SENSE"])
+        self.assertEqual(trans, ["CE_GNDA", "RE_TRANS", "GUARD_WIDE", "WS_CIS_WIDE", "GUARD", "WS_CIS"])
+
+        for bank, y, seq in [("cis", -15.0, cis), ("trans", 15.0, trans)]:
+            geom = extract_cad_geometry(pin_count=6, bank=bank)
+            self.assertEqual([p.net_name for p in geom.pogo_pads], seq)
+            for pad in geom.pogo_pads:
+                self.assertEqual(pad.layers, ["F.Cu", "F.Mask"])
+                self.assertEqual(pad.y, y)
+            sx = generate_kicad_footprint(geom, footprint_name="PogoPin_Target_6Pin_MillMax_09xx")
+            self.assertIn("Mill-Max 09xx", sx)
+            self.assertIn("RIGID ANVIL CLAMP ZONE", sx)
+
+        geom12 = extract_cad_geometry()
+        self.assertEqual(len(geom12.pogo_pads), 12)
+        self.assertEqual([p.net_name for p in geom12.pogo_pads], cis + trans)
+        self.assertEqual({p.y for p in geom12.pogo_pads[:6]}, {-15.0})
+        self.assertEqual({p.y for p in geom12.pogo_pads[6:]}, {15.0})
+
+        fp = REPO_ROOT / "Amplifier" / "footprints"
+        for name in ["PogoPin_Target_6Pin_Cis", "PogoPin_Target_6Pin_Trans",
+                     "PogoPin_SpringHeader_6Pin_Cis", "PogoPin_SpringHeader_6Pin_Trans"]:
+            self.assertTrue((fp / f"{name}.kicad_mod").exists(), name)
+        for name in ["PogoPin_Target_6Pin_Cis", "PogoPin_Target_6Pin_Trans"]:
+            self.assertNotIn('"F.Paste"', (fp / f"{name}.kicad_mod").read_text())
+        for name in ["PogoPin_SpringHeader_6Pin_Cis", "PogoPin_SpringHeader_6Pin_Trans"]:
+            self.assertIn('"F.Paste"', (fp / f"{name}.kicad_mod").read_text())
 
 if __name__ == "__main__":
     unittest.main()
