@@ -986,26 +986,26 @@ def generate_6pin_target_array_sexpr(
         )
         # Bare, unmasked ENIG / Hard Gold landing pads: F.Cu + F.Mask only (NO F.Paste)
         lines.append(
-            f'  (pad "{pin_num}" smd circle (at {fmt4(px)} 0.0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (zone_connect 0) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
+            f'  (pad "{pin_num}" smd circle (at {fmt4(px)} 0.0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
         )
 
     if is_cis:
         # Concentric Driven GUARD Ring around Pin 2 (>PORE_AMP at -6.5, 0.0), tied to Pin 4 (GUARD)
         lines.append(
-            f'  (pad "4" smd custom (at -5.05 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (zone_connect 0) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_pore_guard_ring")}"))'
+            f'  (pad "4" smd custom (at -5.05 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_pore_guard_ring")}"))'
         )
         # Concentric GNDA Shield Ring around Pin 6 (WEEP_SENSE at 11.5, 0.0), tied to Pin 5 (GNDA)
         lines.append(
-            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (zone_connect 0) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_weep_guard_ring")}"))'
+            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_weep_guard_ring")}"))'
         )
     else:
         # Concentric Driven GUARD_WIDE Ring around Pin 4 (WS_CIS_WIDE at 1.5, 0.0), tied to Pin 3 (GUARD_WIDE)
         lines.append(
-            f'  (pad "3" smd custom (at 2.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (zone_connect 0) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_wide_guard_ring")}"))'
+            f'  (pad "3" smd custom (at 2.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_wide_guard_ring")}"))'
         )
         # Concentric Driven GUARD Ring around Pin 6 (WS_CIS at 11.5, 0.0), tied to Pin 5 (GUARD)
         lines.append(
-            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (zone_connect 0) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_cis_guard_ring")}"))'
+            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_cis_guard_ring")}"))'
         )
     lines.append(")")
     return "\n".join(lines) + "\n"
