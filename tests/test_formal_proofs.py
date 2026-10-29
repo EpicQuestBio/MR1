@@ -1033,21 +1033,21 @@ class TestElectricalHarnessAndPinMappingProofs(unittest.TestCase):
 
         Preconditions:
             pins = [Pin 1 .. Pin 12]
-            Pin 1: CE_GNDA
-            Pin 2: RE_TRANS
-            Pin 3: >PORE
-            Pin 4: GNDA
-            Pin 5: GUARD
-            Pin 6: WS_CIS
-            Pin 7: GUARD
-            Pin 8: GNDA
-            Pin 9: GUARD_WIDE
-            Pin 10: WS_CIS_WIDE
-            Pin 11: GNDA
-            Pin 12: WEEP_SENSE
+            Pin 1: GNDA_SHLD
+            Pin 2: WS_CIS_WIDE
+            Pin 3: GUARD_WIDE
+            Pin 4: GUARD_CIS_A
+            Pin 5: WS_CIS
+            Pin 6: GUARD_CIS_B
+            Pin 7: CE_GNDA
+            Pin 8: RE_TRANS
+            Pin 9: >PORE_AMP
+            Pin 10: GNDA
+            Pin 11: WEEP_SENSE
+            Pin 12: GNDA_WEEP
 
         Postconditions / Theorem:
-            High-Z sense lines (Pin 3 >PORE, Pin 6 WS_CIS, Pin 10 WS_CIS_WIDE, Pin 12 WEEP_SENSE)
+            High-Z sense lines (Pin 2 WS_CIS_WIDE, Pin 5 WS_CIS, Pin 9 >PORE_AMP, Pin 11 WEEP_SENSE)
             are pairwise distinct and completely isolated from each other and all other nets.
 
         Counterexample Goal:
@@ -1056,23 +1056,26 @@ class TestElectricalHarnessAndPinMappingProofs(unittest.TestCase):
         solver = z3.Solver()
 
         # Represent net IDs as integers [1..N]
-        net_ce_gnda = z3.IntVal(1)
-        net_re_trans = z3.IntVal(2)
-        net_pore = z3.IntVal(3)
-        net_gnda = z3.IntVal(4)
-        net_guard = z3.IntVal(5)
-        net_ws_cis = z3.IntVal(6)
-        net_guard_wide = z3.IntVal(7)
-        net_ws_cis_wide = z3.IntVal(8)
-        net_weep_sense = z3.IntVal(9)
+        net_gnda_shld = z3.IntVal(1)
+        net_ws_cis_wide = z3.IntVal(2)
+        net_guard_wide = z3.IntVal(3)
+        net_guard_cis_a = z3.IntVal(4)
+        net_ws_cis = z3.IntVal(5)
+        net_guard_cis_b = z3.IntVal(6)
+        net_ce_gnda = z3.IntVal(7)
+        net_re_trans = z3.IntVal(8)
+        net_pore_amp = z3.IntVal(9)
+        net_gnda = z3.IntVal(10)
+        net_weep_sense = z3.IntVal(11)
+        net_gnda_weep = z3.IntVal(12)
 
         # Signal pins
-        p3_pore = net_pore
-        p6_ws_cis = net_ws_cis
-        p10_ws_cis_wide = net_ws_cis_wide
-        p12_weep_sense = net_weep_sense
+        p2_ws_cis_wide = net_ws_cis_wide
+        p5_ws_cis = net_ws_cis
+        p9_pore_amp = net_pore_amp
+        p11_weep_sense = net_weep_sense
 
-        sense_nets = [p3_pore, p6_ws_cis, p10_ws_cis_wide, p12_weep_sense]
+        sense_nets = [p2_ws_cis_wide, p5_ws_cis, p9_pore_amp, p11_weep_sense]
 
         # Distinctness condition: for all i != j in sense_nets, net_i != net_j
         distinct_conds = []

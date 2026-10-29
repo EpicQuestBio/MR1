@@ -23,60 +23,19 @@ from pathlib import Path
 def new_uuid():
     return str(uuid.uuid4())
 
-POGO_12PIN_PCB_FP = """	(footprint "footprints:PogoPin_Target_12Pin_Distributed"
-		(layer "F.Cu")
-		(uuid "95e44bea-e0b1-4001-93da-f59cd86b29fe")
-		(at 164.5 73.5)
-		(descr "12-Pin Low-Leakage ENIG Pogo Pin Landing Array for Nanopore Microfluidic Interposer (Mill-Max 821/824 series, 0.8N spring force, Guarded Cis/Trans lines)")
-		(tags "pogo landing array target enig rogers ptfe nanopore mill-max")
-		(property "Reference" "J_POGO1"
-			(at 0 -3.0 0)
-			(layer "F.SilkS")
-			(uuid "5071002a-544f-43d6-9041-68a3e337c985")
-			(effects (font (size 0.8 0.8) (thickness 0.12)))
-		)
-		(property "Value" "PogoPin_Target_12Pin_Distributed"
-			(at 0 3.0 0)
-			(layer "F.Fab")
-			(uuid "72307f13-d969-4bef-8aad-4ed6011d84fb")
-			(effects (font (size 0.8 0.8) (thickness 0.12)))
-		)
-		(property "Footprint" "footprints:PogoPin_Target_12Pin_Distributed"
-			(at 0 0 0)
-			(hide yes)
-			(layer "F.Fab")
-			(uuid "37d4001f-ee66-4f8d-afb1-c1ddc2c4dcce")
-		)
-		(attr smd)
-		(fp_line (start -13.0 -2.0) (end 13.0 -2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "6236d4d7-584f-47b5-b90e-61affb2055f1"))
-		(fp_line (start 13.0 -2.0) (end 13.0 2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "ee37fc2f-ecf3-4c13-9e83-f662e883a919"))
-		(fp_line (start 13.0 2.0) (end -13.0 2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "dea243f5-a37c-4514-af83-78410423bc5b"))
-		(fp_line (start -13.0 2.0) (end -13.0 -2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "80ae3807-bbb7-49c6-a801-491623e724c2"))
-		(fp_text user "CE_GNDA" (at -11.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-1") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "RE_TRANS" (at -9.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-2") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user ">PORE" (at -7.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-3") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "GNDA" (at -5.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-4") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "GUARD" (at -3.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-5") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "WS_CIS" (at -1.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-6") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "GUARD" (at 1.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-7") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "GNDA" (at 3.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-8") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "GUARD_WIDE" (at 5.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-9") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "WS_CIS_WIDE" (at 7.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-10") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "GNDA" (at 9.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-11") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(fp_text user "WEEP_SENSE" (at 11.0 -2.5 0) (layer "F.SilkS") (uuid "uuid-12") (effects (font (size 0.5 0.5) (thickness 0.08))))
-		(pad "1" smd circle (at -11.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "CE_GNDA") (uuid "uuid-pad-1"))
-		(pad "2" smd circle (at -9.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "RE_TRANS") (uuid "uuid-pad-2"))
-		(pad "3" smd circle (at -7.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net ">PORE") (uuid "uuid-pad-3"))
-		(pad "4" smd circle (at -5.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "GNDA") (uuid "uuid-pad-4"))
-		(pad "5" smd circle (at -3.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "GUARD") (uuid "uuid-pad-5"))
-		(pad "6" smd circle (at -1.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "WS_CIS") (uuid "uuid-pad-6"))
-		(pad "7" smd circle (at 1.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "GUARD") (uuid "uuid-pad-7"))
-		(pad "8" smd circle (at 3.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "GNDA") (uuid "uuid-pad-8"))
-		(pad "9" smd circle (at 5.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "GUARD_WIDE") (uuid "uuid-pad-9"))
-		(pad "10" smd circle (at 7.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "WS_CIS_WIDE") (uuid "uuid-pad-10"))
-		(pad "11" smd circle (at 9.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "GNDA") (uuid "uuid-pad-11"))
-		(pad "12" smd circle (at 11.0 0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (zone_connect 0) (net "WEEP_SENSE") (uuid "uuid-pad-12"))
-	)"""
+def get_pogo_12pin_fp_str():
+    import sys
+    repo_root = Path(__file__).resolve().parent.parent
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+    from generate_footprint import extract_cad_geometry, generate_kicad_footprint
+    geom = extract_cad_geometry(pin_count=12)
+    fp_txt = generate_kicad_footprint(geom, footprint_name="PogoPin_Target_12Pin_Distributed")
+    # Indent block to match PCB footprint section
+    indented_lines = ["\t" + l if l.strip() else "" for l in fp_txt.splitlines()]
+    return "\n".join(indented_lines)
+
+POGO_12PIN_PCB_FP = get_pogo_12pin_fp_str()
 
 def build_interposer_pcb(out_dir: Path = Path("Interposer")):
     out_dir = Path(out_dir)
@@ -127,9 +86,12 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
         ref_m = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', fp_txt)
         ref = ref_m.group(1) if ref_m else ""
 
-        if ref.startswith("J_POGO") or "PogoPin_Target" in fp_txt:
+        if ref.startswith("J_POGO") or "PogoPin_Target" in fp_txt or "PogoPin_SpringHeader" in fp_txt:
             if not pogo_added:
-                retained_fp_blocks.append(POGO_12PIN_PCB_FP)
+                # Assign reference J_POGO1 and location to match interposer center (164.5, 58.494)
+                pogo_fp_positioned = re.sub(r'\(property\s+"Reference"\s+"[^"]*"', '(property "Reference" "J_POGO1"', POGO_12PIN_PCB_FP)
+                pogo_fp_positioned = re.sub(r'\(at\s+[0-9\.\-]+\s+[0-9\.\-]+\)', '(at 164.5 58.494)', pogo_fp_positioned, count=1)
+                retained_fp_blocks.append(pogo_fp_positioned)
                 pogo_added = True
             continue
 

@@ -132,16 +132,24 @@ classDiagram
 
 ## 5. 12-Pin Pogo Interface Pinout Mapping
 
-To mate with the Mill-Max spring pin array header on the Amplifier board, the Interposer's 6 gold target pads (`J_POGO1`, rotated $180^\circ$ at $Y=73.5\text{ mm}$) map symmetrically to the Cis and Trans channels:
+To mate with the Mill-Max spring pin array header on the Amplifier board, the Interposer's 12 distributed gold target pads (`J_POGO1`, spanning $X = -18\text{ mm}$ to $+18\text{ mm}$) map symmetrically across Bank B (Top / Cis) and Bank A (Bottom / Trans):
 
-| Pin # | Board X | Net Name | Electrochemical Function (Gamry Standard) | Connection |
+| Pin # | CAD Coord $(X, Y)$ [mm] | Net Name | Electrochemical Function (Gamry Standard) | Connection & Proximity Justification |
 | :---: | :---: | :--- | :--- | :--- |
-| **1** | $176.0\text{ mm}$ | `CE_GNDA` | **Counter Electrode (`CE`)** | Negative current return connected to `GNDA` (`J2` Trans outer ribbon) |
-| **2** | $171.0\text{ mm}$ | `RE_TRANS` | **Reference Electrode (`RE` / `CS`)** | High-Z potential sensing probe at Trans pore boundary (`J1`) |
-| **3** | $166.0\text{ mm}$ | `GNDA` | **Floating Analog Ground (`FloatGND`)** | Decoupled analog ground reference and driven guard |
-| **4** | $163.0\text{ mm}$ | `WEEP_SENSE` | **Weep Moat Perimeter Leak Detector** | Moisture detection loop with hardware emergency stop cutoff |
-| **5** | $158.0\text{ mm}$ | `WS_CIS` | **Working Sense (`WS` / `PS1`)** | High-Z potential sensing probe at Cis pore boundary (`J11`) |
-| **6** | $153.0\text{ mm}$ | `WE_POS` | **Working Electrode (`WE`)** | Positive terminal ($+V_{bias}$ current drive to `J10` Cis outer ribbon) |
+| **BANK B (CIS / SENSING - TOP QUADRANT $Y > 0$):** | | | | |
+| **1** | $(-18.0, +16.0)$ | `GNDA_SHLD` | **Shield Anchor** | Shield anchor pinning the inlet/outlet fluid manifold ground boundary. |
+| **2** | $(-10.0, +15.0)$ | `WS_CIS_WIDE` | **Path 2 Working Sense** | Path 2 ($200\text{ nm}$ pore) working electrode contact; short straight escape. |
+| **3** | $(-6.0, +15.0)$ | `GUARD_WIDE` | **Path 2 Active Guard** | Active driven guard for Path 2; isolates Path 2 from Path 1 sensing. |
+| **4** | $(+4.0, +15.0)$ | `GUARD_CIS_A` | **Path 1 Driven Guard A** | Driven Guard (Left wing of triaxial Faraday cocoon around P5). |
+| **5** | $(+8.0, +15.0)$ | `WS_CIS` | **Path 1 Working Sense** | Path 1 (Sub-$5\text{ nm}$ Pore) high-Z electrometer node (LMP7721 Pin 8). |
+| **6** | $(+12.0, +15.0)$ | `GUARD_CIS_B` | **Path 1 Driven Guard B** | Driven Guard (Right wing of triaxial Faraday cocoon around P5). |
+| **BANK A (TRANS / EXCITATION - BOTTOM QUADRANT $Y < 0$):** | | | | |
+| **7** | $(-18.0, -16.0)$ | `CE_GNDA` | **Counter Electrode (`CE`)** | Trans Counter Electrode return path; mates directly to bottom Ag strip anchor. |
+| **8** | $(-10.0, -15.0)$ | `RE_TRANS` | **Reference Electrode (`RE`)** | Trans bulk reference sense node; minimizes lead length into trans fluid well. |
+| **9** | $(-4.0, -15.0)$ | `>PORE_AMP` | **Excitation Bias Drive** | Active $\pm 2.4\text{ V}$ bias excitation drive; isolated symmetrically across board from P5. |
+| **10** | $(+3.0, -15.0)$ | `GNDA` | **Analog Ground Fence** | Low-noise analog ground return fence; shields excitation drive from weep sensing. |
+| **11** | $(+12.0, -15.0)$ | `WEEP_SENSE` | **Weep Moat Detector** | Moisture-sensing trace intercepting droplet breaches before dry contacts. |
+| **12** | $(+18.0, -16.0)$ | `GNDA_WEEP` | **Perimeter Weep Drain** | Perimeter weep moat static drain & outer chassis tie. |
 
 ---
 
