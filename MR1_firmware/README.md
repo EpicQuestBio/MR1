@@ -25,6 +25,7 @@ All pin definitions mirror the canonical **KiCad MR1 schematic** (`include/pinou
 | **ADC_CNV** | GPIO 11 | SPI DMA / Timer | AD40xx Conversion Start trigger |
 | **ADC_SCK** | GPIO 10 | SPI Clock (up to 40 MHz) | AD40xx Serial Clock |
 | **ADC_SDO** | GPIO 9 | SPI MISO / DMA | AD40xx Data Output |
+| **PIN_ROUTE_SEL** | GPIO 2 | Digital Output | Amplifer Readout Route SPDT Switch (`ROUTE_SEL`) |
 | **DAC_CS_** | GPIO 6 | SPI Chip Select (Active Low) | MCP4822 DAC Chip Select |
 | **DAC_SCK** | GPIO 7 | SPI Clock (20 MHz) | MCP4822 SPI Bus Clock |
 | **DAC_SDI** | GPIO 8 | SPI MOSI | MCP4822 Serial Data In |

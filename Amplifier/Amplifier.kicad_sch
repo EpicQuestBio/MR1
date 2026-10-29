@@ -2865,7 +2865,7 @@
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "U"
-				(at 0 8.89 0)
+				(at -6.35 9.144 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -2875,7 +2875,7 @@
 				)
 			)
 			(property "Value" "ADG1219BRMZ"
-				(at 0 -8.89 0)
+				(at 8.636 9.398 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -2885,7 +2885,7 @@
 				)
 			)
 			(property "Footprint" "footprints:MSOP-8_3x3mm_P0.65mm"
-				(at 0 0 0)
+				(at -1.524 -27.94 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -2896,7 +2896,7 @@
 				)
 			)
 			(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADG1219.pdf"
-				(at 0 0 0)
+				(at -0.762 -22.098 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -2907,7 +2907,7 @@
 				)
 			)
 			(property "Description" "Low Capacitance (1.0pF), Low Charge Injection (<1pC), 2:1 / SPDT Analog Switch, MSOP-8"
-				(at 0 0 0)
+				(at 1.016 -24.384 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -2940,6 +2940,17 @@
 				)
 			)
 			(property "Mouser PN" "584-ADG1219BRMZ"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC" "C206796"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3066,7 +3077,7 @@
 					)
 				)
 				(pin bidirectional line
-					(at -10.16 -7.62 0)
+					(at -10.16 -5.08 0)
 					(length 2.54)
 					(name "D"
 						(effects
@@ -3115,143 +3126,6 @@
 						(effects
 							(font
 								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "MR1:Concentric_Interposer_Mating_Pad"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J_PAD"
-				(at 0 7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Concentric_Interposer_Mating_Pad"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "footprints:Concentric_Interposer_Mating_Pad"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://doi.org/10.1021/acs.jpcc.6b11501"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Concentric Driven Guard Mating Pad for Elastomer Interposer: Ø0.7mm Signal Pad (via-in-pad), Ø2.1-3.0mm Guard Ring, 4.0mm Solder Mask Keepout"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "nanopore concentric guard interposer ptfe sub-picoamp"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Concentric_Interposer_Mating_Pad_0_1"
-				(circle
-					(center 0 0)
-					(radius 1.27)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 0 0)
-					(radius 3.81)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "Concentric_Interposer_Mating_Pad_1_1"
-				(pin passive line
-					(at -8.89 0 0)
-					(length 5.08)
-					(name "SIG"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 8.89 0 180)
-					(length 5.08)
-					(name "GUARD"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1 1)
 							)
 						)
 					)
@@ -4073,198 +3947,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "MR1:PogoPin_SpringHeader_6Pin_Cis"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J_POGO_CIS"
-				(at 0 13.97 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "PogoPin_SpringHeader_6Pin_Cis"
-				(at 0 11.43 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Cis"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.mill-max.com"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Cis Spring Header Soldered to Bottom of Amplifier PCB (GNDA, >PORE_AMP, GNDA, GUARD, GNDA, WEEP_SENSE)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "mill-max 09xx bias-tail ball-contact spring pogo cis low-leakage 6-pin"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "PogoPin_SpringHeader_6Pin_Cis_0_1"
-				(rectangle
-					(start -10.16 10.16)
-					(end 10.16 -10.16)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "PogoPin_SpringHeader_6Pin_Cis_1_1"
-				(pin passive line (at -15.24 6.35 0) (length 5.08) (name "GNDA" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 3.81 0) (length 5.08) (name ">PORE_AMP" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 1.27 0) (length 5.08) (name "GNDA" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 -1.27 0) (length 5.08) (name "GUARD" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 -3.81 0) (length 5.08) (name "GNDA" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 -6.35 0) (length 5.08) (name "WEEP_SENSE" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-			)
-			(embedded_fonts no)
-		)
-		(symbol "MR1:PogoPin_SpringHeader_6Pin_Trans"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J_POGO_TRANS"
-				(at 0 13.97 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "PogoPin_SpringHeader_6Pin_Trans"
-				(at 0 11.43 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Trans"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.mill-max.com"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Trans Spring Header Soldered to Bottom of Amplifier PCB (CE_GNDA, RE_TRANS, GUARD_WIDE, WS_CIS_WIDE, GUARD, WS_CIS)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "mill-max 09xx bias-tail ball-contact spring pogo trans low-leakage 6-pin"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "PogoPin_SpringHeader_6Pin_Trans_0_1"
-				(rectangle
-					(start -10.16 10.16)
-					(end 10.16 -10.16)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "PogoPin_SpringHeader_6Pin_Trans_1_1"
-				(pin passive line (at -15.24 6.35 0) (length 5.08) (name "CE_GNDA" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 3.81 0) (length 5.08) (name "RE_TRANS" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 1.27 0) (length 5.08) (name "GUARD_WIDE" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 -1.27 0) (length 5.08) (name "WS_CIS_WIDE" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 -3.81 0) (length 5.08) (name "GUARD" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -15.24 -6.35 0) (length 5.08) (name "WS_CIS" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-			)
-			(embedded_fonts no)
-		)
 		(symbol "MR1:PogoPin_SpringHeader_12Pin_Distributed"
 			(pin_names
 				(offset 1.016)
@@ -4553,6 +4235,402 @@
 						(effects
 							(font
 								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "MR1:PogoPin_SpringHeader_6Pin_Cis"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J_POGO_CIS"
+				(at 0 13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PogoPin_SpringHeader_6Pin_Cis"
+				(at 0 11.43 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Cis"
+				(at -0.508 -16.002 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.mill-max.com"
+				(at 0.508 -18.796 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Cis Spring Header Soldered to Bottom of Amplifier PCB"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mill-max 09xx bias-tail ball-contact spring pogo cis low-leakage 6-pin"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Cis_0_1"
+				(rectangle
+					(start -10.16 10.16)
+					(end 10.16 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Cis_1_1"
+				(pin passive line
+					(at -15.24 6.35 0)
+					(length 5.08)
+					(name "GUARD_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 3.81 0)
+					(length 5.08)
+					(name "WS_CIS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 1.27 0)
+					(length 5.08)
+					(name "GUARD_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -1.27 0)
+					(length 5.08)
+					(name "GNDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -3.81 0)
+					(length 5.08)
+					(name "WS_CIS_WIDE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -6.35 0)
+					(length 5.08)
+					(name "GUARD_WIDE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "MR1:PogoPin_SpringHeader_6Pin_Trans"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J_POGO_TRANS"
+				(at 0 13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PogoPin_SpringHeader_6Pin_Trans"
+				(at 0 11.43 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Trans"
+				(at -0.762 -12.954 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.mill-max.com"
+				(at 1.524 -18.288 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Trans Spring Header Soldered to Bottom of Amplifier PCB"
+				(at -1.27 -16.002 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mill-max 09xx bias-tail ball-contact spring pogo trans low-leakage 6-pin"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Trans_0_1"
+				(rectangle
+					(start -10.16 10.16)
+					(end 10.16 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "PogoPin_SpringHeader_6Pin_Trans_1_1"
+				(pin passive line
+					(at -15.24 6.35 0)
+					(length 5.08)
+					(name "CE_GNDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 3.81 0)
+					(length 5.08)
+					(name "RE_TRANS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 1.27 0)
+					(length 5.08)
+					(name ">PORE_AMP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -1.27 0)
+					(length 5.08)
+					(name "GNDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -3.81 0)
+					(length 5.08)
+					(name "GNDA_WEEP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -15.24 -6.35 0)
+					(length 5.08)
+					(name "WEEP_SENSE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -5762,8 +5840,8 @@
 		(uuid "13a4042a-e0d2-4a14-8d56-464be98baf0e")
 	)
 	(rectangle
-		(start -67.31 123.19)
-		(end -39.37 128.27)
+		(start -186.69 280.67)
+		(end -158.75 285.75)
 		(stroke
 			(width 0)
 			(type default)
@@ -5786,8 +5864,8 @@
 		(uuid "6ff3a25d-82be-4a3f-a251-6265e0b1fb28")
 	)
 	(rectangle
-		(start -67.31 133.35)
-		(end -39.37 138.43)
+		(start -186.69 290.83)
+		(end -158.75 295.91)
 		(stroke
 			(width 0)
 			(type default)
@@ -5798,8 +5876,8 @@
 		(uuid "9661a056-bdfd-4259-8360-3fb181a84ab2")
 	)
 	(rectangle
-		(start -67.31 118.11)
-		(end -39.37 123.19)
+		(start -186.69 275.59)
+		(end -158.75 280.67)
 		(stroke
 			(width 0)
 			(type default)
@@ -5822,8 +5900,8 @@
 		(uuid "c0fe298f-e163-475a-ba9f-310b1c327abc")
 	)
 	(rectangle
-		(start -67.31 128.27)
-		(end -39.37 133.35)
+		(start -186.69 285.75)
+		(end -158.75 290.83)
 		(stroke
 			(width 0)
 			(type default)
@@ -5866,13 +5944,14 @@
 		)
 		(uuid "047f5d2f-b0a8-4d18-b5e3-b20a102b692f")
 	)
-	(text "Ceramic capacitors are piezoelectric – mechanical vibrations and noises will create charge across the capacitor. Be careful when using ceramic caps in the input, integration, feedback or biasing networks."
+	(text "Ceramic capacitors are piezoelectric – \nmechanical vibrations and noises will create charge across the capacitor. \nBe careful when using ceramic caps in the input, integration, \nfeedback or biasing networks."
 		(exclude_from_sim no)
 		(at -5.588 -23.368 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
+			(justify left)
 		)
 		(uuid "05af2944-a34a-4af7-a9af-a2431b91138c")
 	)
@@ -5908,7 +5987,7 @@
 	)
 	(text "P4"
 		(exclude_from_sim no)
-		(at -64.77 135.89 0)
+		(at -184.15 293.37 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5970,16 +6049,6 @@
 		)
 		(uuid "5b73bac5-1ce6-4816-a3f7-b8db7654d298")
 	)
-	(text "Add precision low noise ADC\n"
-		(exclude_from_sim no)
-		(at 139.954 -35.306 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "5c3ac91a-42f2-4e8b-924b-3c2eabc44702")
-	)
 	(text "https://www.vpi.us/bulk-cable-sf/super-flat-cat7-736#idTab9"
 		(exclude_from_sim no)
 		(at 29.21 278.13 0)
@@ -6022,7 +6091,7 @@
 	)
 	(text "P1"
 		(exclude_from_sim no)
-		(at -64.77 120.65 0)
+		(at -184.15 278.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6075,7 +6144,7 @@
 	)
 	(text "P3"
 		(exclude_from_sim no)
-		(at -64.77 130.81 0)
+		(at -184.15 288.29 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6094,16 +6163,6 @@
 			)
 		)
 		(uuid "a42a504b-e3fc-4baa-a338-6b86f068368c")
-	)
-	(text "Look at Insturmentation amplifiers"
-		(exclude_from_sim no)
-		(at 139.954 -32.766 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "addf7427-8fdc-41da-833e-37c0023502f8")
 	)
 	(text "499Ω Metal Film Resistor"
 		(exclude_from_sim no)
@@ -6145,16 +6204,6 @@
 		)
 		(uuid "bc1fef7a-9f17-4cc6-bd4f-69f601179e6c")
 	)
-	(text "TODO:\nupdate ADC with correct library part and footprint\nadd voltage reference, "
-		(exclude_from_sim no)
-		(at 139.954 -40.386 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "cfe562fb-3742-44ea-b70f-9edda1d2b541")
-	)
 	(text "pins for holding the board in place while applying adhesive\n\nhttps://www.mcmaster.com/98378A208/"
 		(exclude_from_sim no)
 		(at 253.492 227.33 0)
@@ -6167,7 +6216,7 @@
 	)
 	(text "P2"
 		(exclude_from_sim no)
-		(at -64.77 125.73 0)
+		(at -184.15 283.21 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6408,7 +6457,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 120.65) (xy -49.53 119.38)
+			(xy -168.91 278.13) (xy -168.91 276.86)
 		)
 		(stroke
 			(width 0)
@@ -6418,7 +6467,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 127) (xy -46.99 127)
+			(xy -168.91 284.48) (xy -166.37 284.48)
 		)
 		(stroke
 			(width 0)
@@ -6618,7 +6667,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 121.92) (xy -49.53 123.19)
+			(xy -168.91 279.4) (xy -168.91 280.67)
 		)
 		(stroke
 			(width 0)
@@ -6768,7 +6817,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 119.38) (xy -46.99 119.38)
+			(xy -168.91 276.86) (xy -166.37 276.86)
 		)
 		(stroke
 			(width 0)
@@ -6828,7 +6877,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 132.08) (xy -46.99 132.08)
+			(xy -168.91 289.56) (xy -166.37 289.56)
 		)
 		(stroke
 			(width 0)
@@ -6888,7 +6937,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 124.46) (xy -46.99 124.46)
+			(xy -168.91 281.94) (xy -166.37 281.94)
 		)
 		(stroke
 			(width 0)
@@ -7198,7 +7247,7 @@
 	)
 	(wire
 		(pts
-			(xy -46.99 114.3) (xy -49.53 114.3)
+			(xy -166.37 271.78) (xy -168.91 271.78)
 		)
 		(stroke
 			(width 0)
@@ -7248,7 +7297,7 @@
 	)
 	(wire
 		(pts
-			(xy -46.99 140.97) (xy -46.99 139.7)
+			(xy -166.37 298.45) (xy -166.37 297.18)
 		)
 		(stroke
 			(width 0)
@@ -7358,7 +7407,7 @@
 	)
 	(wire
 		(pts
-			(xy -59.69 140.97) (xy -46.99 140.97)
+			(xy -179.07 298.45) (xy -166.37 298.45)
 		)
 		(stroke
 			(width 0)
@@ -7375,6 +7424,16 @@
 			(type default)
 		)
 		(uuid "a5856219-9c6e-4130-9e4d-add77c7b9f1a")
+	)
+	(wire
+		(pts
+			(xy -100.33 39.37) (xy -95.25 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5a849cd-cf01-479d-923f-84986b8276bc")
 	)
 	(wire
 		(pts
@@ -7438,7 +7497,7 @@
 	)
 	(wire
 		(pts
-			(xy -48.26 138.43) (xy -48.26 137.16)
+			(xy -167.64 295.91) (xy -167.64 294.64)
 		)
 		(stroke
 			(width 0)
@@ -7468,7 +7527,7 @@
 	)
 	(wire
 		(pts
-			(xy -53.34 116.84) (xy -46.99 116.84)
+			(xy -172.72 274.32) (xy -166.37 274.32)
 		)
 		(stroke
 			(width 0)
@@ -7488,7 +7547,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 129.54) (xy -46.99 129.54)
+			(xy -168.91 287.02) (xy -166.37 287.02)
 		)
 		(stroke
 			(width 0)
@@ -7508,7 +7567,7 @@
 	)
 	(wire
 		(pts
-			(xy -49.53 134.62) (xy -46.99 134.62)
+			(xy -168.91 292.1) (xy -166.37 292.1)
 		)
 		(stroke
 			(width 0)
@@ -7678,7 +7737,7 @@
 	)
 	(wire
 		(pts
-			(xy -46.99 121.92) (xy -49.53 121.92)
+			(xy -166.37 279.4) (xy -168.91 279.4)
 		)
 		(stroke
 			(width 0)
@@ -7798,7 +7857,7 @@
 	)
 	(wire
 		(pts
-			(xy -48.26 137.16) (xy -46.99 137.16)
+			(xy -167.64 294.64) (xy -166.37 294.64)
 		)
 		(stroke
 			(width 0)
@@ -9624,7 +9683,7 @@
 		(uuid "00a2ee76-0efd-4eb4-ba87-ff99d3a1619f")
 	)
 	(label "SHIELD_AMP"
-		(at -57.15 107.95 180)
+		(at -176.53 265.43 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9694,7 +9753,7 @@
 		(uuid "29ab95ab-4abf-4ae8-b224-3d399431b36d")
 	)
 	(label "Vbias_AMP"
-		(at -57.15 114.3 180)
+		(at -176.53 271.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9704,7 +9763,7 @@
 		(uuid "3224c3fe-2922-4864-83c1-b63d4a4e8033")
 	)
 	(label "GUARD_WIDE"
-		(at -76.2 132.08 90)
+		(at -195.58 289.56 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9783,6 +9842,16 @@
 		)
 		(uuid "5dac7e7f-58f5-4007-9762-294b26721001")
 	)
+	(label "GNDA"
+		(at -73.66 201.93 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5e25c0ba-62c5-4132-8c3e-200ea40f0cb7")
+	)
 	(label ">PORE_AMP"
 		(at -203.2 162.56 0)
 		(effects
@@ -9803,8 +9872,18 @@
 		)
 		(uuid "671b492f-f421-42fc-8cb9-84a32a20db69")
 	)
+	(label "GUARD"
+		(at -73.66 166.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6bece1e1-6b9f-4544-9e97-52d676d8bb57")
+	)
 	(label "Signal_Return"
-		(at -95.25 41.91 270)
+		(at -100.33 39.37 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9833,6 +9912,16 @@
 		)
 		(uuid "6cc97625-6381-488f-be8e-98640e586dd1")
 	)
+	(label "RE_TRANS"
+		(at -73.66 194.31 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "71795cf0-7d2b-4759-b0c5-49d981c3b85d")
+	)
 	(label "GDAC_CLK"
 		(at -196.85 134.62 180)
 		(effects
@@ -9853,8 +9942,28 @@
 		)
 		(uuid "801179ba-a644-4f68-825d-7fbc8a62d8a3")
 	)
+	(label ">PORE_AMP"
+		(at -73.66 196.85 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8d22ecc0-3e3d-4ba8-9037-71c1dc34abf0")
+	)
+	(label "WS_CIS_WIDE"
+		(at -73.66 176.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8da63ae0-6d26-44a7-aa56-652a03f4dc90")
+	)
 	(label "GUARD_WIDE"
-		(at -83.82 132.08 90)
+		(at -203.2 289.56 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9882,6 +9991,16 @@
 			(justify right bottom)
 		)
 		(uuid "991cddac-87db-43a1-8276-295939f165be")
+	)
+	(label "GUARD_WIDE"
+		(at -73.66 179.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "99ee1797-1bf5-4fb5-8c01-472834b5de55")
 	)
 	(label "Route1_OUT"
 		(at -135.89 82.55 0)
@@ -9993,8 +10112,18 @@
 		)
 		(uuid "b1094c5c-1a6b-4f02-9b9f-2c94cbba9d9b")
 	)
+	(label "WEEP_SENSE"
+		(at -73.66 204.47 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b8289d5c-639e-44e9-a097-0eed00648fe4")
+	)
 	(label "GDAC_EN"
-		(at -58.42 116.84 180)
+		(at -177.8 274.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10033,6 +10162,16 @@
 		)
 		(uuid "c0171234-5206-4ddd-bb64-cb2382445be4")
 	)
+	(label "WS_CIS"
+		(at -73.66 168.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c4a3b273-1c4b-4389-98e2-ccf2fd79f768")
+	)
 	(label "+3V3"
 		(at -176.53 129.54 180)
 		(effects
@@ -10052,26 +10191,6 @@
 			(justify right bottom)
 		)
 		(uuid "ca5d64e7-c56a-4390-9e03-c4960fa09058")
-	)
-	(label ">PORE_AMP"
-		(at -219.71 158.75 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "cf69727b-4493-4b55-a959-58301dc1fe82")
-	)
-	(label "GUARD"
-		(at -237.49 158.75 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d0a1b2c3-1003-4000-8000-000000000003")
 	)
 	(label "WS_CIS"
 		(at -210.82 77.47 180)
@@ -10104,7 +10223,7 @@
 		(uuid "d726e5ed-a7d5-4dbf-a7ee-fdf77b0e162a")
 	)
 	(label "Signal_AMP"
-		(at -57.15 105.41 180)
+		(at -176.53 262.89 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10133,8 +10252,38 @@
 		)
 		(uuid "e75c7598-73e6-4243-95e3-095b8a9da92b")
 	)
+	(label "GNDA"
+		(at -73.66 173.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "eaf04769-e930-4fcf-8fd3-a2adc700b808")
+	)
+	(label "GNDA"
+		(at -73.66 199.39 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "edea64c8-8479-44f6-8623-aeb98c12ce4d")
+	)
+	(label "GUARD"
+		(at -73.66 171.45 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "eea381fe-756e-424d-af15-f9a3246a82f7")
+	)
 	(label "SHIELD_AMP"
-		(at -86.36 148.59 0)
+		(at -205.74 306.07 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10142,6 +10291,16 @@
 			(justify left bottom)
 		)
 		(uuid "efb691e6-d9aa-4075-b672-2ec36dbf63eb")
+	)
+	(label "CE_GNDA"
+		(at -73.66 191.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f473db27-cf24-46e0-ab13-001d0378823b")
 	)
 	(label "SHIELD_AMP"
 		(at 146.05 284.48 0)
@@ -10164,7 +10323,7 @@
 		(uuid "fec1e031-db34-49c5-9a71-ed2e31d7ba62")
 	)
 	(label "GUARD_WIDE"
-		(at -80.01 132.08 90)
+		(at -199.39 289.56 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -13078,6 +13237,98 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR069")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Cis")
+		(at -58.42 172.72 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "268ca0e3-2300-4a5e-a439-7171cca1ecca")
+		(property "Reference" "J_POGO1"
+			(at -46.99 171.45 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "PogoPin_SpringHeader_6Pin_Cis"
+			(at -46.99 173.99 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Cis"
+			(at -58.42 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mill-max.com"
+			(at -58.42 172.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Cis Spring Header Soldered to Bottom of Amplifier PCB"
+			(at -56.388 185.166 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "83648501-31be-48c0-8a17-516c0aba7f93")
+		)
+		(pin "2"
+			(uuid "6b5a2a8c-2e88-48de-8173-4cc49c1af4fe")
+		)
+		(pin "3"
+			(uuid "7375231b-881f-4245-aa44-1cb66ef3e482")
+		)
+		(pin "4"
+			(uuid "4e524b2e-7ef9-4ad1-b71b-0cd46548e322")
+		)
+		(pin "5"
+			(uuid "a98d078b-533b-4c8c-8be0-c6b0a4a95f12")
+		)
+		(pin "6"
+			(uuid "06223944-da45-4298-abd8-1230998cf072")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "J_POGO1")
 					(unit 1)
 				)
 			)
@@ -17638,7 +17889,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at -64.77 224.79 0)
+		(at -114.3 146.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -17649,7 +17900,7 @@
 		(fields_autoplaced yes)
 		(uuid "7c39fbf4-822d-4adb-9608-6ac2e0bf624e")
 		(property "Reference" "H4"
-			(at -62.23 223.5199 0)
+			(at -111.76 144.7799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17660,7 +17911,7 @@
 			)
 		)
 		(property "Value" "FluidHole"
-			(at -62.23 226.0599 0)
+			(at -111.76 147.3199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17671,7 +17922,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.1mm"
-			(at -64.77 224.79 0)
+			(at -114.3 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17682,7 +17933,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -64.77 224.79 0)
+			(at -114.3 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17693,7 +17944,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at -64.77 224.79 0)
+			(at -114.3 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17883,7 +18134,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at -64.77 214.63 0)
+		(at -114.3 135.89 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -17894,7 +18145,7 @@
 		(fields_autoplaced yes)
 		(uuid "81f6114f-8d65-4d18-99f2-72e6965e2a48")
 		(property "Reference" "H2"
-			(at -62.23 213.3599 0)
+			(at -111.76 134.6199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17905,7 +18156,7 @@
 			)
 		)
 		(property "Value" "FluidHole"
-			(at -62.23 215.8999 0)
+			(at -111.76 137.1599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -17916,7 +18167,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.1mm"
-			(at -64.77 214.63 0)
+			(at -114.3 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17927,7 +18178,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -64.77 214.63 0)
+			(at -114.3 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17938,7 +18189,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at -64.77 214.63 0)
+			(at -114.3 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18497,7 +18748,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at -64.77 208.28 0)
+		(at -114.3 130.81 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -18508,7 +18759,7 @@
 		(fields_autoplaced yes)
 		(uuid "8ad76c6f-72ed-4ba6-80b0-611b2b59a3c9")
 		(property "Reference" "H1"
-			(at -62.23 207.0099 0)
+			(at -111.76 129.5399 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18519,7 +18770,7 @@
 			)
 		)
 		(property "Value" "FluidHole"
-			(at -62.23 209.5499 0)
+			(at -111.76 132.0799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -18530,7 +18781,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.1mm"
-			(at -64.77 208.28 0)
+			(at -114.3 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18541,7 +18792,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -64.77 208.28 0)
+			(at -114.3 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18552,7 +18803,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at -64.77 208.28 0)
+			(at -114.3 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18691,6 +18942,98 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "D82")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Trans")
+		(at -58.42 198.12 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8b434888-d697-480c-816b-d0c50af943be")
+		(property "Reference" "J_POGO2"
+			(at -46.99 196.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "PogoPin_SpringHeader_6Pin_Trans"
+			(at -46.99 199.39 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Trans"
+			(at -58.42 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mill-max.com"
+			(at -58.42 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mill-Max 09xx Series (0906/0985) Gold-Plated Bias-Tail/Ball-Contact 6-Pin Trans Spring Header Soldered to Bottom of Amplifier PCB"
+			(at -57.912 211.074 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a4ad2a47-b4b3-4288-83ab-56b96941d910")
+		)
+		(pin "2"
+			(uuid "7fe70bdf-6565-495c-a0a6-27e3c4d7cb41")
+		)
+		(pin "3"
+			(uuid "ded9a05c-53ef-444e-93b8-912cf94a83d2")
+		)
+		(pin "4"
+			(uuid "468c4424-fb8f-493a-8ab6-6731b23e6476")
+		)
+		(pin "5"
+			(uuid "deacd045-dbcc-4e40-ada8-8ca52784c1eb")
+		)
+		(pin "6"
+			(uuid "889b9283-c635-4ed7-aa0d-9af4f5eddf45")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "J_POGO2")
 					(unit 1)
 				)
 			)
@@ -19301,7 +19644,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at -64.77 219.71 0)
+		(at -114.3 140.97 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -19312,7 +19655,7 @@
 		(fields_autoplaced yes)
 		(uuid "98fcb8a0-c59f-42d7-9f1d-550d0f9352f6")
 		(property "Reference" "H3"
-			(at -62.23 218.4399 0)
+			(at -111.76 139.6999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -19323,7 +19666,7 @@
 			)
 		)
 		(property "Value" "FluidHole"
-			(at -62.23 220.9799 0)
+			(at -111.76 142.2399 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -19334,7 +19677,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.1mm"
-			(at -64.77 219.71 0)
+			(at -114.3 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19345,7 +19688,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -64.77 219.71 0)
+			(at -114.3 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19356,7 +19699,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at -64.77 219.71 0)
+			(at -114.3 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22083,85 +22426,6 @@
 		)
 	)
 	(symbol
-		(lib_id "MR1:Concentric_Interposer_Mating_Pad")
-		(at -228.6 158.75 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d0a1b2c3-1004-4000-8000-000000000004")
-		(property "Reference" "J_PAD1"
-			(at -228.6 152.4 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Concentric_Interposer_Mating_Pad"
-			(at -228.6 165.1 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "footprints:Concentric_Interposer_Mating_Pad"
-			(at -228.6 158.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://doi.org/10.1021/acs.jpcc.6b11501"
-			(at -228.6 158.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Concentric Driven Guard Mating Pad for Elastomer Interposer: Ø0.7mm Signal Pad (via-in-pad), Ø2.1-3.0mm Guard Ring, 4.0mm Solder Mask Keepout"
-			(at -228.6 158.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d0a1b2c3-1005-4000-8000-000000000005")
-		)
-		(pin "2"
-			(uuid "d0a1b2c3-1006-4000-8000-000000000006")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "J_PAD1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GNDA")
 		(at 241.3 85.09 0)
 		(unit 1)
@@ -22241,7 +22505,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at -78.74 140.97 270)
+		(at -198.12 298.45 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -22251,7 +22515,7 @@
 		(dnp no)
 		(uuid "dac568de-19fb-4902-87eb-6bc9a8d67fd1")
 		(property "Reference" "#PWR028"
-			(at -85.09 140.97 0)
+			(at -204.47 298.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22262,7 +22526,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at -82.042 140.97 90)
+			(at -201.422 298.45 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -22273,7 +22537,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at -78.74 140.97 0)
+			(at -198.12 298.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22284,7 +22548,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at -78.74 140.97 0)
+			(at -198.12 298.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22295,7 +22559,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at -78.74 140.97 0)
+			(at -198.12 298.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25128,252 +25392,4 @@
 		)
 	)
 	(embedded_fonts no)
-	(symbol
-		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Cis")
-		(at -58.42 172.72 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "268ca0e3-2300-4a5e-a439-7171cca1ecca")
-		(property "Reference" "J_POGO1"
-			(at -46.99 171.45 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)) (justify left))
-		)
-		(property "Value" "PogoPin_SpringHeader_6Pin_Cis"
-			(at -46.99 173.99 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)) (justify left))
-		)
-		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Cis"
-			(at -58.42 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Datasheet" "https://www.mill-max.com"
-			(at -58.42 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)))
-		)
-		(pin "1"
-			(uuid "83648501-31be-48c0-8a17-516c0aba7f93")
-		)
-		(pin "2"
-			(uuid "6b5a2a8c-2e88-48de-8173-4cc49c1af4fe")
-		)
-		(pin "3"
-			(uuid "7375231b-881f-4245-aa44-1cb66ef3e482")
-		)
-		(pin "4"
-			(uuid "4e524b2e-7ef9-4ad1-b71b-0cd46548e322")
-		)
-		(pin "5"
-			(uuid "a98d078b-533b-4c8c-8be0-c6b0a4a95f12")
-		)
-		(pin "6"
-			(uuid "06223944-da45-4298-abd8-1230998cf072")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "J_POGO1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "GNDA"
-		(at -73.66 166.37 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "eaf04769-e930-4fcf-8fd3-a2adc700b808")
-	)
-	(label ">PORE_AMP"
-		(at -73.66 168.91 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "8d22ecc0-3e3d-4ba8-9037-71c1dc34abf0")
-	)
-	(label "GNDA"
-		(at -73.66 171.45 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "5e25c0ba-62c5-4132-8c3e-200ea40f0cb7")
-	)
-	(label "GUARD"
-		(at -73.66 173.99 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "eea381fe-756e-424d-af15-f9a3246a82f7")
-	)
-	(label "GNDA"
-		(at -73.66 176.53 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "edea64c8-8479-44f6-8623-aeb98c12ce4d")
-	)
-	(label "WEEP_SENSE"
-		(at -73.66 179.07 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "b8289d5c-639e-44e9-a097-0eed00648fe4")
-	)
-	(symbol
-		(lib_id "MR1:PogoPin_SpringHeader_6Pin_Trans")
-		(at -58.42 198.12 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8b434888-d697-480c-816b-d0c50af943be")
-		(property "Reference" "J_POGO2"
-			(at -46.99 196.85 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)) (justify left))
-		)
-		(property "Value" "PogoPin_SpringHeader_6Pin_Trans"
-			(at -46.99 199.39000000000001 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)) (justify left))
-		)
-		(property "Footprint" "footprints:PogoPin_SpringHeader_6Pin_Trans"
-			(at -58.42 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)))
-		)
-		(property "Datasheet" "https://www.mill-max.com"
-			(at -58.42 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects (font (size 1.27 1.27)))
-		)
-		(pin "1"
-			(uuid "a4ad2a47-b4b3-4288-83ab-56b96941d910")
-		)
-		(pin "2"
-			(uuid "7fe70bdf-6565-495c-a0a6-27e3c4d7cb41")
-		)
-		(pin "3"
-			(uuid "ded9a05c-53ef-444e-93b8-912cf94a83d2")
-		)
-		(pin "4"
-			(uuid "468c4424-fb8f-493a-8ab6-6731b23e6476")
-		)
-		(pin "5"
-			(uuid "deacd045-dbcc-4e40-ada8-8ca52784c1eb")
-		)
-		(pin "6"
-			(uuid "889b9283-c635-4ed7-aa0d-9af4f5eddf45")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "J_POGO2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "CE_GNDA"
-		(at -73.66 191.77 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f473db27-cf24-46e0-ab13-001d0378823b")
-	)
-	(label "RE_TRANS"
-		(at -73.66 194.31 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "71795cf0-7d2b-4759-b0c5-49d981c3b85d")
-	)
-	(label "GUARD_WIDE"
-		(at -73.66 196.85 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "99ee1797-1bf5-4fb5-8c01-472834b5de55")
-	)
-	(label "WS_CIS_WIDE"
-		(at -73.66 199.39 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "8da63ae0-6d26-44a7-aa56-652a03f4dc90")
-	)
-	(label "GUARD"
-		(at -73.66 201.93 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "6bece1e1-6b9f-4544-9e97-52d676d8bb57")
-	)
-	(label "WS_CIS"
-		(at -73.66 204.47 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c4a3b273-1c4b-4389-98e2-ccf2fd79f768")
-	)
 )

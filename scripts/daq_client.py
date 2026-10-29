@@ -46,6 +46,7 @@ STATUS_PUMP_RUNNING     = 1 << 3
 STATUS_PUMP_EMERGENCY   = 1 << 4
 STATUS_DAC_PULSE_ACTIVE = 1 << 5
 STATUS_DAC_WAVE_ACTIVE  = 1 << 6
+STATUS_ROUTE2_ACTIVE    = 1 << 7
 
 
 def calculate_crc16(data: bytes) -> int:
@@ -141,6 +142,10 @@ class StreamFrame:
     def is_wave_active(self) -> bool:
         return bool(self.status_flags & STATUS_DAC_WAVE_ACTIVE)
 
+    @property
+    def active_route(self) -> int:
+        return 2 if bool(self.status_flags & STATUS_ROUTE2_ACTIVE) else 1
+
     @classmethod
     def unpack(cls, buffer: bytes) -> Optional["StreamFrame"]:
         """Unpacks 146 bytes into a StreamFrame and verifies CRC-16."""
@@ -202,6 +207,7 @@ class MockSerialPort:
         self.sample_rate_hz = sample_rate_hz
         self.streaming = False
         self.bias_mv = 200.0
+        self.route = 1
         self.pulse_active = False
         self.dac_gain_2x = True
         self.dac_speed_sps = 200000
@@ -264,6 +270,18 @@ class MockSerialPort:
                 response = "ERR:INVALID_ARG\n"
         elif cmd == "GET:BIAS":
             response = f"BIAS:{self.bias_mv:.2f}\n"
+        elif cmd.startswith("SET:ROUTE:"):
+            try:
+                route_val = int(cmd.split(":")[2])
+                if route_val in (1, 2):
+                    self.route = route_val
+                    response = f"OK:ROUTE:{self.route}\n"
+                else:
+                    response = "ERR:INVALID_ROUTE\n"
+            except ValueError:
+                response = "ERR:INVALID_ARG\n"
+        elif cmd == "GET:ROUTE":
+            response = f"ROUTE:{self.route}\n"
         elif cmd.startswith("CMD:PULSE:"):
             parts = cmd.split(":")
             response = f"OK:PULSE:{parts[2]}:{parts[3]}\n"
@@ -343,7 +361,7 @@ class MockSerialPort:
                 f'"wave_active":{str(self.wave_active).lower()},"wave_shape":"{self.wave_shape}",'
                 f'"wave_freq":{self.wave_freq_hz:.1f},"pulse_active":false,'
                 f'"sampling":{str(self.streaming).lower()},"streaming":{str(self.streaming).lower()},'
-                f'"rate_hz":{self.sample_rate_hz},"leak":{str(self.leak_detected).lower()},'
+                f'"rate_hz":{self.sample_rate_hz},"route":{self.route},"leak":{str(self.leak_detected).lower()},'
                 f'"pump_conn":{str(self.pump_connected).lower()},"pump_run":{str(self.pump_running).lower()},'
                 f'"pump_rpm":{self.pump_rpm},"frames":{self._frame_index},"dropped":0}}\n'
             )
@@ -396,6 +414,7 @@ class MockSerialPort:
                 if self.pump_connected:  flags |= STATUS_PUMP_CONNECTED
                 if self.pump_running:    flags |= STATUS_PUMP_RUNNING
                 if self.wave_active:     flags |= STATUS_DAC_WAVE_ACTIVE
+                if self.route == 2:      flags |= STATUS_ROUTE2_ACTIVE
 
                 frame = StreamFrame(
                     magic=STREAM_MAGIC_WORD,
@@ -420,15 +439,17 @@ class DaqClient:
         self,
         port: str,
         baud: int = 921600,
-        gain_ohms: float = 1e9,
+        gain_ohms: Optional[float] = None,
         vref: float = 4.096,
         is_mock: bool = False
     ):
         self.port_name = port
         self.baud = baud
-        self.gain_ohms = gain_ohms
         self.vref = vref
         self.is_mock = is_mock
+        self.active_route = 1
+        self.user_specified_gain = (gain_ohms is not None)
+        self.gain_ohms = gain_ohms if gain_ohms is not None else 10e9  # Default Route 1: 1G * 10 = 10G
 
         self.serial_port = None
         self.is_running = False
@@ -524,6 +545,17 @@ class DaqClient:
     def set_bias(self, mv: float):
         return self.send_command(f"SET:BIAS:{mv:.2f}")
 
+    def set_route(self, route: int):
+        """Sets hardware route (1 = Route 1 / Sub-5nm, 2 = Route 2 / Wideband) and updates gain."""
+        if route not in (1, 2):
+            return "ERR:INVALID_ROUTE"
+        res = self.send_command(f"SET:ROUTE:{route}")
+        if "OK:ROUTE" in res:
+            self.active_route = route
+            if not self.user_specified_gain:
+                self.gain_ohms = 10e9 if route == 1 else 100e3
+        return res
+
     def start_streaming(self):
         return self.send_command("STREAM:START")
 
@@ -613,6 +645,13 @@ class DaqClient:
 
                         self.valid_frames += 1
                         self.last_status_flags = frame.status_flags
+
+                        # Dynamic route auto-detection & gain adjustment from telemetry
+                        detected_route = frame.active_route
+                        if detected_route != self.active_route:
+                            self.active_route = detected_route
+                            if not self.user_specified_gain:
+                                self.gain_ohms = 10e9 if detected_route == 1 else 100e3
 
                         # Sequence continuity check
                         if self.last_frame_index is not None:
@@ -806,10 +845,17 @@ def parse_args() -> argparse.Namespace:
         help="Probe USB-C SBU lines to detect I2C polarity."
     )
     parser.add_argument(
+        "--route", "-r",
+        type=int,
+        choices=[1, 2],
+        default=None,
+        help="Select hardware readout route (1 = Sub-5nm 10Gohm, 2 = Wideband 100kohm)."
+    )
+    parser.add_argument(
         "--gain",
         type=float,
-        default=1e9,
-        help="Transimpedance feedback resistor Rf in Ohms (default: 1e9 = 1 Gigaohm)."
+        default=None,
+        help="Override transimpedance gain in Ohms (defaults dynamically to 10e9 for Route 1, 100e3 for Route 2)."
     )
     parser.add_argument(
         "--dac-gain-1x",
@@ -867,6 +913,10 @@ def main():
 
     try:
         client.connect()
+
+        if args.route is not None:
+            resp = client.set_route(args.route)
+            print(f"[CMD] Set Route {args.route}: {resp.strip()}")
 
         if args.dac_gain_1x:
             resp = client.set_dac_gain(gain_2x=False)

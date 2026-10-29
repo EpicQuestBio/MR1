@@ -954,7 +954,7 @@ def generate_6pin_target_array_sexpr(
         )
         # Bare, unmasked ENIG / Hard Gold landing pads: F.Cu + F.Mask only (NO F.Paste)
         lines.append(
-            f'  (pad "{pin_num}" smd circle (at {fmt4(px)} {fmt4(py)}) (size 2.0 2.0) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (zone_connect 0) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
+            f'  (pad "{pin_num}" smd circle (at {fmt4(px)} {fmt4(py)}) (size 2.0 2.0) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
         )
 
     for entry in seq:
