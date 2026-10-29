@@ -66,6 +66,17 @@ public:
     uint32_t get_dropped_frames() const { return _dropped_frames; }
 
     /**
+     * @brief Configure active readout route (1 or 2)
+     * @param route 1 = Route 1 (Sub-5nm, LMP7721, ROUTE_SEL=LOW), 2 = Route 2 (Wideband/Micropore, OPA2192, ROUTE_SEL=HIGH)
+     */
+    void set_route(uint8_t route);
+
+    /**
+     * @brief Fetch current readout route (1 or 2)
+     */
+    uint8_t get_route() const { return _active_route; }
+
+    /**
      * @brief Core ISR handler called by hardware timer
      */
     void IRAM_ATTR on_timer_tick();
@@ -75,6 +86,7 @@ public:
 private:
     SPIClass*   _spi;
     bool        _sampling_active;
+    uint8_t     _active_route;
     uint32_t    _sample_rate_hz;
     uint32_t    _frame_sequence;
     uint32_t    _dropped_frames;

@@ -23,6 +23,7 @@ static void IRAM_ATTR adc_timer_callback(void* arg) {
 AdcAD40xx::AdcAD40xx()
     : _spi(nullptr)
     , _sampling_active(false)
+    , _active_route(1)
     , _sample_rate_hz(DEFAULT_SAMPLE_RATE_HZ)
     , _frame_sequence(0)
     , _dropped_frames(0)
@@ -38,6 +39,10 @@ AdcAD40xx::AdcAD40xx()
 void AdcAD40xx::begin() {
     pinMode(PIN_ADC_CNV, OUTPUT);
     digitalWrite(PIN_ADC_CNV, LOW);
+
+    pinMode(PIN_ROUTE_SEL, OUTPUT);
+    digitalWrite(PIN_ROUTE_SEL, LOW); // Default to Route 1
+    _active_route = 1;
 
     // AD40xx uses SPI: SCK (GPIO10), SDO/MISO (GPIO9)
     _spi = new SPIClass(FSPI);
@@ -113,6 +118,16 @@ void AdcAD40xx::stop_sampling() {
         s_adc_timer = nullptr;
     }
     _sampling_active = false;
+}
+
+void AdcAD40xx::set_route(uint8_t route) {
+    if (route == 2) {
+        digitalWrite(PIN_ROUTE_SEL, HIGH);
+        _active_route = 2;
+    } else {
+        digitalWrite(PIN_ROUTE_SEL, LOW);
+        _active_route = 1;
+    }
 }
 
 void IRAM_ATTR AdcAD40xx::on_timer_tick() {

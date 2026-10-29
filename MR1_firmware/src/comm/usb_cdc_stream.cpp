@@ -48,6 +48,7 @@ void UsbCdcStream::process_streaming() {
         if (Pump.is_emergency())      frame.status_flags |= STATUS_PUMP_EMERGENCY;
         if (Dac.is_pulse_active())    frame.status_flags |= STATUS_DAC_PULSE_ACTIVE;
         if (Dac.is_waveform_active()) frame.status_flags |= STATUS_DAC_WAVE_ACTIVE;
+        if (Adc.get_route() == 2)     frame.status_flags |= STATUS_ROUTE2_ACTIVE;
 
         // Recompute CRC with updated flags
         frame.crc16 = calculate_crc16((const uint8_t*)&frame, sizeof(StreamFrame) - sizeof(uint16_t));
@@ -83,6 +84,8 @@ void UsbCdcStream::execute_command(const String& cmd) {
         Serial.println(F("=== MR1 Nanopore Commands ==="));
         Serial.println(F("SET:BIAS:<mv>          - Set pore bias (-1587 to +1587 mV)"));
         Serial.println(F("GET:BIAS               - Get current bias in mV"));
+        Serial.println(F("SET:ROUTE:<1|2>        - Set readout route (1=Sub-5nm 10Gohm, 2=Wideband 100kohm)"));
+        Serial.println(F("GET:ROUTE              - Get active readout route"));
         Serial.println(F("CMD:PULSE:<mv>:<ms>    - Inject bias pulse"));
         Serial.println(F("SET:DAC:GAIN:<1X|2X>   - Set DAC gain (1X=85kHz full-power BW, 2X=42.7kHz)"));
         Serial.println(F("SET:DAC:SPEED:<sps>    - Set DAC update rate (up to 1,000,000 SPS)"));
@@ -113,6 +116,24 @@ void UsbCdcStream::execute_command(const String& cmd) {
 
     if (trimmed.equalsIgnoreCase("GET:BIAS")) {
         Serial.printf("BIAS:%.2f\n", Dac.get_current_bias_mv());
+        return;
+    }
+
+    if (trimmed.startsWith("SET:ROUTE:")) {
+        String route_str = trimmed.substring(10);
+        route_str.trim();
+        uint8_t route = (uint8_t)route_str.toInt();
+        if (route == 1 || route == 2) {
+            Adc.set_route(route);
+            Serial.printf("OK:ROUTE:%u\n", Adc.get_route());
+        } else {
+            Serial.println(F("ERR:INVALID_ROUTE"));
+        }
+        return;
+    }
+
+    if (trimmed.equalsIgnoreCase("GET:ROUTE")) {
+        Serial.printf("ROUTE:%u\n", Adc.get_route());
         return;
     }
 
@@ -313,7 +334,7 @@ void UsbCdcStream::send_status_json() {
         default: shape_str = "OFF"; break;
     }
 
-    Serial.printf("{\"bias_mv\":%.2f,\"dac_gain\":\"%s\",\"dac_sps\":%lu,\"wave_active\":%s,\"wave_shape\":\"%s\",\"wave_freq\":%.1f,\"pulse_active\":%s,\"sampling\":%s,\"streaming\":%s,\"rate_hz\":%lu,\"leak\":%s,\"pump_conn\":%s,\"pump_run\":%s,\"pump_rpm\":%u,\"sbu_orient\":\"%s\",\"frames\":%lu,\"dropped\":%lu}\n",
+    Serial.printf("{\"bias_mv\":%.2f,\"dac_gain\":\"%s\",\"dac_sps\":%lu,\"wave_active\":%s,\"wave_shape\":\"%s\",\"wave_freq\":%.1f,\"pulse_active\":%s,\"sampling\":%s,\"streaming\":%s,\"rate_hz\":%lu,\"route\":%u,\"leak\":%s,\"pump_conn\":%s,\"pump_run\":%s,\"pump_rpm\":%u,\"sbu_orient\":\"%s\",\"frames\":%lu,\"dropped\":%lu}\n",
         Dac.get_current_bias_mv(),
         Dac.is_gain_2x() ? "2X" : "1X",
         (unsigned long)Dac.get_update_rate_sps(),
@@ -324,6 +345,7 @@ void UsbCdcStream::send_status_json() {
         Adc.is_sampling() ? "true" : "false",
         _streaming_enabled ? "true" : "false",
         (unsigned long)DEFAULT_SAMPLE_RATE_HZ,
+        Adc.get_route(),
         Leak.is_leak_detected() ? "true" : "false",
         Pump.is_connected() ? "true" : "false",
         Pump.is_running() ? "true" : "false",

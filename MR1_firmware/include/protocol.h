@@ -31,7 +31,8 @@ enum SystemStatusFlags : uint16_t {
     STATUS_PUMP_RUNNING     = (1 << 3),
     STATUS_PUMP_EMERGENCY   = (1 << 4),
     STATUS_DAC_PULSE_ACTIVE = (1 << 5),
-    STATUS_DAC_WAVE_ACTIVE  = (1 << 6)
+    STATUS_DAC_WAVE_ACTIVE  = (1 << 6),
+    STATUS_ROUTE2_ACTIVE    = (1 << 7)
 };
 
 /**

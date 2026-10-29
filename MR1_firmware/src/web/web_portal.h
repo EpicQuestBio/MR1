@@ -39,6 +39,7 @@ public:
 private:
     void handle_root();
     void handle_bias();
+    void handle_route();
     void handle_pulse();
     void handle_pump();
     void handle_leak_reset();
