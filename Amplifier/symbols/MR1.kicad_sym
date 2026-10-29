@@ -12,7 +12,7 @@
 		(in_pos_files yes)
 		(duplicate_pin_numbers_are_jumpers no)
 		(property "Reference" "U"
-			(at 0 8.89 0)
+			(at -6.35 9.144 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -22,7 +22,7 @@
 			)
 		)
 		(property "Value" "ADG1219BRMZ"
-			(at 0 -8.89 0)
+			(at 8.636 9.398 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -32,7 +32,7 @@
 			)
 		)
 		(property "Footprint" "footprints:MSOP-8_3x3mm_P0.65mm"
-			(at 0 0 0)
+			(at -1.524 -27.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(hide yes)
@@ -43,7 +43,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADG1219.pdf"
-			(at 0 0 0)
+			(at -0.762 -22.098 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(hide yes)
@@ -54,7 +54,7 @@
 			)
 		)
 		(property "Description" "Low Capacitance (1.0pF), Low Charge Injection (<1pC), 2:1 / SPDT Analog Switch, MSOP-8"
-			(at 0 0 0)
+			(at 1.016 -24.384 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(hide yes)
@@ -224,7 +224,7 @@
 				)
 			)
 			(pin bidirectional line
-				(at -10.16 -7.62 0)
+				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "D"
 					(effects
