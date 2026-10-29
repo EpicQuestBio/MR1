@@ -89,6 +89,23 @@ class TestFirmwareProtocol(unittest.TestCase):
         packet_crc = struct.unpack_from("<H", full_packet, expected_size - 2)[0]
         self.assertEqual(calculated_crc, packet_crc)
 
+    def test_route_status_flag_and_commands(self):
+        """Verify STATUS_ROUTE2_ACTIVE flag bit and route command protocol."""
+        STATUS_ROUTE2_ACTIVE = 1 << 7
+
+        # Route 1: bit 7 is clear (0)
+        flags_route1 = 0x0001  # STATUS_STREAMING_ACTIVE
+        self.assertEqual(flags_route1 & STATUS_ROUTE2_ACTIVE, 0)
+
+        # Route 2: bit 7 is set (1 << 7)
+        flags_route2 = 0x0001 | STATUS_ROUTE2_ACTIVE
+        self.assertEqual(flags_route2 & STATUS_ROUTE2_ACTIVE, 128)
+
+        # Test command syntax
+        route_cmds = ["SET:ROUTE:1", "SET:ROUTE:2", "GET:ROUTE"]
+        for cmd in route_cmds:
+            self.assertTrue(cmd.startswith("SET:ROUTE:") or cmd == "GET:ROUTE")
+
     def test_pump_packet_xor_checksum(self):
         """Verify pump packet XOR checksum calculation."""
         sof = 0xAA

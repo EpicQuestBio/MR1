@@ -17,11 +17,12 @@
 #include <stdint.h>
 
 // =============================================================================
-// Analog-to-Digital Converter (AD40xxBRMZ - U10 on Insturmentation)
+// Analog-to-Digital Converter & Readout Route Selection
 // =============================================================================
 #define PIN_ADC_CNV         11  // Conversion Start / Chip Select (Net: /Insturmentation/DAC_EN)
 #define PIN_ADC_SCK         10  // Serial Clock up to 40MHz (Net: /Insturmentation/DAC_CLK)
 #define PIN_ADC_SDO          9  // Serial Data Out / MISO (Net: /Microcontroller/DAC_Dout)
+#define PIN_ROUTE_SEL        2  // Readout Route Multiplexer Select (Net: /Insturmentation/ROUTE_SEL)
 
 // =============================================================================
 // Digital-to-Analog Converter (MCP4822 - U9 on Ignition)

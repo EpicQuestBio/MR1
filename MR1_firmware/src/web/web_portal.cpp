@@ -33,6 +33,7 @@ void WebPortal::begin() {
     // Register HTTP endpoints
     _server.on("/", HTTP_GET, [this]() { handle_root(); });
     _server.on("/api/bias", HTTP_POST, [this]() { handle_bias(); });
+    _server.on("/api/route", HTTP_POST, [this]() { handle_route(); });
     _server.on("/api/pulse", HTTP_POST, [this]() { handle_pulse(); });
     _server.on("/api/pump", HTTP_POST, [this]() { handle_pump(); });
     _server.on("/api/leak/reset", HTTP_POST, [this]() { handle_leak_reset(); });
@@ -50,6 +51,20 @@ void WebPortal::handle_bias() {
         float mv = _server.arg("plain").toFloat();
         float applied = Dac.set_voltage_mv(mv);
         _server.send(200, "application/json", String("{\"applied\":") + String(applied) + "}");
+    } else {
+        _server.send(400, "text/plain", "Missing body");
+    }
+}
+
+void WebPortal::handle_route() {
+    if (_server.hasArg("plain")) {
+        uint8_t route = (uint8_t)_server.arg("plain").toInt();
+        if (route == 1 || route == 2) {
+            Adc.set_route(route);
+            _server.send(200, "application/json", String("{\"route\":") + String(Adc.get_route()) + "}");
+        } else {
+            _server.send(400, "text/plain", "Invalid route");
+        }
     } else {
         _server.send(400, "text/plain", "Missing body");
     }
@@ -91,8 +106,9 @@ void WebPortal::handle_leak_reset() {
 void WebPortal::handle_status() {
     char json_buf[320];
     snprintf(json_buf, sizeof(json_buf),
-        "{\"bias_mv\":%.2f,\"pulse_active\":%s,\"sampling\":%s,\"streaming\":%s,\"rate_hz\":%lu,\"leak\":%s,\"pump_conn\":%s,\"pump_run\":%s,\"pump_rpm\":%u,\"latest_sample\":%d}",
+        "{\"bias_mv\":%.2f,\"route\":%u,\"pulse_active\":%s,\"sampling\":%s,\"streaming\":%s,\"rate_hz\":%lu,\"leak\":%s,\"pump_conn\":%s,\"pump_run\":%s,\"pump_rpm\":%u,\"latest_sample\":%d}",
         Dac.get_current_bias_mv(),
+        Adc.get_route(),
         Dac.is_pulse_active() ? "true" : "false",
         Adc.is_sampling() ? "true" : "false",
         UsbStream.is_streaming() ? "true" : "false",
