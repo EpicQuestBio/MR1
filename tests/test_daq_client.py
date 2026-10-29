@@ -150,6 +150,29 @@ class TestDaqClient(unittest.TestCase):
         self.assertIn("uA", format_current(45.0e-6))
         self.assertIn("mA", format_current(2.5e-3))
 
+    def test_route_selection_and_dynamic_gain(self):
+        """Verify route command handling and dynamic gain calculation for Route 1 vs Route 2."""
+        client = DaqClient(port="MOCK", is_mock=True)
+        client.connect()
+        try:
+            # Default Route 1: gain = 10 Gigaohm (1G TIA * 10 post-stage)
+            self.assertEqual(client.active_route, 1)
+            self.assertEqual(client.gain_ohms, 10e9)
+
+            # Switch to Route 2: gain = 100 kOhm
+            resp = client.set_route(2)
+            self.assertIn("OK:ROUTE:2", resp)
+            self.assertEqual(client.active_route, 2)
+            self.assertEqual(client.gain_ohms, 100e3)
+
+            # Switch back to Route 1
+            resp = client.set_route(1)
+            self.assertIn("OK:ROUTE:1", resp)
+            self.assertEqual(client.active_route, 1)
+            self.assertEqual(client.gain_ohms, 10e9)
+        finally:
+            client.disconnect()
+
     def test_mock_serial_commands(self):
         """Verify mock firmware serial port parses commands correctly."""
         mock = MockSerialPort()

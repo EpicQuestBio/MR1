@@ -93,11 +93,13 @@ Binary packets are emitted continuously when acquisition is active. Packets use 
 
 #### `status_flags` Bitmask Definition:
 - **Bit 0 (`0x0001`)**: `ACQUISITION_ACTIVE` — Continuous streaming enabled.
-- **Bit 1 (`0x0002`)**: `TIA_SATURATED` — TIA output clamped to power rails ($> \pm 2\text{ nA}$).
-- **Bit 2 (`0x0004`)**: `LEAK_DETECTED` — Weep moat impedance drop triggered (emergency alert).
-- **Bit 3 (`0x0008`)**: `PUMP_OCCLUSION` — Pump feedline backpressure exceeded limit ($> 10\text{ psi}$).
-- **Bit 4 (`0x0010`)**: `PUMP_CONNECTED` — Active SBU link to pump controller verified.
-- **Bit 5 (`0x0020`)**: `BUFFER_OVERRUN` — DMA buffer was delayed by host USB polling.
+- **Bit 1 (`0x0002`)**: `LEAK_DETECTED` — Weep moat impedance drop triggered (emergency alert).
+- **Bit 2 (`0x0004`)**: `PUMP_CONNECTED` — Active SBU link to pump controller verified.
+- **Bit 3 (`0x0008`)**: `PUMP_RUNNING` — External peristaltic pump motor active.
+- **Bit 4 (`0x0010`)**: `PUMP_EMERGENCY` — Pump emergency stop latched.
+- **Bit 5 (`0x0020`)**: `DAC_PULSE_ACTIVE` — Transient bias pulse injection in progress.
+- **Bit 6 (`0x0040`)**: `DAC_WAVE_ACTIVE` — High-speed DDS waveform active.
+- **Bit 7 (`0x0080`)**: `STATUS_ROUTE2_ACTIVE` — Readout Route 2 active (0 = Route 1 Sub-5nm $10\text{ G}\Omega$, 1 = Route 2 Wideband $100\text{ k}\Omega$).
 
 ### 3.2 Physical Current Conversion Formula
 To calculate physical current $I_{pore}$ from ADC signed 16-bit integer $S_{adc}$:
@@ -117,11 +119,13 @@ Commands are sent as human-readable ASCII lines terminated by `\n` or `\r\n`. Ev
 
 | Command | Arguments | Example | Description |
 | :--- | :--- | :--- | :--- |
-| `START` | None | `START\n` | Starts 100 kSPS binary stream output. |
-| `STOP` | None | `STOP\n` | Halts binary stream output and returns to idle console mode. |
-| `SET:BIAS` | `<mv>` ($\pm 1587$) | `SET:BIAS 180.0\n` | Sets transmembrane voltage bias via MCP4822 DAC. |
+| `STREAM:START` | None | `STREAM:START\n` | Starts 100 kSPS binary stream output. |
+| `STREAM:STOP` | None | `STREAM:STOP\n` | Halts binary stream output and returns to idle console mode. |
+| `SET:BIAS` | `<mv>` ($\pm 1587$) | `SET:BIAS:180.0\n` | Sets transmembrane voltage bias via MCP4822 DAC. |
 | `GET:BIAS` | None | `GET:BIAS\n` | Returns currently applied bias in millivolts (`BIAS:180.0\n`). |
-| `STATUS` | None | `STATUS\n` | Returns JSON status dictionary containing voltages, leak, and pump state. |
+| `SET:ROUTE` | `<1|2>` | `SET:ROUTE:1\n` | Configures active readout route (1 = Sub-5nm $10\text{ G}\Omega$, 2 = Wideband $100\text{ k}\Omega$). |
+| `GET:ROUTE` | None | `GET:ROUTE\n` | Returns active readout route selection (`ROUTE:1\n` or `ROUTE:2\n`). |
+| `STATUS?` | None | `STATUS?\n` | Returns JSON status dictionary containing voltages, route, leak, and pump state. |
 | `ESTOP` | None | `ESTOP\n` | Immediate hardware safety shutdown: zeroes bias DAC, cuts motor power. |
 | `PUMP:SET` | `<id> <rate>` | `PUMP:SET 1 25.0\n` | Sets Pump 1 (Cis) flow rate to $25.0\,\mu\text{L/min}$. |
 | `PUMP:STOP` | None | `PUMP:STOP\n` | Commands fluidic pumps to halt normally. |
