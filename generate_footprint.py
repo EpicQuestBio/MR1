@@ -61,52 +61,50 @@ from src.nanopore_wafer_mold import (  # noqa: E402
 
 FOOTPRINT_NAME = "PogoPin_Target_6Pin_Distributed"
 
-# 6-Pin Cis Bank (J_POGO_CIS) along Cis Fluid Inlet/Outlet Dry Perimeter (Y = -15.0 mm):
-# Cis: [GNDA, >PORE_AMP, GNDA, GUARD, GNDA, WEEP_SENSE]
-PIN_NET_SEQUENCE_6PIN_CIS: List[Tuple[int, str, str]] = [
-    (1, "GNDA", "Low-Impedance Analog Ground Shield (Left Flank of >PORE_AMP)"),
-    (2, ">PORE_AMP", "Cis Working Electrode Bias Drive (V_PORE)"),
-    (3, "GNDA", "Low-Impedance Analog Ground Isolation (Right Flank of >PORE_AMP)"),
-    (4, "GUARD", "Active Driven Guard Shield (Cis Side)"),
-    (5, "GNDA", "Low-Impedance Analog Ground Isolation (Left Flank of WEEP_SENSE)"),
-    (6, "WEEP_SENSE", "High-Z Fluidic Weep Cavity Leak Detector Sense"),
+# Bank B (Cis / Sensing - Top Quadrant CAD Y > 0 / KiCad Y = -15.0..-16.0 mm):
+# P1: GNDA_SHLD (-18, +16 CAD), P2: WS_CIS_WIDE (-10, +15 CAD), P3: GUARD_WIDE (-6, +15 CAD),
+# P4: GUARD_CIS_A (+4, +15 CAD), P5: WS_CIS (+8, +15 CAD), P6: GUARD_CIS_B (+12, +15 CAD)
+PIN_NET_SEQUENCE_6PIN_CIS: List[Tuple[int, str, float, float, str]] = [
+    (1, "GNDA_SHLD", -18.0, 16.0, "Shield anchor pinning inlet/outlet fluid manifold ground boundary"),
+    (2, "WS_CIS_WIDE", -10.0, 15.0, "Path 2 (200 nm Pore) working electrode contact; short straight escape"),
+    (3, "GUARD_WIDE", -6.0, 15.0, "Active driven guard for Path 2; isolates Path 2 from Path 1 sensing"),
+    (4, "GUARD_CIS_A", 4.0, 15.0, "Driven Guard (Left wing of triaxial Faraday cocoon around P5)"),
+    (5, "WS_CIS", 8.0, 15.0, "Path 1 (Sub-5 nm Pore) high-Z electrometer node (LMP7721 Pin 8)"),
+    (6, "GUARD_CIS_B", 12.0, 15.0, "Driven Guard (Right wing of triaxial Faraday cocoon around P5)"),
 ]
 
-# 6-Pin Trans Bank (J_POGO_TRANS) along Trans Fluid Inlet/Outlet Dry Perimeter (Y = +15.0 mm):
-# Trans: [CE_GNDA, RE_TRANS, GUARD_WIDE, WS_CIS_WIDE, GUARD, WS_CIS]
-PIN_NET_SEQUENCE_6PIN_TRANS: List[Tuple[int, str, str]] = [
-    (1, "CE_GNDA", "Counter Electrode / Low-Impedance Analog Ground Return"),
-    (2, "RE_TRANS", "Reference Electrode Sense (Trans Chamber)"),
-    (3, "GUARD_WIDE", "Active Driven Guard Ring (OPA2192 Route 2 Wideband)"),
-    (4, "WS_CIS_WIDE", "Working Electrode Sense - 100um Micropore Wideband (Route 2)"),
-    (5, "GUARD", "Active Driven Guard Ring (LMP7721/LTC6268 Route 1 Nanopore)"),
-    (6, "WS_CIS", "Ultra-High-Z Working Electrode Sense - Cis Nanopore Center (Route 1)"),
+# Bank A (Trans / Excitation - Bottom Quadrant CAD Y < 0 / KiCad Y = +15.0..+16.0 mm):
+# P7: CE_GNDA (-18, -16 CAD), P8: RE_TRANS (-10, -15 CAD), P9: >PORE_AMP (-4, -15 CAD),
+# P10: GNDA (+3, -15 CAD), P11: WEEP_SENSE (+12, -15 CAD), P12: GNDA_WEEP (+18, -16 CAD)
+PIN_NET_SEQUENCE_6PIN_TRANS: List[Tuple[int, str, float, float, str]] = [
+    (7, "CE_GNDA", -18.0, -16.0, "Trans Counter Electrode return path; mates directly to bottom Ag strip"),
+    (8, "RE_TRANS", -10.0, -15.0, "Trans bulk reference sense node; minimizes lead length into trans fluid well"),
+    (9, ">PORE_AMP", -4.0, -15.0, "Active bias excitation drive; isolated symmetrically across board"),
+    (10, "GNDA", 3.0, -15.0, "Low-noise analog ground return fence; shields excitation from weep sensing"),
+    (11, "WEEP_SENSE", 12.0, -15.0, "Moisture-sensing trace intercepting droplet breaches before dry contacts"),
+    (12, "GNDA_WEEP", 18.0, -16.0, "Perimeter weep moat static drain & outer chassis tie"),
 ]
 
 # Alias for 6-pin Mill-Max 09xx sequence
-PIN_NET_SEQUENCE_6PIN: List[Tuple[int, str, str]] = PIN_NET_SEQUENCE_6PIN_TRANS
+PIN_NET_SEQUENCE_6PIN: List[Tuple[int, str, float, float, str]] = PIN_NET_SEQUENCE_6PIN_TRANS
 
-# Exact 12-connection Dual 6-Pin sequence (6 Cis at Y = -15.0 mm + 6 Trans at Y = +15.0 mm)
-PIN_NET_SEQUENCE: List[Tuple[int, str, str]] = [
-    # Cis 6-Pin Bank (Pins 1..6 at Y = -15.0 mm along Cis Inlet/Outlet)
-    (1, "GNDA", "Cis Bank Pin 1: Low-Impedance Analog Ground Shield (Left Flank of >PORE_AMP)"),
-    (2, ">PORE_AMP", "Cis Bank Pin 2: Cis Working Electrode Bias Drive (V_PORE)"),
-    (3, "GNDA", "Cis Bank Pin 3: Low-Impedance Analog Ground Isolation (Right Flank of >PORE_AMP)"),
-    (4, "GUARD", "Cis Bank Pin 4: Active Driven Guard Shield (Cis Side)"),
-    (5, "GNDA", "Cis Bank Pin 5: Low-Impedance Analog Ground Isolation (Left Flank of WEEP_SENSE)"),
-    (6, "WEEP_SENSE", "Cis Bank Pin 6: High-Z Fluidic Weep Cavity Leak Detector Sense"),
-    # Trans 6-Pin Bank (Pins 7..12 at Y = +15.0 mm along Trans Inlet/Outlet)
-    (7, "CE_GNDA", "Trans Bank Pin 1: Counter Electrode / Analog Ground Return"),
-    (8, "RE_TRANS", "Trans Bank Pin 2: Reference Electrode Sense (Trans Chamber)"),
-    (9, "GUARD_WIDE", "Trans Bank Pin 3: Active Driven Guard Ring (OPA2192 Route 2 Wideband)"),
-    (10, "WS_CIS_WIDE", "Trans Bank Pin 4: Working Electrode Sense - Micropore Wideband (Route 2)"),
-    (11, "GUARD", "Trans Bank Pin 5: Active Driven Guard Ring (Route 1 Nanopore Shield)"),
-    (12, "WS_CIS", "Trans Bank Pin 6: Ultra-High-Z Working Electrode Sense - Cis Nanopore Center"),
+# Exact 12-connection Distributed 2 x 6 Pogo Pin Map (6 Bank B Cis at CAD Y > 0 + 6 Bank A Trans at CAD Y < 0)
+PIN_NET_SEQUENCE: List[Tuple[int, str, float, float, str]] = [
+    # Bank B (Cis / Sensing - Pins 1..6)
+    (1, "GNDA_SHLD", -18.0, 16.0, "Pin 1: Shield anchor pinning inlet/outlet fluid manifold ground boundary"),
+    (2, "WS_CIS_WIDE", -10.0, 15.0, "Pin 2: Path 2 (200 nm Pore) working electrode contact"),
+    (3, "GUARD_WIDE", -6.0, 15.0, "Pin 3: Active driven guard for Path 2"),
+    (4, "GUARD_CIS_A", 4.0, 15.0, "Pin 4: Driven Guard (Left wing of triaxial Faraday cocoon around P5)"),
+    (5, "WS_CIS", 8.0, 15.0, "Pin 5: Path 1 (Sub-5 nm Pore) high-Z electrometer node"),
+    (6, "GUARD_CIS_B", 12.0, 15.0, "Pin 6: Driven Guard (Right wing of triaxial Faraday cocoon around P5)"),
+    # Bank A (Trans / Excitation - Pins 7..12)
+    (7, "CE_GNDA", -18.0, -16.0, "Pin 7: Trans Counter Electrode return path"),
+    (8, "RE_TRANS", -10.0, -15.0, "Pin 8: Trans bulk reference sense node"),
+    (9, ">PORE_AMP", -4.0, -15.0, "Pin 9: Active bias excitation drive"),
+    (10, "GNDA", 3.0, -15.0, "Pin 10: Low-noise analog ground return fence"),
+    (11, "WEEP_SENSE", 12.0, -15.0, "Pin 11: Moisture-sensing trace intercepting droplet breaches"),
+    (12, "GNDA_WEEP", 18.0, -16.0, "Pin 12: Perimeter weep moat static drain & outer chassis tie"),
 ]
-
-POGO_6PIN_X_COORDS: List[float] = [-11.5, -6.5, -1.5, 1.5, 6.5, 11.5]
-POGO_CIS_Y: float = -15.0   # Top dry perimeter (Cis fluid inlet/outlet side)
-POGO_TRANS_Y: float = 15.0  # Bottom dry perimeter (Trans fluid inlet/outlet side)
 
 HIGH_Z_NETS = {">PORE_AMP", "WS_CIS", "WS_CIS_WIDE", "WEEP_SENSE"}
 GUARD_NETS = {"GUARD", "GUARD_WIDE"}
@@ -346,12 +344,8 @@ def extract_cad_geometry(pin_count: int = 12, bank: str = "trans") -> ExtractedC
             (f"WEEP_{idx}", r4(fc.X), r4(-fc.Y), r4(fbbox.size.X))
         )
 
-    # 4. Extract Pogo Pin Target Locations from PogoPinHoles() & PTFE_Interposer()
-    pogo_sketch = PogoPinHoles()
-    pogo_faces = sorted(
-        pogo_sketch.faces(), key=lambda f: f.bounding_box().center().X
-    )
-    pad_dia = r4(pogo_faces[0].bounding_box().size.X) if pogo_faces else 1.8
+    # 4. Extract Pogo Pin Target Locations from Distributed Table Specification
+    pad_dia = 2.000  # Standard 2.0 mm ENIG circular pads
 
     bank_norm = bank.lower()
     if pin_count == 6:
@@ -364,28 +358,18 @@ def extract_cad_geometry(pin_count: int = 12, bank: str = "trans") -> ExtractedC
         active_seq = PIN_NET_SEQUENCE
 
     pogo_pads: List[PadSpec] = []
-    for idx, (pin_num, net_name, desc) in enumerate(active_seq):
-        if pin_count == 6:
-            px = r4(POGO_6PIN_X_COORDS[idx])
-            py = r4(POGO_CIS_Y if bank_norm == "cis" else POGO_TRANS_Y)
-        else:
-            # Dual 6-Pin Banks on Opposite Dry Y-Perimeters:
-            # Pins 1..6: Cis 6-pin bank at Y = -15.0 mm (along Cis fluid inlet/outlet)
-            # Pins 7..12: Trans 6-pin bank at Y = +15.0 mm (along Trans fluid inlet/outlet)
-            if idx < 6:
-                px = r4(POGO_6PIN_X_COORDS[idx])
-                py = r4(POGO_CIS_Y)
-            else:
-                px = r4(POGO_6PIN_X_COORDS[idx - 6])
-                py = r4(POGO_TRANS_Y)
+    for entry in active_seq:
+        pin_num, net_name, cad_x, cad_y, desc = entry
+        px = r4(cad_x)
+        py = r4(-cad_y)  # Convert CAD +Y_up to KiCad +Y_down
 
         is_high_z = net_name in HIGH_Z_NETS
         is_guard = net_name in GUARD_NETS
 
         # High-Z and Guard pads receive increased isolation clearance (0.4 mm)
         # and explicit solder-mask margin expansion (0.1 mm)
-        clearance = 0.4 if (is_high_z or is_guard) else 0.3
-        mask_margin = 0.1 if (is_high_z or is_guard) else 0.05
+        clearance = 0.400 if (is_high_z or is_guard) else 0.400
+        mask_margin = 0.100 if (is_high_z or is_guard) else 0.050
 
         # Bare, unmasked ENIG / Hard Gold landing pads on passive interposer:
         # F.Cu + F.Mask ONLY (no F.Paste so solder paste never contaminates gold contacts)
@@ -877,32 +861,14 @@ def generate_kicad_footprint(
             f'(uuid "{deterministic_uuid(f"{ce.name}_gnd_ring")}"))'
         )
 
-    # Emit 360-deg Concentric Copper Guard Rings around High-Z Pogo Landing Pads
-    pad_by_net_and_y = {(p.net_name, p.y): p for p in geom.pogo_pads}
+    # Emit 360-deg Concentric Copper Guard Rings around High-Z Pogo Landing Pads (using gr_circle graphic lines)
     for p in geom.pogo_pads:
-        if p.net_name == "WS_CIS":
-            guard_p = pad_by_net_and_y.get(("GUARD", p.y))
-            guard_pin = guard_p.pin_number if guard_p else "4"
+        if p.net_name in HIGH_Z_NETS:
             lines.append(
-                f'  (pad "{guard_pin}" smd custom (at {fmt4(p.x + 1.45)} {fmt4(p.y)}) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{fp_name}_ws_cis_guard_ring_{p.pin_number}")}"))'
+                f'  (fp_circle (center {fmt4(p.x)} {fmt4(p.y)}) (end {fmt4(p.x + 1.45)} {fmt4(p.y)}) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Cu") (uuid "{deterministic_uuid(f"{fp_name}_guard_ring_cu_{p.pin_number}")}"))'
             )
-        elif p.net_name == "WS_CIS_WIDE":
-            guard_p = pad_by_net_and_y.get(("GUARD_WIDE", p.y))
-            guard_pin = guard_p.pin_number if guard_p else "3"
             lines.append(
-                f'  (pad "{guard_pin}" smd custom (at {fmt4(p.x + 1.45)} {fmt4(p.y)}) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{fp_name}_ws_wide_guard_ring_{p.pin_number}")}"))'
-            )
-        elif p.net_name == ">PORE_AMP":
-            guard_p = pad_by_net_and_y.get(("GUARD", p.y))
-            guard_pin = guard_p.pin_number if guard_p else "4"
-            lines.append(
-                f'  (pad "{guard_pin}" smd custom (at {fmt4(p.x + 1.45)} {fmt4(p.y)}) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{fp_name}_pore_amp_guard_ring_{p.pin_number}")}"))'
-            )
-        elif p.net_name == "WEEP_SENSE":
-            gnd_p = pad_by_net_and_y.get(("GNDA", p.y))
-            gnd_pin = gnd_p.pin_number if gnd_p else "5"
-            lines.append(
-                f'  (pad "{gnd_pin}" smd custom (at {fmt4(p.x + 1.45)} {fmt4(p.y)}) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{fp_name}_weep_guard_ring_{p.pin_number}")}"))'
+                f'  (fp_circle (center {fmt4(p.x)} {fmt4(p.y)}) (end {fmt4(p.x + 1.45)} {fmt4(p.y)}) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Mask") (uuid "{deterministic_uuid(f"{fp_name}_guard_ring_mask_{p.pin_number}")}"))'
             )
 
     lines.append(")")
@@ -979,34 +945,28 @@ def generate_6pin_target_array_sexpr(
         f'  (fp_rect (start 0.2 -1.7) (end 12.8 1.7) (stroke (width 0.12) (type dash)) (fill none) (layer "F.SilkS") (uuid "{deterministic_uuid(f"{footprint_name}_guard_env")}"))',
     ]
 
-    for idx, (pin_num, net_name, _desc) in enumerate(seq):
-        px = POGO_6PIN_X_COORDS[idx]
+    for entry in seq:
+        pin_num, net_name, cad_x, cad_y, _desc = entry
+        px = r4(cad_x)
+        py = 0.0
         lines.append(
             f'  (fp_text user "{pin_num}:{net_name}" (at {fmt4(px)} -2.5 0) (layer "F.SilkS") (uuid "{deterministic_uuid(f"{footprint_name}_lbl_{pin_num}")}") (effects (font (size 0.55 0.55) (thickness 0.1))))'
         )
         # Bare, unmasked ENIG / Hard Gold landing pads: F.Cu + F.Mask only (NO F.Paste)
         lines.append(
-            f'  (pad "{pin_num}" smd circle (at {fmt4(px)} 0.0) (size 1.8 1.8) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
+            f'  (pad "{pin_num}" smd circle (at {fmt4(px)} {fmt4(py)}) (size 2.0 2.0) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
         )
 
-    if is_cis:
-        # Concentric Driven GUARD Ring around Pin 2 (>PORE_AMP at -6.5, 0.0), tied to Pin 4 (GUARD)
-        lines.append(
-            f'  (pad "4" smd custom (at -5.05 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_pore_guard_ring")}"))'
-        )
-        # Concentric GNDA Shield Ring around Pin 6 (WEEP_SENSE at 11.5, 0.0), tied to Pin 5 (GNDA)
-        lines.append(
-            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_weep_guard_ring")}"))'
-        )
-    else:
-        # Concentric Driven GUARD_WIDE Ring around Pin 4 (WS_CIS_WIDE at 1.5, 0.0), tied to Pin 3 (GUARD_WIDE)
-        lines.append(
-            f'  (pad "3" smd custom (at 2.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_wide_guard_ring")}"))'
-        )
-        # Concentric Driven GUARD Ring around Pin 6 (WS_CIS at 11.5, 0.0), tied to Pin 5 (GUARD)
-        lines.append(
-            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_cis_guard_ring")}"))'
-        )
+    for entry in seq:
+        _pin_num, net_name, cad_x, _cad_y, _desc = entry
+        if net_name in HIGH_Z_NETS:
+            px = r4(cad_x)
+            lines.append(
+                f'  (fp_circle (center {fmt4(px)} 0.0) (end {fmt4(px + 1.45)} 0.0) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Cu") (uuid "{deterministic_uuid(f"{footprint_name}_guard_ring_cu_{net_name}")}"))'
+            )
+            lines.append(
+                f'  (fp_circle (center {fmt4(px)} 0.0) (end {fmt4(px + 1.45)} 0.0) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Mask") (uuid "{deterministic_uuid(f"{footprint_name}_guard_ring_mask_{net_name}")}"))'
+            )
     lines.append(")")
     return "\n".join(lines) + "\n"
 
@@ -1071,30 +1031,28 @@ def generate_6pin_spring_header_sexpr(
         f'  (fp_text user "READER LID BOTTOM-MOUNTED MILL-MAX 09XX BIAS-TAIL/BALL-CONTACT PINS ({bank_norm.upper()})" (at 0.0 4.3 0) (layer "F.Fab") (uuid "{deterministic_uuid(f"{footprint_name}_txt_lid")}") (effects (font (size 0.5 0.5) (thickness 0.09))))',
     ]
 
-    for idx, (pin_num, net_name, _desc) in enumerate(seq):
-        px = POGO_6PIN_X_COORDS[idx]
+    for entry in seq:
+        pin_num, net_name, cad_x, cad_y, _desc = entry
+        px = r4(cad_x)
+        py = 0.0
         lines.append(
             f'  (fp_text user "{pin_num}:{net_name}" (at {fmt4(px)} -2.5 0) (layer "F.SilkS") (uuid "{deterministic_uuid(f"{footprint_name}_lbl_{pin_num}")}") (effects (font (size 0.55 0.55) (thickness 0.1))))'
         )
         # Mill-Max 09xx SMT base pad (1.5 x 2.0 mm solder pad on Amplifier PCB)
         lines.append(
-            f'  (pad "{pin_num}" smd roundrect (at {fmt4(px)} 0.0) (size 1.5 2.0) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25) (clearance 0.4) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
+            f'  (pad "{pin_num}" smd roundrect (at {fmt4(px)} {fmt4(py)}) (size 1.5 2.0) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25) (clearance 0.4) (uuid "{deterministic_uuid(f"{footprint_name}_pad_{pin_num}")}"))'
         )
 
-    if is_cis:
-        lines.append(
-            f'  (pad "4" smd custom (at -5.05 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_pore_guard_ring")}"))'
-        )
-        lines.append(
-            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_weep_guard_ring")}"))'
-        )
-    else:
-        lines.append(
-            f'  (pad "3" smd custom (at 2.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_wide_guard_ring")}"))'
-        )
-        lines.append(
-            f'  (pad "5" smd custom (at 12.95 0.0) (size 0.25 0.25) (layers "F.Cu" "F.Mask") (clearance 0.4) (solder_mask_margin 0.1) (options (clearance outline) (anchor circle)) (primitives (gr_circle (center -1.45 0.0) (end 0.0 0.0) (width 0.25) (fill none))) (uuid "{deterministic_uuid(f"{footprint_name}_ws_cis_guard_ring")}"))'
-        )
+    for entry in seq:
+        _pin_num, net_name, cad_x, _cad_y, _desc = entry
+        if net_name in HIGH_Z_NETS:
+            px = r4(cad_x)
+            lines.append(
+                f'  (fp_circle (center {fmt4(px)} 0.0) (end {fmt4(px + 1.45)} 0.0) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Cu") (uuid "{deterministic_uuid(f"{footprint_name}_guard_ring_cu_{net_name}")}"))'
+            )
+            lines.append(
+                f'  (fp_circle (center {fmt4(px)} 0.0) (end {fmt4(px + 1.45)} 0.0) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Mask") (uuid "{deterministic_uuid(f"{footprint_name}_guard_ring_mask_{net_name}")}"))'
+            )
     lines.append(")")
     return "\n".join(lines) + "\n"
 

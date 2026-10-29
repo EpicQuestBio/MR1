@@ -85,6 +85,26 @@ HEX_WALL = 3.0
 POGO_Y = -15.0
 POGO_X_SPACING = 5.0
 
+# Distributed 2 x 6 Pogo Pin landing pad coordinates (CAD X, CAD Y):
+# Bank B (Cis / Sensing, CAD Y > 0): P1..P6
+# Bank A (Trans / Excitation & Drain, CAD Y < 0): P7..P12
+POGO_DISTRIBUTED_PADS = [
+    # Bank B (Cis / Sensing)
+    (-18.0, 16.0),   # P1: GNDA_SHLD
+    (-10.0, 15.0),   # P2: WS_CIS_WIDE
+    (-6.0, 15.0),    # P3: GUARD_WIDE
+    (4.0, 15.0),     # P4: GUARD_CIS_A
+    (8.0, 15.0),     # P5: WS_CIS
+    (12.0, 15.0),    # P6: GUARD_CIS_B
+    # Bank A (Trans / Excitation)
+    (-18.0, -16.0),  # P7: CE_GNDA
+    (-10.0, -15.0),  # P8: RE_TRANS
+    (-4.0, -15.0),   # P9: >PORE_AMP
+    (3.0, -15.0),    # P10: GNDA
+    (12.0, -15.0),   # P11: WEEP_SENSE
+    (18.0, -16.0),   # P12: GNDA_WEEP
+]
+
 # [Active Cartridge Settings]
 PCB_THICK = 1.6
 PCB_THIN = 0.8

@@ -9,7 +9,7 @@
 The **MR1 Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
 ## Architecture & Overview
-The system uses a complete **4-electrode topology** (Working Electrode `WE_POS`, Working Sense `WS_CIS`, Reference Electrode `RE_TRANS`, Counter Electrode `CE_GNDA`) combined with explicitly driven guards (`GUARD`, `GUARD_TRANS`) across a 12-pin interface to achieve sub-picoampere sensitivity while neutralizing the effects of stray capacitance and dielectric surface leakage.
+The system uses a complete **4-electrode topology** (Working Electrode `WE_POS` / `>PORE_AMP`, Working Sense `WS_CIS` & `WS_CIS_WIDE`, Reference Electrode `RE_TRANS`, Counter Electrode `CE_GNDA`) combined with explicitly driven guards (`GUARD`, `GUARD_WIDE`, `GUARD_CIS_A`, `GUARD_CIS_B`) across a distributed 12-pin interface ($36\text{ mm}$ span) to achieve sub-picoampere sensitivity, neutralize stray capacitance, and distribute mechanical spring forces across the PTFE substrate.
 
 The architecture consists of:
 - **Headstage Hardware**: A custom, low-parasitic PTFE/Rogers interposer cartridge that seats a 4x4mm nanopore wafer clamped within silicone PDMS gaskets. It interfaces via gold-plated pogo pins to a low-bias-current transimpedance amplifier (LMP7721) mounted beneath the flowcell.
