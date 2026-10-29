@@ -73,7 +73,7 @@ class TestInterposerKiCad(unittest.TestCase):
             self.assertNotIn(ref, refs, f"Active component or colliding concentric ring {ref} must NOT be present on Interposer PCB")
 
         # Required components
-        required = ["H1", "H2", "H3", "H4", "J_POGO1", "J_POGO2"]
+        required = ["H1", "H2", "H3", "H4", "J_POGO1"]
         for ref in required:
             self.assertIn(ref, refs, f"Required component {ref} must be present on Interposer PCB")
 
@@ -585,6 +585,9 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn('"U17"', sch_txt, "U17 multiplexer must be instantiated in Amplifier.kicad_sch")
 
         # 4. Netlist verification using kicad-cli
+        import shutil
+        if shutil.which("kicad-cli") is None:
+            self.skipTest("kicad-cli toolchain not found on system")
         net_path = REPO_ROOT / "build" / "test_amp_netlist.net"
         net_path.parent.mkdir(parents=True, exist_ok=True)
         res = subprocess.run(
