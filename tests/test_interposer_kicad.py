@@ -570,6 +570,9 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn('"U17"', sch_txt, "U17 multiplexer must be instantiated in Amplifier.kicad_sch")
 
         # 4. Netlist verification using kicad-cli
+        import shutil
+        if shutil.which("kicad-cli") is None:
+            self.skipTest("kicad-cli toolchain not found on system")
         net_path = REPO_ROOT / "build" / "test_amp_netlist.net"
         net_path.parent.mkdir(parents=True, exist_ok=True)
         res = subprocess.run(

@@ -42,6 +42,7 @@ CARRIER_THICK = PTFE_THICK # PCB + Carrier assembly
 PUCK_H = 6.0           # Pressure Puck height
 
 # [Compression & Sealing Physics]
+# Cap torque limit tuned for pogo pin spring force (~9.6N total load across 12 pins) and silicone seal seating
 TORQUE_LIMIT = 0.5 # Torque limit of the cap in Nm
 FRICTION_K = 0.2   # Friction coefficient (dry plastic threads)
 E_SILICONE = 1.5   # Young's Modulus for Silicone (~40A) in MPa

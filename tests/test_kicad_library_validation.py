@@ -6,11 +6,15 @@ against the https://github.com/Aharoni-Lab/kicad-library-validator specification
 import unittest
 from pathlib import Path
 
-from kicad_lib_validator.validator import KiCadLibraryValidator
-from kicad_lib_validator.parser.library_parser import parse_symbol_file, parse_footprint_file
-from kicad_lib_validator.validators.symbol_validator import validate_symbol
-from kicad_lib_validator.validators.footprint_validator import validate_footprint
-from kicad_lib_validator.parser.structure_parser import parse_library_structure
+try:
+    from kicad_lib_validator.validator import KiCadLibraryValidator
+    from kicad_lib_validator.parser.library_parser import parse_symbol_file, parse_footprint_file
+    from kicad_lib_validator.validators.symbol_validator import validate_symbol
+    from kicad_lib_validator.validators.footprint_validator import validate_footprint
+    from kicad_lib_validator.parser.structure_parser import parse_library_structure
+    KICAD_LIB_VALIDATOR_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    KICAD_LIB_VALIDATOR_AVAILABLE = False
 
 
 class TestKiCadLibraryValidation(unittest.TestCase):
@@ -18,6 +22,8 @@ class TestKiCadLibraryValidation(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        if not KICAD_LIB_VALIDATOR_AVAILABLE:
+            raise unittest.SkipTest("kicad_lib_validator package is not installed")
         cls.repo_root = Path(__file__).resolve().parent.parent
         cls.amp_dir = cls.repo_root / "Amplifier"
         cls.structure_file = cls.amp_dir / "library_structure.yaml"
