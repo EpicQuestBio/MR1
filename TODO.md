@@ -2,7 +2,7 @@
 
 > **Active work: see [REFACTOR_PLAN.md](REFACTOR_PLAN.md)** (coax pogo stack, single source of truth `src/stack_spec.py`, `generate_footprint.py` rewrite, one-shot rebuild, legacy OpenSCAD disconnect). Phase checklists live there and are kept current.
 
-- **Stack Refactor Status**: Green. 169/169 tests passing (0 failures, 2 documented skips for kicad-cli).
+- **Stack Refactor Status**: Green. 170/170 tests passing (0 failures, 0 CAD collisions).
 - **Coax Pogo Configuration**: 12-pin distributed coax layout (P1–P12) with signal on Pad 1 and driven concentric guard/ground on Pad 2.
 - **Spacers**: Solid Polypropylene shim (0.030" / 0.762 mm), Delrin stock blocks (0.125" / 3.175 mm & 0.270" / 6.858 mm), and 3D printed adjustable spacer ($\ge 3.0$ mm, stepped in 0.1–0.2 mm increments) with component cavities for the inverted amplifier.
 - **Inverted Stack Layup**: Assembled in `src/assembly.py` and validated with 0 collisions in `src/collision_check.py` and `tests/test_geometry.py`.
