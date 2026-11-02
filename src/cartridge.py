@@ -53,7 +53,7 @@ def PCB_Main_Reader_2D():
 def PCB_Main_Reader():
     """Main Reader PCB 3D solid (80 x 60 x 1.6 mm FR4 motherboard)."""
     with BuildPart(mode=Mode.PRIVATE) as p:
-        add(PCB_Main_Reader_2D())
+        insert(PCB_Main_Reader_2D())
         extrude(amount=PCB_THICK)
     return p.part
 
@@ -95,7 +95,7 @@ def PCB_Pump_Controller_2D():
 def PCB_Pump_Controller():
     """Pump Controller & USB-PD Hub PCB 3D solid (88 x 88 x 1.6 mm FR4)."""
     with BuildPart(mode=Mode.PRIVATE) as p:
-        add(PCB_Pump_Controller_2D())
+        insert(PCB_Pump_Controller_2D())
         extrude(amount=1.6)
     return p.part
 
@@ -110,7 +110,7 @@ def Carrier_Frame_Hex():
     ins_l = 38.0
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
             # Central PCB through-pocket
             Rectangle(ins_w + 0.5, ins_l + 0.5, mode=Mode.SUBTRACT)
             # Fluid pass-throughs
@@ -167,7 +167,7 @@ def PTFE_Interposer(render_electrodes=False):
     """
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
             # 13.5 x 3.0 mm ribbon cable clearance notch recessed into bottom hex flat (Y = -25.9808 to -22.9808)
             with Locations((0.0, -25.9808)):
                 Rectangle(13.5, 6.0, mode=Mode.SUBTRACT)
@@ -182,13 +182,13 @@ def PTFE_Interposer(render_electrodes=False):
                 with Locations((PORT_RADIUS * math.cos(ang_rad), PORT_RADIUS * math.sin(ang_rad))):
                     Circle(radius=1.0, mode=Mode.SUBTRACT)
 
-            add(PogoPinHoles(), mode=Mode.SUBTRACT)
+            insert(PogoPinHoles(), mode=Mode.SUBTRACT)
 
         extrude(amount=PCB_THIN)
 
         # Weep duct pass-through
         with Locations((0, 0, PCB_THIN/2.0)):
-            add(Weep_Duct_Holes(height=PCB_THIN + 2.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=PCB_THIN + 2.0), mode=Mode.SUBTRACT)
 
         # Solder mask pad recesses for Ag/AgCl ribbon electrodes
         # Top pads (Z = PCB_THIN) along 30 deg
@@ -208,9 +208,9 @@ def PTFE_Interposer(render_electrodes=False):
         if render_electrodes:
             # Add Ag/AgCl ribbons
             with Locations((0, 0, PCB_THIN)):
-                add(Silver_Chloride_Ribbon_Pads(top=True), mode=Mode.ADD)
+                insert(Silver_Chloride_Ribbon_Pads(top=True), mode=Mode.ADD)
             with Locations((0, 0, 0)):
-                add(Silver_Chloride_Ribbon_Pads(top=False), mode=Mode.ADD)
+                insert(Silver_Chloride_Ribbon_Pads(top=False), mode=Mode.ADD)
 
     return p.part
 
@@ -242,7 +242,7 @@ def Cast_Nanopore_Wafer_Gasket():
 
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
         extrude(amount=GASKET_THICK)
 
         # Silicone protrusion on PCB-facing side (Z < 0), rotated 45 degrees
@@ -283,21 +283,24 @@ def Cast_Nanopore_Wafer_Gasket():
 
         # Weep system cutouts
         with Locations((0, 0, GASKET_THICK/2.0)):
-            add(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
         # Molded wick trench on the top face
         with Locations((0, 0, GASKET_THICK - WEEP_MOAT_DEPTH/2.0)):
-            add(Weep_Trench_Cutout(), mode=Mode.SUBTRACT)
+            insert(Weep_Trench_Cutout(), mode=Mode.SUBTRACT)
 
         # Finger grip cutouts
         with Locations((0, 0, GASKET_THICK/2.0)):
-            add(Finger_Grip_Cutout(height=GASKET_THICK * 3.0), mode=Mode.SUBTRACT)
+            insert(Finger_Grip_Cutout(height=GASKET_THICK * 3.0), mode=Mode.SUBTRACT)
 
     return p.part
 
-def Fitted_Amplifier_Gasket():
-    """Bottom cast silicone gasket for amplifier with continuous Trans flow channel.
+def Fitted_Amplifier_Gasket(include_circuitry_cutouts=False):
+    """Bottom cast silicone gasket for Trans microfluidic channel.
     Channel runs along the X-diagonal: 330 deg -> Center -> 150 deg.
     Passive through-holes at 210 deg and 30 deg allow Cis fluid pass-through.
+    In the inverted cartridge architecture, the amplifier sits at the top of the stack
+    isolated by spacers, so the fluidic gasket does not require circuitry cutouts
+    by default (include_circuitry_cutouts=False).
     """
     p_in = (-PORT_RADIUS * math.cos(math.radians(30)), -PORT_RADIUS * math.sin(math.radians(30))) # 210 deg
     p_out = (PORT_RADIUS * math.cos(math.radians(30)), PORT_RADIUS * math.sin(math.radians(30)))   # 30 deg
@@ -306,7 +309,7 @@ def Fitted_Amplifier_Gasket():
 
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
         extrude(amount=GASKET_THICK)
 
         # Passive pass-through holes for top/Cis ports
@@ -325,8 +328,9 @@ def Fitted_Amplifier_Gasket():
                     Circle(radius=1.0)
             extrude(amount=GASKET_THICK + 0.1, mode=Mode.SUBTRACT)
 
-        # Circuitry clearance cutouts on bottom face
-        add(Circuitry_Cutouts(height=GASKET_THICK * 2.0), mode=Mode.SUBTRACT)
+        # Circuitry clearance cutouts on bottom face (legacy support only)
+        if include_circuitry_cutouts:
+            insert(Circuitry_Cutouts(height=GASKET_THICK * 2.0), mode=Mode.SUBTRACT)
 
         # Active flow channels
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_OUT_BOT]:
@@ -341,11 +345,11 @@ def Fitted_Amplifier_Gasket():
 
         # Weep duct pass-through
         with Locations((0, 0, GASKET_THICK/2.0)):
-            add(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=GASKET_THICK + 2.0), mode=Mode.SUBTRACT)
 
         # Finger grip cutouts
         with Locations((0, 0, GASKET_THICK/2.0)):
-            add(Finger_Grip_Cutout(height=GASKET_THICK * 3.0), mode=Mode.SUBTRACT)
+            insert(Finger_Grip_Cutout(height=GASKET_THICK * 3.0), mode=Mode.SUBTRACT)
 
     return p.part
 
@@ -385,16 +389,20 @@ def Rigid_Backing_Anvil(thickness=ANVIL_THICK):
 
     return p.part
 
-def Bottom_Pusher_Plate():
-    """Bottom TPU Seal plate. Exact match to golden STL (55.0 x 51.962 x 3.0 mm)."""
+def Bottom_Pusher_Plate(include_circuitry_cutouts=False):
+    """Bottom TPU Seal plate. Exact match to golden STL (55.0 x 51.962 x 3.0 mm).
+    In the inverted cartridge architecture, the amplifier sits at the top of the stack,
+    so circuitry cutouts are omitted by default (include_circuitry_cutouts=False).
+    """
     height = 3.0
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
             insert(Hex_Base_Sketch())
         extrude(amount=height)
 
-        # Subtract Cutouts
-        insert(Circuitry_Cutouts(height=height*3.0), mode=Mode.SUBTRACT)
+        # Subtract Cutouts (optional legacy)
+        if include_circuitry_cutouts:
+            insert(Circuitry_Cutouts(height=height*3.0), mode=Mode.SUBTRACT)
 
         # Ports (4x)
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
@@ -403,12 +411,10 @@ def Bottom_Pusher_Plate():
             py = PORT_RADIUS * math.sin(ang_rad)
             with Locations((px, py, height/2.0)):
                 Cylinder(radius=NPT_1_8_TAP_D/2.0, height=height + 1.0, mode=Mode.SUBTRACT)
-            with Locations(Location((0, 0, PP_H/2.0)) * Rotation(0, 0, a) * Location((PORT_RADIUS, 0, 0))):
-                Cylinder(radius=NPT_1_8_TAP_D/2.0, height=PP_H + 1.0, mode=Mode.SUBTRACT)
 
         # Weep duct pass-through
-        with Locations((0, 0, PP_H/2.0)):
-            insert(Weep_Duct_Holes(height=PP_H + 2.0), mode=Mode.SUBTRACT)
+        with Locations((0, 0, height/2.0)):
+            insert(Weep_Duct_Holes(height=height + 2.0), mode=Mode.SUBTRACT)
 
         # Pogo Pin Clearance
         with Locations((0, 0, height/2.0)):
@@ -419,14 +425,20 @@ def Bottom_Pusher_Plate():
 
     return p.part
 
-def Plate_1_Base_Hex():
-    """Base PP Plate with exact KiCad hex profile."""
+def Plate_1_Base_Hex(include_circuitry_cutouts=False, flush_fittings=True):
+    """Base PP Plate with exact KiCad hex profile.
+    Four fluidic fittings screw into this plate such that they are flush,
+    pressing against the Trans gasket to form a liquid-tight compression seal.
+    In the inverted cartridge stack, the amplifier sits at the top of the stack,
+    so circuitry cutouts are omitted by default (include_circuitry_cutouts=False).
+    """
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
         extrude(amount=PLATE_THICK)
 
-        add(Circuitry_Cutouts(height=PLATE_THICK*3.0), mode=Mode.SUBTRACT)
+        if include_circuitry_cutouts:
+            insert(Circuitry_Cutouts(height=PLATE_THICK*3.0), mode=Mode.SUBTRACT)
 
         for a in [ANGLE_FLUID_IN_BOT, ANGLE_FLUID_IN_TOP, ANGLE_FLUID_OUT_BOT, ANGLE_FLUID_OUT_TOP]:
             ang_rad = math.radians(a)
@@ -434,15 +446,19 @@ def Plate_1_Base_Hex():
             py = PORT_RADIUS * math.sin(ang_rad)
             with Locations((px, py, PLATE_THICK/2.0)):
                 Cylinder(radius=NPT_1_8_TAP_D/2.0, height=PLATE_THICK + 1.0, mode=Mode.SUBTRACT)
+            if flush_fittings:
+                # Flush counterbore on outer face (Z = 0) so fitting flange seats flush
+                with Locations((px, py, 1.0)):
+                    Cylinder(radius=11.5 / 2.0, height=2.0, mode=Mode.SUBTRACT)
 
         # Weep duct pass-through
         with Locations((0, 0, PLATE_THICK/2.0)):
-            add(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
 
         # Pogo Pin Clearance
         with Locations((0, 0, PLATE_THICK/2.0)):
             with BuildSketch():
-                add(PogoPinHoles())
+                insert(PogoPinHoles())
                 offset(amount=0.5) # clearance
             extrude(amount=PLATE_THICK + 2.0, mode=Mode.SUBTRACT)
 
@@ -452,7 +468,7 @@ def Plate_3_Top_Hex():
     """Top PP Plate with central pipette access and fluid ports."""
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
-            add(Hex_Base_Sketch())
+            insert(Hex_Base_Sketch())
         extrude(amount=PLATE_THICK)
 
         # Central hole
@@ -467,12 +483,12 @@ def Plate_3_Top_Hex():
 
         # Weep duct pass-through
         with Locations((0, 0, PLATE_THICK/2.0)):
-            add(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=PLATE_THICK + 2.0), mode=Mode.SUBTRACT)
 
         # Pogo Pin Clearance
         with Locations((0, 0, PLATE_THICK/2.0)):
             with BuildSketch():
-                add(PogoPinHoles())
+                insert(PogoPinHoles())
                 offset(amount=0.5) # clearance
             extrude(amount=PLATE_THICK + 2.0, mode=Mode.SUBTRACT)
 
@@ -493,11 +509,63 @@ def Pressure_Puck():
             with BuildPart(mode=Mode.PRIVATE) as recess:
                 Cylinder(radius=(NECK_ID - 4.0)/2.0, height=8.4)
                 Cylinder(radius=10.0, height=10.0, mode=Mode.SUBTRACT)
-            add(recess.part, mode=Mode.SUBTRACT)
+            insert(recess.part, mode=Mode.SUBTRACT)
 
         # Recessed Cups at X = +/- 30
         with Locations((0,0,3)):
-            add(Finger_Grip_Cutout(height=20.0), mode=Mode.SUBTRACT)
+            insert(Finger_Grip_Cutout(height=20.0), mode=Mode.SUBTRACT)
+    return p.part
+
+
+def PCB_Amplifier(flipped: bool = True, thickness: float = 1.5) -> Part:
+    """The 2-layer Rogers RO3003 Cartridge Amplifier PCB.
+    All discrete components, ICs (LMP7721, AD4000, LDOs), and 12 Mill-Max/LCSC pogo pins
+    are placed on the component side (F.Cu).
+    When flipped=True (assembly orientation), the component side faces downwards (-Z)
+    towards the PTFE interposer, nesting perfectly into the cavities of the Printed_Spacer.
+    """
+    with BuildPart(mode=Mode.PRIVATE) as p:
+        with BuildSketch():
+            insert(Hex_Base_Sketch())
+            # Ribbon cable clearance notch
+            with Locations((0.0, -25.9808)):
+                Rectangle(13.5, 6.0, mode=Mode.SUBTRACT)
+        extrude(amount=thickness)
+
+        # Weep duct moisture venting pass-throughs
+        with Locations((0, 0, thickness / 2.0)):
+            insert(Weep_Duct_Holes(height=thickness + 2.0), mode=Mode.SUBTRACT)
+
+        # Component bodies on F.Cu:
+        # If flipped, F.Cu is on bottom (Z <= 0, extending downwards)
+        # If unflipped, F.Cu is on top (Z >= thickness, extending upwards)
+        z_sign = -1.0 if flipped else 1.0
+        z_base = 0.0 if flipped else thickness
+
+        # 1. LMP7721 OpAmp (SOIC-8, ~5.0 x 4.0 x 1.75 mm)
+        with Locations((0, -13.0, z_base + z_sign * 1.75 / 2.0)):
+            Box(5.0, 4.0, 1.75)
+        # 2. V+ Rail Filtering
+        with Locations((-10.0, -18.0, z_base + z_sign * 1.0 / 2.0)):
+            Box(3.0, 3.0, 1.0)
+        # 3. V- Rail Filtering
+        with Locations((6.0, -18.0, z_base + z_sign * 1.0 / 2.0)):
+            Box(3.0, 3.0, 1.0)
+        # 4. Feedback Network
+        with Locations((8.0, -24.0, z_base + z_sign * 1.0 / 2.0)):
+            Box(3.0, 2.5, 1.0)
+        # 5. ESD Protection
+        with Locations((-8.0, -24.0, z_base + z_sign * 1.0 / 2.0)):
+            Box(3.0, 2.5, 1.0)
+        # 6. Ribbon connector along hex edge
+        with Locations((0.0, -25.0, z_base + z_sign * 1.2 / 2.0)):
+            Box(7.0, 3.0, 1.2)
+
+        # SMT Pogo Pin Bases (12x, 2.0 x 2.0 x 0.2 mm pads on F.Cu)
+        for pin in stack_spec.PINS:
+            with Locations((pin.x, pin.y, z_base + z_sign * 0.2 / 2.0)):
+                Cylinder(radius=1.0, height=0.2)
+
     return p.part
 
 

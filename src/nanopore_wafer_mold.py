@@ -82,7 +82,7 @@ def build_base_mold_half(is_left=True):
         res_x_center = -res_t / 2.0 if is_left else res_t / 2.0
         res_cut = Rounded_Reservoir_Block(res_t + 0.1, res_w, res_d + 0.1, is_left=is_left, r_corner=3.0, r_floor=2.0)
         with Locations((res_x_center, 0, MOLD_H - res_d / 2.0 + 0.05)):
-            add(res_cut, mode=Mode.SUBTRACT)
+            insert(res_cut, mode=Mode.SUBTRACT)
 
         # 3. Tapered Sprue Channel (stops at hex cavity apex Z=61)
         with BuildSketch(Plane.YZ.offset(0)):
@@ -155,7 +155,7 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top", multi_stage_gu
     """
     base = build_base_mold_half(is_left=True)
     with BuildPart(mode=Mode.PRIVATE) as p:
-        add(base)
+        insert(base)
         if is_nanopore:
             # 1. Diamond Protrusion Pocket (6.0 x 6.0 mm, 45 deg, depth 0.8mm from X = -GASKET_THICK/2 to -GASKET_THICK/2 - PCB_THICKNESS)
             with BuildSketch(Plane.YZ.offset(-GASKET_THICK / 2.0)):
@@ -186,7 +186,7 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top", multi_stage_gu
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
             # Weep Duct Pins
-            add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+            insert(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
             if multi_stage_guard:
                 # 3D Driven Guard Coaxial Wells:
@@ -210,7 +210,7 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top", multi_stage_gu
             # Amplifier mold (is_nanopore=False)
             cutouts = Circuitry_Cutouts(height=GASKET_THICK / 2.0)
             cutouts = cutouts.rotate(Axis.Y, -90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z)))
-            add(cutouts, mode=Mode.ADD)
+            insert(cutouts, mode=Mode.ADD)
 
             # Central square plug (3.0 x 3.0 mm from X = -GASKET_THICK/2 to X = 0)
             with Locations((-GASKET_THICK / 4.0, 0, CAVITY_Z)):
@@ -223,7 +223,7 @@ def Nanopore_Wafer_Mold_Left(is_nanopore=True, gasket_type="top", multi_stage_gu
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
             # Weep Duct Pins
-            add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+            insert(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
             if multi_stage_guard:
                 # 3D Driven Guard Coaxial Wells:
@@ -256,7 +256,7 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top", multi_stage_g
     """
     base = build_base_mold_half(is_left=False)
     with BuildPart(mode=Mode.PRIVATE) as p:
-        add(base)
+        insert(base)
         if is_nanopore:
             # 1. Opposing Central Clamping Plug (D=2.0mm from X = +0.8 down to X = 0)
             with Locations((GASKET_THICK / 4.0, 0, CAVITY_Z)):
@@ -279,8 +279,8 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top", multi_stage_g
             extrude(amount=GASKET_THICK / 2.0, mode=Mode.ADD)
 
             # Weep Duct Pins and Trench Boss
-            add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
-            add(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+            insert(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+            insert(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
             if multi_stage_guard:
                 # 1. Port Crush-Rib Sealing Grooves (depth 0.4mm into mold face)
@@ -323,8 +323,8 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top", multi_stage_g
                     Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
             # Weep Duct Pins and Trench Boss
-            add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
-            add(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+            insert(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+            insert(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
             if multi_stage_guard:
                 for port in ALL_PORTS:
@@ -374,7 +374,7 @@ def Concentric_Guard_Mold_Plate_Top():
     """
     base = build_base_mold_half(is_left=True)
     with BuildPart(mode=Mode.PRIVATE) as p:
-        add(base)
+        insert(base)
         # 1. Central Signal Dot well (WS_CIS): D=1.2mm, depth 0.4mm into mold
         with Locations((-GASKET_THICK / 2.0 - 0.2, 0, CAVITY_Z)):
             Cylinder(radius=0.6, height=0.4, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
@@ -403,7 +403,7 @@ def Concentric_Guard_Mold_Plate_Top():
         extrude(amount=-0.4, mode=Mode.SUBTRACT)
 
         # Weep Duct Pins
-        add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+        insert(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((-GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
     return p.part
 
@@ -417,7 +417,7 @@ def Bottom_Fluidic_Electrode_Mold_Plate():
     """
     base = build_base_mold_half(is_left=False)
     with BuildPart(mode=Mode.PRIVATE) as p:
-        add(base)
+        insert(base)
         # 1. Port Crush-Rib Sealing Grooves (depth 0.4mm into mold face)
         for port in ALL_PORTS:
             with BuildSketch(Plane.YZ.offset(GASKET_THICK / 2.0)):
@@ -443,8 +443,8 @@ def Bottom_Fluidic_Electrode_Mold_Plate():
                 Cylinder(radius=1.0, height=GASKET_THICK / 2.0, rotation=(0, 90, 0), mode=Mode.ADD)
 
         # Weep Duct Pins and Trench Boss
-        add(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
-        add(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+        insert(Weep_Duct_Holes(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
+        insert(Weep_Trench_Cutout(height=GASKET_THICK / 2.0).rotate(Axis.Y, 90).move(Location((GASKET_THICK / 4.0, 0, CAVITY_Z))), mode=Mode.ADD)
 
     return p.part
 

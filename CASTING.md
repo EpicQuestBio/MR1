@@ -24,3 +24,13 @@ While PDMS will cure at room temperature in about 48 hours, thermal curing is hi
 
 Baking the mold in an oven at 60°C to 80°C for 2–4 hours not only speeds up the manufacturing cycle but also helps drive off unreacted low-molecular-weight siloxanes. If left in the matrix, these unreacted monomers can slowly leach into your buffer and potentially destabilize lipid bilayers or interact with biological pores.
 By using degassed, optically-smooth cast PDMS, you provide your high-impedance amplifier with the perfect, highly resistive dielectric barrier it needs to resolve those delicate femtoampere translocation events.
+
+---
+
+## 5. Dual Identical Gasket Architecture & Anti-Wicking Barrier
+
+In the MR1 inverted cartridge stack:
+- **Identical Gasket Profiles**: Both Cis and Trans faces of the PTFE interposer use identical cast silicone / PDMS gaskets (1.5875 mm uncompressed, clamped under 10% controlled compression to ~1.43 mm). One variant embeds the square silicon nanopore chip (4.0 x 4.0 x 0.5 mm, 45° rotation).
+- **Inverted Stack Isolation**: The Cartridge Amplifier board is mounted component-side down at the top of the stack, separated from the wet fluidics by a hydrophobic solid Polypropylene (PP) shim (0.030" / 0.762 mm) and an adjustable 3D-printed spacer ($\ge 3.0\text{ mm}$).
+- **Capillary Depression**: Because Polypropylene is naturally hydrophobic (water contact angle $\theta \approx 100^\circ$, $\cos\theta < 0$), Jurin's law dictates capillary depression rather than capillary rise. The solid PP shim acts as a physical meniscus breaker that prevents saline buffer from wicking up the 7.5 mm pogo pins to the amplifier circuit.
+

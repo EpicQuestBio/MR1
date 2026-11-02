@@ -23,7 +23,7 @@ def Housing_Pump_Case(pump_type=PUMP_TYPE):
                 edges = bucket.edges().filter_by(Axis.Z)
                 if edges:
                     fillet(edges, radius=2.0)
-            add(bucket.part, mode=Mode.SUBTRACT)
+            insert(bucket.part, mode=Mode.SUBTRACT)
 
         # Fluid Ports with Bosses on Side Walls (Left and Right at Y = +/- 20)
         boss_d = 20.0
@@ -44,7 +44,7 @@ def Housing_Pump_Case(pump_type=PUMP_TYPE):
             with BuildPart(mode=Mode.PRIVATE) as handle:
                 Box(stick_out, h_center*2.0 + tube_d, tube_d)
                 Box(stick_out - tube_d, h_center*2.0 - tube_d, tube_d + 1.0, mode=Mode.SUBTRACT)
-            add(handle.part.move(Rotation(0, 90, 0)), mode=Mode.ADD)
+            insert(handle.part.move(Rotation(0, 90, 0)), mode=Mode.ADD)
 
         # Back Wall Connectivity
         with Locations((0, BASE_L/2.0 + WALL, 0)):
@@ -64,7 +64,7 @@ def Housing_Pump_Case(pump_type=PUMP_TYPE):
                     Rectangle(BASE_W - 8.0 + SEAL_RADIUS*2, BASE_L - 8.0 + SEAL_RADIUS*2)
                     Rectangle(BASE_W - 8.0 - SEAL_RADIUS*2, BASE_L - 8.0 - SEAL_RADIUS*2, mode=Mode.SUBTRACT)
                 extrude(amount=SEAL_RADIUS)
-            add(seal.part, mode=Mode.ADD)
+            insert(seal.part, mode=Mode.ADD)
 
         # Pump Mounting Plate on floor
         with Locations((0, 0, -PUMP_H/2.0 + WALL + 2.5)):
@@ -74,7 +74,7 @@ def Housing_Pump_Case(pump_type=PUMP_TYPE):
                 for side in [-1, 1]:
                     with Locations((side * (BASE_W/4.0), 20.0, 0)):
                         Cylinder(radius=PUMP_MOUNT_D/2.0, height=6.0, mode=Mode.SUBTRACT)
-            add(mplate.part, mode=Mode.ADD)
+            insert(mplate.part, mode=Mode.ADD)
 
     return p.part
 
@@ -269,7 +269,7 @@ def Housing_Lid_Reader():
             if bedges:
                 fillet(bedges, radius=3.0)
         with Locations((0, 0, bucket_z)):
-            add(bucket.part, mode=Mode.SUBTRACT)
+            insert(bucket.part, mode=Mode.SUBTRACT)
 
         # 5. Neck transition cone (Z: 0 to 5)
         with Locations((0, 0, 2.5)):
@@ -308,7 +308,7 @@ def Housing_Lid_Reader():
 
         # 10b. Weep holes penetrating the reader lid ceiling into the hollow bucket
         with Locations((0, 0, -ceiling_thick/2.0)):
-            add(Weep_Duct_Holes(height=neck_length + ceiling_thick*3.0), mode=Mode.SUBTRACT)
+            insert(Weep_Duct_Holes(height=neck_length + ceiling_thick*3.0), mode=Mode.SUBTRACT)
 
         # 11. Horizontal Side Fluid Ports (at Y = +/- 20, Z = -13.0mm penetrating into hollow bucket)
         # Includes counterbores for Luer bulkhead panel mount fittings (D=15.0mm, depth=2.5mm)
@@ -323,7 +323,7 @@ def Housing_Lid_Reader():
             with BuildPart(mode=Mode.PRIVATE) as inset:
                 Box(lid_w + 1.0, lid_l + 1.0, inset_height)
                 Box(lid_w - 2 * inset_depth, lid_l - 2 * inset_depth, inset_height + 1.0, mode=Mode.SUBTRACT)
-            add(inset.part, mode=Mode.SUBTRACT)
+            insert(inset.part, mode=Mode.SUBTRACT)
 
         # 13. Back Wall Connectivity (USB-C cutouts)
         #with Locations((0, lid_l / 2.0, 0)):
@@ -347,7 +347,7 @@ def Housing_Lid_Reader():
                     Rectangle(BASE_W - 8.0 + 1.0, BASE_L - 8.0 + 1.0)
                     Rectangle(BASE_W - 8.0 - 1.0, BASE_L - 8.0 - 1.0, mode=Mode.SUBTRACT)
                 extrude(amount=1.5)
-            add(ogroove.part, mode=Mode.SUBTRACT)
+            insert(ogroove.part, mode=Mode.SUBTRACT)
 
         # Wire clearance cutout for W_USB passing through lower indexing lip
         try:
@@ -355,7 +355,7 @@ def Housing_Lid_Reader():
             pts_u, r_u = get_wiring_routes()["W_USB"]
             pts_local_l = [(x, y, z - (PUMP_H + PUMP_LID_THICK + 5.0 + 30.0)) for x, y, z in pts_u]
             w_cut_l = route_spline(pts_local_l, r_u + 0.1)
-            add(w_cut_l, mode=Mode.SUBTRACT)
+            insert(w_cut_l, mode=Mode.SUBTRACT)
         except Exception:
             pass
 

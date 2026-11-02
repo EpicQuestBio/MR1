@@ -10,8 +10,21 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from build123d import *
 from src.constants import *
+from src import stack_spec
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
-from src.cartridge import Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket, PCB_Rigid_Active, Pressure_Puck
+from src.cartridge import (
+    Bottom_Pusher_Plate,
+    Plate_1_Base_Hex,
+    Plate_3_Top_Hex,
+    Cast_Nanopore_Wafer_Gasket,
+    Fitted_Amplifier_Gasket,
+    PCB_Rigid_Active,
+    PTFE_Interposer,
+    PCB_Amplifier,
+    Rigid_Backing_Anvil,
+    Pressure_Puck,
+)
+from src.spacers import PP_Shim, Printed_Spacer, Pogo_Pin_Array_Solid
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
 from src.connectors import Luer_Bulkhead_Panel_Mount
 
@@ -145,11 +158,18 @@ def route_wiring():
     return Compound(children=wire_solids)
 
 
-def Reader_Module_Assembly():
-    """Assembles the full Reader Module (Housings + Cartridge Stack + Cap) matching OpenSCAD truth.
+def Reader_Module_Assembly(use_inverted_stack: bool = True):
+    """Assembles the full Reader Module (Housings + Cartridge Stack + Cap).
     Housing_Lid_Reader sits on Housing_Case_Reader, with its top plate surface at z=32.5.
     The cartridge stack rests directly on the lid ceiling inside the M75 neck socket,
     with the Torque-Lock Cap threaded onto the neck.
+
+    Parameters:
+      use_inverted_stack: When True (default), assembles the inverted amplifier stackup:
+        Bottom Pusher -> Plate 1 Base -> Trans Gasket -> PTFE Interposer ->
+        Cis Gasket -> PP Shim -> Printed Spacer + 12-pin Coax Pogo Array ->
+        PCB Amplifier (flipped) -> Rigid Backing Anvil -> Pressure Puck.
+        When False, falls back to legacy 7-layer stackup.
     """
     parts = []
 
@@ -173,15 +193,57 @@ def Reader_Module_Assembly():
     # Cartridge stack sits directly on top surface of Lid inside the neck socket
     z_stack = z_lid
 
-    stack_parts = [
-        Bottom_Pusher_Plate().move(Location((0, 0, z_stack))),
-        Plate_1_Base_Hex().move(Location((0, 0, z_stack + PP_H))),
-        Fitted_Amplifier_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK))),
-        PCB_Rigid_Active().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK))),
-        Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS))),
-        Plate_3_Top_Hex().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK))),
-        Pressure_Puck().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK + PUCK_H/2.0)))
-    ]
+    if use_inverted_stack:
+        z = z_stack
+        p_pusher = Bottom_Pusher_Plate().move(Location((0, 0, z)))
+        z += PP_H
+        p_plate1 = Plate_1_Base_Hex().move(Location((0, 0, z)))
+        z += PLATE_THICK
+        p_trans_gasket = Fitted_Amplifier_Gasket().move(Location((0, 0, z)))
+        z += GASKET_THICK
+        interposer_z = z
+        p_interposer = PTFE_Interposer().move(Location((0, 0, z)))
+        z += PCB_THIN
+        p_cis_gasket = Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z)))
+        z += GASKET_THICK
+        p_shim = PP_Shim().move(Location((0, 0, z)))
+        z += stack_spec.PP_SHIM
+        spacer_h = 3.6
+        p_spacer = Printed_Spacer(height=spacer_h).move(Location((0, 0, z)))
+        # Pogo pin array bridges from interposer top surface to amplifier F.Cu
+        p_pogo = Pogo_Pin_Array_Solid(compressed=True).move(Location((0, 0, interposer_z + PCB_THIN)))
+        z += spacer_h
+        amp_thick = 1.5
+        p_amp = PCB_Amplifier(flipped=True, thickness=amp_thick).move(Location((0, 0, z)))
+        z += amp_thick
+        anvil_thick = ANVIL_THICK
+        p_anvil = Rigid_Backing_Anvil(thickness=anvil_thick).move(Location((0, 0, z)))
+        z += anvil_thick
+        p_puck = Pressure_Puck().move(Location((0, 0, z + PUCK_H / 2.0)))
+
+        stack_parts = [
+            p_pusher,
+            p_plate1,
+            p_trans_gasket,
+            p_interposer,
+            p_cis_gasket,
+            p_shim,
+            p_spacer,
+            p_pogo,
+            p_amp,
+            p_anvil,
+            p_puck,
+        ]
+    else:
+        stack_parts = [
+            Bottom_Pusher_Plate().move(Location((0, 0, z_stack))),
+            Plate_1_Base_Hex().move(Location((0, 0, z_stack + PP_H))),
+            Fitted_Amplifier_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK))),
+            PCB_Rigid_Active().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK))),
+            Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS))),
+            Plate_3_Top_Hex().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK))),
+            Pressure_Puck().move(Location((0, 0, z_stack + PP_H + PLATE_THICK + GASKET_THICK + PCB_THICKNESS + GASKET_THICK + PLATE_THICK + PUCK_H/2.0)))
+        ]
     parts.extend(stack_parts)
 
     # Torque-Lock Cap Assembly (engaging onto neck thread above puck)

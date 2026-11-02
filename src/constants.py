@@ -4,6 +4,8 @@
 
 import math
 
+from src import stack_spec
+
 # ==============================================================================
 # MR1 NANOPORE READER - Python Port Constants
 # ==============================================================================
@@ -32,11 +34,11 @@ SEALED_TOP_MODE = False
 PP_H = 3.0           # Bottom Pusher Plate (TPU/Seal) - matches golden STL bounds
 ANVIL_THICK = 6.0    # Rigid Delrin/Aluminum Backing Anvil thickness (6.0 mm)
 ANVIL_MATERIAL = "Delrin / Anodized Aluminum 6061-T6" # Rigid anvil backer material
-POGO_SPRING_FORCE = 0.8 # Spring force per pogo pin in N (~0.5N to 1.5N)
-NUM_POGO_PINS = 12
+POGO_SPRING_FORCE = stack_spec.POGO.spring_force # Spring force per pogo pin in N (~0.5N to 1.5N)
+NUM_POGO_PINS = len(stack_spec.PINS)
 TOTAL_POGO_CLAMP_FORCE = NUM_POGO_PINS * POGO_SPRING_FORCE # Total spring load (~9.6 N)
 PLATE_THICK = 4.0    # Plate 1 (Base) & Plate 3 (Top), 4mm PP Sheet
-GASKET_THICK = 1.5875 # Gaskets (1/16")
+GASKET_THICK = stack_spec.GASKET_THICK # Gaskets (1/16"), shared with stack_spec
 PTFE_THICK = 1.6     # PCB/PTFE assembly thickness
 CARRIER_THICK = PTFE_THICK # PCB + Carrier assembly
 PUCK_H = 6.0           # Pressure Puck height
@@ -82,28 +84,12 @@ M3_INSERT_HOLE = 4.2
 
 # [Dimensions - Hexagonal Cartridge]
 HEX_WALL = 3.0
-POGO_Y = -15.0
-POGO_X_SPACING = 5.0
+POGO_Y = stack_spec.pin(1).y  # -15.0 mm (Trans bank Y)
+POGO_X_SPACING = abs(stack_spec.pin(2).x - stack_spec.pin(1).x)  # 5.0 mm pitch
 
-# Distributed 2 x 6 Pogo Pin landing pad coordinates (CAD X, CAD Y):
-# Bank B (Cis / Sensing, CAD Y > 0): P1..P6
-# Bank A (Trans / Excitation & Drain, CAD Y < 0): P7..P12
-POGO_DISTRIBUTED_PADS = [
-    # Bank B (Cis / Sensing)
-    (-18.0, 16.0),   # P1: GNDA_SHLD
-    (-10.0, 15.0),   # P2: WS_CIS_WIDE
-    (-6.0, 15.0),    # P3: GUARD_WIDE
-    (4.0, 15.0),     # P4: GUARD_CIS_A
-    (8.0, 15.0),     # P5: WS_CIS
-    (12.0, 15.0),    # P6: GUARD_CIS_B
-    # Bank A (Trans / Excitation)
-    (-18.0, -16.0),  # P7: CE_GNDA
-    (-10.0, -15.0),  # P8: RE_TRANS
-    (-4.0, -15.0),   # P9: >PORE_AMP
-    (3.0, -15.0),    # P10: GNDA
-    (12.0, -15.0),   # P11: WEEP_SENSE
-    (18.0, -16.0),   # P12: GNDA_WEEP
-]
+# Distributed 2 x 6 Pogo Pin landing pad coordinates (CAD X, CAD Y).
+# Derived from src/stack_spec.py (single source of truth). Do not edit here.
+POGO_DISTRIBUTED_PADS = stack_spec.pogo_xy()
 
 # [Active Cartridge Settings]
 PCB_THICK = 1.6

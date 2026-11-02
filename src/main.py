@@ -23,8 +23,10 @@ from src.cartridge import (
     Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Pressure_Puck,
     Nanopore_Wafer_Silicon, PCB_Main_Reader_2D, PCB_Main_Reader,
     Carrier_Frame_Hex, Nanopore_Carrier, PTFE_Interposer, Interposer,
-    Silver_Chloride_Ribbon_Pads, PCB_Pump_Controller_2D, PCB_Pump_Controller
+    Silver_Chloride_Ribbon_Pads, PCB_Pump_Controller_2D, PCB_Pump_Controller,
+    PCB_Amplifier
 )
+from src.spacers import PP_Shim, Delrin_Block, Printed_Spacer, Pogo_Pin_Array_Solid
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
@@ -72,6 +74,12 @@ def export_all():
         "JST_XH_2_Pin_Plug": JST_XH_2_Pin_Plug(),
         "USB_C_Panel_Mount": USB_C_Panel_Mount(),
         "Luer_Bulkhead_Panel_Mount": Luer_Bulkhead_Panel_Mount(),
+        "PP_Shim": PP_Shim(),
+        "Delrin_Block_Thin": Delrin_Block(thickness=3.175),
+        "Delrin_Block_Thick": Delrin_Block(thickness=6.858),
+        "Printed_Spacer": Printed_Spacer(height=3.6),
+        "Pogo_Pin_Array": Pogo_Pin_Array_Solid(),
+        "PCB_Amplifier_Flipped": PCB_Amplifier(flipped=True),
     }
 
     # 2. 2D DXF Profiles (for KiCad PCB Edge.Cuts & keepout synchronization)
@@ -120,7 +128,7 @@ def export_all():
                     z_faces = part.faces().filter_by(Axis.Z)
                     main_face = max(z_faces, key=lambda f: f.area) if z_faces else part.faces().sort_by(Axis.Z)[0]
                     with BuildSketch() as s:
-                        add(main_face)
+                        insert(main_face)
                     exporter.add_shape(s.sketch)
                 else:
                     exporter.add_shape(part)

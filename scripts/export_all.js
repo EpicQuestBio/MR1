@@ -8,6 +8,14 @@ if (process.cwd() !== projectRoot && fs.existsSync(path.join(projectRoot, 'packa
     process.chdir(projectRoot);
 }
 
+// DEPRECATED: the OpenSCAD model in openscad-legacy/ is frozen (see REFACTOR_PLAN.md, P6).
+// It is not part of the active build. Opt in explicitly to run it for reference only.
+if (process.env.MR1_ALLOW_LEGACY_SCAD !== '1') {
+    console.error('export_all.js is deprecated: openscad-legacy/ is frozen and disconnected from the build.');
+    console.error('Use `make export-cad` (build123d). To run this legacy exporter anyway: MR1_ALLOW_LEGACY_SCAD=1 node scripts/export_all.js');
+    process.exit(2);
+}
+
 const { ensureBOSL2 } = require('./lib_setup');
 
 const importOpenSCAD = async () => {

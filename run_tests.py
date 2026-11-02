@@ -38,7 +38,7 @@ if __name__ == '__main__':
     t5 = load_module('test_exports_e2e', os.path.join(REPO_ROOT, 'tests', 'test_exports_e2e.py'))
     suite.addTests(loader.loadTestsFromModule(t5))
 
-    t6 = load_module('test_legacy_feature_parity', os.path.join(REPO_ROOT, 'tests', 'test_legacy_feature_parity.py'))
+    t6 = load_module('test_cad_features', os.path.join(REPO_ROOT, 'tests', 'test_cad_features.py'))
     suite.addTests(loader.loadTestsFromModule(t6))
 
     t7 = load_module('test_daq_client', os.path.join(REPO_ROOT, 'tests', 'test_daq_client.py'))
@@ -64,6 +64,15 @@ if __name__ == '__main__':
 
     t14 = load_module('test_formal_proofs', os.path.join(REPO_ROOT, 'tests', 'test_formal_proofs.py'))
     suite.addTests(loader.loadTestsFromModule(t14))
+
+    t15 = load_module('test_stack_spec', os.path.join(REPO_ROOT, 'tests', 'test_stack_spec.py'))
+    suite.addTests(loader.loadTestsFromModule(t15))
+
+    t16 = load_module('test_spacers', os.path.join(REPO_ROOT, 'tests', 'test_spacers.py'))
+    suite.addTests(loader.loadTestsFromModule(t16))
+
+    t17 = load_module('test_stack_consistency', os.path.join(REPO_ROOT, 'tests', 'test_stack_consistency.py'))
+    suite.addTests(loader.loadTestsFromModule(t17))
 
     print(f"Loaded {suite.countTestCases()} unit, formal proof, and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)

@@ -200,6 +200,78 @@ class FlexureLivingHingeFEA:
             "optimized_living_hinge": opt,
         }
 
+    @staticmethod
+    def calculate_stack_pogo_pin_load_and_creep(
+        num_pins: int = 12,
+        pin_spring_force_n: float = 0.8,
+        pin_base_diam_mm: float = 2.0,
+        pp_shim_thick_mm: float = 0.762,
+        delrin_thick_mm: float = 3.175,
+        printed_spacer_h_mm: float = 3.6,
+        printed_material: str = "PETG",
+        anvil_thick_mm: float = 6.0,
+        hours: float = 10000.0,
+    ) -> Dict[str, float]:
+        """
+        Analyzes the axial compressive load path and long-term viscoelastic creep
+        for the inverted cartridge stack (P3/P7.3).
+        Load path:
+          Torque Cap -> Pressure Puck -> Rigid Backing Anvil -> PCB Amplifier
+          -> Pogo Pin Array (12x pins) -> PP Shim & Printed Spacer -> Interposer.
+        """
+        total_force_n = num_pins * pin_spring_force_n
+        pin_base_area_mm2 = math.pi * ((pin_base_diam_mm / 2.0) ** 2)
+
+        # Local compressive stress under a single pin base (MPa)
+        sigma_pin_contact_mpa = pin_spring_force_n / pin_base_area_mm2
+
+        # Yield safety factor for PP shim (yield ~28 MPa)
+        pp_props = PolymerMaterialProperties.PROPERTIES["PP"]
+        pp_yield_sf = pp_props["yield_strength_mpa"] / sigma_pin_contact_mpa
+
+        # Viscoelastic creep of PP shim (long-term creep modulus ~350 MPa)
+        e_creep_pp_mpa = 350.0
+        pp_creep_strain = sigma_pin_contact_mpa / e_creep_pp_mpa
+        pp_creep_deflection_um = pp_shim_thick_mm * pp_creep_strain * 1000.0
+
+        # Printed spacer bearing area under hex frame (> 450 mm^2)
+        frame_bearing_area_mm2 = 450.0
+        sigma_frame_mpa = total_force_n / frame_bearing_area_mm2
+        printed_props = PolymerMaterialProperties.PROPERTIES.get(
+            printed_material, PolymerMaterialProperties.PROPERTIES["PETG"]
+        )
+        printed_yield_sf = printed_props["yield_strength_mpa"] / max(sigma_frame_mpa, 1e-6)
+
+        # Printed spacer creep (creep modulus ~700 MPa for PETG, ~1000 MPa for PLA)
+        e_creep_printed_mpa = 700.0 if printed_material == "PETG" else 1000.0
+        printed_creep_strain = sigma_frame_mpa / e_creep_printed_mpa
+        printed_creep_deflection_um = printed_spacer_h_mm * printed_creep_strain * 1000.0
+
+        # Delrin backing anvil rigidity (E = 2.8 GPa = 2800 MPa, nu = 0.35, 6.0 mm thick)
+        # Bending deflection of clamped circular/hex anvil plate (R ~ 25 mm) under 9.6 N pogo load:
+        # delta = (F * R^2) / (16 * pi * D_flex), where D_flex = E * h^3 / (12 * (1 - nu^2))
+        nu_delrin = 0.35
+        e_delrin_mpa = 2800.0
+        d_flex_delrin = (e_delrin_mpa * (anvil_thick_mm ** 3)) / (12.0 * (1.0 - (nu_delrin ** 2)))
+        r_anvil_mm = 25.0
+        anvil_deflection_mm = (total_force_n * (r_anvil_mm ** 2)) / (16.0 * math.pi * d_flex_delrin)
+        anvil_deflection_um = anvil_deflection_mm * 1000.0
+
+        total_creep_deflection_um = pp_creep_deflection_um + printed_creep_deflection_um
+
+        return {
+            "total_clamp_force_n": total_force_n,
+            "pin_contact_stress_mpa": sigma_pin_contact_mpa,
+            "pp_shim_yield_safety_factor": pp_yield_sf,
+            "pp_shim_creep_deflection_um": pp_creep_deflection_um,
+            "printed_spacer_yield_safety_factor": printed_yield_sf,
+            "printed_spacer_creep_deflection_um": printed_creep_deflection_um,
+            "total_creep_deflection_um": total_creep_deflection_um,
+            "anvil_max_deflection_um": anvil_deflection_um,
+            "is_creep_acceptable": total_creep_deflection_um < 50.0,  # < 50 um is << 1.5mm stroke
+            "is_anvil_rigid": anvil_deflection_um < 10.0,  # < 10 um ensures flat interposer
+        }
+
 
 if __name__ == "__main__":
     fea = FlexureLivingHingeFEA()

@@ -291,6 +291,86 @@ class GuardRingElectrostatics:
             "current_safe": current_safe,
         }
 
+    def calculate_coax_pogo_pin_electrostatics(
+        self,
+        pin_height_mm: float = 7.5,
+        pin_radius_mm: float = 0.75,
+        guard_ring_inner_r_mm: float = 1.0,
+        guard_ring_outer_r_mm: float = 1.4,
+        core_pad_radius_mm: float = 0.8,
+        substrate_rho_surface: float = 1e14,
+        v_aggressor: float = 3.3,
+        v_guard: float = 0.0,
+        v_core: float = 0.0,
+    ) -> Dict[str, float]:
+        """
+        Calculates 3D coax pogo pin stray capacitance and planar surface leakage.
+        For concentric pad geometry (Pad 1 = core, Pad 2 = guard ring):
+          - Annular planar gap: r_pad = core_pad_radius_mm to r_inner = guard_ring_inner_r_mm
+          - Resistance R_surface = (rho_s / (2*pi)) * ln(r_inner / r_pad)
+          - Surface leakage I_surface = (v_guard - v_core) / R_surface
+          - Air coaxial capacitance per unit length: C/L = (2*pi*eps0*eps_r) / ln(r_outer/r_inner)
+        """
+        eps0 = 8.854187817e-12
+        if guard_ring_inner_r_mm > core_pad_radius_mm:
+            r_ratio = guard_ring_inner_r_mm / core_pad_radius_mm
+            r_planar = (substrate_rho_surface / (2.0 * math.pi)) * math.log(r_ratio)
+        else:
+            r_planar = 1e15
+
+        v_offset = 10e-6  # 10 uV residual op-amp offset
+        i_leakage_guarded = v_offset / r_planar
+        r_unshielded = (substrate_rho_surface / (2.0 * math.pi)) * math.log(5.0 / core_pad_radius_mm)
+        i_leakage_unguarded = v_aggressor / r_unshielded
+
+        c_pogo_air = (2.0 * math.pi * eps0 * 1.0 * (pin_height_mm * 1e-3)) / math.log(guard_ring_outer_r_mm / pin_radius_mm)
+
+        return {
+            "r_planar_ohms": r_planar,
+            "i_leakage_guarded_fa": i_leakage_guarded * 1e15,
+            "i_leakage_unguarded_fa": i_leakage_unguarded * 1e15,
+            "attenuation_db": 20.0 * math.log10(i_leakage_unguarded / max(i_leakage_guarded, 1e-20)),
+            "c_pogo_air_pf": c_pogo_air * 1e12,
+        }
+
+    def calculate_pogo_pin_capillary_rise(
+        self,
+        hole_diam_mm: float = 2.5,
+        pin_diam_mm: float = 1.5,
+        contact_angle_deg: float = 100.0,
+        surface_tension_n_m: float = 0.0728,
+        fluid_density_kg_m3: float = 1045.0,
+    ) -> Dict[str, float]:
+        """
+        Calculates capillary rise or depression (Jurin's law) along the vertical
+        annular clearance gap between the pogo pin shaft and spacer through-hole:
+          h_capillary = (2 * gamma * cos(theta)) / (rho * g * r_eff)
+
+        For hydrophobic materials (theta > 90 deg, e.g. PP theta ~ 100 deg):
+          cos(theta) < 0, creating capillary DEPRESSION (liquid is repelled, h <= 0).
+        """
+        g = 9.80665
+        r_eff_mm = (hole_diam_mm - pin_diam_mm) / 2.0
+        r_eff_m = r_eff_mm * 1e-3
+
+        theta_rad = math.radians(contact_angle_deg)
+        cos_theta = math.cos(theta_rad)
+
+        h_m = (2.0 * surface_tension_n_m * cos_theta) / (fluid_density_kg_m3 * g * r_eff_m)
+        h_mm = h_m * 1e3
+        capillary_pressure_pa = (2.0 * surface_tension_n_m * cos_theta) / r_eff_m
+
+        is_repelled = contact_angle_deg >= 90.0
+
+        return {
+            "r_eff_mm": r_eff_mm,
+            "contact_angle_deg": contact_angle_deg,
+            "capillary_rise_mm": h_mm,
+            "capillary_pressure_pa": capillary_pressure_pa,
+            "is_repelled": is_repelled,
+            "wicking_arrested": is_repelled or (h_mm < 3.0),
+        }
+
 
 if __name__ == "__main__":
     sim = GuardRingElectrostatics()

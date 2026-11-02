@@ -32,10 +32,10 @@ from src.nanopore_wafer_mold import (
     Nanopore_Wafer_Mold_Right,
 )
 
-class TestLegacyFeatureParity(unittest.TestCase):
+class TestCADFeatureValidation(unittest.TestCase):
     """
     Validates that build123d models and project exports preserve all functional
-    features present in the legacy OpenSCAD implementation.
+    CAD features (mounting holes, cutouts, fluid ports, wafer mold interlocks, pump bosses).
     """
 
     def test_pcb_main_reader_dxf_dimensions_and_cutouts(self):

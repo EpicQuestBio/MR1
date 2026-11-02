@@ -21,6 +21,8 @@ _autosave-*
 *.bak
 *.bak*
 *.bak_*
+*_old.*
+*_edit.*
 .history
 .history/
 */.history/

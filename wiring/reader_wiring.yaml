@@ -58,6 +58,20 @@ connectors:
     notes: Amplifier PCB Analog Front-End Interface (LMP7721)
     pinlabels: [PAD_3V3, PAD_AGND, PAD_SIG_OUT, PAD_BIAS_REF]
 
+  J_AMP_POGO_12PIN:
+    type: Coaxial Pogo Pin Array (12 discrete SMT pins on F.Cu)
+    subtype: male
+    manufacturer: LCSC
+    mpn: C5221285 / YTC1P-6030-01
+    notes: Inverted Amplifier PCB to PTFE Interposer (7.5mm working height, 0.8N/pin)
+    pinlabels: [P1_GNDA, P2_WS_CIS_WIDE, P3_GUARD_WIDE, P4_GUARD, P5_WS_CIS, P6_GUARD, P7_CE_GNDA, P8_RE_TRANS, P9_PORE_AMP, P10_GNDA, P11_WEEP_SENSE, P12_GNDA]
+
+  J_INTERPOSER_PADS:
+    type: ENIG Target Landing Array (12 Coax Sites with Driven Guard Rings)
+    subtype: female
+    notes: PTFE Interposer top landing pads (Pad 1 = signal pad, Pad 2 = outer guard/ground ring)
+    pinlabels: [PAD1_GNDA, PAD2_WS_WIDE, PAD3_GRD_WIDE, PAD4_GRD_A, PAD5_WS_CIS, PAD6_GRD_B, PAD7_CE_GNDA, PAD8_RE_TRANS, PAD9_PORE_AMP, PAD10_GNDA, PAD11_WEEP, PAD12_GNDA]
+
 cables:
   W_USB:
     gauge: 28 AWG
@@ -79,6 +93,13 @@ cables:
     colors: [RD, BK, GN, WH]
     notes: Ultra-low-noise analog signal harness from Lid Pogo array to MR1 ADC
 
+  W_COAX_POGO:
+    gauge: 30 AWG
+    length: 0.008 m
+    shield: true
+    colors: [BK, BU, GN, YE, RD, YE, BK, WH, OG, BK, VT, BK]
+    notes: 7.5mm vertical coax pogo pin bridge across PP/printed spacer cavity
+
 connections:
   -
     - J_USBC: [1, 2, 3, 4]
@@ -92,3 +113,7 @@ connections:
     - J_POGO_ARRAY: [1, 2, 3, 4]
     - W_POGO_ANALOG: [1, 2, 3, 4]
     - TP_AMP_PCB: [1, 2, 3, 4]
+  -
+    - J_AMP_POGO_12PIN: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    - W_COAX_POGO: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    - J_INTERPOSER_PADS: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

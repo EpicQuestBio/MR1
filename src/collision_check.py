@@ -14,7 +14,8 @@ if REPO_ROOT not in sys.path:
 from build123d import *
 from src.constants import *
 from src.housing import Housing_Pump_Case, Housing_Pump_Lid, Housing_Case_Reader, Housing_Lid_Reader
-from src.cartridge import Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket, PCB_Rigid_Active, Pressure_Puck
+from src.cartridge import Bottom_Pusher_Plate, Plate_1_Base_Hex, Plate_3_Top_Hex, Cast_Nanopore_Wafer_Gasket, Fitted_Amplifier_Gasket, PCB_Rigid_Active, Pressure_Puck, PCB_Amplifier
+from src.spacers import Pogo_Pin_Array_Solid, PP_Shim, Printed_Spacer
 from src.torque_cap import Torque_Cap_Outer, Torque_Cap_Inner
 
 def check_overlap(part_a, part_b, name_a="Part A", name_b="Part B", threshold=0.01):
@@ -109,6 +110,66 @@ def run_cartridge_stack_clearance_check():
             collisions_found += 1
 
     print(f"Stack Check Complete. Collisions found: {collisions_found}")
+    return collisions_found
+
+def run_inverted_cartridge_stack_clearance_check():
+    """
+    Checks all adjacent mating interfaces in the inverted amplifier cartridge stack:
+    Bottom Pusher -> Plate 1 Base -> Trans Gasket -> PTFE Interposer ->
+    Cis Gasket -> PP Shim -> Printed Spacer -> PCB Amplifier (flipped) ->
+    Rigid Backing Anvil -> Pressure Puck, plus Pogo Pin clearances.
+    """
+    print("\n--- Running Inverted Cartridge Stack Collision Check ---")
+    collisions_found = 0
+
+    from src.cartridge import PTFE_Interposer, Rigid_Backing_Anvil
+    from src import stack_spec
+
+    z = 0.0
+    p_pusher = Bottom_Pusher_Plate().move(Location((0, 0, z)))
+    z += PP_H
+    p_plate1 = Plate_1_Base_Hex().move(Location((0, 0, z)))
+    z += PLATE_THICK
+    p_trans_gasket = Fitted_Amplifier_Gasket().move(Location((0, 0, z)))
+    z += GASKET_THICK
+    interposer_z = z
+    p_interposer = PTFE_Interposer().move(Location((0, 0, z)))
+    z += PCB_THIN
+    p_cis_gasket = Cast_Nanopore_Wafer_Gasket().move(Location((0, 0, z)))
+    z += GASKET_THICK
+    p_shim = PP_Shim().move(Location((0, 0, z)))
+    z += stack_spec.PP_SHIM
+    spacer_h = 3.6
+    p_spacer = Printed_Spacer(height=spacer_h).move(Location((0, 0, z)))
+    p_pogo = Pogo_Pin_Array_Solid(compressed=True).move(Location((0, 0, interposer_z + PCB_THIN)))
+    z += spacer_h
+    amp_thick = 1.5
+    p_amp = PCB_Amplifier(flipped=True, thickness=amp_thick).move(Location((0, 0, z)))
+    z += amp_thick
+    p_anvil = Rigid_Backing_Anvil(thickness=ANVIL_THICK).move(Location((0, 0, z)))
+    z += ANVIL_THICK
+    p_puck = Pressure_Puck().move(Location((0, 0, z + PUCK_H / 2.0)))
+
+    checks = [
+        (p_pusher, p_plate1, "Bottom_Pusher_Plate", "Plate_1_Base_Hex"),
+        (p_plate1, p_trans_gasket, "Plate_1_Base_Hex", "Fitted_Amplifier_Gasket"),
+        (p_trans_gasket, p_interposer, "Fitted_Amplifier_Gasket", "PTFE_Interposer"),
+        (p_interposer, p_cis_gasket, "PTFE_Interposer", "Cast_Nanopore_Wafer_Gasket"),
+        (p_cis_gasket, p_shim, "Cast_Nanopore_Wafer_Gasket", "PP_Shim"),
+        (p_shim, p_spacer, "PP_Shim", "Printed_Spacer"),
+        (p_spacer, p_amp, "Printed_Spacer", "PCB_Amplifier_Flipped"),
+        (p_amp, p_anvil, "PCB_Amplifier_Flipped", "Rigid_Backing_Anvil"),
+        (p_anvil, p_puck, "Rigid_Backing_Anvil", "Pressure_Puck"),
+        (p_pogo, p_shim, "Pogo_Pin_Array", "PP_Shim"),
+        (p_pogo, p_spacer, "Pogo_Pin_Array", "Printed_Spacer"),
+    ]
+
+    for pa, pb, na, nb in checks:
+        has_overlap, vol = check_overlap(pa, pb, na, nb)
+        if has_overlap:
+            collisions_found += 1
+
+    print(f"Inverted Stack Check Complete. Collisions found: {collisions_found}")
     return collisions_found
 
 def run_housing_clearance_check():
@@ -341,6 +402,33 @@ def run_internal_clearance_check():
     print(f"Internal Check Complete. Collisions found: {collisions_found}")
     return collisions_found
 
+def run_pogo_and_spacer_clearance_check():
+    """
+    Verifies that the coax pogo-pin array, PP shim, 3D printed spacer,
+    and inverted amplifier board mate with zero physical clash.
+    """
+    print("\n--- Running Pogo Pin & Spacer Clearance Check ---")
+    collisions_found = 0
+
+    pogo_array = Pogo_Pin_Array_Solid(compressed=True)
+    shim = PP_Shim()
+    spacer = Printed_Spacer(height=3.6)
+    amp = PCB_Amplifier(flipped=True).move(Location((0, 0, 3.6)))
+
+    checks = [
+        (pogo_array, spacer, "Pogo_Pin_Array", "Printed_Spacer"),
+        (pogo_array, shim, "Pogo_Pin_Array", "PP_Shim"),
+        (spacer, amp, "Printed_Spacer", "PCB_Amplifier_Flipped"),
+    ]
+
+    for pa, pb, na, nb in checks:
+        has_overlap, vol = check_overlap(pa, pb, na, nb)
+        if has_overlap:
+            collisions_found += 1
+
+    print(f"Pogo & Spacer Check Complete. Collisions found: {collisions_found}")
+    return collisions_found
+
 if __name__ == "__main__":
     c1 = run_cartridge_stack_clearance_check()
     c2 = run_housing_clearance_check()
@@ -348,7 +436,9 @@ if __name__ == "__main__":
     c4 = run_routing_clearance_check()
     c5 = run_standoff_clearance_check()
     c6 = run_internal_clearance_check()
-    total = c1 + c2 + c3 + c4 + c5 + c6
+    c7 = run_pogo_and_spacer_clearance_check()
+    c8 = run_inverted_cartridge_stack_clearance_check()
+    total = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8
     if total == 0:
         print("\nSUCCESS: All components mate perfectly with 0 physical overlap!")
     else:

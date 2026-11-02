@@ -25584,7 +25584,7 @@
 			)
 		)
 	)
-	(label "WS_CIS_WIDE"
+	(label "GUARD_WIDE"
 		(at -63.50 161.43 180)
 		(effects
 			(font
@@ -25592,9 +25592,9 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "a57710de-137f-4e4b-a8a7-07075a436514")
+		(uuid "51649e54-5f93-41ac-8d08-7addc196ddec")
 	)
-	(label "GUARD_WIDE"
+	(label "WS_CIS_WIDE"
 		(at -63.50 158.89 180)
 		(effects
 			(font
@@ -25602,7 +25602,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "51649e54-5f93-41ac-8d08-7addc196ddec")
+		(uuid "a57710de-137f-4e4b-a8a7-07075a436514")
 	)
 	(symbol
 		(lib_id "MR1:PogoPin_MillMax_SMT_1Pin_Guarded")
@@ -25853,7 +25853,7 @@
 			)
 		)
 	)
-	(label "WS_CIS"
+	(label "GUARD"
 		(at -63.50 191.91 180)
 		(effects
 			(font
@@ -25861,9 +25861,9 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "e3c4fe2f-0fed-4250-810f-43d57adc25c3")
+		(uuid "f97852e9-071e-47d7-b694-3cb04ef2258b")
 	)
-	(label "GUARD"
+	(label "WS_CIS"
 		(at -63.50 189.37 180)
 		(effects
 			(font
@@ -25871,7 +25871,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "f97852e9-071e-47d7-b694-3cb04ef2258b")
+		(uuid "e3c4fe2f-0fed-4250-810f-43d57adc25c3")
 	)
 	(symbol
 		(lib_id "MR1:PogoPin_MillMax_SMT_1Pin_Guarded")

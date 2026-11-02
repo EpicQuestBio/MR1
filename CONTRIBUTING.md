@@ -111,8 +111,8 @@ python -m unittest tests/test_golden_stl_bounds.py
 # 3. KiCad Netlist, Footprint, and Edge.Cuts Continuity
 python -m unittest tests/test_interposer_kicad.py
 
-# 4. Legacy OpenSCAD Feature Parity Assertions
-python -m unittest tests/test_legacy_feature_parity.py
+# 4. CAD Feature Validation Suite
+python -m unittest tests/test_cad_features.py
 
 # 5. Firmware Protocol, CRC-16, and DAC Scaling
 python -m unittest tests/test_firmware_protocol.py

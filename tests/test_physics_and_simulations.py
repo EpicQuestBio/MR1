@@ -75,6 +75,25 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertTrue(neg["lp5907_safe"])
         self.assertTrue(neg["current_safe"])
 
+    def test_coax_pogo_pin_electrostatics_and_capacitance(self):
+        """Verify 3D coax pogo pin provides > 80 dB leakage suppression with < 1.0 pF capacitance."""
+        res = self.guard_sim.calculate_coax_pogo_pin_electrostatics()
+        self.assertGreater(res["attenuation_db"], 80.0)
+        self.assertLess(res["i_leakage_guarded_fa"], 0.01) # < 0.01 fA
+        self.assertLess(res["c_pogo_air_pf"], 1.0) # < 1.0 pF stray capacitance
+
+    def test_pogo_pin_capillary_rise_and_anti_wicking(self):
+        """Verify that hydrophobic PP shim (theta=100 deg) arrests capillary wicking (depression)."""
+        pp_res = self.guard_sim.calculate_pogo_pin_capillary_rise(contact_angle_deg=100.0)
+        self.assertTrue(pp_res["is_repelled"])
+        self.assertLessEqual(pp_res["capillary_rise_mm"], 0.0)
+        self.assertTrue(pp_res["wicking_arrested"])
+
+        # Even with hydrophilic brass (theta=65 deg), 0.5mm radial clearance limits rise to < 15mm
+        brass_res = self.guard_sim.calculate_pogo_pin_capillary_rise(contact_angle_deg=65.0)
+        self.assertFalse(brass_res["is_repelled"])
+        self.assertLess(brass_res["capillary_rise_mm"], 15.0)
+
     def test_fluidic_channel_resistance_and_reynolds(self):
         """Verify laminar creeping Stokes flow (Re < 5.0) and realistic pressure drop."""
         flow = self.fluid_sim.calculate_flowcell_pressure_drop(flow_rate_ul_min=25.0)
@@ -377,6 +396,18 @@ class TestPhysicsAndSimulations(unittest.TestCase):
             self.assertFalse(row["is_saturated"], f"Saturated on {row['liquid_name']} {row['pore_diameter_nm']} nm")
             self.assertTrue(row["is_resolvable"], f"Unresolvable on {row['liquid_name']} {row['pore_diameter_nm']} nm")
             self.assertGreaterEqual(row["snr_db"], 60.0)
+
+    def test_stack_pogo_pin_load_and_creep_fea(self):
+        """Verify stack pogo pin load path, PP/printed spacer creep, and Delrin anvil rigidity (P7.3)."""
+        from simulations.flexure_living_hinge_fea import FlexureLivingHingeFEA
+        fea_res = FlexureLivingHingeFEA.calculate_stack_pogo_pin_load_and_creep()
+        self.assertAlmostEqual(fea_res["total_clamp_force_n"], 9.6, delta=0.01)
+        self.assertGreater(fea_res["pp_shim_yield_safety_factor"], 50.0)
+        self.assertGreater(fea_res["printed_spacer_yield_safety_factor"], 100.0)
+        self.assertTrue(fea_res["is_creep_acceptable"])
+        self.assertLess(fea_res["total_creep_deflection_um"], 20.0)  # Total creep < 20 um
+        self.assertTrue(fea_res["is_anvil_rigid"])
+        self.assertLess(fea_res["anvil_max_deflection_um"], 5.0)     # Anvil deflection < 5 um
 
 
 if __name__ == "__main__":

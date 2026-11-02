@@ -682,45 +682,49 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn("CE_GNDA", table)
         self.assertIn("WEEP_SENSE", table)
 
-    def test_6pin_millmax_09xx_bias_tail_footprints_and_guarding(self):
-        """Dual 6-pin banks: Cis (Y=-15) and Trans (Y=+15) Mill-Max 09xx footprints."""
+    def test_coax_pogo_pin_footprints_and_guarding(self):
+        """Verify coax pogo footprints (SMT and Target) across libraries."""
         from scripts.generate_footprint import (
-            PIN_NET_SEQUENCE_6PIN_CIS,
-            PIN_NET_SEQUENCE_6PIN_TRANS,
+            PIN_NET_SEQUENCE,
             extract_cad_geometry,
-            generate_6pin_spring_header_sexpr,
-            generate_6pin_target_array_sexpr,
+            generate_coax_footprint,
             generate_kicad_footprint,
+            LEGACY_ALIASES,
         )
+        from src import stack_spec as spec
 
-        cis = [entry[1] for entry in PIN_NET_SEQUENCE_6PIN_CIS]
-        trans = [entry[1] for entry in PIN_NET_SEQUENCE_6PIN_TRANS]
-        self.assertEqual(cis, ["GNDA_SHLD", "WS_CIS_WIDE", "GUARD_WIDE", "GUARD_CIS_A", "WS_CIS", "GUARD_CIS_B"])
-        self.assertEqual(trans, ["CE_GNDA", "RE_TRANS", ">PORE_AMP", "GNDA", "WEEP_SENSE", "GNDA_WEEP"])
-
-        for bank, seq in [("cis", cis), ("trans", trans)]:
-            geom = extract_cad_geometry(pin_count=6, bank=bank)
-            self.assertEqual([p.net_name for p in geom.pogo_pads], seq)
-            for pad in geom.pogo_pads:
-                self.assertEqual(pad.layers, ["F.Cu", "F.Mask"])
-            sx = generate_kicad_footprint(geom, footprint_name="PogoPin_Target_6Pin_MillMax_09xx")
-            self.assertIn("Mill-Max 09xx", sx)
-            self.assertIn("RIGID ANVIL CLAMP ZONE", sx)
+        cis_nets = [p.net for p in spec.pins_by_side(spec.CIS)]
+        trans_nets = [p.net for p in spec.pins_by_side(spec.TRANS)]
+        self.assertEqual(cis_nets, ["GNDA_SHLD", "WS_CIS_WIDE", "GUARD_WIDE", "GUARD_CIS_A", "WS_CIS", "GUARD_CIS_B"])
+        self.assertEqual(trans_nets, ["CE_GNDA", "RE_TRANS", ">PORE_AMP", "GNDA", "WEEP_SENSE", "GNDA_WEEP"])
 
         geom12 = extract_cad_geometry()
         self.assertEqual(len(geom12.pogo_pads), 12)
-        self.assertEqual([p.net_name for p in geom12.pogo_pads], cis + trans)
+        self.assertEqual([p.net_name for p in geom12.pogo_pads], cis_nets + trans_nets)
         self.assertEqual({p.y for p in geom12.pogo_pads[:6]}, {-16.0, -15.0})
         self.assertEqual({p.y for p in geom12.pogo_pads[6:]}, {16.0, 15.0})
 
-        fp = REPO_ROOT / "Amplifier" / "footprints"
-        for name in ["PogoPin_Target_6Pin_Cis", "PogoPin_Target_6Pin_Trans",
-                     "PogoPin_SpringHeader_6Pin_Cis", "PogoPin_SpringHeader_6Pin_Trans"]:
-            self.assertTrue((fp / f"{name}.kicad_mod").exists(), name)
-        for name in ["PogoPin_Target_6Pin_Cis", "PogoPin_Target_6Pin_Trans"]:
-            self.assertNotIn('"F.Paste"', (fp / f"{name}.kicad_mod").read_text())
-        for name in ["PogoPin_SpringHeader_6Pin_Cis", "PogoPin_SpringHeader_6Pin_Trans"]:
-            self.assertIn('"F.Paste"', (fp / f"{name}.kicad_mod").read_text())
+        # Check coax footprint generation properties
+        smt_guard = generate_coax_footprint("smt", "circle", "GUARD")
+        self.assertIn('"F.Paste"', smt_guard)
+        self.assertIn('(pad "1" smd circle', smt_guard)
+        self.assertIn('(pad "2" smd custom', smt_guard)
+
+        tgt_guard = generate_coax_footprint("target", "circle", "GUARD")
+        self.assertNotIn('"F.Paste"', tgt_guard)
+        self.assertIn('(pad "1" smd circle', tgt_guard)
+        self.assertIn('(pad "2" smd custom', tgt_guard)
+
+        # Check footprint files on disk
+        for lib in [REPO_ROOT / "Amplifier" / "footprints.pretty", REPO_ROOT / "Interposer" / "footprints.pretty"]:
+            for name in ["PogoPin_SMT_Circle_Guard", "PogoPin_Target_Circle_Guard",
+                         "PogoPin_SMT_Circle_GuardWide", "PogoPin_Target_Circle_GNDA"]:
+                fp_file = lib / f"{name}.kicad_mod"
+                self.assertTrue(fp_file.exists(), f"{fp_file} must exist")
+            # Legacy aliases
+            for alias in LEGACY_ALIASES:
+                fp_file = lib / f"{alias}.kicad_mod"
+                self.assertTrue(fp_file.exists(), f"{fp_file} alias must exist")
 
 if __name__ == "__main__":
     unittest.main()

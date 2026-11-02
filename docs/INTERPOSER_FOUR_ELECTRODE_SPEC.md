@@ -132,24 +132,26 @@ classDiagram
 
 ## 5. 12-Pin Pogo Interface Pinout Mapping
 
-To mate with the Mill-Max spring pin array header on the Amplifier board, the Interposer's 12 distributed gold target pads (`J_POGO1`, spanning $X = -18\text{ mm}$ to $+18\text{ mm}$) map symmetrically across Bank B (Top / Cis) and Bank A (Bottom / Trans):
+To mate with the SMT spring pin array on the component side (`F.Cu`) of the inverted Amplifier board, the Interposer's 12 distributed gold target pads (`J_POGO1`, spanning $X = -12.5\text{ mm}$ to $+12.5\text{ mm}$ at $5.0\text{ mm}$ pitch) map symmetrically across Bank A (Trans, $Y = -15.0\text{ mm}$) and Bank B (Cis, $Y = +15.0\text{ mm}$), as defined in `src/stack_spec.py`:
 
-| Pin # | CAD Coord $(X, Y)$ [mm] | Net Name | Electrochemical Function (Gamry Standard) | Connection & Proximity Justification |
-| :---: | :---: | :--- | :--- | :--- |
-| **BANK B (CIS / SENSING - TOP QUADRANT $Y > 0$):** | | | | |
-| **1** | $(-18.0, +16.0)$ | `GNDA_SHLD` | **Shield Anchor** | Shield anchor pinning the inlet/outlet fluid manifold ground boundary. |
-| **2** | $(-10.0, +15.0)$ | `WS_CIS_WIDE` | **Path 2 Working Sense** | Path 2 ($200\text{ nm}$ pore) working electrode contact; short straight escape. |
-| **3** | $(-6.0, +15.0)$ | `GUARD_WIDE` | **Path 2 Active Guard** | Active driven guard for Path 2; isolates Path 2 from Path 1 sensing. |
-| **4** | $(+4.0, +15.0)$ | `GUARD_CIS_A` | **Path 1 Driven Guard A** | Driven Guard (Left wing of triaxial Faraday cocoon around P5). |
-| **5** | $(+8.0, +15.0)$ | `WS_CIS` | **Path 1 Working Sense** | Path 1 (Sub-$5\text{ nm}$ Pore) high-Z electrometer node (LMP7721 Pin 8). |
-| **6** | $(+12.0, +15.0)$ | `GUARD_CIS_B` | **Path 1 Driven Guard B** | Driven Guard (Right wing of triaxial Faraday cocoon around P5). |
-| **BANK A (TRANS / EXCITATION - BOTTOM QUADRANT $Y < 0$):** | | | | |
-| **7** | $(-18.0, -16.0)$ | `CE_GNDA` | **Counter Electrode (`CE`)** | Trans Counter Electrode return path; mates directly to bottom Ag strip anchor. |
-| **8** | $(-10.0, -15.0)$ | `RE_TRANS` | **Reference Electrode (`RE`)** | Trans bulk reference sense node; minimizes lead length into trans fluid well. |
-| **9** | $(-4.0, -15.0)$ | `>PORE_AMP` | **Excitation Bias Drive** | Active $\pm 2.4\text{ V}$ bias excitation drive; isolated symmetrically across board from P5. |
-| **10** | $(+3.0, -15.0)$ | `GNDA` | **Analog Ground Fence** | Low-noise analog ground return fence; shields excitation drive from weep sensing. |
-| **11** | $(+12.0, -15.0)$ | `WEEP_SENSE` | **Weep Moat Detector** | Moisture-sensing trace intercepting droplet breaches before dry contacts. |
-| **12** | $(+18.0, -16.0)$ | `GNDA_WEEP` | **Perimeter Weep Drain** | Perimeter weep moat static drain & outer chassis tie. |
+Every footprint is a coax-style dual-pad landing: **Pad 1** is the center pogo landing pad (Circle or Square, $D = 2.0\text{ mm}$), and **Pad 2** is the outer concentric shielding ring (ID $3.2\text{ mm}$, OD $4.2\text{ mm}$, net `GUARD`, `GUARD_WIDE`, or `GNDA`) fed vertically across the air gap by dedicated pogo pins (`RING_FEEDERS`).
+
+| Pin # | CAD Coord $(X, Y)$ [mm] | Net Name | Role | Concentric Ring (Pad 2) | Feeder Source / Function |
+| :---: | :---: | :--- | :--- | :--- | :--- |
+| **BANK A (TRANS / EXCITATION - CAD $Y = -15.0\text{ mm}$):** | | | | | |
+| **1** | $(-12.5, -15.0)$ | `GNDA` | ground | `GNDA` | Feeds GNDA concentric outer rings. |
+| **2** | $(-7.5, -15.0)$ | `WS_CIS_WIDE` | signal | `GUARD_WIDE` | Route 2 (200 nm wide-pore) working sense; guarded by P3. |
+| **3** | $(-2.5, -15.0)$ | `GUARD_WIDE` | guard | `GUARD_WIDE` | Feeds GUARD_WIDE outer ring on P2. |
+| **4** | $(+2.5, -15.0)$ | `GUARD` | guard | `GUARD` | Feeds GUARD ring on P5 (flanking guard cage A). |
+| **5** | $(+7.5, -15.0)$ | `WS_CIS` | signal | `GUARD` | Route 1 (sub-5 nm pore) LMP7721 ultra-high-Z electrometer node; guarded by P4/P6. |
+| **6** | $(+12.5, -15.0)$ | `GUARD` | guard | `GUARD` | Feeds GUARD ring on P5 (flanking guard cage B). |
+| **BANK B (CIS / SENSING - CAD $Y = +15.0\text{ mm}$):** | | | | | |
+| **7** | $(-12.5, +15.0)$ | `CE_GNDA` | return | `GNDA` | Counter electrode return; mates to bottom Ag strip anchor. |
+| **8** | $(-7.5, +15.0)$ | `RE_TRANS` | sense | `GNDA` | Reference electrode potential sense at Trans aperture boundary. |
+| **9** | $(-2.5, +15.0)$ | `>PORE_AMP` | drive | `GNDA` | Excitation bias drive ($\pm 2.048\text{ V}$) into Cis chamber. |
+| **10** | $(+2.5, +15.0)$ | `GNDA` | ground | `GNDA` | Analog ground shield fence between drive and weep sensing. |
+| **11** | $(+7.5, +15.0)$ | `WEEP_SENSE` | sense | `GNDA` | Moisture-sensing line intercepting saline breach before dry contacts. |
+| **12** | $(+12.5, +15.0)$ | `GNDA` | ground | `GNDA` | Perimeter ground shield and weep drain return. |
 
 ---
 

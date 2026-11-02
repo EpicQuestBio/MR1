@@ -14,6 +14,9 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | **Silicone O-Rings (CS 1.78mm)** | AS568-011, 50A/70A Silicone | 8 | Seals 1/8" NPT adapters and flowcell fluid port interfaces | [McMaster 1173N011](https://www.mcmaster.com/1173N011/) |
 | **M75×8mm Torque Cap & Ratchet** | 3D Printed PETG / Nylon | 1 | Parametric clamping cap with built-in spring ratchet (`src/torque_cap.py`) | Staged STL in `exports/stl/` |
 | **Pressure Puck & Finger Grips** | 3D Printed PETG / Polycarbonate | 1 | Distributes even compressive clamping force across flowcell stack | Staged STL in `exports/stl/` |
+| **3D Printed Adjustable Spacer** | 3D Printed PETG / PVDF (0.1–0.2 mm layers) | 1 | 3.6 mm adjustable spacer with component relief cavities for inverted Amplifier PCB (`src/spacers.py`) | Staged STL in `exports/stl/` |
+| **Polypropylene (PP) Shim** | 0.030" (0.762 mm) Solid PP Sheet | 1 | Chemical barrier and precision thickness adjustment shim (`src/spacers.py`) | [McMaster 8742K11](https://www.mcmaster.com/8742K11/) |
+| **Delrin Stock Spacer Blocks** | 0.125" (3.175 mm) & 0.270" (6.858 mm) Acetal | 1-2 | Coarse structural backing and stack-up spacer blocks (`src/spacers.py`) | [McMaster 8572K14](https://www.mcmaster.com/8572K14/) |
 
 ---
 
@@ -89,5 +92,6 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | **U7, U8 (Pump)** | Texas Instruments DRV8837CDSGR | [`C191000`](https://www.lcsc.com/search?q=C191000) (`DRV8837CDSGR`) | WSON-8 | 2 | 1.8A low-voltage H-bridge motor drivers with PWM interface |
 | **U9 / SEN1 (Pump)** | Honeywell ABP2DANT015PGAA3XX | `GZP6847D-C100KPP` (0–100 kPa I2C eq.) | SMT Barb | 1 | 0-15 psi gauge digital I2C pressure sensor (Cis line) |
 | **U10 / SEN2 (Pump)** | Honeywell ABP2DANT005PGAA3XX | `GZP6847D-C040KPP` (0–40 kPa I2C eq.) | SMT Barb | 1 | 0-5 psi gauge digital I2C pressure sensor (Trans line) |
-| **J_POGO1 (Amp/Int)**| Mill-Max 821-22-012-10-000101 / 824-22-012 | [`C49451500`](https://www.lcsc.com/search?q=C49451500) (`PG2541` series eq.) | 12-Pin DIL | 1 pr | 12-Pin guarded spring pogo header & ENIG target pad array |
+| **P1–P12 (Pogo Pins)**| LCSC C5221285 (YTC1P-6030-01) / Mill-Max 0906 | [`C5221285`](https://www.lcsc.com/search?q=C5221285) (`YTC1P-6030-01`) | SMT 1-Pin | 12 | 12x Discrete SMT pogo pins on Amplifier F.Cu: 9.0 mm free length, 7.5 mm working compressed height, 2.0 mm SMT collar, 0.8 N spring force |
+| **J_POGO1 (Amp/Int)**| Mill-Max 821-22-012-10-000101 / 824-22-012 | [`C49451500`](https://www.lcsc.com/search?q=C49451500) (`PG2541` series eq.) | 12-Pin DIL | 1 pr | 12-Pin guarded spring pogo header & ENIG target pad array (legacy layout) |
 | **Motors** | Diitao / Kamoer 12V Peristaltic Pump | — | DC Gearbox | 2 | Peristaltic pump heads for Cis and Trans automated fluid delivery |

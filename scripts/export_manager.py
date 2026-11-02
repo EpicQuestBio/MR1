@@ -123,14 +123,12 @@ def export_footprints(verbose=True):
         footprints_export_dir = EXPORTS_DIR / "footprints"
         footprints_export_dir.mkdir(parents=True, exist_ok=True)
         export_fp_path = footprints_export_dir / f"{FOOTPRINT_NAME}.kicad_mod"
-        root_fp_path = REPO_ROOT / f"{FOOTPRINT_NAME}.kicad_mod"
 
         _, sexpr = build_footprint_file(
             output_path=export_fp_path,
             sync_libraries=True,
             verbose=verbose,
         )
-        root_fp_path.write_text(sexpr, encoding="utf-8")
         if verbose:
             print(f"  [OK] Exported {export_fp_path.relative_to(REPO_ROOT)} and synced footprint libraries.")
         return True

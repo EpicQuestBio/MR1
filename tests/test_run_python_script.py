@@ -55,7 +55,7 @@ class TestRunPythonScript(unittest.TestCase):
 
     def test_run_from_scripts_directory(self):
         # Reproduces the user's exact scenario from `scripts/`:
-        # loki@loki-omega:~/Projects/daemon-pore/scripts$ ./run_python.sh generate_footprint.py --help
+        # loki@loki-omega:~/Projects/MR1/scripts$ ./run_python.sh generate_footprint.py --help
         res = subprocess.run(
             ["./run_python.sh", "generate_footprint.py", "--help"],
             cwd=REPO_ROOT / "scripts",

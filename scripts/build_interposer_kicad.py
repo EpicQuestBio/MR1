@@ -279,9 +279,44 @@ def build_interposer_sch(out_dir: Path = Path("Interposer")):
         print(f"Successfully synchronized {out_path}!")
         return
 
+def verify_interposer_pcb(pcb_path: Path = Path("Interposer/Interposer.kicad_pcb")) -> list[str]:
+    """Verifies that the Interposer KiCad PCB adheres to the passive interface specification."""
+    if not pcb_path.exists():
+        return [f"Interposer PCB file not found: {pcb_path}"]
+
+    content = pcb_path.read_text(encoding="utf-8")
+    refs = set(re.findall(r'\(property\s+"Reference"\s+"([^"]+)"', content))
+    issues = []
+
+    prohibited = [
+        "U2", "U16", "J9",
+        "R1", "R3", "R4", "R5", "R6", "R8", "R9",
+        "C1", "C2", "C3", "C4", "C5", "C6", "C19", "C20",
+        "NT3", "NT4", "NT5", "E1"
+    ]
+    for p in prohibited:
+        if p in refs:
+            issues.append(f"Prohibited active component {p} found on Interposer PCB")
+
+    required = ["H1", "H2", "H3", "H4", "J_POGO1"]
+    for r in required:
+        if r not in refs:
+            issues.append(f"Required reference {r} missing from Interposer PCB")
+
+    if '(layer "Edge.Cuts")' not in content:
+        issues.append("Edge.Cuts boundary missing from Interposer PCB")
+
+    return issues
+
+
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description="MR1 Interposer KiCad Synchronization Utility."
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Check Interposer PCB consistency against specification."
     )
     parser.add_argument(
         "--write",
@@ -303,6 +338,17 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv)
+
+    if args.check:
+        pcb_path = Path("Interposer/Interposer.kicad_pcb") if args.out_dir is None else args.out_dir / "Interposer.kicad_pcb"
+        issues = verify_interposer_pcb(pcb_path)
+        if issues:
+            print(f"[!] Interposer PCB verification failed ({len(issues)} issues):")
+            for iss in issues:
+                print(f"    - {iss}")
+            return 1
+        print("[OK] Interposer PCB is in sync with passive specification.")
+        return 0
 
     if args.dry_run or (not args.write and args.out_dir is None):
         print("Dry-run mode: Interposer design assets protected. No files written.")

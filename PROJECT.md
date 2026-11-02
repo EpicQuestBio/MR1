@@ -1,10 +1,12 @@
 # Project: mr1
 
 ## Architecture
-- CAD / Mechanical Housing & Cartridge Stack: Python (build123d / CadQuery) modeling in `src/`, generating STEP, STL, and DXF deliverables in `exports/`.
-- PCB Layout: KiCad v8 PCB definitions (`Amplifier/Amplifier.kicad_pcb` and `Interposer/Interposer.kicad_pcb`), outlining Edge.Cuts with exact cavity clearances and connector alignments.
+- Single Source of Truth: `src/stack_spec.py` defines the canonical 12-pin coax pogo array, fluidic X-channel ports, layer datums, and spacer budgets.
+- CAD / Mechanical Housing & Cartridge Stack: Python (build123d / CadQuery) modeling in `src/`, generating STEP, STL, and DXF deliverables in `exports/`. Inverted cartridge architecture isolates the amplifier above an anti-wicking PP shim and printed spacer.
+- PCB Layout: KiCad v8 PCB definitions (`Amplifier/Amplifier.kicad_pcb` and `Interposer/Interposer.kicad_pcb`), placing 12 coax pogo pins on `F.Cu` of the amplifier with mating gold target pads on the PTFE interposer.
+- One-Shot Rebuild: Automated rebuild pipeline via `scripts/rebuild_all.py` (`make rebuild` / `make rebuild-check`).
 - Staged Manufacturing Exports: Automated export management via `scripts/export_manager.py`, compiling firmware via PlatformIO, rendering wiring diagrams via WireViz, and indexing SHA-256 hashes in `exports/manifest.json`.
-- Test Suite & Physical Validation: Python unittest suite (`tests/`) containing 92+ tests covering geometric collision checking, golden STL bounds, legacy feature parity, and E2E export validation.
+- Test Suite & Physical Validation: Python unittest suite (`tests/`) containing 168+ tests covering formal Z3 proofs, geometric collision checking, golden STL bounds, stack consistency, and physical simulations.
 
 ## Feature Inventory
 | # | Feature | Description | Milestone | Source |

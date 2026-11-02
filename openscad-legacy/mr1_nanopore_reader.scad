@@ -1,3 +1,5 @@
+// DEPRECATED / FROZEN: not maintained. Pin map, stack heights and geometry now live in
+// src/stack_spec.py and the build123d model. Do not use this file as a geometry reference.
 // ==============================================================================
 // MR1 NANOPORE READER - REV 12 (Modular Split)
 // Features: Torque-Lock Cap + Round Stack + Bottom Integration + Internal Layout

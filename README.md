@@ -4,7 +4,7 @@
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
-[![Tests](https://img.shields.io/badge/Tests-100%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-169%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
 The **MR1 Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 
@@ -349,7 +349,7 @@ python run_tests.py
    - Internal component clearance (wiring vs. cartridge solids).
    - Flexible routing collision sweeps against module envelopes.
 3. **Spline Bend Radius Validation**: Computes instantaneous curvature along swept routes and verifies compliance with minimum bend radii (Silicone/FEP tubing $\ge 10\text{ mm}$, Wiring $\ge 10\text{ mm}$).
-4. **Legacy OpenSCAD Parity Suite**: Validates 80x60mm rectangular motherboard, hexagonal carrier frame, circular nanopore carrier, mold modes, lid cutouts, and pump case bosses.
+4. **CAD Feature Validation Suite**: Validates 80x60mm rectangular motherboard, hexagonal carrier frame, circular nanopore carrier, mold modes, lid cutouts, and pump case bosses.
 5. **Firmware Protocol Tests**: CRC-16 integrity, binary packet serialization (`StreamFrame`), pump packet XOR checksums, and DAC voltage-to-code mapping.
 6. **E2E Deliverables Tests**: Validates headers, non-zero file sizes, and SHA-256 hashes of all 159 export deliverables.
 

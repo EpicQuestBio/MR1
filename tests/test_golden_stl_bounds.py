@@ -182,7 +182,7 @@ class TestGoldenSTLAndPCBBounds(unittest.TestCase):
         self.assertAlmostEqual(trans_in[1], -10.0000, delta=0.01)
 
     def test_mold_geometry_and_interlocks(self):
-        """Verify Left and Right mold halves match OpenSCAD block dimensions,
+        """Verify Left and Right mold halves match golden CAD block dimensions,
         and mate at X=0 with 0 collision and exact alignment dowel pin engagement."""
         left = Nanopore_Wafer_Mold_Left(is_nanopore=True)
         right = Nanopore_Wafer_Mold_Right(is_nanopore=True)
