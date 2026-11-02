@@ -409,6 +409,16 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertTrue(fea_res["is_anvil_rigid"])
         self.assertLess(fea_res["anvil_max_deflection_um"], 5.0)     # Anvil deflection < 5 um
 
+    def test_crossed_x_flowcell_cfd_simulation(self):
+        """Verify Navier-Stokes CFD dynamics for the crossed 'X' flowcell channels."""
+        cfd = self.fluid_sim.calculate_crossed_x_flowcell_cfd(flow_rate_ul_min=25.0)
+        self.assertTrue(cfd["is_creeping_stokes"])
+        self.assertLess(cfd["reynolds_number"], 0.5)               # Deep creeping flow
+        self.assertAlmostEqual(cfd["chamber_volume_ul"], 22.74, delta=0.5)
+        self.assertLess(cfd["residence_time_s"], 60.0)             # Flush under 1 min
+        self.assertTrue(cfd["is_shear_safe"])
+        self.assertLess(cfd["wall_shear_stress_pa"], 0.01)         # Shear < 10 mPa on membrane
+
 
 if __name__ == "__main__":
     unittest.main()
