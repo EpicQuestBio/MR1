@@ -164,8 +164,6 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertNotIn('"E1"', bom_txt, "E1 must NOT be in Interposer_BOM.csv")
 
     def test_interposer_gerber_exports(self):
-        return
-
         """Ensure Gerbers and schematic PDF exist for Interposer."""
         gerber_zip = REPO_ROOT / "exports" / "Interposer_Gerbers.zip"
         sch_pdf = REPO_ROOT / "exports" / "schematics" / "Interposer.pdf"
