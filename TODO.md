@@ -2,7 +2,7 @@
 
 > **Active work: see [REFACTOR_PLAN.md](REFACTOR_PLAN.md)** (coax pogo stack, single source of truth `src/stack_spec.py`, `generate_footprint.py` rewrite, one-shot rebuild, legacy OpenSCAD disconnect). Phase checklists live there and are kept current.
 
-- **Stack Refactor Status**: Green. 170/170 tests passing (0 failures, 0 CAD collisions).
+- **Stack Refactor Status**: Green. 177/177 tests passing (0 failures, 0 CAD collisions).
 - **Coax Pogo Configuration**: 12-pin distributed coax layout (P1–P12) with signal on Pad 1 and driven concentric guard/ground on Pad 2.
 - **Spacers**: Solid Polypropylene shim (0.030" / 0.762 mm), Delrin stock blocks (0.125" / 3.175 mm & 0.270" / 6.858 mm), and 3D printed adjustable spacer ($\ge 3.0$ mm, stepped in 0.1–0.2 mm increments) with component cavities for the inverted amplifier.
 - **Inverted Stack Layup**: Assembled in `src/assembly.py` and validated with 0 collisions in `src/collision_check.py` and `tests/test_geometry.py`.
@@ -321,27 +321,27 @@ This document outlines the step-by-step strategy for porting the MR1 Nanopore Re
 - [x] Full Project Test Suite Integration (`run_tests.py`):
     - Expanded test suite to **53 passing tests** (100% green).
 
-## 22. External Pump Controller KiCad Board Architecture (Stretch Goal Roadmap)
-- [ ] Mechanical Form Factor:
-    - Sized to fit `Housing_Pump_Case` floor plate ($68.0 \times 88.0\text{ mm}$) with M3 mounting holes matching internal standoffs.
-- [ ] Footprint Generator & Component Completion:
-    - Fix generated STM32 QFN-48 stub (currently a 1-pad placeholder) to expand full 48-lead QFN pad array and exposed thermal ground pad.
-    - Add missing passive component footprints (0603/0402 decoupling caps, pull-up resistors, crystal oscillators) and U5 active regulator footprint.
-    - Associate 3D STEP/WRL models with all Pump board footprints for CAD collision verification.
-- [ ] USB-C Cable Interface & Power Delivery:
-    - USB-C receptacle accepting power and data from Reader module.
+## 22. External Pump Controller KiCad Board Architecture
+- [x] Mechanical Form Factor:
+    - Sized to fit `Housing_Pump_Case` floor plate ($88.0 \times 88.0\text{ mm}$) with M3 mounting holes matching internal standoffs at $(\pm 38.0, \pm 38.0)\text{ mm}$.
+- [x] Footprint Generator & Component Completion:
+    - Expanded generated STM32 QFN-48 stub to full 48-lead QFN pad array (0.5 mm pitch) and exposed 5.6x5.6 mm thermal ground pad.
+    - Added passive component footprints (0402 decoupling caps C1..C4, pull-up resistors R1..R4, 8MHz HSE crystal Y1) and U5 analog 3.3V regulator footprint.
+    - Associated 3D STEP models with all Pump board footprints.
+- [x] USB-C Cable Interface & Power Delivery:
+    - Dual USB-C receptacles (J1_HOST, J2_MR1) accepting power and data from Reader module.
     - SBU1 / SBU2 lines routed to local I2C slave interface.
-    - Hardware USB-PD Sink controller (e.g., CH224K or FUSB302) configured to negotiate 9V or 12V VBUS for pump motors.
-- [ ] Motor Drive Stages:
-    - Dual H-bridge motor drivers (e.g., TI DRV8837 or DRV8871) or stepper drivers (TMC2209) for peristaltic pumps.
-    - Hardware emergency disable input wired directly to leak sensor cutoff.
-- [ ] Peripheral Sensors:
-    - I2C pressure transducer / bubble sensor interfaces.
+    - STUSB4500 USB-PD Sink controller footprint configured for 9V/12V VBUS.
+- [x] Motor Drive Stages:
+    - Dual TI DRV8837C low-voltage H-bridge motor drivers and JST-XH headers (J_PUMP1, J_PUMP2) for peristaltic pumps.
+    - Hardware emergency disable input wired to leak sensor cutoff.
+- [x] Peripheral Sensors:
+    - Honeywell ABP2 Cis & Trans pressure transducer footprints with I2C interfaces.
 
 ## 23. PCB Routing & Fabrication Milestones
 - [ ] Complete copper trace routing and ground plane pours for `MR1` Main Reader Board (111 footprints, placement complete).
 - [ ] Complete copper trace routing and ground plane pours for `Amplifier` Cartridge Board (48 footprints, placement complete).
-- [ ] Complete remaining copper trace routing segments for `Interposer` PTFE Board (33 footprints, 9 segments routed).
+- [x] Complete remaining copper trace routing segments for `Interposer` PTFE Board (12 coax target landing sites, guard feeder traces, weep sense moat, via-in-pad transitions, 0 critical shorts).
 - [ ] Complete copper trace routing and ground plane pours for `Pump` Controller Board (18 footprints).
-- [ ] Execute tagged Gerber release workflow (`python scripts/export_manager.py --release-tag <version>` / `make release-gerbers VERSION=<version>`) prior to first physical fabrication run.
+- [x] Execute tagged Gerber release workflow (`python scripts/export_manager.py --release-tag <version>` / `make release-gerbers VERSION=<version>`) prior to first physical fabrication run.
 

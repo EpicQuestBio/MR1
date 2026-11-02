@@ -178,8 +178,6 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(bom_csv.exists(), "Interposer_BOM.csv must exist")
 
     def test_interposer_gnda_copper_flood_and_weep_traces(self):
-        return
-
         """Ensure full-board GNDA copper pour zone and channel-contouring weep sense traces are present."""
         pcb_path = REPO_ROOT / "Interposer" / "Interposer.kicad_pcb"
         self.assertTrue(pcb_path.exists(), "Interposer.kicad_pcb must exist")

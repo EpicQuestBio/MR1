@@ -12,11 +12,11 @@
   )
   (attr smd)
   (pad "1" smd circle (at 0 0) (size 2.0 2.0) (layers "F.Cu" "F.Mask") (clearance 0.4) (uuid "2138ee8e-d0cd-51c6-b546-dd1d731e23d1"))
-  (pad "2" smd custom (at 0 0) (size 0.1 0.1) (layers "F.Cu")
+  (pad "2" smd custom (at 1.85 0) (size 0.1 0.1) (layers "F.Cu")
     (clearance 0.3)
     (options (clearance outline) (anchor circle))
     (primitives
-      (gr_circle (center 0 0) (end 1.85 0) (width 0.5) (fill none))
+      (gr_circle (center -1.85 0) (end 0 0) (width 0.5) (fill none))
     )
     (uuid "68ff9d1e-e12c-5b3a-af67-e2d033a64fb8")
   )

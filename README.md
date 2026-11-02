@@ -4,7 +4,7 @@
 [![build123d](https://img.shields.io/badge/CAD-build123d-orange.svg)](https://github.com/gumyr/build123d)
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blueviolet.svg)](https://kicad.org/)
 [![PlatformIO](https://img.shields.io/badge/Firmware-PlatformIO%20ESP32--S3-yellowgreen.svg)](https://platformio.org/)
-[![Tests](https://img.shields.io/badge/Tests-170%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
+[![Tests](https://img.shields.io/badge/Tests-177%20Passing%20(0%20Collisions)-brightgreen.svg)](#testing--verification)
 
 The **MR1 Nanopore Reader** is an open-source, ultra-low-noise solid-state and biological nanopore sequencer flow cell, low-current transimpedance amplifier, and automated fluidic control system. It integrates high-precision parametric CAD models (`build123d`), ultra-low-leakage analog front-end electronics (KiCad), an automated dual-pump fluidic handler, and an ESP32-S3 high-speed continuous streaming firmware stack.
 

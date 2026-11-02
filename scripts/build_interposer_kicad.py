@@ -94,6 +94,35 @@ def get_single_pin_pogo_landings_fp_str():
             fp_txt,
         )
 
+        # Inject net annotations for KiCad DRC and connectivity
+        from src import stack_spec as spec
+        pin_def = spec.pin(pin_num)
+        ring_net = pin_def.ring
+
+        pad1_net = net_name
+        if pin_num in (4, 6):
+            pad1_net = "GUARD"
+        elif pin_num == 3:
+            pad1_net = "GUARD_WIDE"
+        elif pin_num in (1, 10, 12):
+            pad1_net = "GNDA"
+        elif pin_num == 9:
+            pad1_net = "WE_POS"
+
+        fp_txt = re.sub(
+            r'(\(pad\s+"1"[^\n]*?)\(uuid',
+            rf'\1(net "{pad1_net}") (uuid',
+            fp_txt,
+            count=1
+        )
+        if ring_net:
+            fp_txt = re.sub(
+                r'(\(pad\s+"2"\s+smd\s+custom[^\n]*\))',
+                rf'\1 (net "{ring_net}")',
+                fp_txt,
+                count=1
+            )
+
         indented_lines = ["\t" + l if l.strip() else "" for l in fp_txt.splitlines()]
         blocks.append("\n".join(indented_lines))
 
@@ -119,145 +148,170 @@ def build_interposer_pcb(out_dir: Path = Path("Interposer")):
     retained_refs = {"H1", "H2", "H3", "H4", "J1", "J2", "J10", "J11", "J_POGO1"}
 
     out_lines = []
+    removed_fp_uuids = set()
+    pogo_added = False
     i = 0
 
-    # 1. Header
     while i < len(lines):
         line = lines[i]
-        if line.startswith("\t(footprint "):
-            break
-        out_lines.append(line)
-        i += 1
 
-    # 2. Footprints
-    retained_fp_blocks = []
-    removed_fp_uuids = set()
-
-    pogo_added = False
-
-    while i < len(lines):
-        line = lines[i]
-        if not line.startswith("\t(footprint "):
-            break
-        start = i
-        depth = line.count("(") - line.count(")")
-        block = [line]
-        i += 1
-        while i < len(lines) and depth > 0:
-            block.append(lines[i])
-            depth += lines[i].count("(") - lines[i].count(")")
+        # Top-level S-expression blocks (indented by 1 tab)
+        if line.startswith("\t("):
+            depth = line.count("(") - line.count(")")
+            block = [line]
             i += 1
-        fp_txt = "\n".join(block)
-        ref_m = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', fp_txt)
-        ref = ref_m.group(1) if ref_m else ""
+            while i < len(lines) and depth > 0:
+                block.append(lines[i])
+                depth += lines[i].count("(") - lines[i].count(")")
+                i += 1
+            block_txt = "\n".join(block)
 
-        if ref.startswith("J_POGO") or "PogoPin_Target" in fp_txt or "PogoPin_SpringHeader" in fp_txt or ref.startswith("P_LAND_"):
-            if not pogo_added:
-                # Assign reference J_POGO1 and location to match interposer center (164.5, 58.494)
-                pogo_fp_positioned = re.sub(r'\(property\s+"Reference"\s+"[^"]*"', '(property "Reference" "J_POGO1"', POGO_12PIN_PCB_FP)
-                pogo_fp_positioned = re.sub(r'\(at\s+[0-9\.\-]+\s+[0-9\.\-]+\)', '(at 164.5 58.494)', pogo_fp_positioned, count=1)
-                retained_fp_blocks.append(pogo_fp_positioned)
-                retained_fp_blocks.append(SINGLE_PIN_POGO_LANDINGS_FP)
-                pogo_added = True
+            # Handle Footprints
+            if line.startswith("\t(footprint "):
+                ref_m = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', block_txt)
+                ref = ref_m.group(1) if ref_m else ""
+
+                if ref.startswith("J_POGO") or "PogoPin_Target" in block_txt or "PogoPin_SpringHeader" in block_txt or ref.startswith("P_LAND_"):
+                    if not pogo_added:
+                        pogo_fp_positioned = re.sub(r'\(property\s+"Reference"\s+"[^"]*"', '(property "Reference" "J_POGO1"', POGO_12PIN_PCB_FP)
+                        pogo_fp_positioned = re.sub(r'\(at\s+[0-9\.\-]+\s+[0-9\.\-]+\)', '(at 164.5 58.494)', pogo_fp_positioned, count=1)
+                        out_lines.append(pogo_fp_positioned)
+                        out_lines.append(SINGLE_PIN_POGO_LANDINGS_FP)
+                        pogo_added = True
+                    continue
+
+                if ref in retained_refs:
+                    fp_txt = block_txt
+                    if ref in ("J1", "J2"):
+                        fp_txt = re.sub(r'\(net\s+"[^"]*"\)', '(net "GNDA")', fp_txt)
+                        fp_txt = re.sub(r'(\(pad\s+"1"[\s\S]*?\(net\s+)"[^"]*"', r'\1">PORE_AMP"', fp_txt)
+                        fp_txt = re.sub(r'(\(pad\s+"2"[\s\S]*?\(net\s+)"[^"]*"', r'\1"GUARD"', fp_txt)
+                    elif ref in ("J10", "J11"):
+                        fp_txt = re.sub(r'\(net\s+"[^"]*"\)', '(net "GNDA")', fp_txt)
+                        fp_txt = re.sub(r'(\(pad\s+"1"[\s\S]*?\(net\s+)"[^"]*"', r'\1"Vbias"', fp_txt)
+                        fp_txt = re.sub(r'(\(pad\s+"2"[\s\S]*?\(net\s+)"[^"]*"', r'\1"GUARD_TRANS"', fp_txt)
+                    out_lines.append(fp_txt)
+                else:
+                    for u in re.findall(r'\(uuid\s+"([^"]+)"\)', block_txt):
+                        removed_fp_uuids.add(u)
+                continue
+
+            # Strip obsolete segments, vias, and copper zones from active amplifier board
+            if line.startswith("\t(segment") or line.startswith("\t(via") or line.startswith("\t(zone"):
+                continue
+
+            # Handle groups: strip removed members
+            if line.startswith("\t(group"):
+                members = re.findall(r'"([0-9a-f\-]{36})"', block_txt)
+                active_m = [m for m in members if m not in removed_fp_uuids]
+                if active_m:
+                    m_str = " ".join(f'"{m}"' for m in active_m)
+                    grp_id = re.search(r'\(uuid\s+"([^"]+)"\)', block_txt).group(1)
+                    locked = "\t\t(locked yes)\n" if "(locked yes)" in block_txt else ""
+                    out_lines.append(f'\t(group ""\n\t\t(uuid "{grp_id}")\n{locked}\t\t(members {m_str})\n\t)')
+                continue
+
+            # Retain other top-level drawing/setup blocks (gr_line, gr_poly, setup, layers, etc.)
+            out_lines.append(block_txt)
             continue
 
-        if ref in retained_refs:
-            if ref in ("J1", "J2"):
-                fp_txt = re.sub(r'\(net\s+"[^"]*"\)', '(net "GNDA")', fp_txt)
-                fp_txt = re.sub(r'(\(pad\s+"1"[\s\S]*?\(net\s+)"[^"]*"', r'\1">PORE_AMP"', fp_txt)
-                fp_txt = re.sub(r'(\(pad\s+"2"[\s\S]*?\(net\s+)"[^"]*"', r'\1"GUARD"', fp_txt)
-            elif ref in ("J10", "J11"):
-                fp_txt = re.sub(r'\(net\s+"[^"]*"\)', '(net "GNDA")', fp_txt)
-                fp_txt = re.sub(r'(\(pad\s+"1"[\s\S]*?\(net\s+)"[^"]*"', r'\1"Vbias"', fp_txt)
-                fp_txt = re.sub(r'(\(pad\s+"2"[\s\S]*?\(net\s+)"[^"]*"', r'\1"GUARD_TRANS"', fp_txt)
-            retained_fp_blocks.append(fp_txt)
-        else:
-            for u in re.findall(r'\(uuid\s+"([^"]+)"\)', fp_txt):
-                removed_fp_uuids.add(u)
+        out_lines.append(line)
+        i += 1
 
     if not pogo_added:
-        retained_fp_blocks.append(POGO_12PIN_PCB_FP)
-        retained_fp_blocks.append(SINGLE_PIN_POGO_LANDINGS_FP)
+        out_lines.append(POGO_12PIN_PCB_FP)
+        out_lines.append(SINGLE_PIN_POGO_LANDINGS_FP)
 
-    for fp in retained_fp_blocks:
-        out_lines.append(fp)
+    # 4. Add new Interposer Routing Segments, Vias, and Copper Flood Zones
+    def make_seg(x1, y1, x2, y2, width, layer, net):
+        return (
+            f'\t(segment\n'
+            f'\t\t(start {x1:.4f} {y1:.4f})\n'
+            f'\t\t(end {x2:.4f} {y2:.4f})\n'
+            f'\t\t(width {width})\n'
+            f'\t\t(layer "{layer}")\n'
+            f'\t\t(net "{net}")\n'
+            f'\t\t(uuid "{new_uuid()}")\n'
+            f'\t)'
+        )
 
-    # 3. Process drawings, segments, vias, zones, groups
-    while i < len(lines):
-        line = lines[i]
-        
-        if line.startswith("\t(segment"):
-            block = [line]
-            depth = line.count("(") - line.count(")")
-            i += 1
-            while i < len(lines) and depth > 0:
-                block.append(lines[i])
-                depth += lines[i].count("(") - lines[i].count(")")
-                i += 1
-            continue
+    def make_via(vx, vy, size, drill, net, layers=("F.Cu", "B.Cu")):
+        return (
+            f'\t(via\n'
+            f'\t\t(at {vx:.4f} {vy:.4f})\n'
+            f'\t\t(size {size})\n'
+            f'\t\t(drill {drill})\n'
+            f'\t\t(layers "{layers[0]}" "{layers[1]}")\n'
+            f'\t\t(net "{net}")\n'
+            f'\t\t(uuid "{new_uuid()}")\n'
+            f'\t)'
+        )
 
-        if line.startswith("\t(via"):
-            block = [line]
-            depth = line.count("(") - line.count(")")
-            i += 1
-            while i < len(lines) and depth > 0:
-                block.append(lines[i])
-                depth += lines[i].count("(") - lines[i].count(")")
-                i += 1
-            continue
-
-        if line.startswith("\t(zone"):
-            block = [line]
-            depth = line.count("(") - line.count(")")
-            i += 1
-            while i < len(lines) and depth > 0:
-                block.append(lines[i])
-                depth += lines[i].count("(") - lines[i].count(")")
-                i += 1
-            continue
-
-        if line.startswith("\t(group"):
-            block = [line]
-            depth = line.count("(") - line.count(")")
-            i += 1
-            while i < len(lines) and depth > 0:
-                block.append(lines[i])
-                depth += lines[i].count("(") - lines[i].count(")")
-                i += 1
-            grp_txt = "\n".join(block)
-            members = re.findall(r'"([0-9a-f\-]{36})"', grp_txt)
-            active_m = [m for m in members if m not in removed_fp_uuids]
-            if active_m:
-                m_str = " ".join(f'"{m}"' for m in active_m)
-                grp_id = re.search(r'\(uuid\s+"([^"]+)"\)', grp_txt).group(1)
-                locked = "\t\t(locked yes)\n" if "(locked yes)" in grp_txt else ""
-                out_lines.append(f'\t(group ""\n\t\t(uuid "{grp_id}")\n{locked}\t\t(members {m_str})\n\t)')
-            continue
-
-        out_lines.append(line)
-        i += 1
-
-    # 4. Add new Interposer Routing Segments and Copper Flood Zones
     new_segments = [
-        f'\t(segment (start 153.5 73.5) (end 153.5 68) (width 0.4) (layer "F.Cu") (net "WE_POS") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 153.5 68) (end 150.37866 65.488975) (width 0.4) (layer "F.Cu") (net "WE_POS") (uuid "{new_uuid()}"))',
+        # --- Cis Signal & Guard Routes (B.Cu escape with via-in-pad to clear concentric guard rings) ---
+        # WS_CIS: P5 (172.50, 43.494) -> via to B.Cu -> J1 (174.892, 52.50) via up to F.Cu
+        make_seg(172.50, 43.494, 174.892, 52.50, 0.35, "B.Cu", "WS_CIS"),
+        make_seg(174.892, 52.50, 174.892, 52.50, 0.35, "F.Cu", "WS_CIS"),
+        make_via(172.50, 43.494, 0.7, 0.35, "WS_CIS"),
+        make_via(174.892, 52.50, 0.7, 0.35, "WS_CIS"),
 
-        f'\t(segment (start 155.5 73.5) (end 158.103349 61.072276) (width 0.4) (layer "F.Cu") (net "WS_CIS") (uuid "{new_uuid()}"))',
+        # WS_CIS_WIDE: P2 (154.50, 43.494) -> via to B.Cu -> J2 (179.222, 50.00) via up to F.Cu
+        make_seg(154.50, 43.494, 170.00, 46.50, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(170.00, 46.50, 179.222, 50.00, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(179.222, 50.00, 179.222, 50.00, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_via(154.50, 43.494, 0.7, 0.35, "WS_CIS_WIDE"),
+        make_via(179.222, 50.00, 0.7, 0.35, "WS_CIS_WIDE"),
 
-        f'\t(segment (start 157.5 73.5) (end 170.855 61.077276) (width 0.4) (layer "B.Cu") (net "RE_TRANS") (uuid "{new_uuid()}"))',
+        # GUARD feeders: P4 (168.50, 43.494) and P6 (176.50, 43.494) feeding P5 (172.50) GUARD ring
+        make_seg(168.50, 43.494, 170.65, 43.494, 0.4, "F.Cu", "GUARD"),
+        make_seg(176.50, 43.494, 174.35, 43.494, 0.4, "F.Cu", "GUARD"),
 
-        f'\t(segment (start 159.5 73.5) (end 159.5 68) (width 0.4) (layer "B.Cu") (net "CE_GNDA") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 159.5 68) (end 178.595144 65.541773) (width 0.4) (layer "B.Cu") (net "CE_GNDA") (uuid "{new_uuid()}"))',
+        # GUARD_WIDE feeder: P3 (158.50, 43.494) feeding P2 (154.50) GUARD_WIDE ring
+        make_seg(158.50, 43.494, 156.35, 43.494, 0.4, "F.Cu", "GUARD_WIDE"),
 
-        # WEEP_SENSE moat trace and vias
-        f'\t(segment (start 163.5 73.5) (end 163.5 68) (width 0.4) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 163.5 68) (end 165.9 60.9) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
-        f'\t(segment (start 165.9 60.9) (end 183.2 50.9) (width 0.3) (layer "F.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        # GNDA feeders: P12 (182.50, 74.494) and P10 (167.50, 73.494) feeding P11 (176.50) GNDA ring
+        make_seg(182.50, 74.494, 178.35, 73.494, 0.4, "F.Cu", "GNDA"),
+        make_seg(174.65, 73.494, 167.50, 73.494, 0.4, "F.Cu", "GNDA"),
 
-        f'\t(via (at 159.5 73.5) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "CE_GNDA") (uuid "{new_uuid()}"))',
-        f'\t(via (at 157.5 73.5) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "RE_TRANS") (uuid "{new_uuid()}"))',
-        f'\t(via (at 163.5 68) (size 0.8) (drill 0.4) (layers "F.Cu" "B.Cu") (net "WEEP_SENSE") (uuid "{new_uuid()}"))',
+        # --- Trans Signal Routes (B.Cu with transition vias at pad center) ---
+        # >PORE_AMP / WE_POS: P9 (160.50, 73.494) via to B.Cu -> J11 (154.108, 64.50)
+        make_seg(160.50, 73.494, 154.108, 64.50, 0.4, "B.Cu", "WE_POS"),
+        make_via(160.50, 73.494, 0.7, 0.35, "WE_POS"),
 
+        # RE_TRANS: P8 (154.50, 73.494) via to B.Cu -> J10 (149.778, 67.00)
+        make_seg(154.50, 73.494, 149.778, 67.00, 0.4, "B.Cu", "RE_TRANS"),
+        make_via(154.50, 73.494, 0.7, 0.35, "RE_TRANS"),
+
+        # CE_GNDA: P7 (146.50, 74.494) via to B.Cu -> ground return
+        make_seg(146.50, 74.494, 148.00, 65.00, 0.4, "B.Cu", "CE_GNDA"),
+        make_via(146.50, 74.494, 0.7, 0.35, "CE_GNDA"),
+
+        # --- WEEP_SENSE Channel-Contouring Moat (F.Cu and B.Cu) ---
+        # Feeder from P11 (176.50, 73.494) via to B.Cu
+        make_via(176.50, 73.494, 0.7, 0.35, "WEEP_SENSE"),
+        make_seg(176.50, 73.494, 176.50, 68.00, 0.4, "B.Cu", "WEEP_SENSE"),
+
+        # B.Cu Moat Perimeter Segments (>= 5 segments)
+        make_seg(176.50, 68.00, 183.20, 60.90, 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(183.20, 60.90, 183.20, 50.90, 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(183.20, 50.90, 165.90, 40.00, 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(165.90, 40.00, 148.00, 40.00, 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(148.00, 40.00, 145.00, 55.00, 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(145.00, 55.00, 148.00, 65.00, 0.3, "B.Cu", "WEEP_SENSE"),
+
+        # F.Cu Moat Perimeter Segments (outside gasket perimeter, >= 5 segments)
+        make_seg(183.20, 60.90, 183.20, 50.90, 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(183.20, 50.90, 165.90, 40.00, 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(165.90, 40.00, 148.00, 40.00, 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(148.00, 40.00, 145.00, 55.00, 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(145.00, 55.00, 148.00, 65.00, 0.3, "F.Cu", "WEEP_SENSE"),
+
+        # WEEP_SENSE stitch/transition vias (>= 2 vias)
+        make_via(183.20, 60.90, 0.8, 0.4, "WEEP_SENSE"),
+        make_via(183.20, 50.90, 0.8, 0.4, "WEEP_SENSE"),
+        make_via(148.00, 40.00, 0.8, 0.4, "WEEP_SENSE"),
+
+        # Full-board GNDA copper pour zone covering both F.Cu and B.Cu
         f'\t(zone (net "GNDA") (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (connect_pads (clearance 0.25)) (min_thickness 0.2) (fill yes (thermal_gap 0.3) (thermal_bridge_width 0.3) (island_removal_mode 0)) (polygon (pts (xy 149.51 84.48) (xy 137.55 84.48) (xy 136.55 83.48) (xy 136.55 32.84) (xy 137.89 31.5) (xy 192.23 31.5) (xy 195.2 34.47) (xy 195.2 85.22) (xy 150.25 85.22))))',
     ]
 

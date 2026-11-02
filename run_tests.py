@@ -74,6 +74,12 @@ if __name__ == '__main__':
     t17 = load_module('test_stack_consistency', os.path.join(REPO_ROOT, 'tests', 'test_stack_consistency.py'))
     suite.addTests(loader.loadTestsFromModule(t17))
 
+    t18 = load_module('test_pump_pcb', os.path.join(REPO_ROOT, 'tests', 'test_pump_pcb.py'))
+    suite.addTests(loader.loadTestsFromModule(t18))
+
+    t19 = load_module('test_kicad_drc_erc', os.path.join(REPO_ROOT, 'tests', 'test_kicad_drc_erc.py'))
+    suite.addTests(loader.loadTestsFromModule(t19))
+
     print(f"Loaded {suite.countTestCases()} unit, formal proof, and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

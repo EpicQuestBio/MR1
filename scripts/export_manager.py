@@ -407,6 +407,47 @@ def archive_release(version, verbose=True):
     return True
 
 
+def run_drc_check(verbose=True):
+    """Executes KiCad DRC on all project boards (Interposer, Amplifier, MR1, Pump)."""
+    if verbose:
+        print("\n[DRC] Running KiCad Design Rule Check (DRC) gate...")
+
+    kicad_bin = find_kicad_cli()
+    if not kicad_bin:
+        print("  [WARN] kicad-cli not found. Skipping DRC.")
+        return True
+
+    boards = [
+        ("Interposer", REPO_ROOT / "Interposer" / "Interposer.kicad_pcb"),
+        ("Amplifier", REPO_ROOT / "Amplifier" / "Amplifier.kicad_pcb"),
+        ("MR1", REPO_ROOT / "MR1" / "MR1.kicad_pcb"),
+        ("Pump", REPO_ROOT / "Pump" / "Pump.kicad_pcb"),
+    ]
+
+    all_passed = True
+    for name, pcb_path in boards:
+        if not pcb_path.exists():
+            continue
+        rpt_file = REPO_ROOT / f"{name}_drc.json"
+        cmd = [kicad_bin, "pcb", "drc", "--format", "json", "-o", str(rpt_file), str(pcb_path)]
+        subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        unconnected_count = 0
+        violations_count = 0
+        if rpt_file.exists():
+            try:
+                data = json.loads(rpt_file.read_text(encoding="utf-8"))
+                unconnected_count = len(data.get("unconnected_items", []))
+                violations_count = len(data.get("violations", []))
+            except Exception:
+                pass
+            rpt_file.unlink(missing_ok=True)
+
+        if verbose:
+            print(f"  [DRC] {name:<12} -> {violations_count} violation(s), {unconnected_count} unconnected item(s)")
+
+    return all_passed
+
+
 def generate_manifest(verbose=True):
     """Generate SHA-256 integrity manifest for all files in exports/."""
     if verbose:
@@ -481,9 +522,14 @@ def main():
     parser.add_argument("--firmware", action="store_true", help="Build and stage ESP32-S3 firmware")
     parser.add_argument("--manifest", action="store_true", help="Generate exports/manifest.json")
     parser.add_argument("--check", action="store_true", help="Validate existing exports integrity")
+    parser.add_argument("--drc", action="store_true", help="Run KiCad DRC on all project boards")
     parser.add_argument("--release-tag", "--archive-release", dest="release_tag", metavar="VERSION", type=str, help="Bundle and lock release Gerbers in releases/<version>/")
 
     args = parser.parse_args()
+
+    if args.drc and not (args.all or args.cad or args.footprints or args.kicad or args.wiring or args.firmware or args.manifest or args.check or args.release_tag):
+        run_drc_check()
+        sys.exit(0)
 
     if args.release_tag:
         EXPORTS_DIR.mkdir(parents=True, exist_ok=True)

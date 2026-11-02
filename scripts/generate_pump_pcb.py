@@ -231,7 +231,87 @@ def generate_pcb():
     lines.append(f'\t\t(at {CX} {CY})')
     lines.append(f'\t\t(property "Reference" "U1_MCU" (at 0 -4.5 0) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 1 1) (thickness 0.15))))')
     lines.append(f'\t\t(property "Value" "STM32G431CBU6" (at 0 4.5 0) (layer "F.Fab") (uuid "{gen_uuid()}") (effects (font (size 1 1) (thickness 0.15))))')
+    
+    # 48 Perimeter Leads (0.5mm pitch, 0.25x0.7mm pads)
+    qfn_coords = [-2.75 + i * 0.5 for i in range(12)]
+    # Left edge: pads 1 to 12
+    for i, y_off in enumerate(qfn_coords, start=1):
+        net_id, net_name = (1, "GND") if i in (8, 23, 35, 47) else (5, "+3V3") if i in (9, 24, 36, 48) else (0, "")
+        lines.append(f'\t\t(pad "{i}" smd rect (at -3.45 {y_off:.2f}) (size 0.7 0.25) (layers "F.Cu" "F.Paste" "F.Mask") (net {net_id} "{net_name}") (uuid "{gen_uuid()}"))')
+    # Bottom edge: pads 13 to 24
+    for i, x_off in enumerate(qfn_coords, start=13):
+        net_id, net_name = (1, "GND") if i in (8, 23, 35, 47) else (5, "+3V3") if i in (9, 24, 36, 48) else (0, "")
+        lines.append(f'\t\t(pad "{i}" smd rect (at {x_off:.2f} 3.45) (size 0.25 0.7) (layers "F.Cu" "F.Paste" "F.Mask") (net {net_id} "{net_name}") (uuid "{gen_uuid()}"))')
+    # Right edge: pads 25 to 36
+    for i, y_off in enumerate(reversed(qfn_coords), start=25):
+        net_id, net_name = (1, "GND") if i in (8, 23, 35, 47) else (5, "+3V3") if i in (9, 24, 36, 48) else (0, "")
+        lines.append(f'\t\t(pad "{i}" smd rect (at 3.45 {y_off:.2f}) (size 0.7 0.25) (layers "F.Cu" "F.Paste" "F.Mask") (net {net_id} "{net_name}") (uuid "{gen_uuid()}"))')
+    # Top edge: pads 37 to 48
+    for i, x_off in enumerate(reversed(qfn_coords), start=37):
+        net_id, net_name = (1, "GND") if i in (8, 23, 35, 47) else (5, "+3V3") if i in (9, 24, 36, 48) else (0, "")
+        lines.append(f'\t\t(pad "{i}" smd rect (at {x_off:.2f} -3.45) (size 0.25 0.7) (layers "F.Cu" "F.Paste" "F.Mask") (net {net_id} "{net_name}") (uuid "{gen_uuid()}"))')
+    
+    # Pad 49 Exposed Thermal Pad (5.6x5.6mm)
     lines.append(f'\t\t(pad "49" smd rect (at 0 0) (size 5.6 5.6) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "GND") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(model "${{KICAD10_3DMODEL_DIR}}/Package_DFN_QFN.3dshapes/QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm.step" (offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))')
+    lines.append(f'\t)')
+
+    # Passive Component Footprints: Decoupling Capacitors (0402)
+    for c_idx, (cx_off, cy_off) in enumerate([(-6.0, -3.5), (-6.0, 3.5), (6.0, -3.5), (6.0, 3.5)], start=1):
+        lines.append(f'\t(footprint "Capacitor_SMD:C_0402_1005Metric"')
+        lines.append(f'\t\t(layer "F.Cu")')
+        lines.append(f'\t\t(uuid "{gen_uuid()}")')
+        lines.append(f'\t\t(at {CX + cx_off} {CY + cy_off})')
+        lines.append(f'\t\t(property "Reference" "C{c_idx}_MCU" (at 0 -1.2 0) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 0.7 0.7) (thickness 0.1))))')
+        lines.append(f'\t\t(property "Value" "100nF" (at 0 1.2 0) (layer "F.Fab") (uuid "{gen_uuid()}") (effects (font (size 0.7 0.7) (thickness 0.1))))')
+        lines.append(f'\t\t(pad "1" smd roundrect (at -0.48 0) (size 0.54 0.64) (layers "F.Cu" "F.Paste" "F.Mask") (net 5 "+3V3") (uuid "{gen_uuid()}"))')
+        lines.append(f'\t\t(pad "2" smd roundrect (at 0.48 0) (size 0.54 0.64) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "GND") (uuid "{gen_uuid()}"))')
+        lines.append(f'\t\t(model "${{KICAD10_3DMODEL_DIR}}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step" (offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))')
+        lines.append(f'\t)')
+
+    # I2C Pull-Up Resistors (0402)
+    for r_idx, r_net, rx_off in [
+        (1, "PRESS_I2C_SCL", -4.0),
+        (2, "PRESS_I2C_SDA", -2.5),
+        (3, "SBU1_HOST", 2.5),
+        (4, "SBU2_HOST", 4.0),
+    ]:
+        lines.append(f'\t(footprint "Resistor_SMD:R_0402_1005Metric"')
+        lines.append(f'\t\t(layer "F.Cu")')
+        lines.append(f'\t\t(uuid "{gen_uuid()}")')
+        lines.append(f'\t\t(at {CX + rx_off} {CY - 8.0})')
+        lines.append(f'\t\t(property "Reference" "R{r_idx}_PU" (at 0 -1.2 0) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 0.7 0.7) (thickness 0.1))))')
+        lines.append(f'\t\t(property "Value" "4.7k" (at 0 1.2 0) (layer "F.Fab") (uuid "{gen_uuid()}") (effects (font (size 0.7 0.7) (thickness 0.1))))')
+        lines.append(f'\t\t(pad "1" smd roundrect (at -0.48 0) (size 0.54 0.64) (layers "F.Cu" "F.Paste" "F.Mask") (net 5 "+3V3") (uuid "{gen_uuid()}"))')
+        lines.append(f'\t\t(pad "2" smd roundrect (at 0.48 0) (size 0.54 0.64) (layers "F.Cu" "F.Paste" "F.Mask") (net 0 "{r_net}") (uuid "{gen_uuid()}"))')
+        lines.append(f'\t\t(model "${{KICAD10_3DMODEL_DIR}}/Resistor_SMD.3dshapes/R_0402_1005Metric.step" (offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))')
+        lines.append(f'\t)')
+
+    # 8MHz HSE Crystal Oscillator (3.2x2.5mm SMD)
+    lines.append(f'\t(footprint "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"')
+    lines.append(f'\t\t(layer "F.Cu")')
+    lines.append(f'\t\t(uuid "{gen_uuid()}")')
+    lines.append(f'\t\t(at {CX + 8.5} {CY})')
+    lines.append(f'\t\t(property "Reference" "Y1_HSE" (at 0 -2.0 0) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 0.8 0.8) (thickness 0.12))))')
+    lines.append(f'\t\t(property "Value" "8.000MHz" (at 0 2.0 0) (layer "F.Fab") (uuid "{gen_uuid()}") (effects (font (size 0.8 0.8) (thickness 0.12))))')
+    lines.append(f'\t\t(pad "1" smd rect (at -1.1 0.8) (size 1.2 0.9) (layers "F.Cu" "F.Paste" "F.Mask") (net 0 "OSC_IN") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(pad "2" smd rect (at 1.1 0.8) (size 1.2 0.9) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "GND") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(pad "3" smd rect (at 1.1 -0.8) (size 1.2 0.9) (layers "F.Cu" "F.Paste" "F.Mask") (net 0 "OSC_OUT") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(pad "4" smd rect (at -1.1 -0.8) (size 1.2 0.9) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "GND") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t)')
+
+    # Footprint: U5_REG (TLV70233 / AP2112K Low-Noise 3.3V Analog LDO)
+    lines.append(f'\t(footprint "Package_TO_SOT_SMD:SOT-23-5"')
+    lines.append(f'\t\t(layer "F.Cu")')
+    lines.append(f'\t\t(uuid "{gen_uuid()}")')
+    lines.append(f'\t\t(at {CX - 8.5} {CY})')
+    lines.append(f'\t\t(property "Reference" "U5_REG" (at 0 -2.2 0) (layer "F.SilkS") (uuid "{gen_uuid()}") (effects (font (size 0.8 0.8) (thickness 0.12))))')
+    lines.append(f'\t\t(property "Value" "TLV70233_3V3_ANA" (at 0 2.2 0) (layer "F.Fab") (uuid "{gen_uuid()}") (effects (font (size 0.8 0.8) (thickness 0.12))))')
+    lines.append(f'\t\t(pad "1" smd rect (at -0.95 -1.35) (size 0.6 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (net 4 "+5V_MR1_CLEAN") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(pad "2" smd rect (at 0 -1.35) (size 0.6 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (net 1 "GND") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(pad "3" smd rect (at 0.95 -1.35) (size 0.6 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (net 4 "+5V_MR1_CLEAN") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(pad "5" smd rect (at -0.95 1.35) (size 0.6 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (net 5 "+3V3") (uuid "{gen_uuid()}"))')
+    lines.append(f'\t\t(model "${{KICAD10_3DMODEL_DIR}}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step" (offset (xyz 0 0 0)) (scale (xyz 1 1 1)) (rotate (xyz 0 0 0)))')
     lines.append(f'\t)')
 
     # Footprint: U2_PD (STUSB4500, QFN-24, 4x4 mm)

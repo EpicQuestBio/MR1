@@ -487,11 +487,11 @@ def generate_coax_footprint(
     if ring:
         r_out = spec.RING_OUTER_R
         out += [
-            '  (pad "2" smd custom (at 0 0) (size 0.1 0.1) (layers "F.Cu")',
+            f'  (pad "2" smd custom (at {fmt4(ring_mid)} 0) (size 0.1 0.1) (layers "F.Cu")',
             "    (clearance 0.3)",
             "    (options (clearance outline) (anchor circle))",
             "    (primitives",
-            f"      (gr_circle (center 0 0) (end {fmt4(ring_mid)} 0) (width {fmt4(spec.RING_WIDTH)}) (fill none))",
+            f"      (gr_circle (center {fmt4(-ring_mid)} 0) (end 0 0) (width {fmt4(spec.RING_WIDTH)}) (fill none))",
             "    )",
             f'    (uuid "{u("pad2_ring")}")',
             "  )",

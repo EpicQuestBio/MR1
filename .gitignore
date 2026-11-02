@@ -81,6 +81,7 @@ Thumbs.db
 .agents/
 
 # Miscellaneous Local Artifacts
+releases/
 *.gpg
 *.sources
 
