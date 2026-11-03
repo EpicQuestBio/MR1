@@ -442,12 +442,14 @@ def generate_coax_footprint(
     shape: str = spec.CIRCLE,
     ring: Optional[str] = None,
     name: Optional[str] = None,
+    notched: bool = False,
 ) -> str:
     """One coax pogo-pin footprint.
 
     style: "smt" (Amplifier, F.Cu + F.Paste + F.Mask) or "target" (Interposer, F.Cu + F.Mask)
     shape: "circle" or "square" signal pad (Pad 1)
     ring:  None, "GUARD", "GUARD_WIDE" or "GNDA" -> concentric ring on Pad 2 (mask-covered)
+    notched: If True, ring has a 60-degree notch for planar trace escape (C-shaped guard)
     """
     if style not in ("smt", "target"):
         raise ValueError(f"unknown style {style!r}")
@@ -455,18 +457,22 @@ def generate_coax_footprint(
         raise ValueError(f"unknown shape {shape!r}")
     if ring not in RING_SUFFIX:
         raise ValueError(f"unknown ring {ring!r}")
+    if notched and not ring:
+        raise ValueError("Cannot create a notched footprint without a guard/ground ring")
     name = name or coax_footprint_name(style, shape, ring)
     size = spec.PAD_SIZE
     u = lambda tag: deterministic_uuid(f"{name}_{tag}")  # noqa: E731
     ring_mid = spec.RING_INNER_R + spec.RING_WIDTH / 2.0
     ring_note = f"ring {ring}" if ring else "no ring (feeder pin)"
+    desc_notched = " (notched / C-shaped guard ring for planar trace escape)" if notched else ""
     desc = (
-        f"MR1 coax pogo pin, {shape} pad, {ring_note}. {STYLE_DESC[style]}. "
+        f"MR1 coax pogo pin, {shape} pad, {ring_note}{desc_notched}. {STYLE_DESC[style]}. "
         f"Pad 1 = signal, Pad 2 = ring. Pin: {spec.POGO.part}, {spec.POGO.free_length:g} mm free / "
         f"{spec.POGO.working_height:g} mm working."
     )
     pad_layers = '"F.Cu" "F.Paste" "F.Mask"' if style == "smt" else '"F.Cu" "F.Mask"'
     shape_tok = "circle" if shape == spec.CIRCLE else "rect"
+    tag_notch = " notched" if notched else ""
 
     out: List[str] = [
         f'(footprint "{name}"',
@@ -474,7 +480,7 @@ def generate_coax_footprint(
         '  (generator "generate_footprint.py")',
         '  (layer "F.Cu")',
         f'  (descr "{desc}")',
-        f'  (tags "mr1 pogo coax {style} {shape} {ring or "plain"}")',
+        f'  (tags "mr1 pogo coax {style} {shape} {ring or "plain"}{tag_notch}")',
         f'  (property "Reference" "REF**" (at 0 -3.2 0) (layer "F.SilkS") (uuid "{u("ref")}")',
         "    (effects (font (size 0.8 0.8) (thickness 0.12)))",
         "  )",
@@ -487,12 +493,25 @@ def generate_coax_footprint(
     ]
     if ring:
         r_out = spec.RING_OUTER_R
+        if notched:
+            # 60-degree notch centered at -X (180 deg) leaving ~1.6 mm inner copper gap for planar trace escape.
+            # Center in pad-local coords is (-ring_mid, 0).
+            # Arc runs from +150 deg, through 0 deg (anchor at origin), to -150 deg (210 deg).
+            rad = math.radians(150.0)
+            sx = fmt4(-ring_mid + ring_mid * math.cos(rad))  # ~ -3.4521
+            sy = fmt4(ring_mid * math.sin(rad))               # ~  0.9250
+            ex = sx
+            ey = fmt4(-ring_mid * math.sin(rad))              # ~ -0.9250
+            prim_str = f"      (gr_arc (start {sx} {sy}) (mid 0 0) (end {ex} {ey}) (width {fmt4(spec.RING_WIDTH)}))"
+        else:
+            prim_str = f"      (gr_circle (center {fmt4(-ring_mid)} 0) (end 0 0) (width {fmt4(spec.RING_WIDTH)}) (fill none))"
+
         out += [
             f'  (pad "2" smd custom (at {fmt4(ring_mid)} 0) (size 0.1 0.1) (layers "F.Cu")',
             "    (clearance 0.3)",
             "    (options (clearance outline) (anchor circle))",
             "    (primitives",
-            f"      (gr_circle (center {fmt4(-ring_mid)} 0) (end 0 0) (width {fmt4(spec.RING_WIDTH)}) (fill none))",
+            prim_str,
             "    )",
             f'    (uuid "{u("pad2_ring")}")',
             "  )",
@@ -516,6 +535,7 @@ LEGACY_ALIASES: Dict[str, Tuple[str, str, Optional[str]]] = {
     "PogoPin_MillMax_SMT_1Pin_Guarded": ("smt", spec.CIRCLE, spec.GUARD),
     "PogoPin_Target_Landing_1Pin": ("target", spec.CIRCLE, None),
     "PogoPin_Target_Landing_1Pin_Guarded": ("target", spec.CIRCLE, spec.GUARD),
+    "PogoPin_Target_Landing_1Pin_Guarded_Notched": ("target", spec.CIRCLE, spec.GUARD),
 }
 
 
@@ -524,12 +544,14 @@ def generate_single_pin_footprint(
     pin_type: str = "target",
     guarded: bool = False,
     layer: str = "F.Cu",
+    notched: bool = False,
 ) -> str:
     """Compatibility generator for single pin landing and pogo footprints."""
     shape = spec.CIRCLE
     ring = spec.GUARD if guarded else None
     style = "smt" if "smt" in pin_type.lower() else "target"
-    return generate_coax_footprint(style, shape=shape, ring=ring, name=name)
+    is_notched = notched or ("notched" in name.lower())
+    return generate_coax_footprint(style, shape=shape, ring=ring, name=name, notched=is_notched)
 
 
 def pin_footprint_name(p: "spec.PinSpec", style: str) -> str:
@@ -537,15 +559,21 @@ def pin_footprint_name(p: "spec.PinSpec", style: str) -> str:
     return coax_footprint_name(style, p.shape, p.ring)
 
 def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = "F") -> str:
-    """Generates fluid port markers and flow channel references for Amplifier vs Interposer."""
+    """Generates fluid port markers, flow channels, wafer boundaries, and keepout corridors."""
     lines = []
+    # In KiCad board coordinates (Y down):
+    # CAD H1 (-FLUID_PORT_X, FLUID_PORT_Y) -> KiCad (-FLUID_PORT_X, -FLUID_PORT_Y) [Cis In]
+    # CAD H2 (FLUID_PORT_X, -FLUID_PORT_Y) -> KiCad (FLUID_PORT_X, FLUID_PORT_Y)   [Cis Out]
+    # CAD H3 (-FLUID_PORT_X, -FLUID_PORT_Y) -> KiCad (-FLUID_PORT_X, FLUID_PORT_Y) [Trans In]
+    # CAD H4 (FLUID_PORT_X, FLUID_PORT_Y) -> KiCad (FLUID_PORT_X, -FLUID_PORT_Y)  [Trans Out]
     ports = [
-        ("H1", -FLUID_PORT_X, FLUID_PORT_Y),
-        ("H2", FLUID_PORT_X, -FLUID_PORT_Y),
-        ("H3", -FLUID_PORT_X, -FLUID_PORT_Y),
-        ("H4", FLUID_PORT_X, FLUID_PORT_Y),
+        ("H1", -FLUID_PORT_X, -FLUID_PORT_Y),
+        ("H2", FLUID_PORT_X, FLUID_PORT_Y),
+        ("H3", -FLUID_PORT_X, FLUID_PORT_Y),
+        ("H4", FLUID_PORT_X, -FLUID_PORT_Y),
     ]
     silk_layer = f"{layer}.SilkS"
+    cmts_layer = "Cmts.User"
 
     for name, x, y in ports:
         if fluid_mode == "drills":
@@ -553,8 +581,9 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
                 f'  (pad "{name}" np_thru_hole circle (at {x:.4f} {y:.4f}) '
                 f'(size {FLUID_DRILL_DIA} {FLUID_DRILL_DIA}) (drill {FLUID_DRILL_DIA}) (layers "*.Cu" "*.Mask") (uuid "{deterministic_uuid(f"fluid_pad_{name}")}"))\n'
             )
+            y_txt = y - 1.8 if y < 0 else y + 1.8
             lines.append(
-                f'  (fp_text user "{name}" (at {x:.4f} {y+1.8:.4f} 0) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.7 0.7) (thickness 0.12))))\n'
+                f'  (fp_text user "{name}" (at {x:.4f} {y_txt:.4f} 0) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.7 0.7) (thickness 0.12))))\n'
             )
         else:
             # Silkscreen reference circle and crosshair
@@ -567,26 +596,101 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
             lines.append(
                 f'  (fp_line (start {x:.4f} {y-1.5:.4f}) (end {x:.4f} {y+1.5:.4f}) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_silk_v_{name}")}"))\n'
             )
+            y_txt = y - 1.8 if y < 0 else y + 1.8
             lines.append(
-                f'  (fp_text user "REF_{name}" (at {x:.4f} {y+1.8:.4f} 0) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.7 0.7) (thickness 0.12))))\n'
+                f'  (fp_text user "REF_{name}" (at {x:.4f} {y_txt:.4f} 0) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.7 0.7) (thickness 0.12))))\n'
             )
 
-    # Draw Flow Channel Paths on Silk:
-    # Cis channel: H1 (-17.3205, 10.0) -> H2 (17.3205, -10.0)
+        # Port keepout circle on comment layer (D = 5.0mm, r = 2.5mm)
+        lines.append(
+            f'  (fp_circle (center {x:.4f} {y:.4f}) (end {x:.4f} {y+2.5:.4f}) (stroke (width 0.12) (type dash)) (fill none) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_port_keepout_circ_{name}")}"))\n'
+        )
+
+    # 1. Flow Channel Centerlines (Dashed on Silk):
+    # Cis channel: H1 (-17.3205, -10.0) -> H2 (17.3205, 10.0), slope = +30 deg
     lines.append(
-        f'  (fp_line (start -17.3205 10.0) (end 17.3205 -10.0) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_cis")}"))\n'
+        f'  (fp_line (start -17.3205 -10.0) (end 17.3205 10.0) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_cis")}"))\n'
     )
     lines.append(
-        f'  (fp_text user "CIS FLOW (H1 -> H2)" (at -5.0 4.0 330) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_label")}") (effects (font (size 0.7 0.7) (thickness 0.11))))\n'
+        f'  (fp_text user "CIS FLOW (H1 -> H2)" (at -5.0 -3.5 30) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_label")}") (effects (font (size 0.7 0.7) (thickness 0.11))))\n'
     )
 
-    # Trans channel: H3 (-17.3205, -10.0) -> H4 (17.3205, 10.0)
+    # Trans channel: H3 (-17.3205, 10.0) -> H4 (17.3205, -10.0), slope = -30 deg
     lines.append(
-        f'  (fp_line (start -17.3205 -10.0) (end 17.3205 10.0) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_trans")}"))\n'
+        f'  (fp_line (start -17.3205 10.0) (end 17.3205 -10.0) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_trans")}"))\n'
     )
     lines.append(
-        f'  (fp_text user "TRANS FLOW (H3 -> H4)" (at -5.0 -4.0 30) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_label")}") (effects (font (size 0.7 0.7) (thickness 0.11))))\n'
+        f'  (fp_text user "TRANS FLOW (H3 -> H4)" (at -5.0 3.5 330) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_label")}") (effects (font (size 0.7 0.7) (thickness 0.11))))\n'
     )
+
+    # 2. Physical Channel Boundaries (Width = 1.4 mm, half-width = 0.7 mm, Solid on Silk):
+    # Cis channel normal = (-1/2, sqrt(3)/2) -> offset = +- (-0.35, 0.6062)
+    lines.append(
+        f'  (fp_line (start -17.6705 -9.3938) (end 16.9705 10.6062) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_wall1")}"))\n'
+    )
+    lines.append(
+        f'  (fp_line (start -16.9705 -10.6062) (end 17.6705 9.3938) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_wall2")}"))\n'
+    )
+
+    # Trans channel normal = (1/2, sqrt(3)/2) -> offset = +- (0.35, 0.6062)
+    lines.append(
+        f'  (fp_line (start -16.9705 10.6062) (end 17.6705 -9.3938) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_wall1")}"))\n'
+    )
+    lines.append(
+        f'  (fp_line (start -17.6705 9.3938) (end 16.9705 -10.6062) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_wall2")}"))\n'
+    )
+
+    # 3. Fluid Keepout Corridor Boundaries (0.5 mm clearance outside channel, total offset = 1.2 mm):
+    # Drawn on both Cmts.User and F.SilkS (dash) so clearly visible in any layer view
+    # Cis keepout normal offset = +- (-0.60, 1.0392)
+    for ly in (cmts_layer, silk_layer):
+        st = "dash" if ly == silk_layer else "solid"
+        pfx = "cmts" if ly == cmts_layer else "silk"
+        lines.append(
+            f'  (fp_line (start -17.9205 -8.9608) (end 16.7205 11.0392) (stroke (width 0.12) (type {st})) (layer "{ly}") (uuid "{deterministic_uuid(f"fluid_keepout_cis1_{pfx}")}"))\n'
+        )
+        lines.append(
+            f'  (fp_line (start -16.7205 -11.0392) (end 17.9205 8.9608) (stroke (width 0.12) (type {st})) (layer "{ly}") (uuid "{deterministic_uuid(f"fluid_keepout_cis2_{pfx}")}"))\n'
+        )
+        lines.append(
+            f'  (fp_line (start -16.7205 11.0392) (end 17.9205 -8.9608) (stroke (width 0.12) (type {st})) (layer "{ly}") (uuid "{deterministic_uuid(f"fluid_keepout_trans1_{pfx}")}"))\n'
+        )
+        lines.append(
+            f'  (fp_line (start -17.9205 8.9608) (end 16.7205 -11.0392) (stroke (width 0.12) (type {st})) (layer "{ly}") (uuid "{deterministic_uuid(f"fluid_keepout_trans2_{pfx}")}"))\n'
+        )
+
+    # 4. Central Nanopore Wafer Die Boundary (4.0 x 4.0 mm rotated 45 deg, half-diagonal = 2.8284 mm):
+    wafer_pts = [(0.0, -2.8284), (2.8284, 0.0), (0.0, 2.8284), (-2.8284, 0.0)]
+    for i in range(4):
+        p1 = wafer_pts[i]
+        p2 = wafer_pts[(i + 1) % 4]
+        lines.append(
+            f'  (fp_line (start {p1[0]:.4f} {p1[1]:.4f}) (end {p2[0]:.4f} {p2[1]:.4f}) (stroke (width 0.15) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"wafer_die_edge_{i}")}"))\n'
+        )
+    lines.append(
+        f'  (fp_text user "WAFER 4x4mm" (at 0.0 -0.6 0) (layer "{silk_layer}") (uuid "{deterministic_uuid("wafer_die_label")}") (effects (font (size 0.6 0.6) (thickness 0.10))))\n'
+    )
+
+    # 5. Central Gasket / PCB Cutout Keepout Boundary (6.2 x 6.2 mm rotated 45 deg, half-diagonal = 4.3841 mm):
+    gasket_pts = [(0.0, -4.3841), (4.3841, 0.0), (0.0, 4.3841), (-4.3841, 0.0)]
+    for i in range(4):
+        p1 = gasket_pts[i]
+        p2 = gasket_pts[(i + 1) % 4]
+        lines.append(
+            f'  (fp_line (start {p1[0]:.4f} {p1[1]:.4f}) (end {p2[0]:.4f} {p2[1]:.4f}) (stroke (width 0.12) (type dash)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"gasket_keepout_edge_{i}")}"))\n'
+        )
+
+    # 6. Comment Annotations for Layout Reference:
+    lines.append(
+        f'  (fp_text user "FLUID KEEPOUT (CLEARANCE >= 0.5mm)" (at 0.0 -7.0 0) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_keepout_note")}") (effects (font (size 0.7 0.7) (thickness 0.12))))\n'
+    )
+    lines.append(
+        f'  (fp_text user "PORT KEEPOUT DIA 5.0mm" (at -17.3205 -13.5 0) (layer "{cmts_layer}") (uuid "{deterministic_uuid("port_keepout_note")}") (effects (font (size 0.6 0.6) (thickness 0.10))))\n'
+    )
+    lines.append(
+        f'  (fp_text user "GASKET SEAL 6.2x6.2mm" (at 0.0 5.0 0) (layer "{cmts_layer}") (uuid "{deterministic_uuid("gasket_keepout_note")}") (effects (font (size 0.6 0.6) (thickness 0.10))))\n'
+    )
+
     return "".join(lines)
 
 
@@ -1130,8 +1234,12 @@ def generate_library() -> Dict[str, str]:
             for ring in RING_SUFFIX:
                 n = coax_footprint_name(style, shape, ring)
                 out[n] = generate_coax_footprint(style, shape, ring)
+                if ring:
+                    n_notched = f"{n}_Notched"
+                    out[n_notched] = generate_coax_footprint(style, shape, ring, name=n_notched, notched=True)
     for alias, (style, shape, ring) in LEGACY_ALIASES.items():
-        out[alias] = generate_coax_footprint(style, shape, ring, name=alias)
+        is_notched = alias.endswith("_Notched")
+        out[alias] = generate_coax_footprint(style, shape, ring, name=alias, notched=is_notched)
     for fmode in ("drills", "silkscreen_only"):
         ref = f"Fluid_Overlay_{fmode.upper()}"
         out[ref] = (

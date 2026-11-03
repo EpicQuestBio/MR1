@@ -1,0 +1,262 @@
+(footprint "PogoPin_Target_12Pin_Distributed"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "12-Pin Low-Leakage ENIG Pogo Pin Landing Array for Nanopore Microfluidic Interposer (Mill-Max 821/824 series, 0.8N spring force, Guarded Cis/Trans lines)")
+	(tags "pogo landing array target enig rogers ptfe nanopore mill-max")
+	(property "Reference" "J_POGO1"
+		(at 0 -3.0 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0001-4000-8000-000000000001")
+		(effects (font (size 0.8 0.8) (thickness 0.12)))
+	)
+	(property "Value" "PogoPin_Target_12Pin_Distributed"
+		(at 0 3.0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "b1b2c3d4-0002-4000-8000-000000000002")
+		(effects (font (size 0.8 0.8) (thickness 0.12)))
+	)
+	(property "Datasheet" "https://www.mill-max.com"
+		(at 0 0 0) (unlocked yes) (layer "F.Fab") (hide yes) (uuid "b1b2c3d4-0003-4000-8000-000000000003")
+	)
+	(property "Description" "12-Position Gold Target Pad Array for Spring Loaded Interconnect"
+		(at 0 0 0) (unlocked yes) (layer "F.Fab") (hide yes) (uuid "b1b2c3d4-0004-4000-8000-000000000004")
+	)
+	(attr smd)
+	(fp_line (start -13.0 -2.0) (end 13.0 -2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "b1b2c3d4-0005-4000-8000-000000000005"))
+	(fp_line (start 13.0 -2.0) (end 13.0 2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "b1b2c3d4-0006-4000-8000-000000000006"))
+	(fp_line (start 13.0 2.0) (end -13.0 2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "b1b2c3d4-0007-4000-8000-000000000007"))
+	(fp_line (start -13.0 2.0) (end -13.0 -2.0) (stroke (width 0.15) (type default)) (layer "F.SilkS") (uuid "b1b2c3d4-0008-4000-8000-000000000008"))
+	(fp_text user "CE_GNDA"
+		(at -11.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0001-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "RE_TRANS"
+		(at -9.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0002-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user ">PORE"
+		(at -7.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0003-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "GNDA"
+		(at -5.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0004-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "GUARD"
+		(at -3.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0005-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "WS_CIS"
+		(at -1.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0006-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "GUARD"
+		(at 1.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0007-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "GNDA"
+		(at 3.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0008-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "GUARD_WIDE"
+		(at 5.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0009-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "WS_CIS_WIDE"
+		(at 7.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0010-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "GNDA"
+		(at 9.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0011-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(fp_text user "WEEP_SENSE"
+		(at 11.0 -2.5 0)
+		(layer "F.SilkS")
+		(uuid "b1b2c3d4-0012-4000-8000-000000000010")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd circle
+		(at -11.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0001-4000-8000-000000000001")
+	)
+	(pad "2" smd circle
+		(at -9.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0002-4000-8000-000000000001")
+	)
+	(pad "3" smd circle
+		(at -7.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0003-4000-8000-000000000001")
+	)
+	(pad "4" smd circle
+		(at -5.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0004-4000-8000-000000000001")
+	)
+	(pad "5" smd circle
+		(at -3.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0005-4000-8000-000000000001")
+	)
+	(pad "6" smd circle
+		(at -1.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0006-4000-8000-000000000001")
+	)
+	(pad "7" smd circle
+		(at 1.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0007-4000-8000-000000000001")
+	)
+	(pad "8" smd circle
+		(at 3.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0008-4000-8000-000000000001")
+	)
+	(pad "9" smd circle
+		(at 5.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0009-4000-8000-000000000001")
+	)
+	(pad "10" smd circle
+		(at 7.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0010-4000-8000-000000000001")
+	)
+	(pad "11" smd circle
+		(at 9.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0011-4000-8000-000000000001")
+	)
+	(pad "12" smd circle
+		(at 11.0 0)
+		(size 1.8 1.8)
+		(layers "F.Cu" "F.Mask")
+		(clearance 0.4)
+		(zone_connect 0)
+		(uuid "b1b2c3d4-0012-4000-8000-000000000001")
+	)
+	(embedded_fonts no)
+)

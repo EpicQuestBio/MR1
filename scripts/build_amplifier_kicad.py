@@ -39,8 +39,29 @@ from src import stack_spec as spec
 from scripts.generate_footprint import extract_pin_placements_from_pcb
 
 DEFAULT_PCB_PATH = REPO_ROOT / "Amplifier" / "Amplifier.kicad_pcb"
-CENTER_X = 164.50
-CENTER_Y = 58.50
+CENTER_X = 43.7042
+CENTER_Y = 42.0206
+
+
+def extract_board_center(pcb_path: Path = DEFAULT_PCB_PATH) -> tuple[float, float]:
+    """Derives board center from Edge.Cuts bounding box, defaulting to (43.7042, 42.0206)."""
+    if not pcb_path.exists():
+        return (CENTER_X, CENTER_Y)
+    text = pcb_path.read_text(encoding="utf-8")
+    blocks = re.findall(
+        r'\(gr_line\s+\(start\s+([0-9\.\-]+)\s+([0-9\.\-]+)\)\s+\(end\s+([0-9\.\-]+)\s+([0-9\.\-]+)\)\s+.*?\(layer\s+"Edge\.Cuts"\)',
+        text,
+        re.DOTALL,
+    )
+    if not blocks:
+        return (CENTER_X, CENTER_Y)
+    xs = []
+    ys = []
+    for x1, y1, x2, y2 in blocks:
+        xs.extend([float(x1), float(x2)])
+        ys.extend([float(y1), float(y2)])
+    return (round((min(xs) + max(xs)) / 2.0, 4), round((min(ys) + max(ys)) / 2.0, 4))
+
 
 
 def verify_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH) -> list[str]:
@@ -48,6 +69,7 @@ def verify_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH) -> list[str]:
     if not pcb_path.exists():
         return [f"PCB file does not exist: {pcb_path}"]
 
+    center_x, center_y = extract_board_center(pcb_path)
     placements = extract_pin_placements_from_pcb(pcb_path)
     issues = []
 
@@ -62,8 +84,8 @@ def verify_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH) -> list[str]:
 
         actual = placements[ref]
         expected_kx, expected_ky = spec.kicad_xy(pin_def.x, pin_def.y)
-        expected_x = CENTER_X + expected_kx
-        expected_y = CENTER_Y + expected_ky
+        expected_x = center_x + expected_kx
+        expected_y = center_y + expected_ky
 
         if actual["layer"] != "F.Cu":
             issues.append(f"{ref} layer is {actual['layer']}, expected F.Cu")
@@ -85,14 +107,15 @@ def update_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH, dry_run: bool = Fals
     if not pcb_path.exists():
         raise FileNotFoundError(f"PCB file not found: {pcb_path}")
 
+    center_x, center_y = extract_board_center(pcb_path)
     text = pcb_path.read_text(encoding="utf-8")
     modified = False
 
     for pin_def in spec.PINS:
         ref = pin_def.ref
         expected_kx, expected_ky = spec.kicad_xy(pin_def.x, pin_def.y)
-        expected_x = CENTER_X + expected_kx
-        expected_y = CENTER_Y + expected_ky
+        expected_x = center_x + expected_kx
+        expected_y = center_y + expected_ky
 
         # Match (footprint ...) block containing this exact reference
         ref_pattern = rf'\(property\s+"Reference"\s+"{ref}"'
@@ -129,6 +152,7 @@ def sync_spec_from_pcb(pcb_path: Path = DEFAULT_PCB_PATH, spec_path: Path = REPO
     if not pcb_path.exists():
         raise FileNotFoundError(f"PCB file not found: {pcb_path}")
 
+    center_x, center_y = extract_board_center(pcb_path)
     placements = extract_pin_placements_from_pcb(pcb_path)
     if len(placements) != 12:
         raise ValueError(f"Expected 12 pins on PCB, found {len(placements)}")
@@ -139,8 +163,8 @@ def sync_spec_from_pcb(pcb_path: Path = DEFAULT_PCB_PATH, spec_path: Path = REPO
         if ref not in placements:
             raise KeyError(f"Missing {ref} from PCB placements")
         actual = placements[ref]
-        cad_x = round(actual["x"] - CENTER_X, 4)
-        cad_y = round(CENTER_Y - actual["y"], 4)
+        cad_x = round(actual["x"] - center_x, 4)
+        cad_y = round(center_y - actual["y"], 4)
         is_guarded = "Guarded" in actual["footprint"]
         ring_net = pin_def.ring if is_guarded else None
         side = pin_def.side
