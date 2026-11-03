@@ -32,10 +32,13 @@ class TestSpacersCAD(unittest.TestCase):
     def test_pogo_pin_array_count_and_positions(self):
         pa = Pogo_Pin_Array_Solid()
         self.assertEqual(len(pa.children), 12)
-        centers = [(round(child.bounding_box().center().X, 2), round(child.bounding_box().center().Y, 2))
+        centers = [(child.bounding_box().center().X, child.bounding_box().center().Y)
                    for child in pa.children]
         for p in spec.PINS:
-            self.assertIn((round(p.x, 2), round(p.y, 2)), centers)
+            self.assertTrue(
+                any(abs(p.x - cx) < 0.01 and abs(p.y - cy) < 0.01 for cx, cy in centers),
+                f"P{p.number} ({p.x}, {p.y}) not found in array centers: {centers}"
+            )
 
     def test_pp_shim(self):
         shim = PP_Shim()

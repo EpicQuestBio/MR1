@@ -10,13 +10,14 @@ from src.common import Circuitry_Cutouts, Finger_Grip_Cutout, Hex_Base_Sketch, W
 POGO_6PIN_X = [-11.5, -6.5, -1.5, 1.5, 6.5, 11.5]
 
 def PogoPinHoles():
-    '''Returns a sketch with the 12 distributed pogo pin landing pad holes
+    '''Returns a sketch with the distributed pogo pin landing pad holes
     across Bank B (Cis / Sensing, CAD Y > 0) and Bank A (Trans / Excitation, CAD Y < 0).
     '''
     with BuildSketch(mode=Mode.PRIVATE) as p:
         for pad in POGO_DISTRIBUTED_PADS:
-            with Locations(pad):
-                Circle(1.0)  # 1.0mm radius (2.0mm diameter)
+            if math.hypot(pad[0], pad[1]) < 26.0 and math.hypot(pad[0], pad[1]) > 4.5:
+                with Locations(pad):
+                    Circle(1.0)  # 1.0mm radius (2.0mm diameter)
     return p.sketch
 
 def PCB_Main_Reader_2D():

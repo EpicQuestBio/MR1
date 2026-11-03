@@ -79,6 +79,7 @@ def verify_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH) -> list[str]:
 
 def update_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH, dry_run: bool = False) -> bool:
     """Updates pin positions in the PCB file to match stack_spec exactly.
+    Safely locates each footprint block without matching across adjacent footprints.
     Preserves all surrounding text, routing, components, and zones.
     """
     if not pcb_path.exists():
@@ -93,21 +94,28 @@ def update_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH, dry_run: bool = Fals
         expected_x = CENTER_X + expected_kx
         expected_y = CENTER_Y + expected_ky
 
-        # Regex to locate footprint block for this reference
-        # We look for (footprint ... (at X Y [ROT]) ... (property "Reference" "REF" ...))
-        pattern = re.compile(
-            rf'(\(footprint\s+"[^"]*"\s*\n\s*\(layer\s+"F\.Cu"\)\s*\n\s*\(uuid\s+"[^"]*"\)\s*\n\s*\(at\s+)([0-9\.\-]+)(\s+)([0-9\.\-]+)([\s0-9\.\-]*)(\)\s*\n[\s\S]*?\(property\s+"Reference"\s+"{ref}")'
-        )
+        # Match (footprint ...) block containing this exact reference
+        ref_pattern = rf'\(property\s+"Reference"\s+"{ref}"'
+        ref_match = re.search(ref_pattern, text)
+        if not ref_match:
+            continue
 
-        match = pattern.search(text)
-        if match:
-            cur_x = float(match.group(2))
-            cur_y = float(match.group(4))
-            rot = match.group(5)
+        fp_start = text.rfind("(footprint ", 0, ref_match.start())
+        if fp_start == -1:
+            continue
+
+        at_pattern = re.compile(
+            r'(\(at\s+)([0-9\.\-]+)(\s+)([0-9\.\-]+)([\s0-9\.\-]*)(\))'
+        )
+        at_match = at_pattern.search(text, fp_start, ref_match.start())
+        if at_match:
+            cur_x = float(at_match.group(2))
+            cur_y = float(at_match.group(4))
+            rot = at_match.group(5)
 
             if abs(cur_x - expected_x) > 0.001 or abs(cur_y - expected_y) > 0.001:
-                replacement = f"{match.group(1)}{expected_x:.4f}{match.group(3)}{expected_y:.4f}{rot}{match.group(6)}"
-                text = text[:match.start()] + replacement + text[match.end():]
+                replacement = f"{at_match.group(1)}{expected_x:.4f}{at_match.group(3)}{expected_y:.4f}{rot}{at_match.group(6)}"
+                text = text[:at_match.start()] + replacement + text[at_match.end():]
                 modified = True
 
     if modified and not dry_run:
@@ -116,14 +124,62 @@ def update_amplifier_pcb(pcb_path: Path = DEFAULT_PCB_PATH, dry_run: bool = Fals
     return modified
 
 
+def sync_spec_from_pcb(pcb_path: Path = DEFAULT_PCB_PATH, spec_path: Path = REPO_ROOT / "src" / "stack_spec.py") -> bool:
+    """Reads manual pin placements from Amplifier.kicad_pcb and synchronizes them into src/stack_spec.py."""
+    if not pcb_path.exists():
+        raise FileNotFoundError(f"PCB file not found: {pcb_path}")
+
+    placements = extract_pin_placements_from_pcb(pcb_path)
+    if len(placements) != 12:
+        raise ValueError(f"Expected 12 pins on PCB, found {len(placements)}")
+
+    lines = []
+    for pin_def in spec.PINS:
+        ref = pin_def.ref
+        if ref not in placements:
+            raise KeyError(f"Missing {ref} from PCB placements")
+        actual = placements[ref]
+        cad_x = round(actual["x"] - CENTER_X, 4)
+        cad_y = round(CENTER_Y - actual["y"], 4)
+        is_guarded = "Guarded" in actual["footprint"]
+        ring_net = pin_def.ring if is_guarded else None
+        side = pin_def.side
+
+        ring_str = f', ring={ring_net}' if ring_net else ""
+        desc_str = f', description="{pin_def.description}"' if pin_def.description else ""
+        lines.append(
+            f'    PinSpec({pin_def.number}, "{pin_def.net}", {side.upper()}, {cad_x}, {cad_y}, "{pin_def.role}"{ring_str}{desc_str}),'
+        )
+
+    new_pins_block = "PINS: Tuple[PinSpec, ...] = (\n" + "\n".join(lines) + "\n)"
+    spec_content = spec_path.read_text(encoding="utf-8")
+    pattern = re.compile(r'PINS:\s*Tuple\[PinSpec,\s*\.\.\.\]\s*=\s*\([\s\S]*?\n\)', re.MULTILINE)
+    if not pattern.search(spec_content):
+        raise ValueError("Could not find PINS definition in stack_spec.py")
+
+    updated_spec = pattern.sub(new_pins_block, spec_content, count=1)
+    if updated_spec != spec_content:
+        spec_path.write_text(updated_spec, encoding="utf-8")
+        return True
+    return False
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="MR1 Amplifier KiCad PCB Synchronization Utility")
     parser.add_argument("--check", action="store_true", help="Check PCB consistency against stack_spec")
     parser.add_argument("--write", action="store_true", help="Write position updates to Amplifier.kicad_pcb")
+    parser.add_argument("--sync-spec", action="store_true", help="Import pin placements from Amplifier.kicad_pcb into stack_spec.py")
     parser.add_argument("--dry-run", action="store_true", help="Dry run without writing changes")
     parser.add_argument("--pcb", type=Path, default=DEFAULT_PCB_PATH, help="Path to Amplifier.kicad_pcb")
 
     args = parser.parse_args()
+
+    if args.sync_spec:
+        print(f"[*] Importing pin placements from {args.pcb} into src/stack_spec.py...")
+        changed = sync_spec_from_pcb(args.pcb)
+        status = "Updated" if changed else "Already in sync"
+        print(f"[OK] {status} src/stack_spec.py from manual PCB layout.")
+        return 0
 
     issues = verify_amplifier_pcb(args.pcb)
     if issues:

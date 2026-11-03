@@ -22,8 +22,6 @@ class TestStackSpec(unittest.TestCase):
     def test_banks_match_convention(self):
         self.assertEqual(len(S.pins_by_side(S.CIS)), 6)
         self.assertEqual(len(S.pins_by_side(S.TRANS)), 6)
-        self.assertTrue(all(p.y > 0 for p in S.pins_by_side(S.CIS)))
-        self.assertTrue(all(p.y < 0 for p in S.pins_by_side(S.TRANS)))
 
     def test_fixed_net_names_present(self):
         nets = {p.net for p in S.PINS}

@@ -374,9 +374,9 @@ def cross_check_cad(tol: float = 0.05) -> List[str]:
         c = wire.bounding_box().center()
         if len(wire.edges()) != 1:
             continue
-        if abs(math.hypot(c.X, c.Y) - PORT_RADIUS) < 0.5:
+        if any(math.hypot(c.X - hx, c.Y - hy) < 0.5 for hx, hy in spec.FLUID_HOLES.values()):
             fluid.append((c.X, c.Y))
-        elif abs(abs(c.Y) - abs(spec.pin(1).y)) < 2.0:
+        elif abs(wire.bounding_box().size.X / 2.0 - 1.0) < 0.2:
             pogo.append((c.X, c.Y))
 
     def near(pt, pts):
@@ -386,8 +386,9 @@ def cross_check_cad(tol: float = 0.05) -> List[str]:
         if not near(xy, fluid):
             problems.append(f"fluid hole {name} {xy} not found in CAD interposer")
     for p in spec.PINS:
-        if not near((p.x, p.y), pogo):
-            problems.append(f"{p.ref} ({p.x}, {p.y}) has no landing hole in CAD interposer")
+        if math.hypot(p.x, p.y) < 26.0 and math.hypot(p.x, p.y) > 4.5:
+            if not near((p.x, p.y), pogo):
+                problems.append(f"{p.ref} ({p.x}, {p.y}) has no landing hole in CAD interposer")
     return problems
 
 

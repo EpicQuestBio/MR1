@@ -85,18 +85,16 @@ def run_pipeline(check_only: bool = False, skip_tests: bool = False) -> int:
 
     # 4. Synchronize & Verify PCB Pin Placements
     log_step("4. Verifying PCB Pin Placements")
-    from scripts.build_amplifier_kicad import verify_amplifier_pcb, update_amplifier_pcb
+    from scripts.build_amplifier_kicad import verify_amplifier_pcb
     from scripts.build_interposer_kicad import verify_interposer_pcb
     amp_issues = verify_amplifier_pcb()
     if amp_issues:
-        if check_only:
-            print("[FAIL] Amplifier PCB pin drift detected:", file=sys.stderr)
-            for iss in amp_issues:
-                print(f"  - {iss}", file=sys.stderr)
-            return 1
-        else:
-            update_amplifier_pcb()
-            print("[OK] Synchronized Amplifier PCB pins with stack_spec.")
+        print("[FAIL] Amplifier PCB pin drift detected:", file=sys.stderr)
+        for iss in amp_issues:
+            print(f"  - {iss}", file=sys.stderr)
+        print("[!] To import PCB changes into stack_spec, run: ./scripts/run_python.sh scripts/build_amplifier_kicad.py --sync-spec", file=sys.stderr)
+        print("[!] To push stack_spec to PCB, run: ./scripts/run_python.sh scripts/build_amplifier_kicad.py --write", file=sys.stderr)
+        return 1
     else:
         print("[OK] Amplifier PCB pins are in sync with stack_spec.")
     steps.append(("Amplifier PCB Pins", "PASS"))

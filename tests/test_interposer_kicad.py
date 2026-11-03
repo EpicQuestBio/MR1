@@ -697,8 +697,10 @@ class TestInterposerKiCad(unittest.TestCase):
         geom12 = extract_cad_geometry()
         self.assertEqual(len(geom12.pogo_pads), 12)
         self.assertEqual([p.net_name for p in geom12.pogo_pads], cis_nets + trans_nets)
-        self.assertEqual({p.y for p in geom12.pogo_pads[:6]}, {-16.0, -15.0})
-        self.assertEqual({p.y for p in geom12.pogo_pads[6:]}, {16.0, 15.0})
+        for pad, p in zip(geom12.pogo_pads, spec.PINS):
+            expected_x, expected_y = spec.kicad_xy(p.x, p.y)
+            self.assertAlmostEqual(pad.x, expected_x, places=3)
+            self.assertAlmostEqual(pad.y, expected_y, places=3)
 
         # Check coax footprint generation properties
         smt_guard = generate_coax_footprint("smt", "circle", "GUARD")

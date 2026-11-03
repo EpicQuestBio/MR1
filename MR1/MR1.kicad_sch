@@ -1782,15 +1782,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C161316"
-			(at 214.63 136.8552 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 218.44 135.89 0)
 			(hide yes)
@@ -1804,6 +1795,17 @@
 		)
 		(property "Description" ""
 			(at 218.44 135.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C161316"
+			(at 214.63 136.8552 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1880,15 +1882,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25488"
-			(at 217.17 111.252 90)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 217.17 113.03 0)
 			(hide yes)
@@ -1902,6 +1895,17 @@
 		)
 		(property "Description" ""
 			(at 217.17 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25488"
+			(at 217.17 111.252 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1978,15 +1982,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25488"
-			(at 218.44 139.192 90)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 218.44 140.97 0)
 			(hide yes)
@@ -2000,6 +1995,17 @@
 		)
 		(property "Description" ""
 			(at 218.44 140.97 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25488"
+			(at 218.44 139.192 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2705,15 +2711,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C161316"
-			(at 213.36 108.9152 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 217.17 107.95 0)
 			(hide yes)
@@ -2727,6 +2724,17 @@
 		)
 		(property "Description" ""
 			(at 217.17 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C161316"
+			(at 213.36 108.9152 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

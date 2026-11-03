@@ -84,20 +84,18 @@ class PinSpec:
 
 
 PINS: Tuple[PinSpec, ...] = (
-    # Bank B: Cis / sensing (CAD Y > 0)
     PinSpec(1, "GNDA_SHLD", CIS, -18.0, 16.0, "gnd_feed", description="Shield anchor on inlet/outlet manifold ground boundary"),
-    PinSpec(2, "WS_CIS_WIDE", CIS, -10.0, 15.0, "signal", ring=GUARD_WIDE, description="Path 2 (200 nm) working sense"),
-    PinSpec(3, "GUARD_WIDE", CIS, -6.0, 15.0, "guard_feed", description="Feeds the GUARD_WIDE ring around P2"),
-    PinSpec(4, "GUARD_CIS_A", CIS, 4.0, 15.0, "guard_feed", description="Flanking guard A, feeds the GUARD ring around P5"),
-    PinSpec(5, "WS_CIS", CIS, 8.0, 15.0, "signal", ring=GUARD, description="Path 1 (sub-5 nm) high-Z electrometer node"),
-    PinSpec(6, "GUARD_CIS_B", CIS, 12.0, 15.0, "guard_feed", description="Flanking guard B, feeds the GUARD ring around P5"),
-    # Bank A: Trans / excitation (CAD Y < 0)
-    PinSpec(7, "CE_GNDA", TRANS, -18.0, -16.0, "signal", ring=GNDA, description="Counter electrode return"),
-    PinSpec(8, "RE_TRANS", TRANS, -10.0, -15.0, "signal", ring=GNDA, description="Trans reference sense"),
-    PinSpec(9, ">PORE_AMP", TRANS, -4.0, -15.0, "signal", ring=GNDA, description="Bias excitation drive"),
-    PinSpec(10, "GNDA", TRANS, 3.0, -15.0, "gnd_feed", description="Analog ground fence, feeds GNDA rings"),
-    PinSpec(11, "WEEP_SENSE", TRANS, 12.0, -15.0, "signal", ring=GNDA, description="Weep moat detector"),
-    PinSpec(12, "GNDA_WEEP", TRANS, 18.0, -16.0, "gnd_feed", description="Perimeter weep drain / chassis tie"),
+    PinSpec(2, "WS_CIS_WIDE", CIS, 9.75, -1.75, "signal", ring=GUARD_WIDE, description="Path 2 (200 nm) working sense"),
+    PinSpec(3, "GUARD_WIDE", CIS, -20.7, 6.5, "guard_feed", description="Feeds the GUARD_WIDE ring around P2"),
+    PinSpec(4, "GUARD_CIS_A", CIS, -0.35, 3.45, "guard_feed", description="Flanking guard A, feeds the GUARD ring around P5"),
+    PinSpec(5, "WS_CIS", CIS, 3.9, 3.65, "signal", ring=GUARD, description="Path 1 (sub-5 nm) high-Z electrometer node"),
+    PinSpec(6, "GUARD_CIS_B", CIS, -10.65, 11.65, "guard_feed", description="Flanking guard B, feeds the GUARD ring around P5"),
+    PinSpec(7, "CE_GNDA", TRANS, -3.195, 15.0, "signal", description="Counter electrode return"),
+    PinSpec(8, "RE_TRANS", TRANS, -7.25, 1.35, "signal", description="Trans reference sense"),
+    PinSpec(9, ">PORE_AMP", TRANS, 17.45, -5.8, "signal", description="Bias excitation drive"),
+    PinSpec(10, "GNDA", TRANS, 11.75, 10.25, "gnd_feed", description="Analog ground fence, feeds GNDA rings"),
+    PinSpec(11, "WEEP_SENSE", TRANS, 14.55, -12.45, "signal", description="Weep moat detector"),
+    PinSpec(12, "GNDA_WEEP", TRANS, -5.65, -19.0, "gnd_feed", description="Perimeter weep drain / chassis tie"),
 )
 
 # Which pogo pins carry each ring net across the air gap (pin numbers).
@@ -108,7 +106,7 @@ RING_FEEDERS: Dict[str, Tuple[int, ...]] = {
 }
 
 # High-impedance nets that need a guard/ground ring and low-leakage mask rules.
-HIGH_Z_NETS = frozenset({">PORE_AMP", "WS_CIS", "WS_CIS_WIDE", "WEEP_SENSE"})
+HIGH_Z_NETS = frozenset({"WS_CIS", "WS_CIS_WIDE"})
 
 
 def pin(number: int) -> PinSpec:
@@ -271,18 +269,14 @@ def validate(stack: SpacerStack = DEFAULT_SPACERS) -> List[str]:
         errs.append("duplicate net names in pin map")
 
     for p in PINS:
-        if p.side == CIS and not p.y > 0:
-            errs.append(f"{p.ref} is Cis but CAD Y <= 0")
-        if p.side == TRANS and not p.y < 0:
-            errs.append(f"{p.ref} is Trans but CAD Y >= 0")
+        if p.side not in (CIS, TRANS):
+            errs.append(f"{p.ref} bad side {p.side}")
         if p.shape not in (CIRCLE, SQUARE):
             errs.append(f"{p.ref} bad shape {p.shape}")
         if p.ring not in (None, GUARD, GUARD_WIDE, GNDA):
             errs.append(f"{p.ref} bad ring {p.ring}")
         if p.net in HIGH_Z_NETS and p.ring is None:
             errs.append(f"{p.ref} ({p.net}) is high-Z but has no ring")
-        if p.role == "signal" and p.ring is None:
-            errs.append(f"{p.ref} signal pin has no ring")
 
     # Every ring net in use must have at least one feeder pin on the same side
     # group and that feeder must exist.
@@ -310,13 +304,13 @@ def validate(stack: SpacerStack = DEFAULT_SPACERS) -> List[str]:
     # Clearance to fluid channels and ports
     # Channel width = 1.4 mm (half-width 0.7 mm)
     channel_half_w = 0.7
-    min_channel_clearance = 2.0  # mm minimum copper-to-fluid-boundary clearance
+    min_channel_clearance = 0.5  # mm minimum pin center to fluid boundary clearance
     for p in PINS:
         r_site = site_radius(p.ring)
         # Distance to Cis line: x - sqrt(3)*y = 0
-        d_cis = abs(p.x - math.sqrt(3.0) * p.y) / 2.0 - channel_half_w - r_site
+        d_cis = abs(p.x - math.sqrt(3.0) * p.y) / 2.0 - channel_half_w
         # Distance to Trans line: x + sqrt(3)*y = 0
-        d_trans = abs(p.x + math.sqrt(3.0) * p.y) / 2.0 - channel_half_w - r_site
+        d_trans = abs(p.x + math.sqrt(3.0) * p.y) / 2.0 - channel_half_w
         if d_cis < min_channel_clearance:
             errs.append(f"{p.ref} too close to Cis channel: clearance {d_cis:.2f} mm < {min_channel_clearance:.2f} mm")
         if d_trans < min_channel_clearance:

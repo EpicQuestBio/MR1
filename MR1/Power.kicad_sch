@@ -7618,15 +7618,6 @@
 				(justify left)
 			)
 		)
-		(property "LCSC" "C21787"
-			(at 111.76 140.97 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/sn65220.pdf"
 			(at 104.14 132.08 0)
 			(hide yes)
@@ -7640,6 +7631,17 @@
 		)
 		(property "Description" "ESD Suppressors / TVS Diodes Single USB Port"
 			(at 107.95 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C21787"
+			(at 111.76 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7806,15 +7808,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
-			(at 128.27 114.3 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/219/RK73B-1825463.pdf"
 			(at 128.27 114.3 0)
 			(hide yes)
@@ -7827,6 +7820,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 1/8W 27 OHM 5%"
+			(at 128.27 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
 			(at 128.27 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -7960,15 +7964,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
-			(at 128.27 149.86 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/219/RK73B-1825463.pdf"
 			(at 128.27 149.86 0)
 			(hide yes)
@@ -7981,6 +7976,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 1/8W 27 OHM 5%"
+			(at 128.27 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
 			(at 128.27 149.86 0)
 			(hide yes)
 			(show_name no)
@@ -8116,15 +8122,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
-			(at 120.65 121.92 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/447/Yageo_03_18_2021_PYu_RC_Group_51_RoHS_L_11-2199992.pdf"
 			(at 120.65 121.92 0)
 			(hide yes)
@@ -8137,6 +8134,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 15 kOhms 100-200 mW 1%"
+			(at 120.65 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25275"
 			(at 120.65 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -8272,15 +8280,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
-			(at 120.65 142.24 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/447/Yageo_03_18_2021_PYu_RC_Group_51_RoHS_L_11-2199992.pdf"
 			(at 120.65 142.24 0)
 			(hide yes)
@@ -8293,6 +8292,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 15 kOhms 100-200 mW 1%"
+			(at 120.65 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25275"
 			(at 120.65 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -8505,15 +8515,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25212"
-			(at 74.93 142.24 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/447/Yageo_03_18_2021_PYu_RC_Group_51_RoHS_L_11-2199992.pdf"
 			(at 74.93 142.24 0)
 			(hide yes)
@@ -8526,6 +8527,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 5.1K ohm 1%"
+			(at 74.93 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25212"
 			(at 74.93 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -8738,15 +8750,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25212"
-			(at 82.55 142.24 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/447/Yageo_03_18_2021_PYu_RC_Group_51_RoHS_L_11-2199992.pdf"
 			(at 82.55 142.24 0)
 			(hide yes)
@@ -8759,6 +8762,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 5.1K ohm 1%"
+			(at 82.55 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25212"
 			(at 82.55 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -8970,15 +8984,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 80.01 39.37 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 80.01 39.37 0)
 			(hide yes)
@@ -8991,6 +8996,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 80.01 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 80.01 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -9115,15 +9131,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 115.57 80.01 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 115.57 80.01 0)
 			(hide yes)
@@ -9136,6 +9143,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 115.57 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 115.57 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -9258,15 +9276,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25149"
-			(at 234.442 109.22 90)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 236.22 109.22 0)
 			(hide yes)
@@ -9280,6 +9289,17 @@
 		)
 		(property "Description" ""
 			(at 236.22 109.22 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25149"
+			(at 234.442 109.22 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9558,15 +9578,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
-			(at 128.27 196.85 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/219/RK73B-1825463.pdf"
 			(at 128.27 196.85 0)
 			(hide yes)
@@ -9579,6 +9590,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 1/8W 27 OHM 5%"
+			(at 128.27 196.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
 			(at 128.27 196.85 0)
 			(hide yes)
 			(show_name no)
@@ -9671,6 +9693,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 88.9 54.61 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0724c9a6-a618-42dc-abf2-35dd72767caf")
+		(property "Reference" "#PWR079"
+			(at 95.25 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 92.202 54.61 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
+			(at 88.9 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e56cf9f7-2bb2-4ece-ab0a-65a0bd0528ea")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176/3d27331b-a58a-4956-92e0-cb1f55544b23"
+					(reference "#PWR079")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Diode:MBR0540")
 		(at 240.03 62.23 180)
 		(unit 1)
@@ -9713,15 +9813,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C5204747"
-			(at 240.03 57.785 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "http://www.mccsemi.com/up_pdf/MBR0520~MBR0580(SOD123).pdf"
 			(at 240.03 62.23 0)
 			(hide yes)
@@ -9735,6 +9826,17 @@
 		)
 		(property "Description" ""
 			(at 240.03 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5204747"
+			(at 240.03 57.785 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9912,15 +10014,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C60490"
-			(at 68.58 57.15 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 68.58 57.15 0)
 			(hide yes)
@@ -9933,6 +10026,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 68.58 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
 			(at 68.58 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -10431,15 +10535,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25327"
-			(at 121.412 81.28 90)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 123.19 81.28 0)
 			(hide yes)
@@ -10453,6 +10548,17 @@
 		)
 		(property "Description" ""
 			(at 123.19 81.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25327"
+			(at 121.412 81.28 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10532,15 +10638,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C107849"
-			(at 227.965 154.94 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.vishay.com/docs/85751/1n4148ws.pdf"
 			(at 232.41 154.94 0)
 			(hide yes)
@@ -10554,6 +10651,17 @@
 		)
 		(property "Description" "75V 0.15A Fast switching Diode, SOD-323"
 			(at 232.41 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C107849"
+			(at 227.965 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10642,15 +10750,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C60490"
-			(at 35.56 49.53 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 35.56 49.53 0)
 			(hide yes)
@@ -10663,6 +10762,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 35.56 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
 			(at 35.56 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -10842,15 +10952,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
-			(at 120.65 189.23 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/447/Yageo_03_18_2021_PYu_RC_Group_51_RoHS_L_11-2199992.pdf"
 			(at 120.65 189.23 0)
 			(hide yes)
@@ -10863,6 +10964,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 15 kOhms 100-200 mW 1%"
+			(at 120.65 189.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25275"
 			(at 120.65 189.23 0)
 			(hide yes)
 			(show_name no)
@@ -11266,15 +11378,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25879"
-			(at 85.09 91.44 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 85.09 91.44 0)
 			(hide yes)
@@ -11287,6 +11390,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 85.09 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25879"
 			(at 85.09 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -11467,15 +11581,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C14902"
-			(at 250.19 111.76 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "http://www.onsemi.com/pub_link/Collateral/BCP53T1-D.PDF"
 			(at 245.11 114.3 0)
 			(hide yes)
@@ -11489,6 +11594,17 @@
 		)
 		(property "Description" "PNP transistor, base/emitter/collector"
 			(at 245.11 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C14902"
+			(at 250.19 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11663,15 +11779,6 @@
 				(justify left)
 			)
 		)
-		(property "LCSC" "C21787"
-			(at 111.76 187.96 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/sn65220.pdf"
 			(at 104.14 179.07 0)
 			(hide yes)
@@ -11685,6 +11792,17 @@
 		)
 		(property "Description" "ESD Suppressors / TVS Diodes Single USB Port"
 			(at 107.95 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C21787"
+			(at 111.76 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12008,15 +12126,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
-			(at 120.65 168.91 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/447/Yageo_03_18_2021_PYu_RC_Group_51_RoHS_L_11-2199992.pdf"
 			(at 120.65 168.91 0)
 			(hide yes)
@@ -12029,6 +12138,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 15 kOhms 100-200 mW 1%"
+			(at 120.65 168.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25275"
 			(at 120.65 168.91 0)
 			(hide yes)
 			(show_name no)
@@ -12164,15 +12284,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 87.63 69.85 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 87.63 69.85 0)
 			(hide yes)
@@ -12185,6 +12296,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 87.63 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 87.63 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -12589,15 +12711,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C1713"
-			(at 246.38 72.39 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 246.38 72.39 0)
 			(hide yes)
@@ -12610,6 +12723,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 246.38 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1713"
 			(at 246.38 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -12733,15 +12857,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C670493"
-			(at 134.62 59.055 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/LT3094.pdf"
 			(at 134.62 67.31 0)
 			(hide yes)
@@ -12755,6 +12870,17 @@
 		)
 		(property "Description" "–20V, 500mA, Ultralow Noise, Ultrahigh PSRR Negative Linear Regulator, -1.8..-20Vin, 0..-19.5Vout, DFN-12"
 			(at 134.62 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C670493"
+			(at 134.62 59.055 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13045,15 +13171,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C15008"
-			(at 221.9452 158.75 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 220.98 154.94 0)
 			(hide yes)
@@ -13067,6 +13184,17 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 220.98 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15008"
+			(at 221.9452 158.75 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13291,15 +13419,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C1713"
-			(at 26.67 54.61 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 26.67 54.61 0)
 			(hide yes)
@@ -13312,6 +13431,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 26.67 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1713"
 			(at 26.67 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -13435,15 +13565,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C514420"
-			(at 134.62 32.385 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/30451fa.pdf"
 			(at 134.62 40.64 0)
 			(hide yes)
@@ -13457,6 +13578,17 @@
 		)
 		(property "Description" "500mA, Adjustable, Ultralow Noise, Ultrahigh PSRR Linear Regulator, DFN-12"
 			(at 134.62 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C514420"
+			(at 134.62 32.385 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13592,15 +13724,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C15008"
-			(at 221.2848 115.57 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 222.25 119.38 0)
 			(hide yes)
@@ -13614,6 +13737,17 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 222.25 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C15008"
+			(at 221.2848 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13839,15 +13973,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C60490"
-			(at 68.58 46.99 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 68.58 46.99 0)
 			(hide yes)
@@ -13860,6 +13985,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 68.58 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
 			(at 68.58 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -14272,15 +14408,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 114.3 50.8 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 114.3 50.8 0)
 			(hide yes)
@@ -14293,6 +14420,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 114.3 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 114.3 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -14415,15 +14553,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25327"
-			(at 121.412 52.07 90)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 123.19 52.07 0)
 			(hide yes)
@@ -14437,6 +14566,17 @@
 		)
 		(property "Description" ""
 			(at 123.19 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25327"
+			(at 121.412 52.07 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -14825,15 +14965,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 36.83 62.23 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 36.83 62.23 0)
 			(hide yes)
@@ -14846,6 +14977,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 36.83 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 36.83 62.23 0)
 			(hide yes)
 			(show_name no)
@@ -14971,15 +15113,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C107849"
-			(at 238.125 120.65 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.vishay.com/docs/85751/1n4148ws.pdf"
 			(at 233.68 120.65 0)
 			(hide yes)
@@ -14993,6 +15126,17 @@
 		)
 		(property "Description" "75V 0.15A Fast switching Diode, SOD-323"
 			(at 233.68 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C107849"
+			(at 238.125 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15081,15 +15225,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25149"
-			(at 233.172 143.51 90)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 234.95 143.51 0)
 			(hide yes)
@@ -15103,6 +15238,17 @@
 		)
 		(property "Description" ""
 			(at 234.95 143.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25149"
+			(at 233.172 143.51 90)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -15413,15 +15559,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
-			(at 128.27 161.29 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.mouser.com/datasheet/2/219/RK73B-1825463.pdf"
 			(at 128.27 161.29 0)
 			(hide yes)
@@ -15434,6 +15571,17 @@
 			)
 		)
 		(property "Description" "Thick Film Resistors - SMD 1/8W 27 OHM 5%"
+			(at 128.27 161.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25078"
 			(at 128.27 161.29 0)
 			(hide yes)
 			(show_name no)
@@ -15879,15 +16027,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C60490"
-			(at 85.09 49.53 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 85.09 49.53 0)
 			(hide yes)
@@ -15900,6 +16039,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 85.09 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
 			(at 85.09 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -16036,158 +16186,6 @@
 		)
 	)
 	(symbol
-		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
-		(at 88.9 54.61 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d31a0cf2-3804-43f5-a050-b811235786b1")
-		(property "Reference" "#PWR0129"
-			(at 95.25 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 93.2942 54.483 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 88.9 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 88.9 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 88.9 54.61 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4edcb40b-e9d4-4922-8db9-d41386834dea")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176/3d27331b-a58a-4956-92e0-cb1f55544b23"
-					(reference "#PWR0129")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "temp-sensor-rescue:GND-power-temp-sensor-rescue")
-		(at 88.9 49.53 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d3f4e025-6e65-44df-a87a-17b95feb75b7")
-		(property "Reference" "#PWR0130"
-			(at 95.25 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 93.2942 49.403 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 88.9 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 88.9 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 88.9 49.53 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "799c2567-66dc-49ad-82bd-a6cd152f24ba")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176/3d27331b-a58a-4956-92e0-cb1f55544b23"
-					(reference "#PWR0130")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 256.54 72.39 0)
 		(unit 1)
@@ -16231,15 +16229,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 256.54 72.39 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 256.54 72.39 0)
 			(hide yes)
@@ -16252,6 +16241,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 256.54 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 256.54 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -16376,15 +16376,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 74.93 69.85 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 74.93 69.85 0)
 			(hide yes)
@@ -16397,6 +16388,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 74.93 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C19702"
 			(at 74.93 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -16519,15 +16521,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C165948"
-			(at 45.72 144.78 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.usb.org/sites/default/files/documents/usb_type-c.zip"
 			(at 45.72 144.78 0)
 			(hide yes)
@@ -16541,6 +16534,17 @@
 		)
 		(property "Description" "USB Connectors USB Type C,2.0, Rec, SMT,TH Shell Stakes"
 			(at 41.91 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C165948"
+			(at 45.72 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16798,15 +16802,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C2152"
-			(at 248.92 146.05 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "https://www.nxp.com/docs/en/data-sheet/BCP56_BCX56_BC56PA.pdf"
 			(at 243.84 148.59 0)
 			(hide yes)
@@ -16820,6 +16815,17 @@
 		)
 		(property "Description" "NPN transistor, base/emitter/collector"
 			(at 243.84 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2152"
+			(at 248.92 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17066,15 +17072,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C60490"
-			(at 83.82 54.61 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 83.82 54.61 0)
 			(hide yes)
@@ -17087,6 +17084,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 83.82 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C60490"
 			(at 83.82 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -17489,6 +17497,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 88.9 49.53 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f1152199-b53c-40dd-a28a-27ea532726e2")
+		(property "Reference" "#PWR071"
+			(at 95.25 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 92.202 49.53 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
+			(at 88.9 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4680f08f-bbab-42e3-9bba-80161905a784")
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176/3d27331b-a58a-4956-92e0-cb1f55544b23"
+					(reference "#PWR071")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:VDDA")
 		(at 170.18 35.56 270)
 		(unit 1)
@@ -17689,15 +17775,6 @@
 				(justify left)
 			)
 		)
-		(property "LCSC" "C473398"
-			(at 58.42 68.58 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm27762.pdf"
 			(at 118.11 59.69 0)
 			(hide yes)
@@ -17711,6 +17788,17 @@
 		)
 		(property "Description" "Low-noise inverting charge pump with both positive and negative LDO's, with 2.7V-5.5V input to +1.5 to +5V and -1.5 to -5V Output Voltage, WSON-12"
 			(at 54.61 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C473398"
+			(at 58.42 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17844,15 +17932,6 @@
 				)
 			)
 		)
-		(property "LCSC" "C25991"
-			(at 85.09 99.06 0)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Datasheet" ""
 			(at 85.09 99.06 0)
 			(hide yes)
@@ -17865,6 +17944,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 85.09 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25991"
 			(at 85.09 99.06 0)
 			(hide yes)
 			(show_name no)

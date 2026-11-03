@@ -17,7 +17,7 @@ endif
 
 VERSION ?= v1.0.0
 
-.PHONY: all rebuild rebuild-check export export-cad export-kicad export-wiring export-firmware release-gerbers manifest check test test-e2e clean help
+.PHONY: all rebuild rebuild-check back-propagate-pcb export export-cad export-kicad export-wiring export-firmware release-gerbers manifest check test test-e2e clean help
 
 all: export
 
@@ -26,6 +26,9 @@ rebuild:
 
 rebuild-check:
 	$(PYTHON) scripts/rebuild_all.py --check
+
+back-propagate-pcb:
+	bash scripts/back_propagate_pcb.sh
 
 export:
 	$(PYTHON) scripts/export_manager.py --all
@@ -62,6 +65,7 @@ clean:
 
 help:
 	@echo "MR1 Nanopore Reader — Build & Export Commands:"
+	@echo "  make back-propagate-pcb Sync manual PCB changes to stack spec, regen interposer & footprints"
 	@echo "  make rebuild         One-shot rebuild: validate spec, sync footprints, check CAD, run tests"
 	@echo "  make rebuild-check   CI check mode: verify no drift between spec, CAD, and footprint libraries"
 	@echo "  make export          Export all deliverables (CAD, KiCad, Wiring, Firmware)"
