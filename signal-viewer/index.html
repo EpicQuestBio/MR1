@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b121b">
+  <meta name="description" content="MR1 real-time ionic current signal visualizer">
+  <title>MR1 · Current Signal Viewer</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="27" height="27" fill="none"><path d="M3 17h6l3-8 7 15 4-9h6" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.2"/></svg>
+        </div>
+        <div class="brand-words"><strong>MR1<span class="brand-dot">.</span></strong><span>SIGNAL VIEWER</span></div>
+      </div>
+      <div class="top-center"><span class="small-caps">ACQUISITION CONSOLE</span><span class="top-separator"></span><span>Single-channel solid-state nanopore</span></div>
+      <div class="top-right"><span class="tag">100 kS/s</span><span class="connection-pill"><span id="connectionDot" class="status-dot"></span><span id="connectionLabel">Disconnected</span></span></div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="sidebar-head"><span class="small-caps">CONTROL PANEL</span><span class="sidebar-badge">01 / MR1</span></div>
+
+        <section class="side-section">
+          <div class="section-title"><span>Connection</span><span class="section-num">01</span></div>
+          <label for="socketUrl" class="field-label">WebSocket endpoint</label>
+          <div class="input-container"><span class="input-prefix">↗</span><input id="socketUrl" value="ws://localhost:8765" type="url" spellcheck="false" autocomplete="off" aria-label="WebSocket endpoint"></div>
+          <div class="button-row"><button id="connectBtn" class="btn btn-primary">Connect to bridge</button><button id="disconnectBtn" class="btn btn-secondary" disabled>Disconnect</button></div>
+          <button id="demoBtn" class="btn btn-demo"><span class="demo-icon">▶</span> Run local demo <span class="demo-caption">No bridge needed</span></button>
+          <p class="field-help" id="connectionHelp" role="status" aria-live="polite">Connect to the MR1 Python bridge or explore a simulated two-sample blockade stream.</p>
+        </section>
+
+        <section class="side-section">
+          <div class="section-title"><span>Display</span><span class="section-num">02</span></div>
+          <label for="windowSelect" class="field-label">Visible time window</label>
+          <select id="windowSelect" class="select-field">
+            <option value="0.001">1 ms · raw samples</option>
+            <option value="0.01">10 ms</option>
+            <option value="0.1">100 ms</option>
+            <option value="0.5">500 ms</option>
+            <option value="1">1 second</option>
+            <option value="5" selected>5 seconds</option>
+            <option value="10">10 seconds</option>
+            <option value="30">30 seconds</option>
+            <option value="60">60 seconds</option>
+          </select>
+          <div class="option-line"><div><strong>Follow live signal</strong><span>Auto-scroll as samples arrive</span></div><label class="switch"><input id="followCheck" type="checkbox" checked><span class="slider-track"></span></label></div>
+          <div class="option-line"><div><strong>Automatic Y range</strong><span>Scale to visible current</span></div><label class="switch"><input id="autoscaleCheck" type="checkbox" checked><span class="slider-track"></span></label></div>
+          <div class="option-line"><div><strong>Event markers</strong><span>Overlay detected blockades</span></div><label class="switch"><input id="markersCheck" type="checkbox" checked><span class="slider-track"></span></label></div>
+          <p class="field-help">Drag to browse history · scroll to zoom · double-click to return live.</p>
+        </section>
+
+        <section class="side-section">
+          <div class="section-title"><span>Event detection</span><span class="section-num">03</span></div>
+          <div class="slider-heading"><label for="thresholdInput" class="field-label">Drop threshold</label><div><span id="thresholdValue">20</span> <span class="muted">pA</span></div></div>
+          <input id="thresholdInput" class="range-input" type="range" min="5" max="100" value="20" step="1" aria-label="Blockade detection threshold in pA">
+          <div class="range-endpoints"><span>5 pA</span><span>100 pA</span></div>
+          <div class="info-callout"><span class="callout-icon">i</span><span>Simple baseline-relative threshold detection on raw samples. Minimum event length: <strong>2 samples (20 µs)</strong>. It is a visual aid, not a validated detector.</span></div>
+        </section>
+
+        <section class="sidebar-foot"><div class="small-caps">INPUT PROTOCOL</div><div class="protocol-row"><span>HEADER</span><code>uint64 LE · timestamp µs</code></div><div class="protocol-row"><span>PAYLOAD</span><code>float32 LE[] · current pA</code></div><div class="protocol-row"><span>BUFFER</span><code>60 seconds · rolling</code></div><div class="protocol-row"><span>RATE</span><code>100,000 samples/s</code></div></section>
+      </aside>
+
+      <main class="main-content">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> LIVE INSTRUMENT MONITORING</div><h1>Ionic current <span>monitor</span></h1><p>High-resolution, single-channel signal acquisition and event inspection.</p></div><div class="heading-badge"><span class="heading-badge-icon">∿</span><div><strong>Nanopore Channel 01</strong><span>Current / picoamperes</span></div></div></div>
+
+        <section class="metrics" aria-label="Live signal statistics">
+          <div class="metric"><div class="metric-header"><span>Current</span><span class="metric-deco">~</span></div><div class="metric-value"><span id="currentValue">—</span><small>pA</small></div><div class="metric-sub">Latest sample</div></div>
+          <div class="metric"><div class="metric-header"><span>Baseline</span><span class="metric-deco amber">∿</span></div><div class="metric-value"><span id="baselineValue">—</span><small>pA</small></div><div class="metric-sub">Adaptive estimate</div></div>
+          <div class="metric"><div class="metric-header"><span>Blockades detected</span><span class="metric-deco orange">↘</span></div><div class="metric-value"><span id="eventValue">0</span><small>events</small></div><div class="metric-sub"><span id="rateValue">0.0</span> events / sec (last 1 s)</div></div>
+          <div class="metric"><div class="metric-header"><span>Incoming rate</span><span class="metric-deco purple">↗</span></div><div class="metric-value"><span id="throughputValue">—</span><small>kS/s</small></div><div class="metric-sub"><span id="bufferValue">0.0</span> s in memory</div></div>
+        </section>
+
+        <section class="chart-panel">
+          <div class="chart-heading"><div><div class="chart-title"><span class="live-ring"></span><h2>Current waveform</h2><span id="plotMode" class="plot-mode">LIVE</span></div><p>Min / max per pixel at overview · raw samples when zoomed in</p></div><div class="chart-actions"><button id="zoomOutBtn" class="square-btn" title="Zoom out" aria-label="Zoom out">−</button><button id="zoomInBtn" class="square-btn" title="Zoom in" aria-label="Zoom in">+</button><button id="liveBtn" class="action-btn">◎ Live</button><button id="snapshotBtn" class="action-btn subtle" title="Save chart image">↓ PNG</button></div></div>
+          <div id="chartArea" class="chart-area">
+            <canvas id="signalCanvas" aria-label="Ionic current over time"></canvas>
+            <div id="chartTooltip" class="chart-tooltip" hidden></div>
+            <div id="emptyState" class="empty-state"><span class="empty-wave">∿</span><h3>Ready for signal</h3><p>Connect to ws://localhost:8765 or launch the built-in demo to begin streaming.</p><button id="emptyDemoBtn" class="btn btn-primary">Start demo stream</button></div>
+          </div>
+          <div class="plot-footer"><div class="legend"><span><i class="legend-swatch aqua"></i> Current range</span><span><i class="legend-swatch gold"></i> Estimated baseline</span><span><i class="legend-swatch coral"></i> Detected blockade</span></div><span id="viewInfo" class="view-info">No data</span></div>
+        </section>
+
+        <section class="events-panel"><div class="events-heading"><div><div class="eyebrow">EVENT REGISTER</div><h2>Recent blockades</h2></div><span class="events-hint">Click an event to inspect at 1 ms</span></div><div class="table-scroll"><table><thead><tr><th>EVENT</th><th>TIME</th><th>BLOCKADE DEPTH</th><th>DWELL TIME</th><th>MIN CURRENT</th><th></th></tr></thead><tbody id="eventRows"><tr><td colspan="6" class="table-empty">No events detected yet. Waiting for samples…</td></tr></tbody></table></div></section>
+        <footer class="app-footer"><span>MR1 Signal Viewer <span class="footer-dot">·</span> Browser-side analysis</span><span id="footerStatus">No active source</span></footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

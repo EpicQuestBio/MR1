@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b121b">
+  <meta name="description" content="MR1 real-time ionic current signal visualizer">
+  <title>MR1 · Current Signal Viewer</title>
+  <style>
+:root{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e6edf7;background:#0a1119;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}body{margin:0;min-width:340px}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #56bed0;outline-offset:3px}
+.app-shell{min-height:100vh;background:radial-gradient(ellipse at 84% -12%,#122534 0,transparent 43%),#0a1119}
+.topbar{height:76px;border-bottom:1px solid #20303c;display:flex;align-items:center;justify-content:space-between;padding:0 35px;gap:20px;background:rgba(11,18,27,.94)}
+.brand{display:flex;align-items:center;gap:12px;min-width:220px}.brand-icon{height:40px;width:40px;display:grid;place-items:center;border-radius:11px;background:#173841;color:#52d7c8;box-shadow:inset 0 0 0 1px #2d6566}.brand-words{display:flex;flex-direction:column;gap:1px}.brand-words strong{font-size:23px;line-height:1;letter-spacing:-1.1px}.brand-dot{color:#56d4c5}.brand-words>span{font-size:9px;letter-spacing:2.2px;color:#7993a4;font-weight:700}
+.top-center{display:flex;gap:17px;align-items:center;color:#7f94a3;font-size:12px}.small-caps{color:#7b96a7;font-size:10px;font-weight:800;letter-spacing:1.7px}.top-separator{height:14px;width:1px;background:#30404d}.top-right{display:flex;align-items:center;gap:12px}.tag{padding:8px 11px;color:#b9cdd6;border-radius:7px;background:#172530;border:1px solid #283945;font-size:11px;font-weight:700;letter-spacing:.4px}.connection-pill{border:1px solid #30414e;border-radius:100px;display:flex;align-items:center;gap:9px;padding:8px 13px;font-size:12px;color:#b6c8d3;background:#111c26;min-width:133px;justify-content:center}.status-dot{height:7px;width:7px;background:#72808f;border-radius:50%;box-shadow:0 0 0 4px #72808f22}.status-dot.online{background:#44d9bd;box-shadow:0 0 0 4px #44d9bd22}.status-dot.connecting{background:#e7be61;box-shadow:0 0 0 4px #e7be6122}.status-dot.error{background:#f28484;box-shadow:0 0 0 4px #f2848422}
+.workspace{display:grid;grid-template-columns:295px minmax(0,1fr);max-width:1800px;margin:auto;min-height:calc(100vh - 76px)}.sidebar{border-right:1px solid #1e2e3a;background:linear-gradient(180deg,#101c27 0%,#0d1822 70%);padding:29px 23px;display:flex;flex-direction:column;gap:27px}.sidebar-head{display:flex;justify-content:space-between;align-items:center}.sidebar-badge{font-size:10px;color:#648497;letter-spacing:1px}.side-section{padding-top:3px}.section-title{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #283743;padding-bottom:14px;margin-bottom:19px;font-size:13px;font-weight:750}.section-num{color:#506e80;font-size:10px;font-weight:700}.field-label{display:block;color:#9db3c3;font-size:11px;font-weight:700;letter-spacing:.2px;margin-bottom:9px}.input-container{display:flex;align-items:center;border:1px solid #344655;border-radius:9px;background:#0a151f;height:43px;padding:0 11px;gap:8px}.input-container:focus-within{border-color:#59bdb9}.input-container input{width:100%;background:transparent;border:0;color:#dce7ed;outline:none!important;font-size:12px;min-width:0}.input-prefix{color:#5eaaab;font-size:20px;line-height:1}.button-row{display:flex;gap:8px;margin-top:11px}.btn{border-radius:8px;border:1px solid transparent;padding:11px 12px;font-size:12px;font-weight:700;transition:background .15s,border-color .15s;white-space:nowrap}.btn-primary{background:#52cbbb;color:#092322;box-shadow:0 2px 16px #3bb4a311}.btn-primary:hover:not(:disabled){background:#70e3d4}.btn-secondary{border-color:#324555;background:#172630;color:#c6d5dc}.btn-secondary:hover:not(:disabled){background:#243744}.button-row .btn-primary{flex:1}.btn-demo{margin-top:10px;width:100%;display:flex;align-items:center;gap:9px;text-align:left;border-color:#34525a;background:#172831;color:#9ed8d4}.btn-demo:hover{background:#203b43}.demo-icon{color:#6cddd0;font-size:10px}.demo-caption{margin-left:auto;color:#7c9da2;font-size:10px;font-weight:500}.field-help{line-height:1.65;font-size:11px;color:#718d9e;margin:11px 0 0}.select-field{background:#101f2b;color:#dce8ef;border:1px solid #344654;border-radius:8px;padding:10px 11px;width:100%;font-size:12px;min-height:42px}.option-line{margin-top:19px;display:flex;align-items:center;justify-content:space-between;gap:12px}.option-line>div{display:flex;flex-direction:column;gap:4px}.option-line strong{font-size:12px;font-weight:650;color:#d7e3ec}.option-line div span{font-size:11px;color:#728b9d}.switch{position:relative;display:inline-flex;cursor:pointer;flex:none}.switch input{position:absolute;opacity:0;pointer-events:none}.slider-track{width:36px;height:21px;border-radius:20px;background:#304452;border:1px solid #40596a;position:relative;transition:.2s}.slider-track:before{content:"";position:absolute;left:3px;top:3px;height:13px;width:13px;background:#a5b5c0;border-radius:50%;transition:.2s}.switch input:checked+.slider-track{background:#207a77;border-color:#2d9e95}.switch input:checked+.slider-track:before{transform:translateX(15px);background:#b9fff1}.switch input:focus-visible+.slider-track{outline:2px solid #72cfc1;outline-offset:3px}.slider-heading{display:flex;justify-content:space-between;align-items:center}.slider-heading>div{color:#e4f6f3;font-size:19px;font-weight:750;font-variant-numeric:tabular-nums}.muted{color:#7894a0;font-size:12px;font-weight:400}.range-input{appearance:none;width:100%;height:5px;border-radius:10px;background:#32515b;margin:16px 0 10px;accent-color:#5bcfbd}.range-input::-webkit-slider-thumb{appearance:none;width:15px;height:15px;border-radius:50%;background:#71e0cf;border:3px solid #103d43;box-shadow:0 0 0 1px #76dcca;cursor:pointer}.range-endpoints{display:flex;justify-content:space-between;color:#688696;font-size:10px}.info-callout{display:flex;gap:10px;border:1px solid #34464e;background:#182934;border-radius:9px;padding:11px 10px;color:#96aeba;font-size:11px;line-height:1.55;margin-top:20px}.info-callout strong{color:#d6e8e8}.callout-icon{flex:none;border:1px solid #4e9292;color:#79c8be;border-radius:50%;height:15px;width:15px;font-size:10px;font-weight:800;display:grid;place-items:center}.sidebar-foot{border-top:1px solid #263744;padding-top:20px;margin-top:auto}.protocol-row{display:flex;justify-content:space-between;gap:6px;border-bottom:1px solid #1e303d;padding:10px 0}.protocol-row>span{font-size:9px;color:#668191;font-weight:700;letter-spacing:1px}.protocol-row code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;color:#a7c0cb;text-align:right}
+.main-content{padding:38px clamp(20px,3.1vw,54px) 22px;min-width:0}.page-heading{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:28px}.eyebrow{color:#6abeb9;font-size:10px;font-weight:800;letter-spacing:1.8px;display:flex;align-items:center;gap:9px}.eyebrow-line{height:2px;width:17px;background:#5bd0bd}.page-heading h1{font-size:clamp(27px,2.7vw,37px);line-height:1.15;font-weight:750;letter-spacing:-1.3px;margin:12px 0 9px}.page-heading h1 span{font-weight:350;color:#94abbc}.page-heading p{font-size:12px;color:#859dad;margin:0}.heading-badge{display:flex;align-items:center;gap:12px;background:#142430;border:1px solid #293f4b;border-radius:10px;padding:12px 15px;min-width:224px}.heading-badge-icon{font-size:27px;color:#5dccbb;background:#1e3e43;border-radius:8px;height:36px;width:36px;display:grid;place-items:center}.heading-badge div{display:flex;flex-direction:column;gap:5px}.heading-badge strong{font-size:11px}.heading-badge div span{font-size:10px;color:#7994a4}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:20px}.metric{background:#111e2a;border:1px solid #283b48;border-radius:11px;min-width:0;padding:17px 19px 14px;position:relative;overflow:hidden}.metric:after{content:"";position:absolute;left:0;top:14px;bottom:14px;width:2px;background:#2c575c}.metric:nth-child(2):after{background:#856d42}.metric:nth-child(3):after{background:#8a5d53}.metric:nth-child(4):after{background:#655d8b}.metric-header{font-size:11px;color:#91aaba;display:flex;align-items:center;justify-content:space-between;gap:5px}.metric-deco{color:#62c6ba;font-size:20px;opacity:.9;line-height:1}.metric-deco.amber{color:#dab168}.metric-deco.orange{color:#dd947a}.metric-deco.purple{color:#ac9cdd}.metric-value{font-variant-numeric:tabular-nums;margin:13px 0 7px;white-space:nowrap;display:flex;align-items:baseline;gap:6px}.metric-value>span{font-size:clamp(22px,2.2vw,31px);font-weight:760;letter-spacing:-1px}.metric-value small{font-size:12px;color:#6e8b9a;font-weight:500}.metric-sub{font-size:10px;color:#6f8e9d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chart-panel,.events-panel{background:#101c27;border:1px solid #293a47;border-radius:13px;overflow:hidden;box-shadow:0 9px 28px #04080e1f}.chart-heading{padding:21px 23px 19px;display:flex;justify-content:space-between;align-items:center;gap:13px;border-bottom:1px solid #283946}.chart-title{display:flex;gap:10px;align-items:center}.chart-title h2{font-size:15px;font-weight:740;margin:0}.live-ring{height:8px;width:8px;border-radius:50%;border:2px solid #6e9b9c}.live-ring.active{border-color:#4ae4c3;background:#4ae4c3;box-shadow:0 0 0 4px #4ae4c319}.chart-title .plot-mode{color:#70bbae;border:1px solid #296b67;background:#193a3d;border-radius:4px;font-size:9px;letter-spacing:1px;font-weight:800;padding:3px 6px}.chart-title .plot-mode.historical{color:#d4b376;border-color:#665338;background:#3a3023}.chart-heading p{margin:7px 0 0 19px;color:#7391a0;font-size:11px}.chart-actions{display:flex;align-items:center;gap:7px}.square-btn,.action-btn{background:#192a36;border:1px solid #304552;color:#c7d5e1;border-radius:7px;height:33px;min-width:33px;font-size:15px;font-weight:650}.square-btn:hover,.action-btn:hover{background:#284251}.action-btn{font-size:11px;padding:0 13px}.action-btn.subtle{background:transparent;color:#9ab3c0}.chart-area{height:clamp(345px,40vw,480px);position:relative;margin:6px 14px 0}.chart-area canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}.chart-tooltip{z-index:2;position:absolute;pointer-events:none;background:#09131def;border:1px solid #47747d;border-radius:8px;box-shadow:0 8px 25px #0006;padding:9px 11px;color:#dbe9f0;font-size:11px;line-height:1.7;min-width:158px;font-variant-numeric:tabular-nums}.chart-tooltip strong{color:#83e7cf}.empty-state{position:absolute;inset:6px 10px 36px 63px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;text-align:center;background:radial-gradient(ellipse at center,#142c38a0 0%,#101c27f1 57%);pointer-events:auto}.empty-state[hidden]{display:none}.empty-wave{font-size:45px;color:#4bafa8;background:#1b3b44;border:1px solid #35646c;border-radius:50%;height:71px;width:71px;display:grid;place-items:center;margin-bottom:4px}.empty-state h3{font-size:17px;margin:0}.empty-state p{font-size:12px;line-height:1.65;color:#83a1b1;margin:0;max-width:285px}.empty-state .btn{margin-top:4px}.plot-footer{border-top:1px solid #263744;padding:13px 23px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}.legend{display:flex;align-items:center;flex-wrap:wrap;gap:20px}.legend span{font-size:10px;color:#94acb8;display:flex;align-items:center;gap:7px}.legend-swatch{width:13px;height:2px;display:inline-block;background:#6de3d4}.legend-swatch.gold{background:#dbb469}.legend-swatch.coral{background:#ed987f}.view-info{font-size:10px;color:#7494a4;font-variant-numeric:tabular-nums}
+.events-panel{margin-top:20px}.events-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:23px 24px 17px}.events-heading h2{font-size:16px;margin:8px 0 0;letter-spacing:-.2px}.events-hint{font-size:11px;color:#7796a5}.table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:11px;font-variant-numeric:tabular-nums}th{color:#7192a1;text-align:left;padding:14px 24px;background:#142330;font-size:9px;letter-spacing:1.05px;font-weight:800;white-space:nowrap}td{border-top:1px solid #253644;padding:13px 24px;color:#bdcdda;white-space:nowrap}tr.event-row{cursor:pointer}tr.event-row:hover{background:#1c3340}td:first-child{font-weight:750;color:#80d5c6}td.table-empty{text-align:center;padding:26px 15px;color:#6e8d9e;font-style:italic}.inspect-arrow{font-size:14px;color:#80b8b5}.app-footer{display:flex;justify-content:space-between;color:#567585;font-size:10px;padding:21px 2px 0;gap:14px}.footer-dot{padding:0 5px;color:#63b9b1}
+@media(max-width:1250px){.top-center{display:none}.workspace{grid-template-columns:265px minmax(0,1fr)}.sidebar{padding:26px 18px}.main-content{padding:29px 21px}.metric{padding:14px}.metrics{gap:8px}.chart-heading{padding:16px}.plot-footer{padding:12px 15px}th,td{padding-left:14px;padding-right:14px}}
+@media(max-width:950px){.workspace{display:flex;flex-direction:column}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:20px;border-right:0;border-bottom:1px solid #263945;padding:22px}.sidebar-head{grid-column:1/-1}.sidebar-foot{margin:0}.main-content{padding:24px 20px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.heading-badge{display:none}}
+@media(max-width:610px){.topbar{padding:0 15px;height:65px}.workspace{min-height:calc(100vh - 65px)}.top-right .tag{display:none}.brand{min-width:0}.sidebar{grid-template-columns:1fr;padding:22px}.sidebar-head{grid-column:auto}.side-section{border-top:1px solid #293b48;padding-top:19px}.main-content{padding:24px 12px}.page-heading{padding:0 6px}.metrics{gap:8px}.metric{padding:14px 12px}.metric-value>span{font-size:24px}.chart-heading{flex-direction:column;align-items:flex-start}.chart-actions{align-self:stretch}.action-btn{flex:1}.chart-area{height:360px;margin:0 5px}.plot-footer{gap:10px}.events-heading{padding:20px 14px}.events-hint{display:none}.legend{gap:10px}.legend span{font-size:9px}.empty-state{left:55px}.app-footer{padding:18px 4px}}
+
+</style>
+  
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="27" height="27" fill="none"><path d="M3 17h6l3-8 7 15 4-9h6" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.2"/></svg>
+        </div>
+        <div class="brand-words"><strong>MR1<span class="brand-dot">.</span></strong><span>SIGNAL VIEWER</span></div>
+      </div>
+      <div class="top-center"><span class="small-caps">ACQUISITION CONSOLE</span><span class="top-separator"></span><span>Single-channel solid-state nanopore</span></div>
+      <div class="top-right"><span class="tag">100 kS/s</span><span class="connection-pill"><span id="connectionDot" class="status-dot"></span><span id="connectionLabel">Disconnected</span></span></div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="sidebar-head"><span class="small-caps">CONTROL PANEL</span><span class="sidebar-badge">01 / MR1</span></div>
+
+        <section class="side-section">
+          <div class="section-title"><span>Connection</span><span class="section-num">01</span></div>
+          <label for="socketUrl" class="field-label">WebSocket endpoint</label>
+          <div class="input-container"><span class="input-prefix">↗</span><input id="socketUrl" value="ws://localhost:8765" type="url" spellcheck="false" autocomplete="off" aria-label="WebSocket endpoint"></div>
+          <div class="button-row"><button id="connectBtn" class="btn btn-primary">Connect to bridge</button><button id="disconnectBtn" class="btn btn-secondary" disabled>Disconnect</button></div>
+          <button id="demoBtn" class="btn btn-demo"><span class="demo-icon">▶</span> Run local demo <span class="demo-caption">No bridge needed</span></button>
+          <p class="field-help" id="connectionHelp" role="status" aria-live="polite">Connect to the MR1 Python bridge or explore a simulated two-sample blockade stream.</p>
+        </section>
+
+        <section class="side-section">
+          <div class="section-title"><span>Display</span><span class="section-num">02</span></div>
+          <label for="windowSelect" class="field-label">Visible time window</label>
+          <select id="windowSelect" class="select-field">
+            <option value="0.001">1 ms · raw samples</option>
+            <option value="0.01">10 ms</option>
+            <option value="0.1">100 ms</option>
+            <option value="0.5">500 ms</option>
+            <option value="1">1 second</option>
+            <option value="5" selected>5 seconds</option>
+            <option value="10">10 seconds</option>
+            <option value="30">30 seconds</option>
+            <option value="60">60 seconds</option>
+          </select>
+          <div class="option-line"><div><strong>Follow live signal</strong><span>Auto-scroll as samples arrive</span></div><label class="switch"><input id="followCheck" type="checkbox" checked><span class="slider-track"></span></label></div>
+          <div class="option-line"><div><strong>Automatic Y range</strong><span>Scale to visible current</span></div><label class="switch"><input id="autoscaleCheck" type="checkbox" checked><span class="slider-track"></span></label></div>
+          <div class="option-line"><div><strong>Event markers</strong><span>Overlay detected blockades</span></div><label class="switch"><input id="markersCheck" type="checkbox" checked><span class="slider-track"></span></label></div>
+          <p class="field-help">Drag to browse history · scroll to zoom · double-click to return live.</p>
+        </section>
+
+        <section class="side-section">
+          <div class="section-title"><span>Event detection</span><span class="section-num">03</span></div>
+          <div class="slider-heading"><label for="thresholdInput" class="field-label">Drop threshold</label><div><span id="thresholdValue">20</span> <span class="muted">pA</span></div></div>
+          <input id="thresholdInput" class="range-input" type="range" min="5" max="100" value="20" step="1" aria-label="Blockade detection threshold in pA">
+          <div class="range-endpoints"><span>5 pA</span><span>100 pA</span></div>
+          <div class="info-callout"><span class="callout-icon">i</span><span>Simple baseline-relative threshold detection on raw samples. Minimum event length: <strong>2 samples (20 µs)</strong>. It is a visual aid, not a validated detector.</span></div>
+        </section>
+
+        <section class="sidebar-foot"><div class="small-caps">INPUT PROTOCOL</div><div class="protocol-row"><span>HEADER</span><code>uint64 LE · timestamp µs</code></div><div class="protocol-row"><span>PAYLOAD</span><code>float32 LE[] · current pA</code></div><div class="protocol-row"><span>BUFFER</span><code>60 seconds · rolling</code></div><div class="protocol-row"><span>RATE</span><code>100,000 samples/s</code></div></section>
+      </aside>
+
+      <main class="main-content">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> LIVE INSTRUMENT MONITORING</div><h1>Ionic current <span>monitor</span></h1><p>High-resolution, single-channel signal acquisition and event inspection.</p></div><div class="heading-badge"><span class="heading-badge-icon">∿</span><div><strong>Nanopore Channel 01</strong><span>Current / picoamperes</span></div></div></div>
+
+        <section class="metrics" aria-label="Live signal statistics">
+          <div class="metric"><div class="metric-header"><span>Current</span><span class="metric-deco">~</span></div><div class="metric-value"><span id="currentValue">—</span><small>pA</small></div><div class="metric-sub">Latest sample</div></div>
+          <div class="metric"><div class="metric-header"><span>Baseline</span><span class="metric-deco amber">∿</span></div><div class="metric-value"><span id="baselineValue">—</span><small>pA</small></div><div class="metric-sub">Adaptive estimate</div></div>
+          <div class="metric"><div class="metric-header"><span>Blockades detected</span><span class="metric-deco orange">↘</span></div><div class="metric-value"><span id="eventValue">0</span><small>events</small></div><div class="metric-sub"><span id="rateValue">0.0</span> events / sec (last 1 s)</div></div>
+          <div class="metric"><div class="metric-header"><span>Incoming rate</span><span class="metric-deco purple">↗</span></div><div class="metric-value"><span id="throughputValue">—</span><small>kS/s</small></div><div class="metric-sub"><span id="bufferValue">0.0</span> s in memory</div></div>
+        </section>
+
+        <section class="chart-panel">
+          <div class="chart-heading"><div><div class="chart-title"><span class="live-ring"></span><h2>Current waveform</h2><span id="plotMode" class="plot-mode">LIVE</span></div><p>Min / max per pixel at overview · raw samples when zoomed in</p></div><div class="chart-actions"><button id="zoomOutBtn" class="square-btn" title="Zoom out" aria-label="Zoom out">−</button><button id="zoomInBtn" class="square-btn" title="Zoom in" aria-label="Zoom in">+</button><button id="liveBtn" class="action-btn">◎ Live</button><button id="snapshotBtn" class="action-btn subtle" title="Save chart image">↓ PNG</button></div></div>
+          <div id="chartArea" class="chart-area">
+            <canvas id="signalCanvas" aria-label="Ionic current over time"></canvas>
+            <div id="chartTooltip" class="chart-tooltip" hidden></div>
+            <div id="emptyState" class="empty-state"><span class="empty-wave">∿</span><h3>Ready for signal</h3><p>Connect to ws://localhost:8765 or launch the built-in demo to begin streaming.</p><button id="emptyDemoBtn" class="btn btn-primary">Start demo stream</button></div>
+          </div>
+          <div class="plot-footer"><div class="legend"><span><i class="legend-swatch aqua"></i> Current range</span><span><i class="legend-swatch gold"></i> Estimated baseline</span><span><i class="legend-swatch coral"></i> Detected blockade</span></div><span id="viewInfo" class="view-info">No data</span></div>
+        </section>
+
+        <section class="events-panel"><div class="events-heading"><div><div class="eyebrow">EVENT REGISTER</div><h2>Recent blockades</h2></div><span class="events-hint">Click an event to inspect at 1 ms</span></div><div class="table-scroll"><table><thead><tr><th>EVENT</th><th>TIME</th><th>BLOCKADE DEPTH</th><th>DWELL TIME</th><th>MIN CURRENT</th><th></th></tr></thead><tbody id="eventRows"><tr><td colspan="6" class="table-empty">No events detected yet. Waiting for samples…</td></tr></tbody></table></div></section>
+        <footer class="app-footer"><span>MR1 Signal Viewer <span class="footer-dot">·</span> Browser-side analysis</span><span id="footerStatus">No active source</span></footer>
+      </main>
+    </div>
+  </div>
+<script>
+// MR1 waveform storage, protocol decoding, and optional simple event detector.
+// No external dependencies. All sample times are measured from frame timestamps,
+// never from WebSocket arrival time.
+
+const SAMPLE_RATE = 100_000;
+const SAMPLE_PERIOD_US = 1_000_000 / SAMPLE_RATE;
+const BUFFER_SECONDS = 60;
+
+class SignalHistory {
+  constructor(sampleRate = SAMPLE_RATE, bufferSeconds = BUFFER_SECONDS) {
+    this.sampleRate = sampleRate;
+    this.capacity = Math.round(sampleRate * bufferSeconds);
+    this.samples = new Float32Array(this.capacity);
+    this.nextIndex = 0;
+    // Small summaries can be combined to query any pixel range efficiently.
+    this.levels = [16, 256, 4096].map(size => {
+      const slots = Math.ceil(this.capacity / size) + 2;
+      const ids = new Float64Array(slots);
+      const min = new Float32Array(slots);
+      const max = new Float32Array(slots);
+      ids.fill(-1);
+      min.fill(Infinity);
+      max.fill(-Infinity);
+      return { size, slots, ids, min, max };
+    });
+  }
+
+  get oldestIndex() { return Math.max(0, this.nextIndex - this.capacity); }
+  get availableSamples() { return this.nextIndex - this.oldestIndex; }
+
+  append(value) {
+    const index = this.nextIndex++;
+    this.samples[index % this.capacity] = value;
+    for (const level of this.levels) {
+      const block = Math.floor(index / level.size);
+      const slot = block % level.slots;
+      if (level.ids[slot] !== block) {
+        level.ids[slot] = block;
+        level.min[slot] = Infinity;
+        level.max[slot] = -Infinity;
+      }
+      if (Number.isFinite(value)) {
+        if (value < level.min[slot]) level.min[slot] = value;
+        if (value > level.max[slot]) level.max[slot] = value;
+      }
+    }
+    return index;
+  }
+
+  get(index) {
+    if (!Number.isInteger(index) || index < this.oldestIndex || index >= this.nextIndex) return NaN;
+    return this.samples[index % this.capacity];
+  }
+
+  // Inclusive start, exclusive end. NaN represents a sample gap.
+  range(start, end) {
+    start = Math.max(this.oldestIndex, Math.floor(start));
+    end = Math.min(this.nextIndex, Math.ceil(end));
+    let lo = Infinity, hi = -Infinity;
+    let pos = start;
+    while (pos < end) {
+      let consumed = false;
+      for (let j = this.levels.length - 1; j >= 0; j--) {
+        const level = this.levels[j];
+        const size = level.size;
+        if (pos % size !== 0 || pos + size > end) continue;
+        const block = Math.floor(pos / size);
+        const slot = block % level.slots;
+        if (level.ids[slot] !== block) continue;
+        if (level.min[slot] < lo) lo = level.min[slot];
+        if (level.max[slot] > hi) hi = level.max[slot];
+        pos += size;
+        consumed = true;
+        break;
+      }
+      if (!consumed) {
+        const value = this.get(pos++);
+        if (Number.isFinite(value)) {
+          if (value < lo) lo = value;
+          if (value > hi) hi = value;
+        }
+      }
+    }
+    return lo <= hi ? { min: lo, max: hi } : null;
+  }
+}
+
+class EventDetector {
+  constructor(thresholdPA = 20, minSamples = 2) {
+    this.thresholdPA = thresholdPA;
+    this.minSamples = minSamples;
+    this.baseline = null;
+    this.active = null;
+    this.total = 0;
+    this.events = [];
+    this.maxEvents = 6000;
+  }
+
+  resetTransient() { this.active = null; }
+
+  ingest(value, sampleIndex) {
+    if (!Number.isFinite(value)) {
+      this.active = null;
+      return null;
+    }
+    if (this.baseline === null) { this.baseline = value; return null; }
+    const depth = this.baseline - value;
+    if (this.active !== null) {
+      if (depth >= this.thresholdPA * 0.45) {
+        this.active.durationSamples++;
+        if (value < this.active.minPA) this.active.minPA = value;
+        if (depth > this.active.depthPA) this.active.depthPA = depth;
+        return null;
+      }
+      const finished = this.active;
+      this.active = null;
+      this.baseline += 0.003 * (value - this.baseline);
+      if (finished.durationSamples >= this.minSamples) {
+        this.total++;
+        this.events.push(finished);
+        if (this.events.length > this.maxEvents) this.events.splice(0, this.events.length - this.maxEvents);
+        return finished;
+      }
+      return null;
+    }
+    if (depth >= this.thresholdPA) {
+      this.active = {
+        startSample: sampleIndex,
+        durationSamples: 1,
+        baselinePA: this.baseline,
+        minPA: value,
+        depthPA: depth,
+      };
+    } else {
+      // Gated EMA follows drift but does not get pulled down by blockades.
+      this.baseline += 0.003 * (value - this.baseline);
+    }
+    return null;
+  }
+}
+
+class MR1Stream {
+  constructor({ sampleRate = SAMPLE_RATE, bufferSeconds = BUFFER_SECONDS, thresholdPA = 20 } = {}) {
+    this.sampleRate = sampleRate;
+    this.bufferSeconds = bufferSeconds;
+    this.thresholdPA = thresholdPA;
+    this.reset();
+  }
+
+  reset() {
+    this.history = new SignalHistory(this.sampleRate, this.bufferSeconds);
+    this.detector = new EventDetector(this.thresholdPA);
+    this.lastTimestampUs = null;
+    this.previousFrameLength = 0;
+    this.received = 0;
+    this.lost = 0;
+    this.packets = 0;
+    this.resets = (this.resets || 0);
+    this.latestPA = NaN;
+  }
+
+  ingestPacket(buffer) {
+    if (!(buffer instanceof ArrayBuffer) || buffer.byteLength < 12 || (buffer.byteLength - 8) % 4 !== 0) {
+      throw new Error('Expected 8-byte LE uint64 timestamp followed by float32 LE current samples.');
+    }
+    const data = new DataView(buffer);
+    const timestampUs = data.getBigUint64(0, true);
+    const n = (buffer.byteLength - 8) / 4;
+    if (this.lastTimestampUs !== null) {
+      let deltaUs = timestampUs - this.lastTimestampUs;
+      // Source DAQ timestamps are uint32 microseconds; the bridge wraps them in uint64.
+      if (deltaUs < 0n && deltaUs + 4294967296n > 0n && deltaUs + 4294967296n < 5000000n) {
+        deltaUs += 4294967296n;
+      }
+      const distanceSamples = Math.round(Number(deltaUs) / SAMPLE_PERIOD_US);
+      const gap = distanceSamples - this.previousFrameLength;
+      if (distanceSamples <= 0 || gap < 0) {
+        // Ignore duplicate/out-of-order or overlapping frames rather than shifting data.
+        return { ignored: true, reason: 'non-monotonic timestamp' };
+      }
+      if (gap > this.sampleRate * 2) {
+        // A new simulator session / disconnected stream: avoid allocating an enormous gap.
+        this.resets++;
+        this.reset();
+      } else if (gap > 0) {
+        this.lost += gap;
+        this.detector.resetTransient();
+        for (let i = 0; i < gap; i++) this.history.append(NaN);
+      }
+    }
+    for (let i = 0; i < n; i++) {
+      const value = data.getFloat32(8 + 4 * i, true);
+      const index = this.history.append(value);
+      this.detector.ingest(value, index);
+      this.latestPA = value;
+    }
+    this.packets++;
+    this.received += n;
+    this.lastTimestampUs = timestampUs;
+    this.previousFrameLength = n;
+    return { samples: n, timestampUs };
+  }
+}
+
+// The local demonstration encodes real MR1-format binary frames, so it exercises
+// the same decoder and renderer as an actual websocket_bridge.py connection.
+function makeMR1Frame(timestampUs, values) {
+  const frame = new ArrayBuffer(8 + values.length * 4);
+  const view = new DataView(frame);
+  view.setBigUint64(0, BigInt(timestampUs), true);
+  for (let i = 0; i < values.length; i++) view.setFloat32(8 + i * 4, values[i], true);
+  return frame;
+}
+
+
+const $ = id => document.getElementById(id);
+const stream = new MR1Stream();
+const plot = $('signalCanvas');
+const ctx = plot.getContext('2d', { alpha: false });
+const area = $('chartArea');
+const tooltip = $('chartTooltip');
+const GRID = { left: 63, right: 18, top: 23, bottom: 43 };
+const COLORS = {
+  bg: '#101c27', plot: '#0d1923', grid: '#223845', axis: '#738f9e',
+  wave: '#65ddce', waveLow: '#36aead', baseline: '#d6ad6b',
+  event: '#f1a27e', cross: '#9bb5bd', selection: '#eac078',
+};
+const intFmt = new Intl.NumberFormat('en-US');
+let source = null;     // WebSocket | DemoSource | null
+let sourceType = null; // 'ws' | 'demo' | null
+let state = 'offline';
+let windowSeconds = 5;
+let followLive = true;
+let autoScale = true;
+let showMarkers = true;
+let viewportEnd = 0;
+let fixedYRange = null;
+let dimensions = { width: 0, height: 0, dpr: 1 };
+let pointer = null;
+let dragging = null;
+let dirty = true;
+let lastPaint = 0;
+let samplesThisSecond = 0;
+let throughput = 0;
+let lastPacketAt = 0;
+let selectedEvent = null;
+let lastError = '';
+
+function setStatus(next, explanation = '') {
+  state = next;
+  const names = { offline: 'Disconnected', connecting: 'Connecting', connected: 'Connected', demo: 'Local demo', error: 'Connection error' };
+  $('connectionLabel').textContent = names[next];
+  $('connectionDot').className = 'status-dot' + (next === 'connected' || next === 'demo' ? ' online' : next === 'connecting' ? ' connecting' : next === 'error' ? ' error' : '');
+  $('connectionHelp').textContent = explanation || (next === 'connected' ? 'Binary MR1 frames are arriving from the bridge.' : next === 'demo' ? 'Synthetic two-sample events; encoded and decoded using the real MR1 binary frame format.' : 'Connect to the MR1 Python bridge or explore a simulated two-sample blockade stream.');
+  $('connectBtn').disabled = next === 'connecting' || next === 'connected';
+  $('disconnectBtn').disabled = !source;
+  $('demoBtn').disabled = next === 'demo';
+  $('emptyState').hidden = next === 'connected' || next === 'demo' || stream.received > 0;
+  $('liveBtn').textContent = followLive ? '◉ Live' : '◎ Return live';
+  $('footerStatus').textContent = next === 'demo' ? 'LOCAL DEMO / 100 kHz' : next === 'connected' ? 'BRIDGE / ws stream' : next === 'connecting' ? 'OPENING SOCKET' : next === 'error' ? 'WEBSOCKET ERROR' : 'NO ACTIVE SOURCE';
+  dirty = true;
+}
+
+function resetSession() {
+  stream.reset();
+  stream.detector.thresholdPA = Number($('thresholdInput').value);
+  samplesThisSecond = 0; throughput = 0; selectedEvent = null;
+  viewportEnd = 0; fixedYRange = null; followLive = true;
+  $('followCheck').checked = true;
+  updateStatistics();
+  dirty = true;
+}
+
+function stopSource(silent = false) {
+  if (sourceType === 'ws' && source) {
+    source.onopen = source.onclose = source.onerror = source.onmessage = null;
+    source.close();
+  } else if (sourceType === 'demo' && source) {
+    source.stop();
+  }
+  source = null;
+  sourceType = null;
+  if (!silent) setStatus('offline');
+}
+
+function consumePacket(buffer) {
+  try {
+    const result = stream.ingestPacket(buffer);
+    if (result.ignored) return;
+    samplesThisSecond += result.samples;
+    lastPacketAt = performance.now();
+    dirty = true;
+  } catch (err) {
+    lastError = err.message;
+    $('connectionHelp').textContent = `Ignored invalid frame: ${err.message}`;
+    console.warn('MR1 frame:', err);
+  }
+}
+
+function connectWebSocket() {
+  lastError = '';
+  stopSource(true);
+  resetSession();
+  const url = $('socketUrl').value.trim();
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'ws:' && parsed.protocol !== 'wss:') throw new Error('Use a ws:// or wss:// URL.');
+    source = new WebSocket(url);
+  } catch (error) {
+    source = null;
+    setStatus('error', error.message);
+    return;
+  }
+  sourceType = 'ws';
+  const ws = source;
+  ws.binaryType = 'arraybuffer';
+  ws.onopen = () => {
+    if (source !== ws) return;
+    setStatus('connected', `Connected to ${url}. Waiting for MR1 binary frames…`);
+  };
+  ws.onmessage = event => {
+    if (source !== ws) return;
+    if (event.data instanceof ArrayBuffer) consumePacket(event.data);
+    else if (event.data instanceof Blob) event.data.arrayBuffer().then(buffer => { if (source === ws) consumePacket(buffer); });
+  };
+  ws.onerror = () => {
+    if (source !== ws) return;
+    lastError = 'WebSocket connection failed. Is websocket_bridge.py running?';
+  };
+  ws.onclose = event => {
+    if (source !== ws) return;
+    source = null;
+    sourceType = null;
+    setStatus('error', lastError || `WebSocket closed (code ${event.code}). Verify the bridge and address.`);
+    lastError = '';
+  };
+  setStatus('connecting', `Opening ${url}…`);
+}
+
+class DemoSource {
+  constructor(onFrame) {
+    this.onFrame = onFrame;
+    this.sample = 0;
+    this.pending = 0;
+    this.eventRemaining = 0;
+    this.eventDepth = 32;
+    this.timer = null;
+    this.lastTime = 0;
+  }
+  start() {
+    this.lastTime = performance.now();
+    this.timer = setInterval(() => this.tick(), 16);
+  }
+  tick() {
+    const now = performance.now();
+    // Clamp elapsed wall-clock time to keep browser-background throttling from
+    // creating an unbounded backlog. This is a demonstration, not an acquisition clock.
+    this.pending += Math.min(100, now - this.lastTime) * SAMPLE_RATE / 1000;
+    this.lastTime = now;
+    let frames = 0;
+    while (this.pending >= 64 && frames < 160) {
+      const values = new Float32Array(64);
+      for (let i = 0; i < 64; i++) {
+        const time = (this.sample + i) / SAMPLE_RATE;
+        const baseline = 122 + 7 * Math.sin(time * 0.75) + 3.6 * Math.sin(time * 3.1);
+        const noise = (Math.random() + Math.random() + Math.random() - 1.5) * 4.4;
+        if (this.eventRemaining === 0 && Math.random() < 0.00036) {
+          this.eventRemaining = 2;
+          this.eventDepth = 26 + Math.random() * 22;
+        }
+        let current = baseline + noise;
+        if (this.eventRemaining > 0) { current -= this.eventDepth; this.eventRemaining--; }
+        values[i] = current;
+      }
+      const timestamp = BigInt(this.sample * 10);
+      this.onFrame(makeMR1Frame(timestamp, values));
+      this.sample += 64;
+      this.pending -= 64;
+      frames++;
+    }
+  }
+  stop() { clearInterval(this.timer); this.timer = null; }
+}
+
+function startDemo() {
+  stopSource(true);
+  resetSession();
+  source = new DemoSource(consumePacket);
+  sourceType = 'demo';
+  source.start();
+  setStatus('demo');
+}
+
+function formatElapsed(seconds, digits = 3) {
+  if (Math.abs(seconds) < 1) return `${(seconds * 1000).toFixed(Math.abs(seconds) < 0.01 ? 2 : 1)} ms`;
+  return `${seconds.toFixed(digits)} s`;
+}
+function formatPA(value, decimals = 1) {
+  return Number.isFinite(value) ? value.toFixed(decimals) : '—';
+}
+function windowSamples() { return Math.max(10, Math.round(windowSeconds * SAMPLE_RATE)); }
+function clamp(value, lo, hi) { return Math.min(hi, Math.max(lo, value)); }
+function getView() {
+  const history = stream.history;
+  const latest = history.nextIndex - 1;
+  const span = windowSamples();
+  if (latest < 0) return { start: -span, end: 0, span };
+  const earliestAllowedEnd = Math.min(latest, history.oldestIndex + span - 1);
+  const end = followLive ? latest : clamp(viewportEnd, earliestAllowedEnd, latest);
+  if (!followLive) viewportEnd = end;
+  return { start: end - span + 1, end, span };
+}
+
+function setWindow(seconds, preserveAnchor = false, fraction = 0.5) {
+  const old = getView();
+  const anchor = old.start + old.span * fraction;
+  windowSeconds = clamp(seconds, 0.0005, BUFFER_SECONDS);
+  const select = $('windowSelect');
+  const matching = [...select.options].find(x => Math.abs(Number(x.value) - windowSeconds) < 1e-9);
+  const custom = $('customWindowOption');
+  if (matching) { if (custom) custom.remove(); select.value = matching.value; }
+  else {
+    if (custom) custom.remove();
+    const option = document.createElement('option');
+    option.id = 'customWindowOption'; option.value = String(windowSeconds);
+    option.textContent = `${formatElapsed(windowSeconds)} · custom`;
+    select.add(option); select.value = option.value;
+  }
+  if (preserveAnchor) {
+    followLive = false;
+    $('followCheck').checked = false;
+    viewportEnd = anchor + windowSamples() * (1 - fraction);
+  }
+  fixedYRange = null;
+  dirty = true;
+}
+
+function goLive() {
+  followLive = true;
+  $('followCheck').checked = true;
+  selectedEvent = null;
+  dirty = true;
+}
+
+function getBox() {
+  return {
+    x: GRID.left, y: GRID.top,
+    w: Math.max(1, dimensions.width - GRID.left - GRID.right),
+    h: Math.max(1, dimensions.height - GRID.top - GRID.bottom),
+  };
+}
+function graphX(sample, view, box) { return box.x + (sample - view.start) / view.span * box.w; }
+function graphY(value, range, box) { return box.y + box.h - (value - range.min) / (range.max - range.min) * box.h; }
+
+function drawCanvas() {
+  if (!dimensions.width || !dimensions.height || !ctx) return;
+  const { width, height, dpr } = dimensions;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = COLORS.bg;
+  ctx.fillRect(0, 0, width, height);
+  const box = getBox();
+  ctx.fillStyle = COLORS.plot;
+  ctx.fillRect(box.x, box.y, box.w, box.h);
+  const view = getView();
+  const history = stream.history;
+  const rawMode = view.span <= box.w * 1.6;
+  const dataLeft = Math.max(history.oldestIndex, Math.floor(view.start));
+  const dataRight = Math.min(history.nextIndex, Math.ceil(view.end + 1));
+  const columns = [];
+  let lo = Infinity, hi = -Infinity;
+
+  if (rawMode) {
+    for (let s = dataLeft; s < dataRight; s++) {
+      const v = history.get(s);
+      if (Number.isFinite(v)) { if (v < lo) lo = v; if (v > hi) hi = v; }
+    }
+  } else if (dataRight > dataLeft) {
+    const visibleWidth = Math.ceil(box.w);
+    for (let px = 0; px < visibleWidth; px++) {
+      const a = Math.floor(view.start + (px / box.w) * view.span);
+      const b = Math.max(a + 1, Math.ceil(view.start + ((px + 1) / box.w) * view.span));
+      const mm = history.range(a, b);
+      columns.push(mm);
+      if (mm) { if (mm.min < lo) lo = mm.min; if (mm.max > hi) hi = mm.max; }
+    }
+  }
+
+  if (!Number.isFinite(lo)) { lo = 0; hi = 200; }
+  const pad = Math.max(3, (hi - lo) * .18);
+  const newRange = { min: lo - pad, max: hi + pad };
+  if (autoScale || !fixedYRange) fixedYRange = newRange;
+  const range = autoScale ? newRange : fixedYRange;
+
+  // Grid and readable axes.
+  ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
+  ctx.lineWidth = 1;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= 5; i++) {
+    const y = box.y + box.h * i / 5;
+    ctx.strokeStyle = COLORS.grid;
+    ctx.beginPath(); ctx.moveTo(box.x, y + .5); ctx.lineTo(box.x + box.w, y + .5); ctx.stroke();
+    ctx.fillStyle = COLORS.axis;
+    ctx.fillText((range.max - (range.max - range.min) * i / 5).toFixed(1), box.x - 11, y);
+  }
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for (let i = 0; i <= 6; i++) {
+    const x = box.x + box.w * i / 6;
+    ctx.strokeStyle = COLORS.grid;
+    ctx.beginPath(); ctx.moveTo(x + .5, box.y); ctx.lineTo(x + .5, box.y + box.h); ctx.stroke();
+    const sec = (view.start + view.span * i / 6) / SAMPLE_RATE;
+    ctx.fillStyle = COLORS.axis;
+    ctx.fillText(sec < 0 ? '' : windowSeconds < .1 ? `${(sec * 1000).toFixed(2)} ms` : `${sec.toFixed(windowSeconds < 1 ? 3 : 2)} s`, x, box.y + box.h + 11);
+  }
+  ctx.save(); ctx.translate(12, box.y + box.h * 0.5); ctx.rotate(-Math.PI / 2);
+  ctx.font = '10px ui-sans-serif, system-ui'; ctx.fillStyle = '#829aab';
+  ctx.textAlign = 'center'; ctx.fillText('CURRENT (pA)', 0, 0); ctx.restore();
+
+  // Clipping means spikes cannot draw across axes or toolbar.
+  ctx.save();
+  ctx.beginPath(); ctx.rect(box.x, box.y, box.w, box.h); ctx.clip();
+
+  // Baseline reference (only drawn when we have current data).
+  if (history.availableSamples && Number.isFinite(stream.detector.baseline)) {
+    const y = graphY(stream.detector.baseline, range, box);
+    ctx.strokeStyle = COLORS.baseline;
+    ctx.globalAlpha = .72;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 6]);
+    ctx.beginPath(); ctx.moveTo(box.x, y); ctx.lineTo(box.x + box.w, y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+  }
+
+  if (rawMode) {
+    ctx.strokeStyle = COLORS.wave; ctx.lineWidth = 1.5;
+    ctx.beginPath(); let started = false;
+    for (let s = dataLeft; s < dataRight; s++) {
+      const v = history.get(s);
+      if (!Number.isFinite(v)) { started = false; continue; }
+      const x = graphX(s, view, box), y = graphY(v, range, box);
+      if (!started) { ctx.moveTo(x, y); started = true; }
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    if (view.span < box.w / 4) {
+      ctx.fillStyle = '#a4f9e9';
+      for (let s = dataLeft; s < dataRight; s++) {
+        const v = history.get(s);
+        if (!Number.isFinite(v)) continue;
+        ctx.beginPath(); ctx.arc(graphX(s, view, box), graphY(v, range, box), 2.8, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  } else {
+    // An extrema segment for EACH screen pixel: the briefest downward blockade
+    // is retained without pretending that multiple extrema have known ordering.
+    ctx.strokeStyle = COLORS.wave; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 0; x < columns.length; x++) {
+      const mm = columns[x]; if (!mm) continue;
+      const xx = box.x + x + .5;
+      ctx.moveTo(xx, graphY(mm.min, range, box));
+      ctx.lineTo(xx, graphY(mm.max, range, box));
+    }
+    ctx.stroke();
+  }
+
+  const visibleEvents = stream.detector.events.filter(ev => ev.startSample >= view.start - ev.durationSamples && ev.startSample <= view.end + 1);
+  const markersSuppressed = visibleEvents.length > 240;
+  if (showMarkers && !markersSuppressed) {
+    for (const ev of visibleEvents) {
+      const x = graphX(ev.startSample, view, box);
+      const y = clamp(graphY(ev.minPA, range, box), box.y + 5, box.y + box.h - 5);
+      ctx.fillStyle = COLORS.event;
+      ctx.beginPath(); ctx.arc(x, y, rawMode ? 4 : 2.6, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  if (selectedEvent !== null && selectedEvent >= view.start && selectedEvent <= view.end) {
+    const x = graphX(selectedEvent, view, box);
+    ctx.strokeStyle = COLORS.selection; ctx.lineWidth = 1.3; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(x, box.y); ctx.lineTo(x, box.y + box.h); ctx.stroke(); ctx.setLineDash([]);
+  }
+  if (pointer && pointer.x >= box.x && pointer.x <= box.x + box.w && pointer.y >= box.y && pointer.y <= box.y + box.h) {
+    ctx.strokeStyle = COLORS.cross; ctx.globalAlpha = .5;
+    ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(pointer.x, box.y); ctx.lineTo(pointer.x, box.y + box.h); ctx.moveTo(box.x, pointer.y); ctx.lineTo(box.x + box.w, pointer.y); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+
+  if (pointer && history.availableSamples > 0) updateTooltip(pointer, view, box);
+  else tooltip.hidden = true;
+  const detail = rawMode ? 'RAW SAMPLES' : 'MIN / MAX DECIMATION';
+  $('viewInfo').textContent = `${detail}  ·  ${formatElapsed(windowSeconds)} window  ·  ${(view.span / box.w).toFixed(view.span / box.w < 10 ? 2 : 0)} samples / px` + (markersSuppressed && showMarkers ? '  ·  Event markers hidden at this scale' : '');
+  $('plotMode').textContent = followLive ? 'LIVE' : 'HISTORY';
+  $('plotMode').className = 'plot-mode' + (followLive ? '' : ' historical');
+  document.querySelector('.live-ring').classList.toggle('active', state === 'connected' || state === 'demo');
+}
+
+function updateTooltip(pos, view, box) {
+  const index = Math.floor(view.start + (pos.x - box.x) / box.w * view.span);
+  const value = stream.history.get(index);
+  const bucketWidth = Math.max(1, Math.round(view.span / box.w));
+  const range = stream.history.range(index - Math.floor(bucketWidth / 2), index + Math.ceil(bucketWidth / 2));
+  const label = range && bucketWidth > 1 ? `<div>Range: <strong>${formatPA(range.min)} – ${formatPA(range.max)} pA</strong></div>` : `<div>Current: <strong>${formatPA(value)} pA</strong></div>`;
+  tooltip.innerHTML = `<div>Time: <strong>${formatElapsed(index / SAMPLE_RATE, 4)}</strong></div><div>Sample: ${intFmt.format(index)}</div>${label}`;
+  tooltip.hidden = false;
+  const left = clamp(pos.x + 14, 3, dimensions.width - 186);
+  const top = clamp(pos.y - 74, 0, dimensions.height - 85);
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+}
+
+function updateStatistics() {
+  $('currentValue').textContent = formatPA(stream.latestPA);
+  $('baselineValue').textContent = formatPA(stream.detector.baseline);
+  $('eventValue').textContent = intFmt.format(stream.detector.total);
+  const cutoff = stream.history.nextIndex - SAMPLE_RATE;
+  const perSecond = stream.detector.events.reduce((acc, ev) => acc + (ev.startSample >= cutoff ? 1 : 0), 0);
+  $('rateValue').textContent = perSecond.toFixed(1);
+  $('throughputValue').textContent = stream.packets ? throughput.toFixed(1) : '—';
+  $('bufferValue').textContent = (stream.history.availableSamples / SAMPLE_RATE).toFixed(1);
+  if (!stream.detector.events.length) {
+    $('eventRows').innerHTML = '<tr><td colspan="6" class="table-empty">No events detected yet. Waiting for samples…</td></tr>';
+    return;
+  }
+  const rows = stream.detector.events.slice(-7).reverse();
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < rows.length; i++) {
+    const ev = rows[i];
+    const tr = document.createElement('tr');
+    tr.className = 'event-row'; tr.tabIndex = 0;
+    const eventNum = stream.detector.total - i;
+    tr.innerHTML = `<td>#${intFmt.format(eventNum)}</td><td>${(ev.startSample / SAMPLE_RATE).toFixed(4)} s</td><td>${ev.depthPA.toFixed(1)} pA</td><td>${(ev.durationSamples * 10).toFixed(0)} µs (${ev.durationSamples})</td><td>${ev.minPA.toFixed(1)} pA</td><td class="inspect-arrow">↗</td>`;
+    const jump = () => inspectEvent(ev);
+    tr.addEventListener('click', jump);
+    tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jump(); } });
+    frag.append(tr);
+  }
+  $('eventRows').replaceChildren(frag);
+}
+
+function inspectEvent(ev) {
+  if (ev.startSample < stream.history.oldestIndex) return;
+  setWindow(.001);
+  followLive = false;
+  $('followCheck').checked = false;
+  viewportEnd = ev.startSample + 52;
+  selectedEvent = ev.startSample;
+  dirty = true;
+}
+
+function resize() {
+  const bounds = area.getBoundingClientRect();
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const width = Math.round(bounds.width), height = Math.round(bounds.height);
+  if (width < 1 || height < 1) return;
+  if (dimensions.width !== width || dimensions.height !== height || dimensions.dpr !== dpr) {
+    dimensions = { width, height, dpr };
+    plot.width = Math.round(width * dpr);
+    plot.height = Math.round(height * dpr);
+    dirty = true;
+  }
+}
+new ResizeObserver(resize).observe(area);
+window.addEventListener('resize', resize);
+
+plot.addEventListener('pointermove', e => {
+  const rect = plot.getBoundingClientRect();
+  pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  if (dragging) {
+    const deltaPixels = pointer.x - dragging.x;
+    followLive = false; $('followCheck').checked = false;
+    viewportEnd = dragging.end - deltaPixels / getBox().w * windowSamples();
+    selectedEvent = null;
+  }
+  dirty = true;
+});
+plot.addEventListener('pointerleave', () => { if (!dragging) pointer = null; dirty = true; });
+plot.addEventListener('pointerdown', e => {
+  if (e.button !== 0 || !stream.history.availableSamples) return;
+  const rect = plot.getBoundingClientRect();
+  dragging = { x: e.clientX - rect.left, end: getView().end };
+  plot.setPointerCapture(e.pointerId);
+});
+plot.addEventListener('pointerup', () => { dragging = null; dirty = true; });
+plot.addEventListener('pointercancel', () => { dragging = null; pointer = null; dirty = true; });
+plot.addEventListener('wheel', e => {
+  if (!stream.history.availableSamples) return;
+  e.preventDefault();
+  const rect = plot.getBoundingClientRect();
+  const posX = e.clientX - rect.left;
+  const box = getBox();
+  const fraction = clamp((posX - box.x) / box.w, 0, 1);
+  setWindow(windowSeconds * (e.deltaY < 0 ? 0.78 : 1.28), true, fraction);
+}, { passive: false });
+plot.addEventListener('dblclick', goLive);
+
+$('connectBtn').addEventListener('click', connectWebSocket);
+$('disconnectBtn').addEventListener('click', () => { stopSource(); updateStatistics(); });
+$('demoBtn').addEventListener('click', startDemo);
+$('emptyDemoBtn').addEventListener('click', startDemo);
+$('windowSelect').addEventListener('change', e => setWindow(Number(e.target.value)));
+$('followCheck').addEventListener('change', e => { const currentEnd = getView().end; followLive = e.target.checked; if (!followLive) viewportEnd = currentEnd; selectedEvent = null; dirty = true; });
+$('autoscaleCheck').addEventListener('change', e => { autoScale = e.target.checked; fixedYRange = null; dirty = true; });
+$('markersCheck').addEventListener('change', e => { showMarkers = e.target.checked; dirty = true; });
+$('thresholdInput').addEventListener('input', e => {
+  const threshold = Number(e.target.value);
+  $('thresholdValue').textContent = threshold;
+  stream.thresholdPA = threshold;
+  stream.detector.thresholdPA = threshold;
+  stream.detector.resetTransient();
+});
+$('liveBtn').addEventListener('click', goLive);
+$('zoomInBtn').addEventListener('click', () => setWindow(windowSeconds / 2, !followLive, .5));
+$('zoomOutBtn').addEventListener('click', () => setWindow(windowSeconds * 2, !followLive, .5));
+$('snapshotBtn').addEventListener('click', () => {
+  plot.toBlob(blob => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `mr1-waveform-${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
+});
+window.addEventListener('keydown', e => {
+  if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+  if (e.key.toLowerCase() === 'l') goLive();
+  else if (e.key === '+') setWindow(windowSeconds / 2, !followLive, .5);
+  else if (e.key === '-') setWindow(windowSeconds * 2, !followLive, .5);
+});
+
+setInterval(() => {
+  throughput = samplesThisSecond / 1000;
+  samplesThisSecond = 0;
+  updateStatistics();
+  if (state === 'connected' && stream.packets > 0 && performance.now() - lastPacketAt > 2500) {
+    $('connectionHelp').textContent = 'Connected, but no samples received for 2.5 seconds. Check the bridge stream.';
+  }
+}, 1000);
+setInterval(updateStatistics, 300);
+
+function frame(time) {
+  if (dirty && time - lastPaint > 40) {
+    drawCanvas();
+    dirty = false;
+    lastPaint = time;
+  }
+  requestAnimationFrame(frame);
+}
+resize();
+setStatus('offline');
+updateStatistics();
+requestAnimationFrame(frame);
+
+</script>
+</body>
+</html>
