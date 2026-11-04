@@ -49,6 +49,9 @@ ${PYTHON_CMD} "${REPO_ROOT}/run_tests.py"
 echo -e "${YELLOW}>> Verifying Export Deliverables Integrity (E2E)...${NC}"
 ${PYTHON_CMD} "${REPO_ROOT}/tests/test_exports_e2e.py"
 
+echo -e "${YELLOW}>> Running Playwright Signal Viewer Simulation E2E...${NC}"
+${PYTHON_CMD} "${REPO_ROOT}/tests/e2e/test_signal_viewer_e2e.py"
+
 echo -e "${GREEN}=================================================================${NC}"
 echo -e "${GREEN}  ALL TESTS AND VERIFICATIONS PASSED CLEANLY (0 ERRORS)${NC}"
 echo -e "${GREEN}=================================================================${NC}"

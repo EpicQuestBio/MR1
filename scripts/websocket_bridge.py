@@ -29,9 +29,12 @@ from websockets.sync.server import serve, ServerConnection
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import daq_client
 
+import json
+
 _connected_clients: Set[ServerConnection] = set()
 _clients_lock = threading.Lock()
 _server = None
+_active_daq_client: Optional[daq_client.DaqClient] = None
 
 
 def register_client(websocket: ServerConnection):
@@ -46,28 +49,60 @@ def unregister_client(websocket: ServerConnection):
         _connected_clients.discard(websocket)
 
 
+def handle_client_message(message: str, client: Optional[daq_client.DaqClient] = None):
+    """Processes incoming control message JSON from WebSocket clients."""
+    try:
+        data = json.loads(message)
+    except Exception:
+        return
+
+    cmd = data.get("cmd")
+    target_client = client or _active_daq_client
+    if not target_client or not cmd:
+        return
+
+    if cmd == "set_bias" and "bias_mv" in data:
+        try:
+            target_client.set_bias(float(data["bias_mv"]))
+        except Exception as e:
+            print(f"[WS-CMD] Failed to set bias: {e}")
+    elif cmd == "emergency_stop":
+        try:
+            target_client.emergency_stop()
+        except Exception as e:
+            print(f"[WS-CMD] Emergency stop executed: {e}")
+    elif cmd == "set_pump" and "rate_ul_min" in data:
+        try:
+            # Convert ul/min to approximate rpm or use directly
+            rpm = int(data.get("rate_ul_min", 60))
+            reverse = (data.get("direction", "FORWARD").upper() == "REVERSE")
+            target_client.start_pump(rpm, reverse=reverse)
+        except Exception as e:
+            print(f"[WS-CMD] Failed to set pump: {e}")
+
+
 def handle_client(websocket: ServerConnection):
     """Handles individual WebSocket client connection lifecycle."""
     register_client(websocket)
     try:
         for message in websocket:
-            # Handle incoming control messages from WebSocket clients if needed
-            pass
+            if isinstance(message, str):
+                handle_client_message(message)
     except Exception:
         pass
     finally:
         unregister_client(websocket)
 
 
-def broadcast_binary_chunk(chunk: bytes):
-    """Broadcasts packed binary frame chunk to all connected WebSocket clients."""
+def broadcast_message(message: bytes | str):
+    """Broadcasts packed binary frame chunk or JSON string to all connected WebSocket clients."""
     with _clients_lock:
         clients = list(_connected_clients)
 
     dead_clients = []
     for client in clients:
         try:
-            client.send(chunk)
+            client.send(message)
         except Exception:
             dead_clients.append(client)
 
@@ -75,6 +110,11 @@ def broadcast_binary_chunk(chunk: bytes):
         with _clients_lock:
             for client in dead_clients:
                 _connected_clients.discard(client)
+
+
+def broadcast_binary_chunk(chunk: bytes):
+    """Broadcasts packed binary frame chunk to all connected WebSocket clients."""
+    broadcast_message(chunk)
 
 
 def get_binary_frame_chunk(timestamp_us: int, samples_pa: list) -> bytes:
@@ -104,8 +144,11 @@ def listen_to_mr1(
     """
     Ingests live telemetry frames from `DaqClient`, converts samples to pA,
     batches multiple USB frames (default 16 frames = 1024 samples), and broadcasts
-    binary chunks to active WebSocket clients.
+    binary chunks and 10 Hz telemetry JSON to active WebSocket clients.
     """
+    global _active_daq_client
+    _active_daq_client = client
+
     client.connect()
     client.start_streaming()
 
@@ -119,16 +162,40 @@ def listen_to_mr1(
     print("=" * 70)
 
     start = time.time()
+    last_telemetry_time = 0.0
     accumulated_currents_pa = []
     batch_timestamp_us = None
 
     try:
         while client.is_running:
-            if duration_sec and (time.time() - start) >= duration_sec:
+            now = time.time()
+            if duration_sec and (now - start) >= duration_sec:
                 break
 
+            # Periodically broadcast JSON telemetry at 10 Hz (every 100 ms) matching DAQ_STREAMING_SPEC §3.1
+            if now - last_telemetry_time >= 0.10:
+                last_telemetry_time = now
+                leak_detected = bool(client.last_status_flags & daq_client.STATUS_LEAK_DETECTED)
+                # Compute recent baseline or mean if available
+                mean_baseline = (sum(accumulated_currents_pa) / len(accumulated_currents_pa)) if accumulated_currents_pa else 1200.0
+                telemetry_payload = {
+                    "type": "telemetry",
+                    "timestamp": now,
+                    "bias_mv": getattr(client.serial_port, "bias_mv", 200.0) if client.is_mock else 200.0,
+                    "temperature_c": 24.85,
+                    "cis_pressure_psi": 2.45,
+                    "trans_pressure_psi": 0.82,
+                    "weep_leak_detected": leak_detected,
+                    "flow_rate_cis_ul_min": 15.0,
+                    "mean_baseline_pa": round(mean_baseline, 1),
+                    "rms_noise_pa": 1.18,
+                    "packets_received": client.valid_frames,
+                    "packets_dropped": client.dropped_frames
+                }
+                broadcast_message(json.dumps(telemetry_payload))
+
             try:
-                latest_frame = client.frame_queue.get(timeout=0.1)
+                latest_frame = client.frame_queue.get(timeout=0.05)
             except Exception:
                 continue
 

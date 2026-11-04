@@ -107,8 +107,21 @@ function connectWebSocket() {
   };
   ws.onmessage = event => {
     if (source !== ws) return;
-    if (event.data instanceof ArrayBuffer) consumePacket(event.data);
-    else if (event.data instanceof Blob) event.data.arrayBuffer().then(buffer => { if (source === ws) consumePacket(buffer); });
+    if (typeof event.data === 'string') {
+      try {
+        const telemetry = stream.ingestTelemetry(event.data);
+        if (telemetry) {
+          updateTelemetryBadges(telemetry);
+          dirty = true;
+        }
+      } catch (e) {
+        console.warn('Telemetry JSON parse error:', e);
+      }
+    } else if (event.data instanceof ArrayBuffer) {
+      consumePacket(event.data);
+    } else if (event.data instanceof Blob) {
+      event.data.arrayBuffer().then(buffer => { if (source === ws) consumePacket(buffer); });
+    }
   };
   ws.onerror = () => {
     if (source !== ws) return;
@@ -400,6 +413,54 @@ function updateTooltip(pos, view, box) {
   tooltip.style.top = `${top}px`;
 }
 
+function updateTelemetryBadges(t) {
+  if (!t) return;
+  if ($('tempBadge') && Number.isFinite(t.temperature_c)) {
+    $('tempBadge').textContent = t.temperature_c.toFixed(1);
+  }
+  if ($('cisBadge') && Number.isFinite(t.cis_pressure_psi)) {
+    $('cisBadge').textContent = t.cis_pressure_psi.toFixed(2);
+  }
+  if ($('transBadge') && Number.isFinite(t.trans_pressure_psi)) {
+    $('transBadge').textContent = t.trans_pressure_psi.toFixed(2);
+  }
+  if ($('leakBadge') && $('leakDot') && $('leakText')) {
+    if (t.weep_leak_detected) {
+      $('leakBadge').style.borderColor = '#c73e3e';
+      $('leakDot').style.background = '#e74c3c';
+      $('leakDot').style.boxShadow = '0 0 6px #e74c3c';
+      $('leakText').textContent = 'LEAK DETECTED';
+      $('leakText').style.color = '#ff6b6b';
+    } else {
+      $('leakBadge').style.borderColor = '#2a3e4c';
+      $('leakDot').style.background = '#5bd0bd';
+      $('leakDot').style.boxShadow = 'none';
+      $('leakText').textContent = 'LEAK SENSOR: DRY';
+      $('leakText').style.color = '';
+    }
+  }
+  if ($('biasInput') && Number.isFinite(t.bias_mv) && document.activeElement !== $('biasInput')) {
+    $('biasInput').value = Math.round(t.bias_mv);
+    if ($('biasValue')) $('biasValue').textContent = Math.round(t.bias_mv);
+  }
+}
+
+export function sendCommand(cmdObj) {
+  if (sourceType === 'ws' && source && source.readyState === WebSocket.OPEN) {
+    source.send(JSON.stringify(cmdObj));
+    return true;
+  }
+  return false;
+}
+
+export function sendBias(bias_mv) {
+  return sendCommand({ cmd: 'set_bias', bias_mv: Number(bias_mv) });
+}
+
+export function emergencyStop() {
+  return sendCommand({ cmd: 'emergency_stop', reason: 'USER_ABORT' });
+}
+
 function updateStatistics() {
   $('currentValue').textContent = formatPA(stream.latestPA);
   $('baselineValue').textContent = formatPA(stream.detector.baseline);
@@ -409,6 +470,7 @@ function updateStatistics() {
   $('rateValue').textContent = perSecond.toFixed(1);
   $('throughputValue').textContent = stream.packets ? throughput.toFixed(1) : '—';
   $('bufferValue').textContent = (stream.history.availableSamples / SAMPLE_RATE).toFixed(1);
+  updateTelemetryBadges(stream.telemetry);
   if (!stream.detector.events.length) {
     $('eventRows').innerHTML = '<tr><td colspan="6" class="table-empty">No events detected yet. Waiting for samples…</td></tr>';
     return;
@@ -511,6 +573,32 @@ $('snapshotBtn').addEventListener('click', () => {
     a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }, 'image/png');
 });
+if ($('setBiasBtn')) {
+  $('setBiasBtn').addEventListener('click', () => {
+    const val = Number($('biasInput').value);
+    if (sendBias(val)) {
+      $('ctrlStatus').textContent = `Bias command sent: ${val} mV`;
+    } else {
+      $('ctrlStatus').textContent = 'Not connected to bridge.';
+    }
+  });
+}
+if ($('biasInput')) {
+  $('biasInput').addEventListener('input', e => {
+    if ($('biasValue')) $('biasValue').textContent = e.target.value;
+  });
+}
+if ($('estopBtn')) {
+  $('estopBtn').addEventListener('click', () => {
+    if (emergencyStop()) {
+      $('ctrlStatus').textContent = 'EMERGENCY STOP SENT!';
+      $('biasInput').value = 0;
+      if ($('biasValue')) $('biasValue').textContent = '0';
+    } else {
+      $('ctrlStatus').textContent = 'ESTOP: Not connected.';
+    }
+  });
+}
 window.addEventListener('keydown', e => {
   if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
   if (e.key.toLowerCase() === 'l') goLive();

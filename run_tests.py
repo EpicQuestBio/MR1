@@ -80,6 +80,13 @@ if __name__ == '__main__':
     t19 = load_module('test_kicad_drc_erc', os.path.join(REPO_ROOT, 'tests', 'test_kicad_drc_erc.py'))
     suite.addTests(loader.loadTestsFromModule(t19))
 
+    t20 = load_module('test_signal_viewer_bundle', os.path.join(REPO_ROOT, 'tests', 'test_signal_viewer_bundle.py'))
+    suite.addTests(loader.loadTestsFromModule(t20))
+
+    if "--e2e" in sys.argv:
+        t_e2e = load_module('test_signal_viewer_e2e', os.path.join(REPO_ROOT, 'tests', 'e2e', 'test_signal_viewer_e2e.py'))
+        suite.addTests(loader.loadTestsFromModule(t_e2e))
+
     print(f"Loaded {suite.countTestCases()} unit, formal proof, and E2E tests from tests/.")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

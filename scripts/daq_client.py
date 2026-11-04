@@ -232,6 +232,8 @@ class MockSerialPort:
         # Translocation event simulation state
         self._event_active = False
         self._event_samples_remaining = 0
+        self._event_drop_ratio = 0.30
+        self._baseline_wander_phase = 0.0
 
     @property
     def in_waiting(self) -> int:
@@ -390,19 +392,41 @@ class MockSerialPort:
                 samples = []
                 for i in range(SAMPLES_PER_FRAME):
                     # Check for simulated translocation event
-                    if not self._event_active and (self._frame_index % 70 == 0) and i == 10:
+                    # Multi-scale parametric events between 2 samples (20 us) and 50 samples (500 us)
+                    # with fractional drop ratio delta_I / I_0 between 0.20 and 0.85
+                    if not self._event_active and (self._frame_index % 35 == 0) and i == 10:
                         self._event_active = True
-                        self._event_samples_remaining = 25  # ~250 us blockade
+                        # Cycle or randomize duration across multi-scale range [2, 50]
+                        # Using pseudo-random or deterministic multi-scale based on frame index
+                        duration_choice = 2 + (self._frame_index * 17) % 49
+                        self._event_samples_remaining = duration_choice
+                        # Fractional drop ratio between 0.20 and 0.85
+                        self._event_drop_ratio = 0.20 + ((self._frame_index * 31) % 65) / 100.0
 
-                    noise = int(math.sin(self._frame_index * 0.1 + i * 0.05) * 120)
+                    # Realistic physical nanopore noise:
+                    # 1. Low-frequency baseline wander (~0.1-1 Hz)
+                    self._baseline_wander_phase += (2.0 * math.pi * 0.5) / self.sample_rate_hz
+                    wander = int(math.sin(self._baseline_wander_phase) * 60 + math.sin(self._baseline_wander_phase * 0.23) * 40)
+
+                    # 2. White Gaussian thermal noise approx via Central Limit Theorem / trig noise
+                    # ~1.2 pA RMS equivalent noise floor in counts: 1 count ~ 62.5 fA, so ~1.2 pA ~ 20 counts
+                    # High frequency multi-tone / pseudo-gaussian noise
+                    pseudo_noise = int(
+                        math.sin(self._frame_index * 13.7 + i * 3.1) * 15 +
+                        math.cos(self._frame_index * 29.3 + i * 7.7) * 12 +
+                        math.sin(self._frame_index * 47.1 + i * 11.3) * 8
+                    )
+                    total_noise = wander + pseudo_noise
+
                     if self._event_active:
-                        # 30% current blockade
-                        sample_val = int(base_counts * 0.7) + noise
+                        # Parametric current blockade
+                        effective_scale = max(0.0, 1.0 - self._event_drop_ratio)
+                        sample_val = int(base_counts * effective_scale) + total_noise
                         self._event_samples_remaining -= 1
                         if self._event_samples_remaining <= 0:
                             self._event_active = False
                     else:
-                        sample_val = base_counts + noise
+                        sample_val = base_counts + total_noise
 
                     # Clamp int16
                     sample_val = max(-32768, min(32767, sample_val))
