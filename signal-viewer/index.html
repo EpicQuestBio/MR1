@@ -63,11 +63,40 @@
           <div class="info-callout"><span class="callout-icon">i</span><span>Simple baseline-relative threshold detection on raw samples. Minimum event length: <strong>2 samples (20 µs)</strong>. It is a visual aid, not a validated detector.</span></div>
         </section>
 
+        <section class="side-section">
+          <div class="section-title"><span>Instrument Controls</span><span class="section-num">04</span></div>
+          <div class="slider-heading"><label for="biasInput" class="field-label">Pore Bias</label><div><span id="biasValue">200</span> <span class="muted">mV</span></div></div>
+          <div class="input-container" style="margin-bottom:8px;">
+            <input id="biasInput" type="number" min="-1500" max="1500" step="10" value="200" class="select-field" style="width:100%;" aria-label="Bias voltage in mV">
+          </div>
+          <div class="button-row">
+            <button id="setBiasBtn" class="btn btn-secondary">Apply Bias</button>
+            <button id="estopBtn" class="btn btn-danger" style="background:#8b2424;border-color:#b53939;color:#fff;">ESTOP</button>
+          </div>
+          <p class="field-help" id="ctrlStatus">Bidirectional control via WebSocket.</p>
+        </section>
+
         <section class="sidebar-foot"><div class="small-caps">INPUT PROTOCOL</div><div class="protocol-row"><span>HEADER</span><code>uint64 LE · timestamp µs</code></div><div class="protocol-row"><span>PAYLOAD</span><code>float32 LE[] · current pA</code></div><div class="protocol-row"><span>BUFFER</span><code>60 seconds · rolling</code></div><div class="protocol-row"><span>RATE</span><code>100,000 samples/s</code></div></section>
       </aside>
 
       <main class="main-content">
-        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> LIVE INSTRUMENT MONITORING</div><h1>Ionic current <span>monitor</span></h1><p>High-resolution, single-channel signal acquisition and event inspection.</p></div><div class="heading-badge"><span class="heading-badge-icon">∿</span><div><strong>Nanopore Channel 01</strong><span>Current / picoamperes</span></div></div></div>
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> LIVE INSTRUMENT MONITORING</div>
+            <h1>Ionic current <span>monitor</span></h1>
+            <p>High-resolution, single-channel signal acquisition and event inspection.</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="heading-badge" id="leakBadge" style="min-width:auto;padding:8px 12px;border-color:#2a3e4c;">
+              <span id="leakDot" class="status-dot" style="background:#5bd0bd;box-shadow:none;"></span>
+              <div><strong id="leakText" style="font-size:10px;letter-spacing:0.5px;">LEAK SENSOR: DRY</strong></div>
+            </div>
+            <div class="heading-badge" style="min-width:auto;padding:8px 12px;">
+              <div><strong style="font-size:10px;">TEMP: <span id="tempBadge">25.0</span> °C</strong><span style="font-size:9px;color:#7994a4;">CIS: <span id="cisBadge">0.0</span> psi · TRANS: <span id="transBadge">0.0</span> psi</span></div>
+            </div>
+            <div class="heading-badge"><span class="heading-badge-icon">∿</span><div><strong>Nanopore Channel 01</strong><span>Current / picoamperes</span></div></div>
+          </div>
+        </div>
 
         <section class="metrics" aria-label="Live signal statistics">
           <div class="metric"><div class="metric-header"><span>Current</span><span class="metric-deco">~</span></div><div class="metric-value"><span id="currentValue">—</span><small>pA</small></div><div class="metric-sub">Latest sample</div></div>

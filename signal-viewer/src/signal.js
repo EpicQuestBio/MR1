@@ -144,6 +144,18 @@ export class MR1Stream {
     this.sampleRate = sampleRate;
     this.bufferSeconds = bufferSeconds;
     this.thresholdPA = thresholdPA;
+    this.telemetry = {
+      bias_mv: 200,
+      temperature_c: 25.0,
+      cis_pressure_psi: 0.0,
+      trans_pressure_psi: 0.0,
+      weep_leak_detected: false,
+      flow_rate_cis_ul_min: 0.0,
+      mean_baseline_pa: 0.0,
+      rms_noise_pa: 0.0,
+      packets_received: 0,
+      packets_dropped: 0
+    };
     this.reset();
   }
 
@@ -157,6 +169,19 @@ export class MR1Stream {
     this.packets = 0;
     this.resets = (this.resets || 0);
     this.latestPA = NaN;
+  }
+
+  ingestTelemetry(json) {
+    if (typeof json === 'string') {
+      try {
+        json = JSON.parse(json);
+      } catch {
+        return null;
+      }
+    }
+    if (!json || json.type !== 'telemetry') return null;
+    this.telemetry = { ...this.telemetry, ...json };
+    return this.telemetry;
   }
 
   ingestPacket(buffer) {
@@ -182,7 +207,9 @@ export class MR1Stream {
         // A new simulator session / disconnected stream: avoid allocating an enormous gap.
         this.resets++;
         this.reset();
-      } else if (gap > 0) {
+      } else if (gap >= 1) {
+        // Insert NaN missing sample gaps when delta exceeds the expected sample interval
+        // to prevent drawing artificial line ramps across dropped packets.
         this.lost += gap;
         this.detector.resetTransient();
         for (let i = 0; i < gap; i++) this.history.append(NaN);
