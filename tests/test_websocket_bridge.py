@@ -151,6 +151,64 @@ class TestWebSocketBridgeIntegration(unittest.TestCase):
             server.shutdown()
             server_thread.join(timeout=1.0)
 
+    def test_mock_websocket_bidirectional_commands_and_telemetry(self):
+        host = "127.0.0.1"
+        ws_port = 8787
+
+        # Start WebSocket server
+        server = websocket_bridge.run_websocket_server(host, ws_port)
+        server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+        server_thread.start()
+
+        ws_url = f"ws://{host}:{ws_port}"
+        telemetry_messages = []
+
+        try:
+            mock_client = daq_client.DaqClient(port="MOCK", is_mock=True)
+            daq_thread = threading.Thread(
+                target=websocket_bridge.listen_to_mr1,
+                args=(mock_client,),
+                kwargs={"duration_sec": 1.0, "batch_frames": 4},
+                daemon=True
+            )
+            daq_thread.start()
+            time.sleep(0.15)
+
+            with connect(ws_url) as ws:
+                # 1. Send set_bias command
+                import json
+                ws.send(json.dumps({"cmd": "set_bias", "bias_mv": 320.0}))
+                time.sleep(0.1)
+                self.assertEqual(mock_client.serial_port.bias_mv, 320.0)
+
+                # 2. Send emergency_stop command
+                ws.send(json.dumps({"cmd": "emergency_stop"}))
+                time.sleep(0.1)
+                self.assertEqual(mock_client.serial_port.bias_mv, 0.0)
+
+                # 3. Receive telemetry JSON
+                for _ in range(15):
+                    try:
+                        msg = ws.recv(timeout=0.5)
+                        if isinstance(msg, str):
+                            data = json.loads(msg)
+                            if data.get("type") == "telemetry":
+                                telemetry_messages.append(data)
+                                break
+                    except Exception:
+                        pass
+
+            self.assertGreater(len(telemetry_messages), 0)
+            self.assertIn("temperature_c", telemetry_messages[0])
+            self.assertIn("cis_pressure_psi", telemetry_messages[0])
+            self.assertIn("trans_pressure_psi", telemetry_messages[0])
+            self.assertIn("weep_leak_detected", telemetry_messages[0])
+
+            daq_thread.join(timeout=2.0)
+        finally:
+            server.shutdown()
+            server_thread.join(timeout=1.0)
+
 
 if __name__ == "__main__":
     unittest.main()
