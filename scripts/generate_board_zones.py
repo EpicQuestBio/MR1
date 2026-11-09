@@ -229,6 +229,30 @@ def replace_sexpr_block(text: str, uuid_str: str, new_block: str, tag: str) -> s
     return text
 
 
+def remove_sexpr_block(text: str, uuid_str: str, tag: str) -> str:
+    """Removes an S-expression block identified by tag and uuid without affecting other blocks."""
+    uuid_idx = text.find(uuid_str)
+    if uuid_idx == -1:
+        return text
+    start = text.rfind(f"({tag}", 0, uuid_idx)
+    depth = 0
+    end = -1
+    for i in range(start, len(text)):
+        if text[i] == '(':
+            depth += 1
+        elif text[i] == ')':
+            depth -= 1
+            if depth == 0:
+                end = i + 1
+                break
+    if start != -1 and end != -1:
+        prefix_tab = "\t" if (start > 0 and text[start-1] == '\t') else ""
+        while end < len(text) and text[end] in ' \t\r\n':
+            end += 1
+        return text[:start - len(prefix_tab)] + text[end:]
+    return text
+
+
 def sanitize_silkscreen_over_guard(pcb_text: str) -> str:
     """Removes and relocates all silkscreen ink from the electrometer bare copper / guard window.
 
@@ -349,15 +373,14 @@ def update_pcb_zones(pcb_path: Path = DEFAULT_PCB, write: bool = False) -> bool:
     new_bmask_poly = build_mask_polygon_sexpr(mask_box, "B.Mask", uuid_bmask)
     new_keepout = build_keepout_zone_sexpr(keepout_box, uuid_keepout)
     new_guard = build_guard_zone_sexpr(guard_box, uuid_guard)
-    new_silk_f = build_silk_keepout_zone_sexpr(mask_box, "F.SilkS", uuid_silk_f, "Silk_Keepout_Front")
-    new_silk_b = build_silk_keepout_zone_sexpr(mask_box, "B.SilkS", uuid_silk_b, "Silk_Keepout_Back")
 
     pcb_text = replace_sexpr_block(pcb_text, uuid_fmask, new_fmask_poly, "gr_poly")
     pcb_text = replace_sexpr_block(pcb_text, uuid_bmask, new_bmask_poly, "gr_poly")
     pcb_text = replace_sexpr_block(pcb_text, uuid_keepout, new_keepout, "zone")
     pcb_text = replace_sexpr_block(pcb_text, uuid_guard, new_guard, "zone")
-    pcb_text = replace_sexpr_block(pcb_text, uuid_silk_f, new_silk_f, "zone")
-    pcb_text = replace_sexpr_block(pcb_text, uuid_silk_b, new_silk_b, "zone")
+    # Clean up obsolete silkscreen keepout zones if present (zones on SilkS layers are positive fills in KiCad)
+    pcb_text = remove_sexpr_block(pcb_text, uuid_silk_f, "zone")
+    pcb_text = remove_sexpr_block(pcb_text, uuid_silk_b, "zone")
 
     # Enforce subtractmaskfromsilk yes so 3D viewer and plotters suppress silk over bare copper
     if "(subtractmaskfromsilk no)" in pcb_text:

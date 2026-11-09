@@ -2176,6 +2176,179 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:NetTie_3"
+				(pin_numbers
+					(hide yes)
+				)
+				(pin_names
+					(offset 0)
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom no)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "NT"
+					(at 0 1.27 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Value" "NetTie_3"
+					(at 0 -3.81 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Footprint" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "Description" "Net tie, 3 pins"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_keywords" "net tie short"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(property "ki_fp_filters" "Net*Tie*"
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "NetTie_3_0_1"
+					(polyline
+						(pts
+							(xy -1.27 0) (xy 1.27 0)
+						)
+						(stroke
+							(width 0.508)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+					(polyline
+						(pts
+							(xy 0 0) (xy 0 -2.54) (xy -1.27 -2.54)
+						)
+						(stroke
+							(width 0.508)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(symbol "NetTie_3_1_1"
+					(pin passive line
+						(at -2.54 0 0)
+						(length 2.54)
+						(name "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at 2.54 0 180)
+						(length 2.54)
+						(name "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+					(pin passive line
+						(at -2.54 -2.54 0)
+						(length 2.54)
+						(name "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+						(number "3"
+							(effects
+								(font
+									(size 1.27 1.27)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+
 		(symbol "Device:R"
 			(pin_numbers
 				(hide yes)
@@ -7038,7 +7211,27 @@
 		(at 186.69 36.83)
 		(uuid "d3e21729-69da-486e-aa06-a4c9bdf3707e")
 	)
+		(wire
+		(pts
+			(xy 139.7 284.48) (xy 153.67 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c4e201b-5f11-4712-a1b2-c3d4e5f60001")
+	)
 	(wire
+		(pts
+			(xy 134.62 287.02) (xy 142.24 287.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c4e201b-5f11-4712-a1b2-c3d4e5f60002")
+	)
+(wire
 		(pts
 			(xy -82.55 44.45) (xy -82.55 50.8)
 		)
@@ -7177,16 +7370,6 @@
 			(type default)
 		)
 		(uuid "1d802db0-48cb-4c1d-afbf-d1dac4293431")
-	)
-	(wire
-		(pts
-			(xy 139.7 284.48) (xy 162.56 284.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1e0efe1e-5ddd-49f2-915d-6540aab640ea")
 	)
 	(wire
 		(pts
@@ -8437,16 +8620,6 @@
 			(type default)
 		)
 		(uuid "f0039020-0d16-46e5-aa84-21929f882ffe")
-	)
-	(wire
-		(pts
-			(xy 167.64 284.48) (xy 181.61 284.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f083b469-8ad5-4127-b05a-970f9eab8de7")
 	)
 	(wire
 		(pts
@@ -10266,7 +10439,7 @@
 		(uuid "1a2e6502-a1ce-4ad5-8461-e93064cafc15")
 	)
 	(label "GNDA_SHLD"
-		(at 181.61 284.48 180)
+		(at 142.24 287.02 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -19256,284 +19429,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 165.1 284.48 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7a617457-4cb6-4add-82bb-8ec0fc029565")
-		(property "Reference" "NT9"
-			(at 165.1 279.4 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 165.1 281.94 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Quantity" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "PARTREV" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ALT_Part_Number" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Cost" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Alternate Part Number 1" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "AssemblyType" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Configuration" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2 PN" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer_Name" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer_Part_Number" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Price/Stock" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "price" ""
-			(at 165.1 284.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "6b956d4c-0fdd-4fa8-a39b-bf8ab4b62689")
-		)
-		(pin "1"
-			(uuid "280632ec-3ee9-43b1-83ea-cae14d657228")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "NT9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at -128.27 7.62 90)
 		(unit 1)
@@ -25102,7 +24997,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:NetTie_2")
+		(lib_id "Device:NetTie_3")
 		(at 137.16 284.48 0)
 		(unit 1)
 		(body_style 1)
@@ -25123,7 +25018,7 @@
 				)
 			)
 		)
-		(property "Value" "NetTie_2"
+		(property "Value" "NetTie_3"
 			(at 137.16 281.94 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25133,7 +25028,7 @@
 				)
 			)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
+		(property "Footprint" "footprints:NetTie-3_SMD_ShieldPad_2.5x3.6mm"
 			(at 137.16 284.48 0)
 			(hide yes)
 			(show_name no)
@@ -25155,7 +25050,7 @@
 				)
 			)
 		)
-		(property "Description" "Net tie, 2 pins"
+		(property "Description" "Net tie, 3 pins"
 			(at 137.16 284.48 0)
 			(hide yes)
 			(show_name no)
@@ -25370,7 +25265,10 @@
 		(pin "1"
 			(uuid "f7e745e3-aa78-470b-a3f1-f6b6a9ca116e")
 		)
-		(instances
+				(pin "3"
+			(uuid "3e6b3173-b067-4b6b-90be-e0b5b201f6a3")
+		)
+(instances
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "NT4")
