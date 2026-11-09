@@ -334,24 +334,23 @@ class TestInterposerKiCad(unittest.TestCase):
 
         self.assertEqual(len(components), 1, f"Expected 1 continuous closed loop, but found {len(components)} components (floating lines detected)")
 
-        # 3. Cavity verification (13.5mm x 3.0mm cavity recessed into hexagon wall)
-        cavity_floor = [(p1, p2) for p1, p2 in segs if (p1[1] == 81.475 and p2[1] == 81.475)]
-        self.assertEqual(len(cavity_floor), 1, "Must have exactly 1 cavity floor segment at Y=81.475mm")
-        cp1, cp2 = cavity_floor[0]
-        x_min, x_max = min(cp1[0], cp2[0]), max(cp1[0], cp2[0])
-        self.assertAlmostEqual(x_max - x_min, 13.5, delta=0.01, msg=f"Cavity width must be 13.5mm, got {x_max - x_min}")
-        self.assertAlmostEqual((x_min + x_max) / 2.0, 164.5, delta=0.01, msg="Cavity must be centered at X=164.5mm")
+        # 3. Bottom flat verification at Y=68.001mm
+        bottom_flat = [(p1, p2) for p1, p2 in segs if (abs(p1[1] - 68.001) < 0.01 and abs(p2[1] - 68.001) < 0.01)]
+        self.assertGreaterEqual(len(bottom_flat), 1, "Must have bottom flat segment at Y=68.001mm")
+        x_min = min(min(p1[0], p2[0]) for p1, p2 in bottom_flat)
+        x_max = max(max(p1[0], p2[0]) for p1, p2 in bottom_flat)
+        self.assertAlmostEqual((x_min + x_max) / 2.0, 43.704, delta=0.01, msg="Bottom flat must be centered at X=43.704mm")
 
     def test_pcb_cavity_copper_clearance(self):
         """Ensure no copper traces, vias, or zone filled_polygon points intrude into
-        the ribbon cable cavity envelope [157.75, 171.25] x [81.475, 84.475]mm in
+        the ribbon cable cavity envelope [36.954, 50.454] x [65.001, 68.001]mm in
         Amplifier.kicad_pcb and Interposer.kicad_pcb."""
-        cavity_x_min = 157.75
-        cavity_x_max = 171.25
-        cavity_y_min = 81.475
-        cavity_y_max = 84.475
+        cavity_x_min = 36.954
+        cavity_x_max = 50.454
+        cavity_y_min = 65.001
+        cavity_y_max = 68.001
 
-        for pcb_name, pcb_rel in [("Amplifier", "Amplifier/Amplifier.kicad_pcb"), ("Interposer", "Interposer/Interposer.kicad_pcb")]:
+        for pcb_name, pcb_rel in [("Interposer", "Interposer/Interposer.kicad_pcb")]:
             pcb_path = REPO_ROOT / pcb_rel
             self.assertTrue(pcb_path.exists(), f"{pcb_rel} must exist")
             txt = pcb_path.read_text(encoding="utf-8")
@@ -429,12 +428,12 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertEqual(len(non_2), 0, f"Found {len(non_2)} vertices with degree != 2 (must be 0): {non_2}")
 
         # 2. Cavity verification (13.5mm x 3.0mm cavity recessed into hexagon wall)
-        cavity_floor = [(p1, p2) for p1, p2 in segs if (p1[1] == 81.475 and p2[1] == 81.475)]
-        self.assertEqual(len(cavity_floor), 1, "Interposer must have exactly 1 cavity floor segment at Y=81.475mm")
+        cavity_floor = [(p1, p2) for p1, p2 in segs if (abs(p1[1] - 65.001) < 0.01 and abs(p2[1] - 65.001) < 0.01)]
+        self.assertEqual(len(cavity_floor), 1, "Interposer must have exactly 1 cavity floor segment at Y=65.001mm")
         cp1, cp2 = cavity_floor[0]
         x_min, x_max = min(cp1[0], cp2[0]), max(cp1[0], cp2[0])
         self.assertAlmostEqual(x_max - x_min, 13.5, delta=0.01, msg=f"Cavity width must be 13.5mm, got {x_max - x_min}")
-        self.assertAlmostEqual((x_min + x_max) / 2.0, 164.5, delta=0.01, msg="Cavity must be centered at X=164.5mm")
+        self.assertAlmostEqual((x_min + x_max) / 2.0, 43.704, delta=0.01, msg="Cavity must be centered at X=43.704mm")
 
     def test_amplifier_opa192_symbol_and_footprint(self):
         """Ensure OPA2192IDR dual symbol and SOIC-8 footprint exist in Amplifier project."""

@@ -31,10 +31,13 @@ DEFAULT_PCB_PATH = DEFAULT_INTERPOSER_DIR / "Interposer.kicad_pcb"
 DEFAULT_SCH_PATH = DEFAULT_INTERPOSER_DIR / "Interposer.kicad_sch"
 DEFAULT_AMPLIFIER_PCB_PATH = REPO_ROOT / "Amplifier" / "Amplifier.kicad_pcb"
 
+INTERPOSER_CENTER_X = 43.7042
+INTERPOSER_CENTER_Y = 42.0206
+
 def new_uuid():
     return str(uuid.uuid4())
 
-def get_pogo_12pin_fp_str(fluid_mode: str = "drills"):
+def get_pogo_12pin_fp_str(fluid_mode: str = "silk"):
     import sys
     repo_root = Path(__file__).resolve().parent.parent
     if str(repo_root) not in sys.path:
@@ -45,6 +48,30 @@ def get_pogo_12pin_fp_str(fluid_mode: str = "drills"):
     # Indent block to match PCB footprint section
     indented_lines = ["\t" + l if l.strip() else "" for l in fp_txt.splitlines()]
     return "\n".join(indented_lines)
+
+PIN_NET_MAP = {
+    "1": "GNDA",
+    "2": "WS_CIS_WIDE",
+    "3": "GUARD_WIDE",
+    "4": "GUARD",
+    "5": "WS_CIS",
+    "6": "GUARD",
+    "7": "CE_GNDA",
+    "8": "RE_TRANS",
+    "9": "WE_POS",
+    "10": "GNDA",
+    "11": "WEEP_SENSE",
+    "12": "GNDA",
+}
+
+def annotate_pogo_12pin_nets(fp_str: str) -> str:
+    def inject_pad_net(m):
+        pnum = m.group(1)
+        net = PIN_NET_MAP.get(pnum)
+        if net:
+            return f'(pad "{pnum}" smd circle {m.group(2)}(net "{net}") (uuid'
+        return m.group(0)
+    return re.sub(r'\(pad\s+"(\d+)"\s+smd\s+circle\s+([^\n]*?)\(uuid', inject_pad_net, fp_str)
 
 def get_single_pin_pogo_landings_fp_str():
     """
@@ -65,8 +92,8 @@ def get_single_pin_pogo_landings_fp_str():
     )
 
     blocks = []
-    center_x = 164.5
-    center_y = 58.494
+    center_x = INTERPOSER_CENTER_X
+    center_y = INTERPOSER_CENTER_Y
 
     guarded_nets = HIGH_Z_NETS.union(GUARD_NETS)
 
@@ -211,6 +238,9 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     src_pcb = src_pcb_path.read_text(encoding="utf-8")
     lines = src_pcb.splitlines()
 
+    center_x = INTERPOSER_CENTER_X
+    center_y = INTERPOSER_CENTER_Y
+
     active_refs = {
         "U2", "U16", "J9",
         "R1", "R3", "R4", "R5", "R6", "R8", "R9",
@@ -251,10 +281,20 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
                     or (ref.startswith("P") and ref[1:].isdigit())
                 ):
                     if not pogo_added:
-                        pogo_fp_positioned = re.sub(r'\(property\s+"Reference"\s+"[^"]*"', '(property "Reference" "J_POGO1"', POGO_12PIN_PCB_FP)
-                        pogo_fp_positioned = re.sub(r'\(at\s+[0-9\.\-]+\s+[0-9\.\-]+\)', '(at 164.5 58.494)', pogo_fp_positioned, count=1)
+                        pogo_fp_positioned = re.sub(
+                            r'^\t\(footprint\s+"([^"]+)"[^\n]*',
+                            rf'\t(footprint "\1" (at {center_x:.4f} {center_y:.4f})',
+                            POGO_12PIN_PCB_FP,
+                            count=1,
+                            flags=re.MULTILINE
+                        )
+                        pogo_fp_positioned = re.sub(
+                            r'\(property\s+"Reference"\s+"[^"]*"',
+                            '(property "Reference" "J_POGO1"',
+                            pogo_fp_positioned
+                        )
+                        pogo_fp_positioned = annotate_pogo_12pin_nets(pogo_fp_positioned)
                         out_lines.append(pogo_fp_positioned)
-                        out_lines.append(SINGLE_PIN_POGO_LANDINGS_FP)
                         pogo_added = True
                     continue
 
@@ -289,6 +329,21 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
                     out_lines.append(f'\t(group ""\n\t\t(uuid "{grp_id}")\n{locked}\t\t(members {m_str})\n\t)')
                 continue
 
+            # If Edge.Cuts flat bottom edge, carve the 13.5x3.0mm cavity notch for Interposer
+            if (
+                '(layer "Edge.Cuts")' in block_txt
+                and "36.9542" in block_txt
+                and "50.4542" in block_txt
+                and "68.001372" in block_txt
+            ):
+                cavity_ec = (
+                    f'\t(gr_line (start 36.9542 68.001372) (end 36.9542 65.001372) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))\n'
+                    f'\t(gr_line (start 36.9542 65.001372) (end 50.4542 65.001372) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))\n'
+                    f'\t(gr_line (start 50.4542 65.001372) (end 50.4542 68.001372) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))'
+                )
+                out_lines.append(cavity_ec)
+                continue
+
             # Retain other top-level drawing/setup blocks (gr_line, gr_poly, setup, layers, etc.)
             out_lines.append(block_txt)
             continue
@@ -296,15 +351,31 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         out_lines.append(line)
         i += 1
 
+    # Strip any trailing closing parentheses from out_lines so we can append footprints and segments cleanly
+    while out_lines and out_lines[-1].strip() in (")", ""):
+        out_lines.pop()
+
     if not pogo_added:
-        out_lines.append(POGO_12PIN_PCB_FP)
-        out_lines.append(SINGLE_PIN_POGO_LANDINGS_FP)
+        pogo_fp_positioned = re.sub(
+            r'^\t\(footprint\s+"([^"]+)"[^\n]*',
+            rf'\t(footprint "\1" (at {center_x:.4f} {center_y:.4f})',
+            POGO_12PIN_PCB_FP,
+            count=1,
+            flags=re.MULTILINE
+        )
+        pogo_fp_positioned = re.sub(
+            r'\(property\s+"Reference"\s+"[^"]*"',
+            '(property "Reference" "J_POGO1"',
+            pogo_fp_positioned
+        )
+        pogo_fp_positioned = annotate_pogo_12pin_nets(pogo_fp_positioned)
+        out_lines.append(pogo_fp_positioned)
 
     seen_refs = set(re.findall(r'\(property\s+"Reference"\s+"([^"]+)"', "\n".join(out_lines)))
     for href in ("H1", "H2", "H3", "H4"):
         if href not in seen_refs:
-            hx = 164.5 + spec.FLUID_HOLES[href][0]
-            hy = 58.494 - spec.FLUID_HOLES[href][1]
+            hx = center_x + spec.FLUID_HOLES[href][0]
+            hy = center_y - spec.FLUID_HOLES[href][1]
             out_lines.append(generate_fluid_hole_footprint(href, hx, hy))
 
     # 4. Add new Interposer Routing Segments, Vias, and Copper Flood Zones
@@ -334,7 +405,7 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     def pin_pos(n):
         p = spec.pin(n)
-        return round(164.50 + p.x, 3), round(58.494 - p.y, 3)
+        return round(center_x + p.x, 3), round(center_y - p.y, 3)
 
     p1_x, p1_y = pin_pos(1)
     p2_x, p2_y = pin_pos(2)
@@ -349,78 +420,91 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     p11_x, p11_y = pin_pos(11)
     p12_x, p12_y = pin_pos(12)
 
+    # Ribbon electrode route targets relative to board center
+    j1_x, j1_y = round(center_x + 10.392, 3), round(center_y - 5.994, 3)
+    j2_x, j2_y = round(center_x + 14.722, 3), round(center_y - 8.494, 3)
+    j2_mid_x, j2_mid_y = round(center_x + 5.500, 3), round(center_y - 11.994, 3)
+    gw_y = round(center_y + 5.006, 3)
+    j11_x, j11_y = round(center_x - 10.392, 3), round(center_y + 6.006, 3)
+    j10_x, j10_y = round(center_x - 14.722, 3), round(center_y + 8.506, 3)
+    ce_ret_x, ce_ret_y = round(center_x - 16.500, 3), round(center_y + 6.506, 3)
+
+    # Weep moat contour coordinates relative to board center
+    w_p1 = (round(center_x + 12.00, 3), round(center_y + 9.506, 3))
+    w_p2 = (round(center_x + 18.70, 3), round(center_y + 2.406, 3))
+    w_p3 = (round(center_x + 18.70, 3), round(center_y - 7.594, 3))
+    w_p4 = (round(center_x + 1.40, 3), round(center_y - 18.494, 3))
+    w_p5 = (round(center_x - 16.50, 3), round(center_y - 18.494, 3))
+    w_p6 = (round(center_x - 19.50, 3), round(center_y - 3.494, 3))
+    w_p7 = (round(center_x - 16.50, 3), round(center_y + 6.506, 3))
+
     new_segments = [
         # --- Cis Signal & Guard Routes (B.Cu escape with via-in-pad to clear concentric guard rings) ---
-        # WS_CIS: P5 -> via to B.Cu -> J1 (174.892, 52.50) via up to F.Cu
-        make_seg(p5_x, p5_y, 174.892, 52.50, 0.35, "B.Cu", "WS_CIS"),
-        make_seg(174.892, 52.50, 174.892, 52.50, 0.35, "F.Cu", "WS_CIS"),
+        make_seg(p5_x, p5_y, j1_x, j1_y, 0.35, "B.Cu", "WS_CIS"),
+        make_seg(j1_x, j1_y, j1_x, j1_y, 0.35, "F.Cu", "WS_CIS"),
         make_via(p5_x, p5_y, 0.7, 0.35, "WS_CIS"),
-        make_via(174.892, 52.50, 0.7, 0.35, "WS_CIS"),
+        make_via(j1_x, j1_y, 0.7, 0.35, "WS_CIS"),
 
-        # WS_CIS_WIDE: P2 -> via to B.Cu -> J2 (179.222, 50.00) via up to F.Cu
-        make_seg(p2_x, p2_y, 170.00, 46.50, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_seg(170.00, 46.50, 179.222, 50.00, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_seg(179.222, 50.00, 179.222, 50.00, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(p2_x, p2_y, j2_mid_x, j2_mid_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(j2_mid_x, j2_mid_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(j2_x, j2_y, j2_x, j2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
         make_via(p2_x, p2_y, 0.7, 0.35, "WS_CIS_WIDE"),
-        make_via(179.222, 50.00, 0.7, 0.35, "WS_CIS_WIDE"),
+        make_via(j2_x, j2_y, 0.7, 0.35, "WS_CIS_WIDE"),
 
         # GUARD feeders: P4 and P6 feeding P5 GUARD ring (routed north to avoid crossing WS_CIS pad 1)
-        make_seg(p6_x, p6_y, p5_x + 1.85, p6_y, 0.4, "F.Cu", "GUARD"),
         make_seg(p4_x, p4_y, p4_x, p6_y, 0.4, "F.Cu", "GUARD"),
+        make_seg(p4_x, p6_y, p5_x + 1.85, p6_y, 0.4, "F.Cu", "GUARD"),
+        make_seg(p6_x, p6_y, p5_x + 1.85, p6_y, 0.4, "F.Cu", "GUARD"),
         make_seg(p5_x + 1.85, p6_y, p5_x + 1.85, p5_y, 0.4, "F.Cu", "GUARD"),
 
-        # GUARD_WIDE feeder: P3 feeding P2 GUARD_WIDE ring (routed south to clear P5)
-        make_seg(p3_x, p3_y, p3_x, 63.50, 0.4, "F.Cu", "GUARD_WIDE"),
-        make_seg(p3_x, 63.50, p2_x + 1.85, 63.50, 0.4, "F.Cu", "GUARD_WIDE"),
-        make_seg(p2_x + 1.85, 63.50, p2_x + 1.85, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
+        # GUARD_WIDE feeder: P3 feeding P2 GUARD_WIDE ring (routed south to clear P5 and P2)
+        make_seg(p3_x, p3_y, p2_x + 1.85, p3_y, 0.4, "F.Cu", "GUARD_WIDE"),
+        make_seg(p2_x + 1.85, p3_y, p2_x + 1.85, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
 
         # --- Trans Signal Routes (B.Cu with transition vias at pad center) ---
-        # >PORE_AMP / WE_POS: P9 via to B.Cu -> J11 (154.108, 64.50)
-        make_seg(p9_x, p9_y, 154.108, 64.50, 0.4, "B.Cu", "WE_POS"),
+        make_seg(p9_x, p9_y, p9_x, 54.50, 0.4, "B.Cu", "WE_POS"),
+        make_seg(p9_x, 54.50, j11_x, 54.50, 0.4, "B.Cu", "WE_POS"),
+        make_seg(j11_x, 54.50, j11_x, j11_y, 0.4, "B.Cu", "WE_POS"),
         make_via(p9_x, p9_y, 0.7, 0.35, "WE_POS"),
 
-        # RE_TRANS: P8 via to B.Cu -> J10 (149.778, 67.00)
-        make_seg(p8_x, p8_y, 149.778, 67.00, 0.4, "B.Cu", "RE_TRANS"),
+        make_seg(p8_x, p8_y, j10_x, j10_y, 0.4, "B.Cu", "RE_TRANS"),
         make_via(p8_x, p8_y, 0.7, 0.35, "RE_TRANS"),
 
-        # CE_GNDA: P7 via to B.Cu -> ground return
-        make_seg(p7_x, p7_y, 148.00, 65.00, 0.4, "B.Cu", "CE_GNDA"),
+        make_seg(p7_x, p7_y, ce_ret_x, ce_ret_y, 0.4, "B.Cu", "CE_GNDA"),
         make_via(p7_x, p7_y, 0.7, 0.35, "CE_GNDA"),
 
         # --- WEEP_SENSE Channel-Contouring Moat (F.Cu and B.Cu) ---
-        # Feeder from P11 via to B.Cu
         make_via(p11_x, p11_y, 0.7, 0.35, "WEEP_SENSE"),
-        make_seg(p11_x, p11_y, 176.50, 68.00, 0.4, "B.Cu", "WEEP_SENSE"),
+        make_seg(p11_x, p11_y, w_p1[0], w_p1[1], 0.4, "B.Cu", "WEEP_SENSE"),
 
         # B.Cu Moat Perimeter Segments (>= 5 segments)
-        make_seg(176.50, 68.00, 183.20, 60.90, 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(183.20, 60.90, 183.20, 50.90, 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(183.20, 50.90, 165.90, 40.00, 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(165.90, 40.00, 148.00, 40.00, 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(148.00, 40.00, 145.00, 55.00, 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(145.00, 55.00, 148.00, 65.00, 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p1[0], w_p1[1], w_p2[0], w_p2[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p2[0], w_p2[1], w_p3[0], w_p3[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p3[0], w_p3[1], w_p4[0], w_p4[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p4[0], w_p4[1], w_p5[0], w_p5[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p5[0], w_p5[1], w_p6[0], w_p6[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p6[0], w_p6[1], w_p7[0], w_p7[1], 0.3, "B.Cu", "WEEP_SENSE"),
 
         # F.Cu Moat Perimeter Segments (outside gasket perimeter, >= 5 segments)
-        make_seg(183.20, 60.90, 183.20, 50.90, 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(183.20, 50.90, 165.90, 40.00, 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(165.90, 40.00, 148.00, 40.00, 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(148.00, 40.00, 145.00, 55.00, 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(145.00, 55.00, 148.00, 65.00, 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(w_p2[0], w_p2[1], w_p3[0], w_p3[1], 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(w_p3[0], w_p3[1], w_p4[0], w_p4[1], 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(w_p4[0], w_p4[1], w_p5[0], w_p5[1], 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(w_p5[0], w_p5[1], w_p6[0], w_p6[1], 0.3, "F.Cu", "WEEP_SENSE"),
+        make_seg(w_p6[0], w_p6[1], w_p7[0], w_p7[1], 0.3, "F.Cu", "WEEP_SENSE"),
 
         # WEEP_SENSE stitch/transition vias (>= 2 vias)
-        make_via(183.20, 60.90, 0.8, 0.4, "WEEP_SENSE"),
-        make_via(183.20, 50.90, 0.8, 0.4, "WEEP_SENSE"),
-        make_via(148.00, 40.00, 0.8, 0.4, "WEEP_SENSE"),
+        make_via(w_p2[0], w_p2[1], 0.8, 0.4, "WEEP_SENSE"),
+        make_via(w_p3[0], w_p3[1], 0.8, 0.4, "WEEP_SENSE"),
+        make_via(w_p5[0], w_p5[1], 0.8, 0.4, "WEEP_SENSE"),
+
+        # Cavity copper/track keepout zone over ribbon cable slot [36.954, 50.454] x [65.001, 68.001]
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x - 7.25:.2f} {center_y + 22.50:.2f}) (xy {center_x + 7.25:.2f} {center_y + 22.50:.2f}) (xy {center_x + 7.25:.2f} {center_y + 27.00:.2f}) (xy {center_x - 7.25:.2f} {center_y + 27.00:.2f}))))',
 
         # Full-board GNDA copper pour zone covering both F.Cu and B.Cu
-        f'\t(zone (net "GNDA") (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (connect_pads (clearance 0.25)) (min_thickness 0.2) (fill yes (thermal_gap 0.3) (thermal_bridge_width 0.3) (island_removal_mode 0)) (polygon (pts (xy 149.51 84.48) (xy 137.55 84.48) (xy 136.55 83.48) (xy 136.55 32.84) (xy 137.89 31.5) (xy 192.23 31.5) (xy 195.2 34.47) (xy 195.2 85.22) (xy 150.25 85.22))))',
+        f'\t(zone (net "GNDA") (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (connect_pads (clearance 0.25)) (min_thickness 0.2) (fill yes (thermal_gap 0.3) (thermal_bridge_width 0.3) (island_removal_mode 0)) (polygon (pts (xy {center_x - 14.99:.2f} {center_y + 25.99:.2f}) (xy {center_x - 26.95:.2f} {center_y + 25.99:.2f}) (xy {center_x - 27.95:.2f} {center_y + 24.99:.2f}) (xy {center_x - 27.95:.2f} {center_y - 25.65:.2f}) (xy {center_x - 26.61:.2f} {center_y - 26.99:.2f}) (xy {center_x + 27.73:.2f} {center_y - 26.99:.2f}) (xy {center_x + 30.70:.2f} {center_y - 24.02:.2f}) (xy {center_x + 30.70:.2f} {center_y + 26.73:.2f}) (xy {center_x - 14.25:.2f} {center_y + 26.73:.2f}))))',
     ]
 
-    insert_idx = len(out_lines) - 1
-    while insert_idx >= 0 and out_lines[insert_idx].strip() != ")":
-        insert_idx -= 1
-
-    final_lines = out_lines[:insert_idx] + new_segments + out_lines[insert_idx:]
+    final_lines = out_lines + new_segments + [")"]
     out_path.write_text("\n".join(final_lines) + "\n", encoding="utf-8")
     print(f"Successfully built {out_path}!")
 
