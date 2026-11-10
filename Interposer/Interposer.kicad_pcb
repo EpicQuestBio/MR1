@@ -2944,7 +2944,7 @@
 			)
 		)
 		(fp_text user "CIS 6-PIN BANK (J_POGO_CIS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 -12.9706 0)
+			(at 0 -18.2 0)
 			(layer "F.Fab")
 			(uuid "3a4739ec-6f61-5c72-b8ff-0a753f2159e7")
 			(effects
@@ -2965,182 +2965,6 @@
 				)
 			)
 		)
-		(fp_text user "CIS 6-PIN BANK (J_POGO_CIS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 -10.6 0)
-			(layer "F.Fab")
-			(uuid "414ca1db-1a60-5d20-812e-c2a2d9bab4dc")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "CIS 6-PIN BANK (J_POGO_CIS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 -10.6 0)
-			(layer "F.Fab")
-			(uuid "414ca1db-1a60-5d20-812e-c2a2d9bab4dc")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "CIS 6-PIN BANK (J_POGO_CIS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 -6.8206 0)
-			(layer "F.Fab")
-			(uuid "3a4739ec-6f61-5c72-b8ff-0a753f2159e7")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "CIS 6-PIN BANK (J_POGO_CIS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 -3.2456 0)
-			(layer "F.Fab")
-			(uuid "3a4739ec-6f61-5c72-b8ff-0a753f2159e7")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 3.7794 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 4.4794 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 8.9794 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 9.3794 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
-			(at 0 10.6 0)
-			(layer "F.Fab")
-			(uuid "12527efe-1d93-51bc-be2e-03e454500674")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
 		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): DUAL-PERIMETER PDMS SEAL + ATMOSPHERIC WEEP MOAT"
 			(at 0 10.6 0)
 			(layer "F.Fab")
@@ -3153,40 +2977,7 @@
 			)
 		)
 		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 12.0544 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 12.9294 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 14.0794 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 14.6794 0)
+			(at 0 18.2 0)
 			(layer "F.Fab")
 			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
 			(effects
@@ -3204,17 +2995,6 @@
 				(font
 					(size 0.7 0.7)
 					(thickness 0.12)
-				)
-			)
-		)
-		(fp_text user "TRANS 6-PIN BANK (J_POGO_TRANS): RIGID ANVIL CLAMP ZONE (DELRIN/AL CREEP NEUTRALIZATION)"
-			(at 0 23.7794 0)
-			(layer "F.Fab")
-			(uuid "4de8e121-9fd9-5eb4-8448-968064199d9f")
-			(effects
-				(font
-					(size 0.55 0.55)
-					(thickness 0.1)
 				)
 			)
 		)
@@ -3339,7 +3119,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "footprints:Electrode"
+	(footprint "footprints:Electrode_Guard_Shield"
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "5c7ced58-b180-4d5c-a4a3-781c082492e9")
@@ -3619,7 +3399,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "footprints:Electrode"
+	(footprint "footprints:Electrode_Guard_Shield"
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "bcf772f0-4a1d-4f6b-8850-fc719bd7d357")
@@ -3731,7 +3511,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "footprints:Electrode"
+	(footprint "footprints:Electrode_Guard_Shield"
 		(locked yes)
 		(layer "B.Cu")
 		(uuid "640bdb31-736d-450b-b8d3-f631de4dd1ae")
@@ -3843,7 +3623,7 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "footprints:Electrode"
+	(footprint "footprints:Electrode_Guard_Shield"
 		(locked yes)
 		(layer "B.Cu")
 		(uuid "ffc10ca5-f0c7-4538-8705-616a686a7e61")
@@ -3953,6 +3733,92 @@
 			(net "WE_POS")
 			(uuid "0a7de78d-6666-4172-b518-7762a3d08488")
 		)
+		(embedded_fonts no)
+	)
+	(footprint "footprints:Nanopore holder_recessed"
+		(layer "F.Cu")
+		(uuid "c6e1d42e-abd2-4ba9-bf5e-152ece1dc33c")
+		(at 43.7042 42.0206)
+		(descr "Central 6.20x6.20mm diamond aperture recess for 4x4mm silicon nanopore chip")
+		(tags "nanopore wafer aperture flowcell microfluidic")
+		(property "Reference" "NP1"
+			(at 0 -5.0 0)
+			(layer "F.SilkS")
+			(uuid "f018bc95-b0a9-47e8-998a-3fdcdc50d9b2")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "Nanopore_Wafer_Aperture"
+			(at 0 5.0 0)
+			(layer "F.Fab")
+			(uuid "90208f06-0c14-4887-9ce6-8c271cccb9b7")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Footprint" "footprints:Nanopore holder_recessed"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d227926d-b93b-4f33-aad3-a7df477cafd4")
+		)
+		(attr smd)
+		(fp_poly
+			(pts
+				(xy -4.384062 0) (xy 0 -4.384062) (xy 4.384062 0) (xy 0 4.384062)
+			)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "Edge.Cuts")
+			(uuid "fb383b30-6385-483e-9273-9ff4866cb730")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "footprints:Weep_Moat_Sensor"
+		(layer "F.Cu")
+		(uuid "ba1c6b4e-b0fc-4a90-88f2-176a9f8e10d9")
+		(at 43.7042 42.0206)
+		(descr "Perimeter moisture & leak detection sensor moat flanking microfluidic channels")
+		(tags "weep moat leak sensor interlock")
+		(property "Reference" "W1"
+			(at 0 -2.5 0)
+			(layer "F.SilkS")
+			(uuid "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "Weep_Moat_Sensor"
+			(at 0 2.5 0)
+			(layer "F.Fab")
+			(uuid "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f")
+			(effects
+				(font
+					(size 0.7 0.7)
+					(thickness 0.12)
+				)
+			)
+		)
+		(property "Footprint" "footprints:Weep_Moat_Sensor"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a0b1c2d3-e4f5-a6b7-c8d9-e0f1a2b3c4d5")
+		)
+		(attr smd)
 		(embedded_fonts no)
 	)
 	(gr_poly

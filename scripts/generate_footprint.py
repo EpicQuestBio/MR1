@@ -985,12 +985,16 @@ def generate_kicad_footprint(
             f'  (fp_text user "{fid_name}" (at {fmt4(fx)} {fmt4(fy - 1.6)} 0) (layer "F.Fab") (uuid "{deterministic_uuid(f"{fid_name}_txt")}") (effects (font (size 0.7 0.7) (thickness 0.12))))'
         )
 
-    # Determine active Y-perimeters present in this footprint ([-15.0] Cis, [+15.0] Trans, or both)
-    active_y_banks = sorted({pad.y for pad in geom.pogo_pads})
-    for y_bank in active_y_banks:
-        bank_tag = "cis" if y_bank < 0 else "trans"
-        bank_label = "CIS 6-PIN BANK (J_POGO_CIS)" if y_bank < 0 else "TRANS 6-PIN BANK (J_POGO_TRANS)"
-        sign = -1.0 if y_bank < 0 else 1.0
+    # Determine active banks present in this footprint (Cis y < 0, Trans y >= 0)
+    has_cis = any(pad.y < 0 for pad in geom.pogo_pads)
+    has_trans = any(pad.y >= 0 for pad in geom.pogo_pads)
+    active_banks = []
+    if has_cis:
+        active_banks.append((-15.0, "cis", "CIS 6-PIN BANK (J_POGO_CIS)", -1.0))
+    if has_trans:
+        active_banks.append((15.0, "trans", "TRANS 6-PIN BANK (J_POGO_TRANS)", 1.0))
+
+    for y_bank, bank_tag, bank_label, sign in active_banks:
 
         # High-Z Pogo Array Enclosure Box on F.SilkS & F.CrtYd (Bone-Dry Outer Cavity)
         y_box_in = fmt4(y_bank - 2.0)

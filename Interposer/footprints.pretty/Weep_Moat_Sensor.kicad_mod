@@ -1,0 +1,28 @@
+(footprint "Weep_Moat_Sensor"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Perimeter moisture & leak detection sensor moat flanking microfluidic channels")
+	(tags "weep moat leak sensor interlock")
+	(property "Reference" "REF**"
+		(at 0 -2.5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(effects (font (size 0.8 0.8) (thickness 0.15)))
+	)
+	(property "Value" "Weep_Moat_Sensor"
+		(at 0 2.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(effects (font (size 0.7 0.7) (thickness 0.12)))
+	)
+	(property "Footprint" "footprints:Weep_Moat_Sensor"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+	)
+	(attr smd)
+	(embedded_fonts no)
+)

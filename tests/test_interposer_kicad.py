@@ -177,7 +177,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(bom_csv.exists(), "Interposer_BOM.csv must exist")
 
         bom_txt = bom_csv.read_text(encoding="utf-8")
-        for ref in ["H1", "J1", "J2", "J10", "J11", "P1", "P2", "P3", "P4", "W1"]:
+        for ref in ["H1", "H2", "H3", "H4", "J1", "J2", "J10", "J11", "NP1", "W1"]:
             self.assertIn(f'"{ref}"', bom_txt, f"Reference {ref} must be listed in Interposer_BOM.csv")
         self.assertNotIn('"E1"', bom_txt, "E1 must NOT be in Interposer_BOM.csv")
 
