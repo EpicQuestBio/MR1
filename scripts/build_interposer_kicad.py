@@ -245,13 +245,13 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
     cu_layer = f"{layer}.Cu"
     mask_layer = f"{layer}.Mask"
     return (
-        f'\t(footprint "footprints:Electrode"\n'
+        f'\t(footprint "footprints:Electrode_Guard_Shield"\n'
         f'\t\t(locked yes)\n'
         f'\t\t(layer "{cu_layer}")\n'
         f'\t\t(uuid "{new_uuid()}")\n'
         f'\t\t(at {x:.4f} {y:.4f} {rot:.1f})\n'
-        f'\t\t(descr "Ag/AgCl ribbon electrode pad 2.0x0.8mm aligned with microfluidic channel")\n'
-        f'\t\t(tags "electrode ag_agcl ribbon microfluidic")\n'
+        f'\t\t(descr "Channel-aligned Ag/AgCl ribbon electrode pad 2.0x0.8mm with driven guard shield")\n'
+        f'\t\t(tags "electrode ag_agcl ribbon microfluidic guard")\n'
         f'\t\t(property "Reference" "{ref}"\n'
         f'\t\t\t(at 0 -1.6 0)\n'
         f'\t\t\t(layer "{silk_layer}")\n'
@@ -264,7 +264,7 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t\t(effects (font (size 0.6 0.6) (thickness 0.10)))\n'
         f'\t\t)\n'
-        f'\t\t(property "Footprint" "footprints:Electrode"\n'
+        f'\t\t(property "Footprint" "footprints:Electrode_Guard_Shield"\n'
         f'\t\t\t(at 0 0 0)\n'
         f'\t\t\t(layer "{fab_layer}")\n'
         f'\t\t\t(hide yes)\n'
@@ -460,29 +460,61 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     # Ribbon electrode route targets aligned with liquid flow:
     # Cis channel (H1 -> Center -> H2, 30 deg flow angle):
     # Both pads placed on Inlet side (between H1 and Nanopore aperture):
-    #   J1: Cis Sense (WS_CIS), closest near Nanopore at r = 7.0mm
-    #   J2: Cis Drive (WS_CIS_WIDE), closest near Inlet H1 at r = 15.5mm
+    #   J1: Cis Pre-pore (WS_CIS / >PORE_AMP), closest near Nanopore at r = 7.0mm
+    #   J2: Cis Inlet (WS_CIS_WIDE), closest near Inlet H1 at r = 15.5mm
     j1_x, j1_y = round(center_x - 7.0 * 0.866025, 3), round(center_y - 7.0 * 0.500000, 3)
     j2_x, j2_y = round(center_x - 15.5 * 0.866025, 3), round(center_y - 15.5 * 0.500000, 3)
 
     # Trans channel (H3 -> Center -> H4, -30 deg / 150 deg flow angle):
     # Both pads placed on Inlet side (between H3 and Nanopore aperture):
-    #   J11: Trans Sense (RE_TRANS), closest near Nanopore at r = 7.0mm
-    #   J10: Trans Drive (WE_POS), closest near Inlet H3 at r = 15.5mm
+    #   J11: Trans Pre-pore (RE_TRANS), closest near Nanopore at r = 7.0mm
+    #   J10: Trans Inlet (CE_GNDA), closest near Inlet H3 at r = 15.5mm
     j11_x, j11_y = round(center_x - 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
     j10_x, j10_y = round(center_x - 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
 
     # 3. Add Channel-Aligned Solder Pads for Ag/AgCl Ribbon Electrodes (2.0x0.8mm exposed ENIG pads)
     electrode_defs = [
-        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", "WS_CIS"),
+        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", ">PORE_AMP"),
         ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 30.0, "F", "WS_CIS_WIDE"),
         ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 150.0, "B", "RE_TRANS"),
-        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 150.0, "B", "WE_POS"),
+        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 150.0, "B", "CE_GNDA"),
     ]
     for jref, jval, jx, jy, jrot, jlayer, jnet in electrode_defs:
         out_lines.append(generate_channel_electrode_pad_fp(jref, jval, jx, jy, jrot, jlayer, jnet))
 
-    # 4. Add Central Nanopore Chip Cutout on Edge.Cuts (6.20x6.20mm diamond rotated 45 deg)
+    # 4. Add Central Nanopore Wafer Recess NP1 and Weep Moat Sensor W1 Footprints
+    np1_fp = (
+        f'\t(footprint "footprints:Nanopore holder_recessed"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t(at {center_x:.4f} {center_y:.4f})\n'
+        f'\t\t(descr "Central 6.20x6.20mm diamond aperture recess for 4x4mm silicon nanopore chip")\n'
+        f'\t\t(tags "nanopore wafer aperture flowcell microfluidic")\n'
+        f'\t\t(property "Reference" "NP1"\n'
+        f'\t\t\t(at 0 -5.0 0)\n'
+        f'\t\t\t(layer "F.SilkS")\n'
+        f'\t\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t\t(effects (font (size 0.8 0.8) (thickness 0.15)))\n'
+        f'\t\t)\n'
+        f'\t\t(property "Value" "Nanopore_Wafer_Aperture"\n'
+        f'\t\t\t(at 0 5.0 0)\n'
+        f'\t\t\t(layer "F.Fab")\n'
+        f'\t\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)))\n'
+        f'\t\t)\n'
+        f'\t\t(property "Footprint" "footprints:Nanopore holder_recessed"\n'
+        f'\t\t\t(at 0 0 0)\n'
+        f'\t\t\t(layer "F.Fab")\n'
+        f'\t\t\t(hide yes)\n'
+        f'\t\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t)\n'
+        f'\t\t(attr smd)\n'
+        f'\t\t(embedded_fonts no)\n'
+        f'\t)'
+    )
+    out_lines.append(np1_fp)
+
+    # Board-level Edge.Cuts lines for the 6.20x6.20mm diamond cutout
     wafer_cutout_lines = [
         f'\t(gr_line (start {center_x:.4f} {center_y - 4.3841:.4f}) (end {center_x + 4.3841:.4f} {center_y:.4f}) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))',
         f'\t(gr_line (start {center_x + 4.3841:.4f} {center_y:.4f}) (end {center_x:.4f} {center_y + 4.3841:.4f}) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))',
@@ -491,6 +523,37 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     ]
     for wl in wafer_cutout_lines:
         out_lines.append(wl)
+
+    w1_fp = (
+        f'\t(footprint "footprints:Weep_Moat_Sensor"\n'
+        f'\t\t(layer "F.Cu")\n'
+        f'\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t(at {center_x:.4f} {center_y:.4f})\n'
+        f'\t\t(descr "Perimeter moisture & leak detection sensor moat flanking microfluidic channels")\n'
+        f'\t\t(tags "weep moat leak sensor interlock")\n'
+        f'\t\t(property "Reference" "W1"\n'
+        f'\t\t\t(at 0 -2.5 0)\n'
+        f'\t\t\t(layer "F.SilkS")\n'
+        f'\t\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t\t(effects (font (size 0.8 0.8) (thickness 0.15)))\n'
+        f'\t\t)\n'
+        f'\t\t(property "Value" "Weep_Moat_Sensor"\n'
+        f'\t\t\t(at 0 2.5 0)\n'
+        f'\t\t\t(layer "F.Fab")\n'
+        f'\t\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)))\n'
+        f'\t\t)\n'
+        f'\t\t(property "Footprint" "footprints:Weep_Moat_Sensor"\n'
+        f'\t\t\t(at 0 0 0)\n'
+        f'\t\t\t(layer "F.Fab")\n'
+        f'\t\t\t(hide yes)\n'
+        f'\t\t\t(uuid "{new_uuid()}")\n'
+        f'\t\t)\n'
+        f'\t\t(attr smd)\n'
+        f'\t\t(embedded_fonts no)\n'
+        f'\t)'
+    )
+    out_lines.append(w1_fp)
 
     # 5. Add new Interposer Routing Segments, Vias, and Copper Flood Zones
     def make_seg(x1, y1, x2, y2, width, layer, net):
@@ -543,14 +606,21 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     w_p6 = (round(center_x - 22.70, 3), round(center_y - 14.000, 3))
     w_p7 = (round(center_x - 22.70, 3), round(center_y + 5.000, 3))
 
+    def make_circle_keepout(cx, cy, radius):
+        import math
+        pts = []
+        for deg in range(0, 360, 30):
+            rad = math.radians(deg)
+            pts.append(f"(xy {cx + radius*math.cos(rad):.3f} {cy + radius*math.sin(rad):.3f})")
+        pts_str = " ".join(pts)
+        return f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts {pts_str})))'
+
     new_segments = [
         # --- Cis Signal & Guard Routes (F.Cu & B.Cu escape) ---
-        # J1 (WS_CIS): Pin 5 via to B.Cu, route north around aperture to J1 via on F.Cu
-        make_via(p5_x, p5_y, 0.7, 0.35, "WS_CIS"),
-        make_seg(p5_x, p5_y, p5_x, 36.5, 0.35, "B.Cu", "WS_CIS"),
-        make_seg(p5_x, 36.5, j1_x, 36.5, 0.35, "B.Cu", "WS_CIS"),
-        make_seg(j1_x, 36.5, j1_x, j1_y, 0.35, "B.Cu", "WS_CIS"),
-        make_via(j1_x, j1_y, 0.7, 0.35, "WS_CIS"),
+        # J1 (>PORE_AMP): Pin 9 on F.Cu, routed cleanly north of central aperture to J1 pad on F.Cu
+        make_seg(p9_x, p9_y, p9_x, 36.0, 0.4, "F.Cu", ">PORE_AMP"),
+        make_seg(p9_x, 36.0, j1_x, 36.0, 0.4, "F.Cu", ">PORE_AMP"),
+        make_seg(j1_x, 36.0, j1_x, j1_y, 0.4, "F.Cu", ">PORE_AMP"),
 
         # J2 (WS_CIS_WIDE): Pin 2 via to B.Cu, route south & west along X=32.5 to J2 via on F.Cu
         make_via(p2_x, p2_y, 0.7, 0.35, "WS_CIS_WIDE"),
@@ -571,21 +641,13 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_seg(p3_x, p2_y, p2_x - 1.45, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
 
         # --- Trans Signal Routes (B.Cu direct & F.Cu excitation feed) ---
-        # J11 (RE_TRANS): Pin 8 via to B.Cu, direct route to J11 pad on B.Cu
+        # J11 (RE_TRANS): Pin 8 on B.Cu, direct short route to J11 pad on B.Cu
         make_via(p8_x, p8_y, 0.7, 0.35, "RE_TRANS"),
         make_seg(p8_x, p8_y, j11_x, j11_y, 0.35, "B.Cu", "RE_TRANS"),
 
-        # J10 (WE_POS): Pin 9 on F.Cu, routed south-east around H2, across south, then via to J10 on B.Cu
-        make_seg(p9_x, p9_y, 64.5, p9_y, 0.4, "F.Cu", "WE_POS"),
-        make_seg(64.5, p9_y, 64.5, 55.0, 0.4, "F.Cu", "WE_POS"),
-        make_seg(64.5, 55.0, 32.5, 55.0, 0.4, "F.Cu", "WE_POS"),
-        make_seg(32.5, 55.0, 32.5, j10_y, 0.4, "F.Cu", "WE_POS"),
-        make_seg(32.5, j10_y, j10_x, j10_y, 0.4, "F.Cu", "WE_POS"),
-        make_via(j10_x, j10_y, 0.7, 0.35, "WE_POS"),
-
-        # CE_GNDA: Pin 7 stub on B.Cu
+        # J10 (CE_GNDA): Pin 7 on B.Cu, direct short route to J10 pad on B.Cu
         make_via(p7_x, p7_y, 0.7, 0.35, "CE_GNDA"),
-        make_seg(p7_x, p7_y, p7_x, p7_y + 2.0, 0.4, "B.Cu", "CE_GNDA"),
+        make_seg(p7_x, p7_y, j10_x, j10_y, 0.4, "B.Cu", "CE_GNDA"),
 
         # --- WEEP_SENSE Channel-Contouring Moat (F.Cu and B.Cu) ---
         make_via(p11_x, p11_y, 0.7, 0.35, "WEEP_SENSE"),
@@ -611,11 +673,24 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_via(w_p3[0], w_p3[1], 0.8, 0.4, "WEEP_SENSE"),
         make_via(w_p5[0], w_p5[1], 0.8, 0.4, "WEEP_SENSE"),
 
-        # Cavity copper/track keepout zone over ribbon cable slot [36.954, 50.454] x [65.001, 68.001]
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x - 7.25:.2f} {center_y + 22.50:.2f}) (xy {center_x + 7.25:.2f} {center_y + 22.50:.2f}) (xy {center_x + 7.25:.2f} {center_y + 27.00:.2f}) (xy {center_x - 7.25:.2f} {center_y + 27.00:.2f}))))',
+        # --- Fluidic Isolation Keepout Zones (Zero Copper / Zero Ground over Fluid Path) ---
+        # Port H1..H4 keepouts (5.5mm diameter circles around fluid ports to guarantee non-conductive boundary)
+        make_circle_keepout(center_x + spec.FLUID_HOLES["H1"][0], center_y - spec.FLUID_HOLES["H1"][1], 2.75),
+        make_circle_keepout(center_x + spec.FLUID_HOLES["H2"][0], center_y - spec.FLUID_HOLES["H2"][1], 2.75),
+        make_circle_keepout(center_x + spec.FLUID_HOLES["H3"][0], center_y - spec.FLUID_HOLES["H3"][1], 2.75),
+        make_circle_keepout(center_x + spec.FLUID_HOLES["H4"][0], center_y - spec.FLUID_HOLES["H4"][1], 2.75),
+
+        # Cis fluid channel corridor keepout (H1 -> H2 along 30 deg, width 3.6mm)
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
+
+        # Trans fluid channel corridor keepout (H3 -> H4 along 150 deg, width 3.6mm)
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy 63.657 32.580) (xy 25.551 54.580) (xy 23.751 51.462) (xy 61.857 29.462))))',
 
         # Central Nanopore Chip aperture copper/track keepout zone (>= 0.5mm clearance around 6.2x6.2mm diamond)
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x:.4f} {center_y - 4.8841:.4f}) (xy {center_x + 4.8841:.4f} {center_y:.4f}) (xy {center_x:.4f} {center_y + 4.8841:.4f}) (xy {center_x - 4.8841:.4f} {center_y:.4f}))))',
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x:.4f} {center_y - 5.5:.4f}) (xy {center_x + 5.5:.4f} {center_y:.4f}) (xy {center_x:.4f} {center_y + 5.5:.4f}) (xy {center_x - 5.5:.4f} {center_y:.4f}))))',
+
+        # Cavity copper/track keepout zone over ribbon cable slot [36.954, 50.454] x [65.001, 68.001]
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x - 7.25:.2f} {center_y + 22.50:.2f}) (xy {center_x + 7.25:.2f} {center_y + 22.50:.2f}) (xy {center_x + 7.25:.2f} {center_y + 27.00:.2f}) (xy {center_x - 7.25:.2f} {center_y + 27.00:.2f}))))',
 
         # Full-board GNDA copper pour zone covering both F.Cu and B.Cu
         f'\t(zone (net "GNDA") (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (connect_pads (clearance 0.25)) (min_thickness 0.2) (fill yes (thermal_gap 0.3) (thermal_bridge_width 0.3) (island_removal_mode 0)) (polygon (pts (xy {center_x - 14.99:.2f} {center_y + 25.99:.2f}) (xy {center_x - 26.95:.2f} {center_y + 25.99:.2f}) (xy {center_x - 27.95:.2f} {center_y + 24.99:.2f}) (xy {center_x - 27.95:.2f} {center_y - 25.65:.2f}) (xy {center_x - 26.61:.2f} {center_y - 26.99:.2f}) (xy {center_x + 27.73:.2f} {center_y - 26.99:.2f}) (xy {center_x + 30.70:.2f} {center_y - 24.02:.2f}) (xy {center_x + 30.70:.2f} {center_y + 26.73:.2f}) (xy {center_x - 14.25:.2f} {center_y + 26.73:.2f}))))',
