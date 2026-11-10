@@ -82,13 +82,13 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn("CIS FLOW", content, "CIS FLOW channel indicator must be present on Interposer PCB")
         self.assertIn("TRANS FLOW", content, "TRANS FLOW channel indicator must be present on Interposer PCB")
 
-        # Square 2.0x2.0mm Ag/AgCl ribbon solder pads
-        sq_pads = re.findall(r'\(pad\s+"1"\s+smd\s+rect\s+\(at\s+0\s+0\)\s+\(size\s+2(?:\.0)?\s+2(?:\.0)?\)\s+\(layers\s+"[FB]\.Cu"\s+"[FB]\.Mask"\)', content)
-        self.assertGreaterEqual(len(sq_pads), 4, f"Interposer PCB must contain at least 4 square 2.0x2.0mm exposed solder pads (found {len(sq_pads)})")
+        # Channel-aligned 2.0x0.8mm Ag/AgCl ribbon solder pads
+        ribbon_pads = re.findall(r'\(pad\s+"1"\s+smd\s+rect\s+\(at\s+0\s+0\)\s+\(size\s+2(?:\.0)?\s+0\.8\)\s+\(layers\s+"[FB]\.Cu"\s+"[FB]\.Mask"\)', content)
+        self.assertGreaterEqual(len(ribbon_pads), 4, f"Interposer PCB must contain at least 4 channel-aligned 2.0x0.8mm exposed solder pads (found {len(ribbon_pads)})")
 
-        # Fluid hole landing pads (circular pads on *.Cu and *.Mask)
-        fluid_pads = re.findall(r'\(pad\s+"1"\s+thru_hole\s+circle\s+\(at\s+0\s+0\)\s+\(size\s+4\.2\s+4\.2\)\s+\(drill\s+2\.1\)\s+\(layers\s+"\*\.Cu"\s+"\*\.Mask"\)', content)
-        self.assertEqual(len(fluid_pads), 4, f"Interposer PCB must contain 4 hermetic 4.2mm landing pads for H1..H4 (found {len(fluid_pads)})")
+        # Fluid hole pass-throughs (2.1mm NPTH non-plated through-holes, non-conductive)
+        fluid_holes = re.findall(r'\(pad\s+""\s+np_thru_hole\s+circle\s+\(at\s+0\s+0\)\s+\(size\s+2\.1\s+2\.1\)\s+\(drill\s+2\.1\)', content)
+        self.assertEqual(len(fluid_holes), 4, f"Interposer PCB must contain 4 non-conductive NPTH holes for H1..H4 (found {len(fluid_holes)})")
 
         # Nanopore chip diamond cutout (6.2x6.2mm rotated 45 deg on Edge.Cuts)
         wafer_cutout_pts = ["37.6365", "46.4047", "39.3201", "48.0883"]

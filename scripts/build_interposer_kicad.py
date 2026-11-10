@@ -180,9 +180,10 @@ SINGLE_PIN_POGO_LANDINGS_FP = get_single_pin_pogo_landings_fp_str()
 
 def generate_fluid_hole_footprint(ref: str, val: str, x: float, y: float) -> str:
     """
-    Generates a microfluidic pass-through port footprint with a 5.0mm OD circular copper landing pad
-    and 2.1mm drill hole on *.Cu and *.Mask, tied to net GNDA. Provides a rigid, flat, hermetic sealing
-    surface against the silicone gasket / fluid fittings to prevent fluid wicking and leakage.
+    Generates a microfluidic pass-through port footprint (2.1mm non-plated through-hole, NPTH).
+    Pure bare dielectric hole with zero conductive copper and no net connection, ensuring
+    the liquid path remains electrically isolated from ground and signal nets.
+    Includes a 5.0mm diameter silkscreen keepout ring defining the gasket sealing zone.
     """
     return (
         f'\t(footprint "footprints:Fluidic_Port_PassThrough_5mm"\n'
@@ -190,8 +191,8 @@ def generate_fluid_hole_footprint(ref: str, val: str, x: float, y: float) -> str
         f'\t\t(layer "F.Cu")\n'
         f'\t\t(uuid "{new_uuid()}")\n'
         f'\t\t(at {x:.4f} {y:.4f})\n'
-        f'\t\t(descr "Microfluidic Port 2.1mm hole with 5.0mm OD circular copper landing pad for hermetic seal")\n'
-        f'\t\t(tags "fluidic port landing hole")\n'
+        f'\t\t(descr "Microfluidic Port 2.1mm NPTH non-plated through-hole with 5.0mm gasket sealing zone")\n'
+        f'\t\t(tags "fluidic port npth mountinghole non-conductive")\n'
         f'\t\t(property "Reference" "{ref}"\n'
         f'\t\t\t(at 0 -3.6 0)\n'
         f'\t\t\t(layer "F.SilkS")\n'
@@ -222,22 +223,22 @@ def generate_fluid_hole_footprint(ref: str, val: str, x: float, y: float) -> str
         f'\t\t)\n'
         f'\t\t(fp_circle (center 0 0) (end 2.5 0) (stroke (width 0.15) (type solid)) (fill none) (layer "F.SilkS") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_circle (center 0 0) (end 2.5 0) (stroke (width 0.15) (type solid)) (fill none) (layer "B.SilkS") (uuid "{new_uuid()}"))\n'
-        f'\t\t(pad "1" thru_hole circle\n'
+        f'\t\t(pad "" np_thru_hole circle\n'
         f'\t\t\t(at 0 0)\n'
-        f'\t\t\t(size 4.2 4.2)\n'
+        f'\t\t\t(size 2.1 2.1)\n'
         f'\t\t\t(drill 2.1)\n'
         f'\t\t\t(layers "*.Cu" "*.Mask")\n'
-        f'\t\t\t(net "GNDA")\n'
+        f'\t\t\t(clearance 1.0)\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t)\n'
         f'\t)'
     )
 
-def generate_square_electrode_pad_fp(ref: str, val: str, x: float, y: float, rot: float, layer: str, net: str) -> str:
+def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, rot: float, layer: str, net: str) -> str:
     """
-    Generates a 2.0x2.0mm square SMD solder pad with exposed solder mask (ENIG copper)
-    for attaching silver (Ag) ribbon foil, later sensitized with bleach (FeCl3/NaOCl)
-    to form non-polarizable Ag/AgCl reference and working electrodes.
+    Generates a 2.0x0.8mm SMD solder pad with exposed solder mask (ENIG bare copper)
+    aligned with the microfluidic liquid flow channel (1.4mm width) for attaching
+    silver (Ag) ribbon foil (2.0x0.8x0.1mm), bleach-sensitized to form Ag/AgCl electrodes.
     """
     silk_layer = f"{layer}.SilkS"
     fab_layer = f"{layer}.Fab"
@@ -249,16 +250,16 @@ def generate_square_electrode_pad_fp(ref: str, val: str, x: float, y: float, rot
         f'\t\t(layer "{cu_layer}")\n'
         f'\t\t(uuid "{new_uuid()}")\n'
         f'\t\t(at {x:.4f} {y:.4f} {rot:.1f})\n'
-        f'\t\t(descr "Square 2.0x2.0mm SMD Pad with solder mask opening for Ag/AgCl ribbon electrode bonding")\n'
-        f'\t\t(tags "electrode ag_agcl ribbon square")\n'
+        f'\t\t(descr "Ag/AgCl ribbon electrode pad 2.0x0.8mm aligned with microfluidic channel")\n'
+        f'\t\t(tags "electrode ag_agcl ribbon microfluidic")\n'
         f'\t\t(property "Reference" "{ref}"\n'
-        f'\t\t\t(at 0 -2.2 0)\n'
+        f'\t\t\t(at 0 -1.6 0)\n'
         f'\t\t\t(layer "{silk_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)))\n'
         f'\t\t)\n'
         f'\t\t(property "Value" "{val}"\n'
-        f'\t\t\t(at 0 2.2 0)\n'
+        f'\t\t\t(at 0 1.6 0)\n'
         f'\t\t\t(layer "{fab_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t\t(effects (font (size 0.6 0.6) (thickness 0.10)))\n'
@@ -269,11 +270,14 @@ def generate_square_electrode_pad_fp(ref: str, val: str, x: float, y: float, rot
         f'\t\t\t(hide yes)\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t)\n'
-        f'\t\t(fp_rect (start -1.0 -0.4) (end 1.0 0.4) (stroke (width 0.12) (type solid)) (fill none) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_text user "Ag/AgCl" (at 0 0 0) (layer "{silk_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08))))\n'
+        f'\t\t(fp_line (start -1.0 0.4) (end 1.0 0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start 1.0 0.4) (end 1.0 -0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start 1.0 -0.4) (end -1.0 -0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start -1.0 -0.4) (end -1.0 0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_text user "Ag/AgCl" (at 0 0 0) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08))))\n'
         f'\t\t(pad "1" smd rect\n'
         f'\t\t\t(at 0 0)\n'
-        f'\t\t\t(size 2.0 2.0)\n'
+        f'\t\t\t(size 2.0 0.8)\n'
         f'\t\t\t(layers "{cu_layer}" "{mask_layer}")\n'
         f'\t\t\t(net "{net}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
@@ -453,26 +457,30 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     for href, hval, hx, hy in hole_defs:
         out_lines.append(generate_fluid_hole_footprint(href, hval, hx, hy))
 
-    # Ribbon electrode route targets along Cis channel (30 deg toward H2)
-    # J1 (Cis Sense, WS_CIS) at r = 10.0mm; J2 (Cis Drive, WS_CIS_WIDE) at r = 14.5mm
-    j1_x, j1_y = round(center_x + 8.660, 3), round(center_y + 5.000, 3)
-    j2_x, j2_y = round(center_x + 12.557, 3), round(center_y + 7.250, 3)
+    # Ribbon electrode route targets aligned with liquid flow:
+    # Cis channel (H1 -> Center -> H2, 30 deg flow angle):
+    # Both pads placed on Inlet side (between H1 and Nanopore aperture):
+    #   J1: Cis Sense (WS_CIS), closest near Nanopore at r = 7.0mm
+    #   J2: Cis Drive (WS_CIS_WIDE), closest near Inlet H1 at r = 15.5mm
+    j1_x, j1_y = round(center_x - 7.0 * 0.866025, 3), round(center_y - 7.0 * 0.500000, 3)
+    j2_x, j2_y = round(center_x - 15.5 * 0.866025, 3), round(center_y - 15.5 * 0.500000, 3)
 
-    # Ribbon electrode route targets along Trans channel (-30 deg / 150 deg toward H3)
-    # J11 (Trans Drive, WE_POS) at r = 10.0mm; J10 (Trans Sense, RE_TRANS) at r = 14.5mm
-    j11_x, j11_y = round(center_x - 8.660, 3), round(center_y + 5.000, 3)
-    j10_x, j10_y = round(center_x - 12.557, 3), round(center_y + 7.250, 3)
-    ce_ret_x, ce_ret_y = round(center_x - 16.500, 3), round(center_y + 6.506, 3)
+    # Trans channel (H3 -> Center -> H4, -30 deg / 150 deg flow angle):
+    # Both pads placed on Inlet side (between H3 and Nanopore aperture):
+    #   J11: Trans Sense (RE_TRANS), closest near Nanopore at r = 7.0mm
+    #   J10: Trans Drive (WE_POS), closest near Inlet H3 at r = 15.5mm
+    j11_x, j11_y = round(center_x - 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
+    j10_x, j10_y = round(center_x - 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
 
-    # 3. Add Square Solder Pads for Ag/AgCl Ribbon Electrodes (2.0x2.0mm exposed ENIG pads)
+    # 3. Add Channel-Aligned Solder Pads for Ag/AgCl Ribbon Electrodes (2.0x0.8mm exposed ENIG pads)
     electrode_defs = [
         ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", "WS_CIS"),
         ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 30.0, "F", "WS_CIS_WIDE"),
-        ("J11", "Trans_Drive_AgAgCl", j11_x, j11_y, 30.0, "B", "WE_POS"),
-        ("J10", "Trans_Sense_AgAgCl", j10_x, j10_y, 30.0, "B", "RE_TRANS"),
+        ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 150.0, "B", "RE_TRANS"),
+        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 150.0, "B", "WE_POS"),
     ]
     for jref, jval, jx, jy, jrot, jlayer, jnet in electrode_defs:
-        out_lines.append(generate_square_electrode_pad_fp(jref, jval, jx, jy, jrot, jlayer, jnet))
+        out_lines.append(generate_channel_electrode_pad_fp(jref, jval, jx, jy, jrot, jlayer, jnet))
 
     # 4. Add Central Nanopore Chip Cutout on Edge.Cuts (6.20x6.20mm diamond rotated 45 deg)
     wafer_cutout_lines = [
@@ -536,13 +544,20 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     w_p7 = (round(center_x - 22.70, 3), round(center_y + 5.000, 3))
 
     new_segments = [
-        # --- Cis Signal & Guard Routes (B.Cu escape with via-in-pad to clear concentric guard rings) ---
+        # --- Cis Signal & Guard Routes (F.Cu & B.Cu escape) ---
+        # J1 (WS_CIS): Pin 5 via to B.Cu, route north around aperture to J1 via on F.Cu
         make_via(p5_x, p5_y, 0.7, 0.35, "WS_CIS"),
-        make_seg(p5_x, p5_y, j1_x, j1_y, 0.35, "B.Cu", "WS_CIS"),
+        make_seg(p5_x, p5_y, p5_x, 36.5, 0.35, "B.Cu", "WS_CIS"),
+        make_seg(p5_x, 36.5, j1_x, 36.5, 0.35, "B.Cu", "WS_CIS"),
+        make_seg(j1_x, 36.5, j1_x, j1_y, 0.35, "B.Cu", "WS_CIS"),
         make_via(j1_x, j1_y, 0.7, 0.35, "WS_CIS"),
 
+        # J2 (WS_CIS_WIDE): Pin 2 via to B.Cu, route south & west along X=32.5 to J2 via on F.Cu
         make_via(p2_x, p2_y, 0.7, 0.35, "WS_CIS_WIDE"),
-        make_seg(p2_x, p2_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(p2_x, p2_y, p2_x, 52.5, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(p2_x, 52.5, 32.5, 52.5, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(32.5, 52.5, 32.5, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(32.5, j2_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
         make_via(j2_x, j2_y, 0.7, 0.35, "WS_CIS_WIDE"),
 
         # GUARD feeders: P4 and P6 feeding P5 GUARD ring (routed north at Y=40.0 to clear WS_CIS pad 5)
@@ -555,17 +570,20 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_seg(p3_x, p3_y, p3_x, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
         make_seg(p3_x, p2_y, p2_x - 1.45, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
 
-        # --- Trans Signal Routes (WE_POS routed on F.Cu east of H2 to clear Cis routes, then via to J11 on B.Cu) ---
+        # --- Trans Signal Routes (B.Cu direct & F.Cu excitation feed) ---
+        # J11 (RE_TRANS): Pin 8 via to B.Cu, direct route to J11 pad on B.Cu
+        make_via(p8_x, p8_y, 0.7, 0.35, "RE_TRANS"),
+        make_seg(p8_x, p8_y, j11_x, j11_y, 0.35, "B.Cu", "RE_TRANS"),
+
+        # J10 (WE_POS): Pin 9 on F.Cu, routed south-east around H2, across south, then via to J10 on B.Cu
         make_seg(p9_x, p9_y, 64.5, p9_y, 0.4, "F.Cu", "WE_POS"),
         make_seg(64.5, p9_y, 64.5, 55.0, 0.4, "F.Cu", "WE_POS"),
-        make_seg(64.5, 55.0, j11_x, 55.0, 0.4, "F.Cu", "WE_POS"),
-        make_seg(j11_x, 55.0, j11_x, j11_y, 0.4, "F.Cu", "WE_POS"),
-        make_via(j11_x, j11_y, 0.7, 0.35, "WE_POS"),
+        make_seg(64.5, 55.0, 32.5, 55.0, 0.4, "F.Cu", "WE_POS"),
+        make_seg(32.5, 55.0, 32.5, j10_y, 0.4, "F.Cu", "WE_POS"),
+        make_seg(32.5, j10_y, j10_x, j10_y, 0.4, "F.Cu", "WE_POS"),
+        make_via(j10_x, j10_y, 0.7, 0.35, "WE_POS"),
 
-        make_via(p8_x, p8_y, 0.7, 0.35, "RE_TRANS"),
-        make_seg(p8_x, p8_y, 33.5, 43.3, 0.4, "B.Cu", "RE_TRANS"),
-        make_seg(33.5, 43.3, j10_x, j10_y, 0.4, "B.Cu", "RE_TRANS"),
-
+        # CE_GNDA: Pin 7 stub on B.Cu
         make_via(p7_x, p7_y, 0.7, 0.35, "CE_GNDA"),
         make_seg(p7_x, p7_y, p7_x, p7_y + 2.0, 0.4, "B.Cu", "CE_GNDA"),
 
