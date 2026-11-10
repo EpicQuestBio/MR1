@@ -59,7 +59,7 @@ PIN_NET_MAP = {
     "6": "GUARD",
     "7": "CE_GNDA",
     "8": "RE_TRANS",
-    "9": "WE_POS",
+    "9": ">PORE_AMP",
     "10": "GNDA",
     "11": "WEEP_SENSE",
     "12": "GNDA",
@@ -146,7 +146,7 @@ def get_single_pin_pogo_landings_fp_str():
         elif pin_num in (1, 10, 12):
             pad1_net = "GNDA"
         elif pin_num == 9:
-            pad1_net = "WE_POS"
+            pad1_net = ">PORE_AMP"
 
         fp_txt = re.sub(
             r'(\(pad\s+"1"[^\n]*?)\(uuid',
@@ -270,15 +270,16 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t\t(hide yes)\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t)\n'
-        f'\t\t(fp_line (start -1.0 0.4) (end 1.0 0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_line (start 1.0 0.4) (end 1.0 -0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_line (start 1.0 -0.4) (end -1.0 -0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_line (start -1.0 -0.4) (end -1.0 0.4) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start -0.9525 0.635) (end 0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start 0.9525 0.635) (end 0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start 0.9525 -0.635) (end -0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start -0.9525 -0.635) (end -0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_text user "Ag/AgCl" (at 0 0 0) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08))))\n'
-        f'\t\t(pad "1" smd rect\n'
+        f'\t\t(pad "1" smd roundrect\n'
         f'\t\t\t(at 0 0)\n'
-        f'\t\t\t(size 2.0 0.8)\n'
+        f'\t\t\t(size 1.905 1.27)\n'
         f'\t\t\t(layers "{cu_layer}" "{mask_layer}")\n'
+        f'\t\t\t(roundrect_rratio 0.15)\n'
         f'\t\t\t(net "{net}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t)\n'
@@ -680,11 +681,11 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_circle_keepout(center_x + spec.FLUID_HOLES["H3"][0], center_y - spec.FLUID_HOLES["H3"][1], 2.75),
         make_circle_keepout(center_x + spec.FLUID_HOLES["H4"][0], center_y - spec.FLUID_HOLES["H4"][1], 2.75),
 
-        # Cis fluid channel corridor keepout (H1 -> H2 along 30 deg, width 3.6mm)
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
+        # Cis fluid channel corridor keepout (H1 -> H2 along 30 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (copperpour not_allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
 
-        # Trans fluid channel corridor keepout (H3 -> H4 along 150 deg, width 3.6mm)
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy 63.657 32.580) (xy 25.551 54.580) (xy 23.751 51.462) (xy 61.857 29.462))))',
+        # Trans fluid channel corridor keepout (H3 -> H4 along 150 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (copperpour not_allowed)) (polygon (pts (xy 63.657 32.580) (xy 25.551 54.580) (xy 23.751 51.462) (xy 61.857 29.462))))',
 
         # Central Nanopore Chip aperture copper/track keepout zone (>= 0.5mm clearance around 6.2x6.2mm diamond)
         f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x:.4f} {center_y - 5.5:.4f}) (xy {center_x + 5.5:.4f} {center_y:.4f}) (xy {center_x:.4f} {center_y + 5.5:.4f}) (xy {center_x - 5.5:.4f} {center_y:.4f}))))',

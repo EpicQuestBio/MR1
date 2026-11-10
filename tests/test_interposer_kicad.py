@@ -82,9 +82,9 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn("CIS FLOW", content, "CIS FLOW channel indicator must be present on Interposer PCB")
         self.assertIn("TRANS FLOW", content, "TRANS FLOW channel indicator must be present on Interposer PCB")
 
-        # Channel-aligned 2.0x0.8mm Ag/AgCl ribbon solder pads
-        ribbon_pads = re.findall(r'\(pad\s+"1"\s+smd\s+rect\s+\(at\s+0\s+0\)\s+\(size\s+2(?:\.0)?\s+0\.8\)\s+\(layers\s+"[FB]\.Cu"\s+"[FB]\.Mask"\)', content)
-        self.assertGreaterEqual(len(ribbon_pads), 4, f"Interposer PCB must contain at least 4 channel-aligned 2.0x0.8mm exposed solder pads (found {len(ribbon_pads)})")
+        # Channel-aligned 1.905x1.270mm (0.075x0.050in) Ag/AgCl ribbon solder pads (Part #1900)
+        ribbon_pads = re.findall(r'\(pad\s+"1"\s+smd\s+(?:roundrect|rect)\s+\(at\s+0\s+0\)\s+\(size\s+1\.905\s+1\.27\)\s+\(layers\s+"[FB]\.Cu"\s+"[FB]\.Mask"\)', content)
+        self.assertGreaterEqual(len(ribbon_pads), 4, f"Interposer PCB must contain at least 4 channel-aligned 1.905x1.27mm exposed solder pads (found {len(ribbon_pads)})")
 
         # Fluid hole pass-throughs (2.1mm NPTH non-plated through-holes, non-conductive)
         fluid_holes = re.findall(r'\(pad\s+""\s+np_thru_hole\s+circle\s+\(at\s+0\s+0\)\s+\(size\s+2\.1\s+2\.1\)\s+\(drill\s+2\.1\)', content)
