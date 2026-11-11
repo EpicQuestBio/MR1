@@ -83,7 +83,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn("TRANS FLOW", content, "TRANS FLOW channel indicator must be present on Interposer PCB")
 
         # Channel-aligned 1.905x1.270mm (0.075x0.050in) Ag/AgCl ribbon solder pads (Part #1900)
-        ribbon_pads = re.findall(r'\(pad\s+"1"\s+smd\s+(?:roundrect|rect)\s+\(at\s+0\s+0\)\s+\(size\s+1\.905\s+1\.27\)\s+\(layers\s+"[FB]\.Cu"\s+"[FB]\.Mask"\)', content)
+        ribbon_pads = re.findall(r'\(pad\s+"1"\s+smd\s+(?:roundrect|rect)\s+\(at\s+0\s+0(?:\s+[-\d.]+)?\)\s+\(size\s+1\.905\s+1\.27\)\s+\(layers\s+"[FB]\.Cu"\s+"[FB]\.Mask"\)', content)
         self.assertGreaterEqual(len(ribbon_pads), 4, f"Interposer PCB must contain at least 4 channel-aligned 1.905x1.27mm exposed solder pads (found {len(ribbon_pads)})")
 
         # Fluid hole pass-throughs (2.1mm NPTH non-plated through-holes, non-conductive)
