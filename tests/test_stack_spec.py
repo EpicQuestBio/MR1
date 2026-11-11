@@ -16,11 +16,11 @@ class TestStackSpec(unittest.TestCase):
     def test_default_is_valid(self):
         self.assertEqual(S.validate(), [])
 
-    def test_twelve_pins_contiguous(self):
-        self.assertEqual([p.number for p in S.PINS], list(range(1, 13)))
+    def test_pins_contiguous(self):
+        self.assertEqual([p.number for p in S.PINS], list(range(1, len(S.PINS) + 1)))
 
     def test_banks_match_convention(self):
-        self.assertEqual(len(S.pins_by_side(S.CIS)), 6)
+        self.assertEqual(len(S.pins_by_side(S.CIS)), 10)
         self.assertEqual(len(S.pins_by_side(S.TRANS)), 6)
 
     def test_fixed_net_names_present(self):
@@ -35,7 +35,7 @@ class TestStackSpec(unittest.TestCase):
                 self.assertTrue(S.RING_FEEDERS[p.ring], p.ref)
         self.assertEqual(S.RING_FEEDERS[S.GUARD], (4, 6))
         self.assertEqual(S.RING_FEEDERS[S.GUARD_WIDE], (3,))
-        self.assertEqual(S.RING_FEEDERS[S.GNDA], (1, 10, 12))
+        self.assertEqual(S.RING_FEEDERS[S.GNDA], (1, 10, 12, 13, 14, 15, 16))
 
     def test_high_z_pins_are_ringed(self):
         for p in S.PINS:

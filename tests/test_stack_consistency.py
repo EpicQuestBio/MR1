@@ -40,7 +40,7 @@ class TestStackConsistency(unittest.TestCase):
         self.assertTrue(pcb_path.exists(), "Amplifier.kicad_pcb must exist")
 
         placements = extract_pin_placements_from_pcb(pcb_path)
-        self.assertEqual(len(placements), 12, "Must find exactly 12 pogo pin footprints on Amplifier PCB")
+        self.assertEqual(len(placements), len(spec.PINS), f"Must find exactly {len(spec.PINS)} pogo pin footprints on Amplifier PCB")
 
         # All pins must be on F.Cu
         for ref, info in placements.items():
@@ -69,7 +69,7 @@ class TestStackConsistency(unittest.TestCase):
 
     def test_cad_pogo_pin_array_matches_spec(self):
         pa = Pogo_Pin_Array_Solid(compressed=True)
-        self.assertEqual(len(pa.children), 12)
+        self.assertEqual(len(pa.children), len(spec.PINS))
         centers = [(child.bounding_box().center().X, child.bounding_box().center().Y)
                    for child in pa.children]
         for p in spec.PINS:

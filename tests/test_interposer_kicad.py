@@ -708,13 +708,13 @@ class TestInterposerKiCad(unittest.TestCase):
 
         cis_nets = [p.net for p in spec.pins_by_side(spec.CIS)]
         trans_nets = [p.net for p in spec.pins_by_side(spec.TRANS)]
-        self.assertEqual(cis_nets, ["GNDA_SHLD", "WS_CIS_WIDE", "GUARD_WIDE", "GUARD_CIS_A", "WS_CIS", "GUARD_CIS_B"])
+        self.assertEqual(cis_nets, ["GNDA_SHLD", "WS_CIS_WIDE", "GUARD_WIDE", "GUARD_CIS_A", "WS_CIS", "GUARD_CIS_B", "GNDA_BAL1", "GNDA_BAL2", "GNDA_BAL3", "GNDA_BAL4"])
         self.assertEqual(trans_nets, ["CE_GNDA", "RE_TRANS", ">PORE_AMP", "GNDA", "WEEP_SENSE", "GNDA_WEEP"])
 
-        geom12 = extract_cad_geometry()
-        self.assertEqual(len(geom12.pogo_pads), 12)
-        self.assertEqual([p.net_name for p in geom12.pogo_pads], cis_nets + trans_nets)
-        for pad, p in zip(geom12.pogo_pads, spec.PINS):
+        geom16 = extract_cad_geometry()
+        self.assertEqual(len(geom16.pogo_pads), 16)
+        self.assertEqual([p.net_name for p in geom16.pogo_pads], [p.net for p in spec.PINS])
+        for pad, p in zip(geom16.pogo_pads, spec.PINS):
             expected_x, expected_y = spec.kicad_xy(p.x, p.y)
             self.assertAlmostEqual(pad.x, expected_x, places=3)
             self.assertAlmostEqual(pad.y, expected_y, places=3)

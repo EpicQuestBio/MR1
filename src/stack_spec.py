@@ -96,13 +96,17 @@ PINS: Tuple[PinSpec, ...] = (
     PinSpec(10, "GNDA", TRANS, -0.9042, 9.7706, "gnd_feed", description="Analog ground fence, feeds GNDA rings"),
     PinSpec(11, "WEEP_SENSE", TRANS, 13.3458, -10.8794, "signal", description="Weep moat detector"),
     PinSpec(12, "GNDA_WEEP", TRANS, 4.1958, -9.7294, "gnd_feed", description="Perimeter weep drain / chassis tie"),
+    PinSpec(13, "GNDA_BAL1", CIS, -7.7042, 14.5206, "gnd_feed", description="Northern balancing ground anchor flanking H2"),
+    PinSpec(14, "GNDA_BAL2", CIS, -18.7042, 6.0206, "gnd_feed", description="Northern balancing ground anchor flanking H2"),
+    PinSpec(15, "GNDA_BAL3", CIS, 7.7042, 14.5206, "gnd_feed", description="Northern balancing ground anchor flanking H4"),
+    PinSpec(16, "GNDA_BAL4", CIS, 18.7042, 6.0206, "gnd_feed", description="Northern balancing ground anchor flanking H4"),
 )
 
 # Which pogo pins carry each ring net across the air gap (pin numbers).
 RING_FEEDERS: Dict[str, Tuple[int, ...]] = {
     GUARD: (4, 6),
     GUARD_WIDE: (3,),
-    GNDA: (1, 10, 12),
+    GNDA: (1, 10, 12, 13, 14, 15, 16),
 }
 
 # High-impedance nets that need a guard/ground ring and low-leakage mask rules.

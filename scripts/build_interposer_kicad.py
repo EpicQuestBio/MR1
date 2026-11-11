@@ -63,6 +63,10 @@ PIN_NET_MAP = {
     "10": "GNDA",
     "11": "WEEP_SENSE",
     "12": "GNDA",
+    "13": "GNDA",
+    "14": "GNDA",
+    "15": "GNDA",
+    "16": "GNDA",
 }
 
 def annotate_pogo_12pin_nets(fp_str: str) -> str:

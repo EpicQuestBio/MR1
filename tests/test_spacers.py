@@ -31,7 +31,7 @@ class TestSpacersCAD(unittest.TestCase):
 
     def test_pogo_pin_array_count_and_positions(self):
         pa = Pogo_Pin_Array_Solid()
-        self.assertEqual(len(pa.children), 12)
+        self.assertEqual(len(pa.children), len(spec.PINS))
         centers = [(child.bounding_box().center().X, child.bounding_box().center().Y)
                    for child in pa.children]
         for p in spec.PINS:
