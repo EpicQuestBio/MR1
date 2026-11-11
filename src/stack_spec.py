@@ -139,8 +139,8 @@ FLUID_PORT_X = 17.3205
 FLUID_PORT_Y = 10.0
 # H1..H4 CAD positions. Cis flow H1->H2, Trans flow H3->H4 (forms an X).
 FLUID_HOLES: Dict[str, Tuple[float, float]] = {
-    "H1": (-FLUID_PORT_X, FLUID_PORT_Y),
-    "H2": (FLUID_PORT_X, -FLUID_PORT_Y),
+    "H1": (FLUID_PORT_X, -FLUID_PORT_Y),
+    "H2": (-FLUID_PORT_X, FLUID_PORT_Y),
     "H3": (-FLUID_PORT_X, -FLUID_PORT_Y),
     "H4": (FLUID_PORT_X, FLUID_PORT_Y),
 }

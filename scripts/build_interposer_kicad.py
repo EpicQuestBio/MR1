@@ -459,12 +459,12 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         out_lines.append(generate_fluid_hole_footprint(href, hval, hx, hy))
 
     # Ribbon electrode route targets aligned with liquid flow:
-    # Cis channel (H1 -> Center -> H2, 30 deg flow angle):
-    # Both pads placed on Inlet side (between H1 and Nanopore aperture):
+    # Cis channel (H1 -> Center -> H2, 330 deg flow angle):
+    # Both pads placed on Inlet side (between H1 at bottom-right and Nanopore aperture):
     #   J1: Cis Pre-pore (WS_CIS / >PORE_AMP), closest near Nanopore at r = 7.0mm
     #   J2: Cis Inlet (WS_CIS_WIDE), closest near Inlet H1 at r = 15.5mm
-    j1_x, j1_y = round(center_x - 7.0 * 0.866025, 3), round(center_y - 7.0 * 0.500000, 3)
-    j2_x, j2_y = round(center_x - 15.5 * 0.866025, 3), round(center_y - 15.5 * 0.500000, 3)
+    j1_x, j1_y = round(center_x + 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
+    j2_x, j2_y = round(center_x + 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
 
     # Trans channel (H3 -> Center -> H4, -30 deg / 150 deg flow angle):
     # Both pads placed on Inlet side (between H3 and Nanopore aperture):
@@ -618,17 +618,14 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     new_segments = [
         # --- Cis Signal & Guard Routes (F.Cu & B.Cu escape) ---
-        # J1 (>PORE_AMP): Pin 9 on F.Cu, routed cleanly north of central aperture to J1 pad on F.Cu
-        make_seg(p9_x, p9_y, p9_x, 36.0, 0.4, "F.Cu", ">PORE_AMP"),
-        make_seg(p9_x, 36.0, j1_x, 36.0, 0.4, "F.Cu", ">PORE_AMP"),
-        make_seg(j1_x, 36.0, j1_x, j1_y, 0.4, "F.Cu", ">PORE_AMP"),
+        # J1 (>PORE_AMP): Pin 9 on F.Cu, routed cleanly north & west to J1 pad on F.Cu
+        make_seg(p9_x, p9_y, p9_x, j1_y, 0.4, "F.Cu", ">PORE_AMP"),
+        make_seg(p9_x, j1_y, j1_x, j1_y, 0.4, "F.Cu", ">PORE_AMP"),
 
-        # J2 (WS_CIS_WIDE): Pin 2 via to B.Cu, route south & west along X=32.5 to J2 via on F.Cu
+        # J2 (WS_CIS_WIDE): Pin 2 via to B.Cu, route south & east along Y=j2_y to J2 via on F.Cu
         make_via(p2_x, p2_y, 0.7, 0.35, "WS_CIS_WIDE"),
-        make_seg(p2_x, p2_y, p2_x, 52.5, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_seg(p2_x, 52.5, 32.5, 52.5, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_seg(32.5, 52.5, 32.5, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_seg(32.5, j2_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(p2_x, p2_y, p2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_seg(p2_x, j2_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
         make_via(j2_x, j2_y, 0.7, 0.35, "WS_CIS_WIDE"),
 
         # GUARD feeders: P4 and P6 feeding P5 GUARD ring (routed north at Y=40.0 to clear WS_CIS pad 5)
