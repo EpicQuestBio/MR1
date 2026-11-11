@@ -475,10 +475,10 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     # 3. Add Channel-Aligned Solder Pads for Ag/AgCl Ribbon Electrodes (2.0x0.8mm exposed ENIG pads)
     electrode_defs = [
-        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", ">PORE_AMP"),
-        ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 30.0, "F", "WS_CIS_WIDE"),
-        ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 150.0, "B", "RE_TRANS"),
-        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 150.0, "B", "CE_GNDA"),
+        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 330.0, "F", ">PORE_AMP"),
+        ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 330.0, "F", "WS_CIS_WIDE"),
+        ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 210.0, "B", "RE_TRANS"),
+        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 210.0, "B", "CE_GNDA"),
     ]
     for jref, jval, jx, jy, jrot, jlayer, jnet in electrode_defs:
         out_lines.append(generate_channel_electrode_pad_fp(jref, jval, jx, jy, jrot, jlayer, jnet))
