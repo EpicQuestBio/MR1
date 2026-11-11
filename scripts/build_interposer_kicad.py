@@ -473,10 +473,12 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     j11_x, j11_y = round(center_x - 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
     j10_x, j10_y = round(center_x - 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
 
-    # 3. Add Channel-Aligned Solder Pads for Ag/AgCl Ribbon Electrodes (2.0x0.8mm exposed ENIG pads)
+    # 3. Add Channel-Aligned Solder Pads for Ag/AgCl Ribbon Electrodes (1.905x1.27mm exposed ENIG pads)
+    # J1: Cis Inlet / Drive (>PORE_AMP) at r=15.5mm near Inlet H1 (adjacent to Pin 9)
+    # J2: Cis Pre-pore / Sense (WS_CIS_WIDE) at r=7.0mm near Nanopore (adjacent to Pin 2)
     electrode_defs = [
-        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 330.0, "F", ">PORE_AMP"),
-        ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 330.0, "F", "WS_CIS_WIDE"),
+        ("J1", "Cis_Electrode_In", j2_x, j2_y, 330.0, "F", ">PORE_AMP"),
+        ("J2", "Cis_Electrode_Out", j1_x, j1_y, 330.0, "F", "WS_CIS_WIDE"),
         ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 210.0, "B", "RE_TRANS"),
         ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 210.0, "B", "CE_GNDA"),
     ]
@@ -617,16 +619,14 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         return f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts {pts_str})))'
 
     new_segments = [
-        # --- Cis Signal & Guard Routes (F.Cu & B.Cu escape) ---
-        # J1 (>PORE_AMP): Pin 9 on F.Cu, routed cleanly north & west to J1 pad on F.Cu
-        make_seg(p9_x, p9_y, p9_x, j1_y, 0.4, "F.Cu", ">PORE_AMP"),
-        make_seg(p9_x, j1_y, j1_x, j1_y, 0.4, "F.Cu", ">PORE_AMP"),
+        # --- Cis Signal & Guard Routes (F.Cu direct escape, zero vias) ---
+        # J1 (>PORE_AMP at j2_x, j2_y): Pin 9 on F.Cu, routed cleanly south & west to J1 pad on F.Cu
+        make_seg(p9_x, p9_y, p9_x, j2_y, 0.4, "F.Cu", ">PORE_AMP"),
+        make_seg(p9_x, j2_y, j2_x, j2_y, 0.4, "F.Cu", ">PORE_AMP"),
 
-        # J2 (WS_CIS_WIDE): Pin 2 via to B.Cu, route south & east along Y=j2_y to J2 via on F.Cu
-        make_via(p2_x, p2_y, 0.7, 0.35, "WS_CIS_WIDE"),
-        make_seg(p2_x, p2_y, p2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_seg(p2_x, j2_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
-        make_via(j2_x, j2_y, 0.7, 0.35, "WS_CIS_WIDE"),
+        # J2 (WS_CIS_WIDE at j1_x, j1_y): Pin 2 on F.Cu, routed cleanly north & east to J2 pad on F.Cu (NO VIAS!)
+        make_seg(p2_x, p2_y, p2_x, j1_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(p2_x, j1_y, j1_x, j1_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
 
         # GUARD feeders: P4 and P6 feeding P5 GUARD ring (routed north at Y=40.0 to clear WS_CIS pad 5)
         make_seg(p4_x, p4_y, p4_x, 40.0, 0.4, "F.Cu", "GUARD"),
