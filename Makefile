@@ -52,6 +52,9 @@ export-cad:
 export-kicad:
 	$(PYTHON) scripts/export_manager.py --kicad
 
+export-kicad-3d:
+	$(PYTHON) scripts/export_manager.py --kicad-3d
+
 export-wiring:
 	$(PYTHON) scripts/export_manager.py --wiring
 

@@ -85,17 +85,16 @@ class PinSpec:
 
 PINS: Tuple[PinSpec, ...] = (
     PinSpec(1, "GNDA_SHLD", CIS, -7.2542, -20.5794, "gnd_feed", description="Shield anchor on inlet/outlet manifold ground boundary"),
-    PinSpec(2, "WS_CIS_WIDE", CIS, 2.3958, -5.7794, "signal", ring=GUARD_WIDE, description="Path 2 (200 nm) working sense"),
-    PinSpec(3, "GUARD_WIDE", CIS, 0.4958, -8.8544, "guard_feed", description="Feeds the GUARD_WIDE ring around P2"),
-    PinSpec(4, "GUARD_CIS_A", CIS, -0.5542, 3.6206, "guard_feed", description="Flanking guard A, feeds the GUARD ring around P5"),
-    PinSpec(5, "WS_CIS", CIS, 5.6958, 0.0456, "signal", ring=GUARD, description="Path 1 (sub-5 nm) high-Z electrometer node"),
-    PinSpec(6, "GUARD_CIS_B", CIS, 9.2458, -0.5794, "guard_feed", description="Flanking guard B, feeds the GUARD ring around P5"),
-    PinSpec(7, "CE_GNDA", TRANS, -14.3542, -11.4794, "signal", description="Counter electrode return"),
-    PinSpec(8, "RE_TRANS", TRANS, -7.7042, -1.2794, "signal", description="Trans reference sense"),
+    PinSpec(2, "WS_CIS_WIDE", CIS, 2.8458, -5.8294, "signal", ring=GUARD_WIDE, description="Path 2 (200 nm) working sense"),
+    PinSpec(3, "GUARD_WIDE", CIS, 6.4458, -6.9294, "guard_feed", description="Feeds the GUARD_WIDE ring around P2"),
+    PinSpec(4, "GUARD", CIS, 10.5458, -1.6294, "guard_feed", description="Flanking guard, feeds the GUARD ring around P5"),
+    PinSpec(5, "WS_CIS", CIS, 7.1458, -0.0294, "signal", ring=GUARD, description="Path 1 (sub-5 nm) high-Z electrometer node"),
+    PinSpec(7, "CE_GNDA", TRANS, -13.3042, -10.8794, "signal", description="Counter electrode return"),
+    PinSpec(8, "RE_TRANS", TRANS, -8.0542, -0.5294, "signal", description="Trans reference sense"),
     PinSpec(9, ">PORE_AMP", TRANS, 16.2958, -6.1794, "signal", description="Bias excitation drive"),
-    PinSpec(10, "GNDA", TRANS, -0.9042, 9.7706, "gnd_feed", description="Analog ground fence, feeds GNDA rings"),
+    PinSpec(10, "GNDA", TRANS, 8.1958, 21.1706, "gnd_feed", description="Analog ground fence, feeds GNDA rings"),
     PinSpec(11, "WEEP_SENSE", TRANS, 13.3458, -10.8794, "signal", description="Weep moat detector"),
-    PinSpec(12, "GNDA_WEEP", TRANS, 4.1958, -9.7294, "gnd_feed", description="Perimeter weep drain / chassis tie"),
+    PinSpec(12, "GNDA_WEEP", TRANS, 3.7208, -9.5044, "gnd_feed", description="Perimeter weep drain / chassis tie"),
     PinSpec(13, "GNDA_BAL1", CIS, -7.7042, 14.5206, "gnd_feed", description="Northern balancing ground anchor flanking H2"),
     PinSpec(14, "GNDA_BAL2", CIS, -18.7042, 6.0206, "gnd_feed", description="Northern balancing ground anchor flanking H2"),
     PinSpec(15, "GNDA_BAL3", CIS, 7.7042, 14.5206, "gnd_feed", description="Northern balancing ground anchor flanking H4"),
@@ -104,7 +103,7 @@ PINS: Tuple[PinSpec, ...] = (
 
 # Which pogo pins carry each ring net across the air gap (pin numbers).
 RING_FEEDERS: Dict[str, Tuple[int, ...]] = {
-    GUARD: (4, 6),
+    GUARD: (4,),
     GUARD_WIDE: (3,),
     GNDA: (1, 10, 12, 13, 14, 15, 16),
 }
@@ -129,9 +128,14 @@ def pogo_xy() -> List[Tuple[float, float]]:
     return [(p.x, p.y) for p in PINS]
 
 
-def kicad_xy(x: float, y: float) -> Tuple[float, float]:
-    """Convert CAD (Y up) to KiCad board coordinates (Y down)."""
-    return (x, -y if y else 0.0)
+def kicad_xy(x: float, y: float, interposer: bool = False) -> Tuple[float, float]:
+    """Convert CAD (Y up) to KiCad board coordinates (Y down).
+    When interposer=True, mirrors X across center (X -> -X) because the Amplifier
+    mates face-to-face with the Interposer.
+    """
+    kx = -x if interposer else x
+    ky = -y if y else 0.0
+    return (kx, ky)
 
 
 # ---------------------------------------------------------------------------
@@ -267,8 +271,8 @@ def validate(stack: SpacerStack = DEFAULT_SPACERS) -> List[str]:
     """Return human-readable problems (empty list = valid)."""
     errs: List[str] = []
     nums = [p.number for p in PINS]
-    if sorted(nums) != list(range(1, len(PINS) + 1)):
-        errs.append(f"pin numbers must be 1..N contiguous, got {nums}")
+    if len(set(nums)) != len(nums) or any(n < 1 for n in nums):
+        errs.append(f"pin numbers must be unique positive integers, got {nums}")
     if len({p.net for p in PINS}) != len(PINS):
         errs.append("duplicate net names in pin map")
 

@@ -17,23 +17,23 @@ class TestStackSpec(unittest.TestCase):
         self.assertEqual(S.validate(), [])
 
     def test_pins_contiguous(self):
-        self.assertEqual([p.number for p in S.PINS], list(range(1, len(S.PINS) + 1)))
+        self.assertEqual([p.number for p in S.PINS], [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
 
     def test_banks_match_convention(self):
-        self.assertEqual(len(S.pins_by_side(S.CIS)), 10)
+        self.assertEqual(len(S.pins_by_side(S.CIS)), 9)
         self.assertEqual(len(S.pins_by_side(S.TRANS)), 6)
 
     def test_fixed_net_names_present(self):
         nets = {p.net for p in S.PINS}
         for n in ("WS_CIS", "WS_CIS_WIDE", "RE_TRANS", "CE_GNDA", ">PORE_AMP",
-                  "GUARD_CIS_A", "GUARD_CIS_B", "GUARD_WIDE"):
+                  "GUARD", "GUARD_WIDE"):
             self.assertIn(n, nets)
 
     def test_rings_have_feeders(self):
         for p in S.PINS:
             if p.ring:
                 self.assertTrue(S.RING_FEEDERS[p.ring], p.ref)
-        self.assertEqual(S.RING_FEEDERS[S.GUARD], (4, 6))
+        self.assertEqual(S.RING_FEEDERS[S.GUARD], (4,))
         self.assertEqual(S.RING_FEEDERS[S.GUARD_WIDE], (3,))
         self.assertEqual(S.RING_FEEDERS[S.GNDA], (1, 10, 12, 13, 14, 15, 16))
 

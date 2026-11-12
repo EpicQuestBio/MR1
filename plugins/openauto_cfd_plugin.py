@@ -233,10 +233,11 @@ class OpenAutoCFDSynchronizer:
             if abs(bounds["height"] - 51.96) > 0.5:
                 warnings.append(f"Interposer height {bounds['height']} mm deviates from expected 51.96 mm.")
 
-            # Required nets for 4-electrode cell & weep moat
+            # Required nets for 4-electrode cell & weep moat (WE_POS is aliased to >PORE_AMP in KiCad)
             required_nets = ["WE_POS", "WS_CIS", "RE_TRANS", "CE_GNDA", "GNDA", "WEEP_SENSE"]
             for rn in required_nets:
-                if rn not in norm_nets:
+                found = rn in norm_nets or (rn == "WE_POS" and (">PORE_AMP" in norm_nets or "PORE_AMP" in norm_nets))
+                if not found:
                     errors.append(f"Missing required electrochemical net '{rn}' in Interposer PCB.")
 
             # Verify pogo interface target pad footprint

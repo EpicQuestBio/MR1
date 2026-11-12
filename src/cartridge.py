@@ -4,6 +4,7 @@
 
 from build123d import *
 import math
+from pathlib import Path
 from src.constants import *
 from src.common import Circuitry_Cutouts, Finger_Grip_Cutout, Hex_Base_Sketch, Weep_Duct_Holes, Weep_Trench_Cutout
 
@@ -153,7 +154,32 @@ def Silver_Chloride_Ribbon_Pads(top=True, length=2.0, width=0.8, thickness=0.1):
                     Box(length, width, thickness)
     return p.part
 
-def PTFE_Interposer(render_electrodes=False):
+def PTFE_Interposer_KiCad() -> Compound:
+    """Imports the 3D model exported from KiCad (PTFE_Interposer_kicad.step)."""
+    repo_root = Path(__file__).resolve().parent.parent
+    step_path = repo_root / "exports" / "PTFE_Interposer_kicad.step"
+    if not step_path.exists():
+        import shutil
+        import subprocess
+        kicad_cli = shutil.which("kicad-cli")
+        if kicad_cli:
+            step_path.parent.mkdir(parents=True, exist_ok=True)
+            cmd = [
+                kicad_cli, "pcb", "export", "step",
+                "--user-origin", "43.7042x42.0206mm",
+                "--subst-models",
+                "-o", str(step_path),
+                str(repo_root / "Interposer" / "Interposer.kicad_pcb"),
+            ]
+            subprocess.run(cmd, check=True, capture_output=True)
+    if not step_path.exists():
+        raise FileNotFoundError(f"KiCad STEP model not found: {step_path}")
+
+    from build123d.importers import import_step
+    return import_step(str(step_path))
+
+
+def PTFE_Interposer(render_electrodes=False, use_kicad: bool = False):
     """The PTFE / Rogers RO4350B Interposer Circuit Board (55.0 x 51.962 x 0.8 mm).
     Serves as the mechanical fluidic partition and low-noise electrical interface
     between Cis and Trans chambers:
@@ -166,6 +192,12 @@ def PTFE_Interposer(render_electrodes=False):
     - Pogo pin landing array at Y=2.5mm (X = +/-1.5, +/-6.5, +/-11.5mm)
     - Weep duct moisture pass-throughs for early leak detection
     """
+    if use_kicad:
+        try:
+            return PTFE_Interposer_KiCad()
+        except Exception:
+            pass
+
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
             insert(Hex_Base_Sketch())
@@ -518,13 +550,52 @@ def Pressure_Puck():
     return p.part
 
 
-def PCB_Amplifier(flipped: bool = True, thickness: float = 1.5) -> Part:
+def PCB_Amplifier_KiCad(flipped: bool = True, thickness: float = 1.5) -> Compound:
+    """Imports the 3D model exported from KiCad (PCB_Amplifier_kicad.step)
+    with all physical components, ICs, passives, connectors, and pogo pins.
+    When flipped=True, rotates 180 degrees around Y axis (inverting X and Z
+    while preserving the ribbon cable notch at Y = -25.98 mm) and shifts
+    by thickness so the substrate occupies Z in [0, thickness].
+    """
+    repo_root = Path(__file__).resolve().parent.parent
+    step_path = repo_root / "exports" / "PCB_Amplifier_kicad.step"
+    if not step_path.exists():
+        import shutil
+        import subprocess
+        kicad_cli = shutil.which("kicad-cli")
+        if kicad_cli:
+            step_path.parent.mkdir(parents=True, exist_ok=True)
+            cmd = [
+                kicad_cli, "pcb", "export", "step",
+                "--user-origin", "43.7042x42.0206mm",
+                "--subst-models",
+                "-o", str(step_path),
+                str(repo_root / "Amplifier" / "Amplifier.kicad_pcb"),
+            ]
+            subprocess.run(cmd, check=True, capture_output=True)
+    if not step_path.exists():
+        raise FileNotFoundError(f"KiCad STEP model not found: {step_path}")
+
+    from build123d.importers import import_step
+    raw = import_step(str(step_path))
+    if flipped:
+        return raw.rotate(Axis.Y, 180).translate((0, 0, thickness))
+    return raw
+
+
+def PCB_Amplifier(flipped: bool = True, thickness: float = 1.5, use_kicad: bool = False) -> Part | Compound:
     """The 2-layer Rogers RO3003 Cartridge Amplifier PCB.
-    All discrete components, ICs (LMP7721, AD4000, LDOs), and 12 Mill-Max/LCSC pogo pins
+    All discrete components, ICs (LMP7721, AD4000, LDOs), and 15 Mill-Max/LCSC pogo pins
     are placed on the component side (F.Cu).
     When flipped=True (assembly orientation), the component side faces downwards (-Z)
     towards the PTFE interposer, nesting perfectly into the cavities of the Printed_Spacer.
     """
+    if use_kicad:
+        try:
+            return PCB_Amplifier_KiCad(flipped=flipped, thickness=thickness)
+        except Exception:
+            pass
+
     with BuildPart(mode=Mode.PRIVATE) as p:
         with BuildSketch():
             insert(Hex_Base_Sketch())

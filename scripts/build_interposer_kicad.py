@@ -56,7 +56,6 @@ PIN_NET_MAP = {
     "3": "GUARD_WIDE",
     "4": "GUARD",
     "5": "WS_CIS",
-    "6": "GUARD",
     "7": "CE_GNDA",
     "8": "RE_TRANS",
     "9": ">PORE_AMP",
@@ -264,19 +263,19 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t(descr "Channel-aligned Ag/AgCl ribbon electrode pad 1.905x1.270mm (0.075x0.050in) with driven guard shield")\n'
         f'\t\t(tags "electrode ag_agcl ribbon microfluidic guard")\n'
         f'\t\t(property "Reference" "{ref}"\n'
-        f'\t\t\t(at 0 -1.6 0)\n'
+        f'\t\t\t(at 0 -1.6 {rot:.1f})\n'
         f'\t\t\t(layer "{silk_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)))\n'
         f'\t\t)\n'
         f'\t\t(property "Value" "{val}"\n'
-        f'\t\t\t(at 0 1.6 0)\n'
+        f'\t\t\t(at 0 1.6 {rot:.1f})\n'
         f'\t\t\t(layer "{fab_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t\t(effects (font (size 0.6 0.6) (thickness 0.10)))\n'
         f'\t\t)\n'
         f'\t\t(property "Footprint" "footprints:Electrode_Guard_Shield"\n'
-        f'\t\t\t(at 0 0 0)\n'
+        f'\t\t\t(at 0 0 {rot:.1f})\n'
         f'\t\t\t(layer "{fab_layer}")\n'
         f'\t\t\t(hide yes)\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
@@ -285,7 +284,7 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t(fp_line (start 0.9525 0.635) (end 0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_line (start 0.9525 -0.635) (end -0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_line (start -0.9525 -0.635) (end -0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_text user "Ag/AgCl" (at 0 0 0) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08))))\n'
+        f'\t\t(fp_text user "Ag/AgCl" (at 0 0 {rot:.1f}) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08))))\n'
         f'\t\t(pad "1" smd roundrect\n'
         f'\t\t\t(at 0 0 {rot:.1f})\n'
         f'\t\t\t(size 1.905 1.27)\n'
@@ -429,7 +428,9 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
                 out_lines.append(cavity_ec)
                 continue
 
-            # Retain other top-level drawing/setup blocks (gr_line, gr_poly, setup, layers, etc.)
+            # Retain other top-level drawing/setup blocks, except Amplifier mask exclusions
+            if '(layer "F.Mask")' in block_txt or '(layer "B.Mask")' in block_txt:
+                continue
             out_lines.append(block_txt)
             continue
 
@@ -461,37 +462,34 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     # 2. Add Fluid Holes H1..H4 with 5.0mm OD landing pads for hermetic sealing
     hole_defs = [
-        ("H1", "Port_Cis_In_H1", center_x + spec.FLUID_HOLES["H1"][0], center_y - spec.FLUID_HOLES["H1"][1]),
-        ("H2", "Port_Cis_Out_H2", center_x + spec.FLUID_HOLES["H2"][0], center_y - spec.FLUID_HOLES["H2"][1]),
-        ("H3", "Port_Trans_In_H3", center_x + spec.FLUID_HOLES["H3"][0], center_y - spec.FLUID_HOLES["H3"][1]),
-        ("H4", "Port_Trans_Out_H4", center_x + spec.FLUID_HOLES["H4"][0], center_y - spec.FLUID_HOLES["H4"][1]),
+        ("H1", "Port_Cis_In_H1", round(center_x - spec.FLUID_PORT_X, 4), round(center_y - spec.FLUID_PORT_Y, 4)),
+        ("H2", "Port_Cis_Out_H2", round(center_x + spec.FLUID_PORT_X, 4), round(center_y + spec.FLUID_PORT_Y, 4)),
+        ("H3", "Port_Trans_In_H3", round(center_x - spec.FLUID_PORT_X, 4), round(center_y + spec.FLUID_PORT_Y, 4)),
+        ("H4", "Port_Trans_Out_H4", round(center_x + spec.FLUID_PORT_X, 4), round(center_y - spec.FLUID_PORT_Y, 4)),
     ]
     for href, hval, hx, hy in hole_defs:
         out_lines.append(generate_fluid_hole_footprint(href, hval, hx, hy))
 
     # Ribbon electrode route targets aligned with liquid flow:
-    # Cis channel (H1 -> Center -> H2, 330 deg flow angle):
-    # Both pads placed on Inlet side (between H1 at bottom-right and Nanopore aperture):
-    #   J1: Cis Pre-pore (WS_CIS / >PORE_AMP), closest near Nanopore at r = 7.0mm
-    #   J2: Cis Inlet (WS_CIS_WIDE), closest near Inlet H1 at r = 15.5mm
-    j1_x, j1_y = round(center_x + 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
-    j2_x, j2_y = round(center_x + 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
+    # Cis channel (H3 at South-West -> Center -> H4 at North-East, 330 deg flow angle):
+    #   J2: Cis Drive (WS_CIS_WIDE), near Inlet H3 at r = 15.5mm
+    #   J1: Cis Pre-pore / Sense (>PORE_AMP), near Nanopore at r = 7.0mm
+    j2_x, j2_y = round(center_x - 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
+    j1_x, j1_y = round(center_x - 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
 
-    # Trans channel (H3 -> Center -> H4, -30 deg / 150 deg flow angle):
-    # Both pads placed on Inlet side (between H3 and Nanopore aperture):
-    #   J11: Trans Pre-pore (RE_TRANS), closest near Nanopore at r = 7.0mm
-    #   J10: Trans Inlet (CE_GNDA), closest near Inlet H3 at r = 15.5mm
-    j11_x, j11_y = round(center_x - 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
-    j10_x, j10_y = round(center_x - 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
+    # Trans channel (H1 at North-West -> Center -> H2 at South-East, 30 deg flow angle):
+    #   J11: Trans Sense (RE_TRANS), near Nanopore at r = 7.0mm
+    #   J10: Trans Drive (CE_GNDA), near Port H2 at r = 15.5mm
+    j11_x, j11_y = round(center_x + 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
+    j10_x, j10_y = round(center_x + 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
 
     # 3. Add Channel-Aligned Solder Pads for Ag/AgCl Ribbon Electrodes (1.905x1.27mm exposed ENIG pads)
-    # J1: Cis Inlet / Drive (>PORE_AMP) at r=15.5mm near Inlet H1 (adjacent to Pin 9)
-    # J2: Cis Pre-pore / Sense (WS_CIS_WIDE) at r=7.0mm near Nanopore (adjacent to Pin 2)
+    # Mirrored rotations: J1 & J2 along H3 leg rotated 30.0 deg; J11 & J10 along H2 leg rotated 330.0 deg
     electrode_defs = [
-        ("J1", "Cis_Electrode_In", j2_x, j2_y, 330.0, "F", ">PORE_AMP"),
-        ("J2", "Cis_Electrode_Out", j1_x, j1_y, 330.0, "F", "WS_CIS_WIDE"),
-        ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 210.0, "B", "RE_TRANS"),
-        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 210.0, "B", "CE_GNDA"),
+        ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 30.0, "F", "WS_CIS_WIDE"),
+        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", ">PORE_AMP"),
+        ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 330.0, "B", "RE_TRANS"),
+        ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 330.0, "B", "CE_GNDA"),
     ]
     for jref, jval, jx, jy, jrot, jlayer, jnet in electrode_defs:
         out_lines.append(generate_channel_electrode_pad_fp(jref, jval, jx, jy, jrot, jlayer, jnet))
@@ -596,14 +594,14 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     def pin_pos(n):
         p = spec.pin(n)
-        return round(center_x + p.x, 3), round(center_y - p.y, 3)
+        kx, ky = spec.kicad_xy(p.x, p.y, interposer=True)
+        return round(center_x + kx, 3), round(center_y + ky, 3)
 
     p1_x, p1_y = pin_pos(1)
     p2_x, p2_y = pin_pos(2)
     p3_x, p3_y = pin_pos(3)
     p4_x, p4_y = pin_pos(4)
     p5_x, p5_y = pin_pos(5)
-    p6_x, p6_y = pin_pos(6)
     p7_x, p7_y = pin_pos(7)
     p8_x, p8_y = pin_pos(8)
     p9_x, p9_y = pin_pos(9)
@@ -612,11 +610,11 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     p12_x, p12_y = pin_pos(12)
 
     # Weep moat contour coordinates routed clear of all 4 fluid ports
-    w_p1 = (round(center_x + 12.00, 3), round(center_y + 9.506, 3))
+    w_p1 = (round(center_x + 21.30, 3), 56.500)
     w_p2 = (round(center_x + 23.30, 3), round(center_y + 5.000, 3))
     w_p3 = (round(center_x + 23.30, 3), round(center_y - 14.000, 3))
-    w_p4 = (round(center_x + 5.00, 3), round(center_y - 20.000, 3))
-    w_p5 = (round(center_x - 16.50, 3), round(center_y - 20.000, 3))
+    w_p4 = (round(center_x + 5.00, 3), round(center_y - 18.000, 3))
+    w_p5 = (round(center_x - 16.50, 3), round(center_y - 18.000, 3))
     w_p6 = (round(center_x - 22.70, 3), round(center_y - 14.000, 3))
     w_p7 = (round(center_x - 22.70, 3), round(center_y + 5.000, 3))
 
@@ -630,40 +628,38 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         return f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts {pts_str})))'
 
     new_segments = [
-        # --- Cis Signal & Guard Routes (F.Cu direct escape, zero vias) ---
-        # J1 (>PORE_AMP at j2_x, j2_y): Pin 9 on F.Cu, routed cleanly south & west to J1 pad on F.Cu
-        make_seg(p9_x, p9_y, p9_x, j2_y, 0.4, "F.Cu", ">PORE_AMP"),
-        make_seg(p9_x, j2_y, j2_x, j2_y, 0.4, "F.Cu", ">PORE_AMP"),
+        # --- Cis Signal & Guard Routes ---
+        # J1 (>PORE_AMP at j1_x, j1_y): Pin 9 is at (p9_x, p9_y) on West side. Drops via to B.Cu, routes to J1
+        make_via(p9_x, p9_y, 0.7, 0.35, ">PORE_AMP"),
+        make_seg(p9_x, p9_y, j1_x, j1_y, 0.35, "B.Cu", ">PORE_AMP"),
+        make_via(j1_x, j1_y, 0.7, 0.35, ">PORE_AMP"),
 
-        # J2 (WS_CIS_WIDE at j1_x, j1_y): Pin 2 on F.Cu, routed cleanly north & east to J2 pad on F.Cu (NO VIAS!)
-        make_seg(p2_x, p2_y, p2_x, j1_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(p2_x, j1_y, j1_x, j1_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        # J2 (WS_CIS_WIDE at j2_x, j2_y): Pin 2 on F.Cu escapes east through guard notch, routes north to Y=38, west to j2_x, then south to J2
+        make_seg(p2_x, p2_y, 43.3, p2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(43.3, p2_y, 43.3, 38.0, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(43.3, 38.0, j2_x, 38.0, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(j2_x, 38.0, j2_x, j2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
 
-        # GUARD feeders: P4 and P6 feeding P5 GUARD ring (routed north at Y=40.0 to clear WS_CIS pad 5)
-        make_seg(p4_x, p4_y, p4_x, 40.0, 0.4, "F.Cu", "GUARD"),
-        make_seg(p4_x, 40.0, p6_x, 40.0, 0.4, "F.Cu", "GUARD"),
-        make_seg(p6_x, 40.0, p6_x, p6_y, 0.4, "F.Cu", "GUARD"),
-        make_seg(p5_x + 1.85, 40.0, p5_x + 1.85, p5_y, 0.4, "F.Cu", "GUARD"),
+        # GUARD feeder: P4 feeding P5 GUARD ring directly on F.Cu
+        make_seg(p4_x, p4_y, p5_x - 1.85, p5_y, 0.4, "F.Cu", "GUARD"),
 
-        # GUARD_WIDE feeder: P3 feeding P2 GUARD_WIDE ring (routed north and east on F.Cu to clear P12 and P2)
-        make_seg(p3_x, p3_y, p3_x, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
-        make_seg(p3_x, p2_y, p2_x - 1.85, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
+        # GUARD_WIDE feeder: P3 feeding P2 GUARD_WIDE ring directly on F.Cu
+        make_seg(p3_x, p3_y, p2_x - 1.85, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
 
-        # --- Trans Signal Routes (B.Cu direct & F.Cu excitation feed) ---
-        # J11 (RE_TRANS): Pin 8 on B.Cu, direct short route to J11 pad on B.Cu
+        # --- Trans Signal Routes ---
+        # J11 (RE_TRANS at j11_x, j11_y): Pin 8 drops via to B.Cu, routes directly to J11
         make_via(p8_x, p8_y, 0.7, 0.35, "RE_TRANS"),
         make_seg(p8_x, p8_y, j11_x, j11_y, 0.35, "B.Cu", "RE_TRANS"),
 
-        # J10 (CE_GNDA): Pin 7 on B.Cu, direct short route to J10 pad on B.Cu
-        make_via(p7_x, p7_y, 0.7, 0.35, "CE_GNDA"),
-        make_seg(p7_x, p7_y, j10_x, j10_y, 0.4, "B.Cu", "CE_GNDA"),
+        # J10 (CE_GNDA at j10_x, j10_y): Pin 7 on F.Cu routes north of WEEP_SENSE on F.Cu, drops via to J10 on B.Cu
+        make_seg(p7_x, p7_y, j10_x, j10_y, 0.4, "F.Cu", "CE_GNDA"),
+        make_via(j10_x, j10_y, 0.7, 0.35, "CE_GNDA"),
 
         # --- WEEP_SENSE Channel-Contouring Moat (F.Cu and B.Cu) ---
         make_via(p11_x, p11_y, 0.7, 0.35, "WEEP_SENSE"),
-        make_seg(p11_x, p11_y, w_p1[0], w_p1[1], 0.4, "B.Cu", "WEEP_SENSE"),
-
-        # B.Cu Moat Perimeter Segments (>= 5 segments)
-        make_seg(w_p1[0], w_p1[1], w_p2[0], w_p2[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        make_seg(p11_x, p11_y, p11_x, 56.500, 0.4, "B.Cu", "WEEP_SENSE"),
+        make_seg(p11_x, 56.500, w_p1[0], 56.500, 0.4, "B.Cu", "WEEP_SENSE"),
+        make_seg(w_p1[0], 56.500, w_p2[0], w_p2[1], 0.3, "B.Cu", "WEEP_SENSE"),
         make_seg(w_p2[0], w_p2[1], w_p3[0], w_p3[1], 0.3, "B.Cu", "WEEP_SENSE"),
         make_seg(w_p3[0], w_p3[1], w_p4[0], w_p4[1], 0.3, "B.Cu", "WEEP_SENSE"),
         make_seg(w_p4[0], w_p4[1], w_p5[0], w_p5[1], 0.3, "B.Cu", "WEEP_SENSE"),

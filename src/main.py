@@ -24,7 +24,7 @@ from src.cartridge import (
     Nanopore_Wafer_Silicon, PCB_Main_Reader_2D, PCB_Main_Reader,
     Carrier_Frame_Hex, Nanopore_Carrier, PTFE_Interposer, Interposer,
     Silver_Chloride_Ribbon_Pads, PCB_Pump_Controller_2D, PCB_Pump_Controller,
-    PCB_Amplifier
+    PCB_Amplifier, PCB_Amplifier_KiCad, PTFE_Interposer_KiCad
 )
 from src.spacers import PP_Shim, Delrin_Block, Printed_Spacer, Pogo_Pin_Array_Solid
 from src.adapters import Threaded_Luer_Adapter, Elbow_Adapter
@@ -80,6 +80,8 @@ def export_all():
         "Printed_Spacer": Printed_Spacer(height=3.6),
         "Pogo_Pin_Array": Pogo_Pin_Array_Solid(),
         "PCB_Amplifier_Flipped": PCB_Amplifier(flipped=True),
+        "PCB_Amplifier_KiCad": PCB_Amplifier(flipped=True, use_kicad=True),
+        "PTFE_Interposer_KiCad": PTFE_Interposer(use_kicad=True),
     }
 
     # 2. 2D DXF Profiles (for KiCad PCB Edge.Cuts & keepout synchronization)

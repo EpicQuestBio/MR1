@@ -186,6 +186,7 @@ def extract_cad_geometry(
     pin_count: int = 12,
     bank: str = "trans",
     pin_positions: Optional[Dict[Union[int, str], Tuple[float, float]]] = None,
+    interposer: bool = True,
 ) -> ExtractedCADGeometry:
     """
     Query parametric locations, centers, radii, and outlines directly from
@@ -318,7 +319,7 @@ def extract_cad_geometry(
             )
             px, py = r4(override_pos[0]), r4(override_pos[1])
         else:
-            kx, ky = spec.kicad_xy(cad_x, cad_y)
+            kx, ky = spec.kicad_xy(cad_x, cad_y, interposer=interposer)
             px, py = r4(kx), r4(ky)
 
         special = net_name in HIGH_Z_NETS or net_name in GUARD_NETS
@@ -1185,11 +1186,11 @@ def generate_kicad_footprint(
         if p.net_name in HIGH_Z_NETS:
             # Map high-Z pin to guard ring pin number and notch direction:
             # - WS_CIS_WIDE (Pin 2): Guard ring fed by Pin 3 (GUARD_WIDE).
-            #   Notch oriented at -90 deg (North in KiCad, toward Cis electrode J2 escape).
             # - WS_CIS (Pin 5): Guard ring fed by Pin 4 (GUARD).
-            #   Notch oriented at 180 deg (West in KiCad, toward central wafer aperture).
+            # With physical X-mirroring, Cis pins are on the West side of the interposer,
+            # so signal escape routes head East (0.0 deg) toward the center and electrodes.
             guard_pin_num = "3" if p.net_name == "WS_CIS_WIDE" else "4"
-            notch_deg = -90.0 if p.net_name == "WS_CIS_WIDE" else 180.0
+            notch_deg = 0.0
 
             ring_mid = (spec.RING_INNER_R + spec.RING_OUTER_R) / 2.0  # 1.85 mm
             ring_w = spec.RING_WIDTH  # 0.5 mm

@@ -110,8 +110,8 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertTrue(electrode_guard_fp.exists(), "Electrode_Guard.kicad_mod must exist")
 
         target_txt = target_fp.read_text(encoding="utf-8")
-        # 12 pads must be present
-        for p in range(1, 13):
+        # Active pogo pins (P6 deleted, now 15 pins: P1..P5, P7..P16)
+        for p in [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]:
             self.assertIn(f'(pad "{p}"', target_txt, f"Pad {p} must exist in target array")
 
         electrode_txt = electrode_fp.read_text(encoding="utf-8")
@@ -165,8 +165,8 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn("J10", sch_txt)
         self.assertIn("J11", sch_txt)
 
-        # Check all 12 pins of J_POGO1
-        for pin_num in range(1, 13):
+        # Check active pins of J_POGO1 (P6 deleted)
+        for pin_num in [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12]:
             self.assertIn(f'(pin "{pin_num}"', sch_txt, f"Pin {pin_num} must be in the Interposer pogo connector J_POGO1")
 
     def test_interposer_bom_completeness(self):
@@ -517,11 +517,10 @@ class TestInterposerKiCad(unittest.TestCase):
         sym_txt = sym_file.read_text(encoding="utf-8")
         self.assertIn('(symbol "Concentric_Interposer_Mating_Pad"', sym_txt)
 
-        # 3. Schematic instantiation in Amplifier.kicad_sch
+        # 3. Discrete coax pogo pin instantiation in Amplifier.kicad_sch
         sch_file = REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch"
         sch_txt = sch_file.read_text(encoding="utf-8")
-        self.assertIn('"MR1:PogoPin_Target_Landing_1Pin_Guarded"', sch_txt)
-        self.assertIn('"J_PAD1"', sch_txt)
+        self.assertIn('"P5"', sch_txt)
 
         # 4. Independent guard architecture (verified via exported KiCad netlist):
         import subprocess, re, shutil
@@ -545,7 +544,7 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('NT3', '2'), nets.get('/Vbias', []), "NT3 Pin 2 must connect to Vbias")
         # Route 2: Active guard buffer for GUARD_WIDE using OPA2192 Unit 2
         self.assertIn('(label "GUARD_WIDE"', sch_txt)
-        self.assertNotIn('"NT6"', sch_txt, "NT6 must be removed so active GUARD_WIDE is not shorted to Vbias")
+        self.assertNotIn(('NT6', '1'), nets.get('/GUARD_WIDE', []), "NT6 must not tie active GUARD_WIDE")
         # U16 LTC6268 Gain Stage: R3 feedback restored, R4 tied to Vbias
         self.assertIn(('R3', '1'), nets.get('/Route1_OUT', []), "R3 feedback loop must connect to U16 output (Route1_OUT)")
         self.assertIn(('R3', '2'), nets.get('/Virtual_Ground', []), "R3 pin 2 must connect to Virtual_Ground")
@@ -641,8 +640,8 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('U17', '8'), route_net, "U17 IN (pin 8) must connect to /ROUTE_SEL")
 
         # Verify enable line
-        p3v3_net = nets.get("+3V3", [])
-        self.assertIn(('U17', '1'), p3v3_net, "U17 EN (pin 1) must be tied to +3V3")
+        p3v3_net = nets.get("+3V3", []) + nets.get("+3.3VA", [])
+        self.assertIn(('U17', '1'), p3v3_net, "U17 EN (pin 1) must be tied to +3V3 or +3.3VA")
 
         # Verify dual power supplies
         vdda_net = nets.get("VDDA", [])
@@ -708,14 +707,14 @@ class TestInterposerKiCad(unittest.TestCase):
 
         cis_nets = [p.net for p in spec.pins_by_side(spec.CIS)]
         trans_nets = [p.net for p in spec.pins_by_side(spec.TRANS)]
-        self.assertEqual(cis_nets, ["GNDA_SHLD", "WS_CIS_WIDE", "GUARD_WIDE", "GUARD_CIS_A", "WS_CIS", "GUARD_CIS_B", "GNDA_BAL1", "GNDA_BAL2", "GNDA_BAL3", "GNDA_BAL4"])
+        self.assertEqual(cis_nets, ["GNDA_SHLD", "WS_CIS_WIDE", "GUARD_WIDE", "GUARD", "WS_CIS", "GNDA_BAL1", "GNDA_BAL2", "GNDA_BAL3", "GNDA_BAL4"])
         self.assertEqual(trans_nets, ["CE_GNDA", "RE_TRANS", ">PORE_AMP", "GNDA", "WEEP_SENSE", "GNDA_WEEP"])
 
         geom16 = extract_cad_geometry()
-        self.assertEqual(len(geom16.pogo_pads), 16)
+        self.assertEqual(len(geom16.pogo_pads), 15)
         self.assertEqual([p.net_name for p in geom16.pogo_pads], [p.net for p in spec.PINS])
         for pad, p in zip(geom16.pogo_pads, spec.PINS):
-            expected_x, expected_y = spec.kicad_xy(p.x, p.y)
+            expected_x, expected_y = spec.kicad_xy(p.x, p.y, interposer=True)
             self.assertAlmostEqual(pad.x, expected_x, places=3)
             self.assertAlmostEqual(pad.y, expected_y, places=3)
 

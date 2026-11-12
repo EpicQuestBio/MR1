@@ -5304,7 +5304,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k 1%"
 			(at 82.55 69.85 90)
 			(show_name no)
 			(do_not_autoplace no)

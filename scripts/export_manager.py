@@ -244,7 +244,71 @@ def export_kicad(verbose=True):
         if verbose:
             print(f"  [OK] {b_name}: Gerbers, Drill, POS, PDF, BOM, and {b['zip_name']} created.")
 
+    # 7. KiCad 3D STL & STEP Models
+    export_kicad_3d(verbose=verbose)
+
     return success
+
+
+def export_kicad_3d(verbose=True):
+    """Export 3D STL and STEP renderings directly from KiCad PCBs using kicad-cli."""
+    if verbose:
+        print("\n[KiCad 3D] Exporting 3D STL & STEP models from KiCad PCBs...")
+    kicad_cli = find_kicad_cli()
+    if not kicad_cli:
+        print("  [WARN] Warning: kicad-cli not found. Skipping KiCad 3D exports.")
+        return False
+
+    boards = [
+        {
+            "name": "PCB_Amplifier_kicad",
+            "pcb": REPO_ROOT / "Amplifier" / "Amplifier.kicad_pcb",
+            "origin": "43.7042x42.0206mm",
+        },
+        {
+            "name": "PTFE_Interposer_kicad",
+            "pcb": REPO_ROOT / "Interposer" / "Interposer.kicad_pcb",
+            "origin": "43.7042x42.0206mm",
+        },
+        {
+            "name": "PCB_Main_Reader_kicad",
+            "pcb": REPO_ROOT / "MR1" / "MR1.kicad_pcb",
+            "origin": None,
+        },
+        {
+            "name": "PCB_Pump_Controller_kicad",
+            "pcb": REPO_ROOT / "Pump" / "Pump.kicad_pcb",
+            "origin": None,
+        },
+    ]
+
+    for b in boards:
+        pcb_file = b["pcb"]
+        if not pcb_file.exists():
+            continue
+        base_name = b["name"]
+        stl_out = EXPORTS_DIR / f"{base_name}.stl"
+        step_out = EXPORTS_DIR / f"{base_name}.step"
+
+        # 1. Export STL
+        cmd_stl = [kicad_cli, "pcb", "export", "stl", "--subst-models", "-o", str(stl_out)]
+        if b["origin"]:
+            cmd_stl.extend(["--user-origin", b["origin"]])
+        cmd_stl.append(str(pcb_file))
+        res_stl = subprocess.run(cmd_stl, capture_output=True, text=True)
+
+        # 2. Export STEP
+        cmd_step = [kicad_cli, "pcb", "export", "step", "--subst-models", "-o", str(step_out)]
+        if b["origin"]:
+            cmd_step.extend(["--user-origin", b["origin"]])
+        cmd_step.append(str(pcb_file))
+        res_step = subprocess.run(cmd_step, capture_output=True, text=True)
+
+        if verbose:
+            s_ok = "OK" if res_stl.returncode == 0 and res_step.returncode == 0 else "WARN"
+            print(f"  [{s_ok}] {base_name} -> {stl_out.name}, {step_out.name}")
+
+    return True
 
 
 def export_wiring(verbose=True):
@@ -518,6 +582,7 @@ def main():
     parser.add_argument("--cad", action="store_true", help="Export 3D STL/STEP and 2D DXF models")
     parser.add_argument("--footprints", action="store_true", help="Generate CAD-driven KiCad footprints (.kicad_mod)")
     parser.add_argument("--kicad", action="store_true", help="Export KiCad Footprints, Gerbers, BOM, POS, and PDFs")
+    parser.add_argument("--kicad-3d", dest="kicad_3d", action="store_true", help="Export KiCad 3D STL and STEP renderings")
     parser.add_argument("--wiring", "--wireviz", dest="wiring", action="store_true", help="Export WireViz harness diagrams")
     parser.add_argument("--firmware", action="store_true", help="Build and stage ESP32-S3 firmware")
     parser.add_argument("--manifest", action="store_true", help="Generate exports/manifest.json")
@@ -537,7 +602,7 @@ def main():
         sys.exit(0)
 
     # Default to all if no specific target selected
-    if not (args.all or args.cad or args.footprints or args.kicad or args.wiring or args.firmware or args.manifest or args.check):
+    if not (args.all or args.cad or args.footprints or args.kicad or args.kicad_3d or args.wiring or args.firmware or args.manifest or args.check):
         args.all = True
 
     EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -552,6 +617,8 @@ def main():
         export_footprints()
     if args.all or args.kicad:
         export_kicad()
+    elif args.kicad_3d:
+        export_kicad_3d()
     if args.all or args.wiring:
         export_wiring()
     if args.all or args.firmware:
