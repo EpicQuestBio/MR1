@@ -1913,7 +1913,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25488"
+		(property "LCSC" "C26083"
 			(at 217.17 111.252 90)
 			(hide yes)
 			(show_name no)
@@ -2013,7 +2013,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25488"
+		(property "LCSC" "C26083"
 			(at 218.44 139.192 90)
 			(hide yes)
 			(show_name no)

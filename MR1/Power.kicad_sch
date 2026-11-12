@@ -18239,7 +18239,7 @@
 				)
 			)
 		)
-		(property "Description" "250mA low-noise LDO, 2.2V-5.5V input, 3.3V output, SOT-23-5"
+		(property "Description" "600mA Ultra-Low Noise LDO, 2.2V-5.5V input, 3.3V output, SOT-23-5"
 			(at 245.11 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -18261,7 +18261,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C156285"
+		(property "LCSC" "C136082"
 			(at 245.11 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -18305,7 +18305,7 @@
 				)
 			)
 		)
-		(property "MPN" "NCP114ASN330T1G"
+		(property "MPN" "NCP163ASN330T1G"
 			(at 245.11 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -18338,7 +18338,7 @@
 				)
 			)
 		)
-		(property "Mouser PN" "863-NCP114ASN330T1G"
+		(property "Mouser PN" "863-NCP163ASN330T1G"
 			(at 245.11 31.75 0)
 			(hide yes)
 			(show_name no)

@@ -2214,10 +2214,16 @@
 		(uuid "8c1c1086-c537-428c-98f6-639ea208650c")
 	)
 	(junction
-		(at 59.69 40.64)
+		(at 73.66 24.13)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a7bd9969-21a5-4830-9dd6-6ad36da83a37")
+	)
+	(junction
+		(at 78.74 24.13)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8174a29-2319-4dc3-8ce2-881a2818de71")
 	)
 	(junction
 		(at 90.17 43.18)
@@ -2491,7 +2497,7 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 43.18) (xy 59.69 40.64)
+			(xy 73.66 17.78) (xy 73.66 24.13)
 		)
 		(stroke
 			(width 0)
@@ -2671,7 +2677,7 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 49.53) (xy 59.69 48.26)
+			(xy 78.74 17.78) (xy 78.74 24.13)
 		)
 		(stroke
 			(width 0)
@@ -3316,84 +3322,6 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176/ac451f08-b061-4a40-ab47-bc465f0c8937"
 					(reference "C25")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 59.69 49.53 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1156c291-3d35-4b58-97fc-60c4053b646f")
-		(property "Reference" "#PWR066"
-			(at 59.69 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 59.69 55.245 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 59.69 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 59.69 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 59.69 49.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a239aca8-42fe-4c9c-b311-fd8b214f31d1")
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176/ac451f08-b061-4a40-ab47-bc465f0c8937"
-					(reference "#PWR066")
 					(unit 1)
 				)
 			)
@@ -4915,7 +4843,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 59.69 45.72 0)
+		(at 76.2 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4925,29 +4853,27 @@
 		(dnp no)
 		(uuid "4952ac19-c550-44d6-8c2e-d297f5ad0dad")
 		(property "Reference" "C24"
-			(at 62.0268 44.5516 0)
+			(at 76.2 12.7 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "4.7u"
-			(at 62.0268 46.863 0)
+		(property "Value" "100p"
+			(at 76.2 15.24 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 59.69 45.72 0)
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4958,7 +4884,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 59.69 45.72 0)
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4968,8 +4894,8 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 59.69 45.72 0)
+		(property "Description" "Capacitor 100pF 50V C0G 0402"
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4979,8 +4905,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 59.69 45.72 0)
+		(property "LCSC" "C1546"
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4990,8 +4916,8 @@
 				)
 			)
 		)
-		(property "Manufacturer_Name" "Taiyo Yuden	"
-			(at 59.69 45.72 0)
+		(property "Manufacturer_Name" "Fenghua"
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5001,8 +4927,8 @@
 				)
 			)
 		)
-		(property "Manufacturer_Part_Number" "JMK107C6475KA-T"
-			(at 59.69 45.72 0)
+		(property "Manufacturer_Part_Number" "0402CG101J500NT"
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5012,8 +4938,8 @@
 				)
 			)
 		)
-		(property "Mouser Part Number" "963-JMK107C6475KA-T"
-			(at 59.69 45.72 0)
+		(property "Mouser Part Number" "581-04025A101JAT2A"
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5023,8 +4949,8 @@
 				)
 			)
 		)
-		(property "Mouser Price/Stock" "$0.16/1200"
-			(at 59.69 45.72 0)
+		(property "Mouser Price/Stock" ""
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5035,7 +4961,7 @@
 			)
 		)
 		(property "Configuration" "all"
-			(at 59.69 45.72 0)
+			(at 76.2 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5716,7 +5642,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25488"
+		(property "LCSC" "C26083"
 			(at 88.9 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -5771,7 +5697,7 @@
 				)
 			)
 		)
-		(property "Distributor 2 PN" "660-RK73H1ETTPB1002F"
+		(property "Distributor 2 PN" "603-RC0402FR-071ML"
 			(at 88.9 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -5782,7 +5708,7 @@
 				)
 			)
 		)
-		(property "MPN" "RK73H1ETTPB1002F"
+		(property "MPN" "0402WGF1004TCE"
 			(at 88.9 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -6757,7 +6683,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VDDA")
+		(lib_id "power:+3V3")
 		(at 38.1 33.02 0)
 		(unit 1)
 		(body_style 1)
@@ -6779,7 +6705,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA"
+		(property "Value" "+3V3"
 			(at 38.1 29.464 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6811,7 +6737,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"VDDA\""
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
 			(at 38.1 33.02 0)
 			(hide yes)
 			(show_name no)

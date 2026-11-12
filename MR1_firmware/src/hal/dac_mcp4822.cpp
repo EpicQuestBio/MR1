@@ -82,11 +82,12 @@ float DacMCP4822::set_voltage_mv(float mv) {
 
     _current_bias_mv = mv;
 
-    // Linear mapping:
-    // min_mv -> Code 0
-    // 0.0 mV -> Code 2048
-    // max_mv -> Code 4095
-    float norm = (mv - min_mv) / (max_mv - min_mv);
+    // Inverting summing amplifier transfer function:
+    // V_pore = +2457.6mV - 2.4 * V_DAC
+    // max_mv (+2457.6 mV) -> Code 0 (V_DAC = 0V)
+    // 0.0 mV              -> Code 2048 (V_DAC = 1.024V)
+    // min_mv (-2457.6 mV) -> Code 4095 (V_DAC = 2.048V)
+    float norm = (max_mv - mv) / (max_mv - min_mv);
     int code = (int)(norm * 4095.0f + 0.5f);
     if (code < 0) code = 0;
     if (code > 4095) code = 4095;
@@ -153,7 +154,8 @@ void DacMCP4822::rebuild_lut() {
         if (v_inst < min_mv) v_inst = min_mv;
         if (v_inst > max_mv) v_inst = max_mv;
 
-        float norm = (v_inst - min_mv) / (max_mv - min_mv);
+        // Inverting summing amplifier transfer function
+        float norm = (max_mv - v_inst) / (max_mv - min_mv);
         int code = (int)(norm * 4095.0f + 0.5f);
         if (code < 0) code = 0;
         if (code > 4095) code = 4095;

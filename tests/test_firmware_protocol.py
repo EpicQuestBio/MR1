@@ -121,24 +121,24 @@ class TestFirmwareProtocol(unittest.TestCase):
 
     def test_pore_bias_voltage_clamping_and_mapping(self):
         """Verify DAC voltage mapping logic."""
-        BIAS_MIN_MV = -1587.0
-        BIAS_MAX_MV = 1587.0
+        BIAS_MIN_MV = -2457.6
+        BIAS_MAX_MV = 2457.6
 
         def mv_to_code(mv: float) -> int:
             clamped = max(BIAS_MIN_MV, min(BIAS_MAX_MV, mv))
-            norm = (clamped - BIAS_MIN_MV) / (BIAS_MAX_MV - BIAS_MIN_MV)
+            norm = (BIAS_MAX_MV - clamped) / (BIAS_MAX_MV - BIAS_MIN_MV)
             return int(round(norm * 4095.0))
 
         # Midscale (0 mV) -> code ~2048
         self.assertEqual(mv_to_code(0.0), 2048)
-        # Min scale (-1587 mV) -> code 0
-        self.assertEqual(mv_to_code(-1587.0), 0)
-        # Max scale (+1587 mV) -> code 4095
-        self.assertEqual(mv_to_code(1587.0), 4095)
-        # Out-of-bounds negative clamped to 0
-        self.assertEqual(mv_to_code(-2500.0), 0)
-        # Out-of-bounds positive clamped to 4095
-        self.assertEqual(mv_to_code(3000.0), 4095)
+        # Min scale (-2457.6 mV) -> code 4095 (V_DAC = 2.048V)
+        self.assertEqual(mv_to_code(-2457.6), 4095)
+        # Max scale (+2457.6 mV) -> code 0 (V_DAC = 0V)
+        self.assertEqual(mv_to_code(2457.6), 0)
+        # Out-of-bounds negative clamped to 4095
+        self.assertEqual(mv_to_code(-3000.0), 4095)
+        # Out-of-bounds positive clamped to 0
+        self.assertEqual(mv_to_code(3000.0), 0)
 
     def test_sbu_orientation_detection_logic(self):
         """Verify USB-C SBU auto-polarity state machine and pin swap logic."""

@@ -6649,6 +6649,65 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Reference_Voltage:ADR4525"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U" (at 0 6.35 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+			(property "Value" "ADR4525" (at 2.54 -6.35 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+			(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 2.54 -7.62 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27) (italic yes))))
+			(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADR4520_4525_4530_4533_4540_4550.pdf" (at 2.54 -8.89 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27) (italic yes))))
+			(property "Description" "2.500V, Ultralow Noise, High Accuracy Voltage Reference, SOIC-8" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(property "ki_keywords" "vref" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm*" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(symbol "ADR4525_0_0"
+				(pin no_connect line (at -5.08 0 0) (length 2.54) (hide yes) (name "NC" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+				(pin no_connect line (at 5.08 2.54 180) (length 2.54) (hide yes) (name "NC" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
+				(pin no_connect line (at 5.08 -2.54 180) (length 2.54) (hide yes) (name "NC" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
+			)
+			(symbol "ADR4525_0_1"
+				(rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
+			)
+			(symbol "ADR4525_1_1"
+				(pin no_connect line (at -5.08 2.54 0) (length 2.54) (hide yes) (name "NC" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+				(pin power_in line (at -2.54 7.62 270) (length 2.54) (name "IN" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+				(pin power_in line (at -2.54 -7.62 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
+				(pin no_connect line (at -5.08 -2.54 0) (length 2.54) (hide yes) (name "NC" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
+				(pin power_out line (at 7.62 0 180) (length 2.54) (name "OUT" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Transistor_BJT:MMBT3906"
+			(pin_names (offset 0) (hide yes))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "Q" (at 5.08 1.905 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Value" "MMBT3906" (at 5.08 0 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 5.08 -1.905 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27) (italic yes)) (justify left)))
+			(property "Datasheet" "https://www.onsemi.com/pdf/datasheet/mmbt3906lt1-d.pdf" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(property "Description" "PNP transistor, base/emitter/collector, SOT-23" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(property "ki_keywords" "transistor PNP BJT" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(symbol "MMBT3906_0_1"
+				(polyline (pts (xy -2.54 0) (xy 0.635 0)) (stroke (width 0) (type default)) (fill (type none)))
+				(polyline (pts (xy 0.635 1.905) (xy 0.635 -1.905)) (stroke (width 0.508) (type default)) (fill (type none)))
+				(polyline (pts (xy 0.635 0.635) (xy 2.54 2.54)) (stroke (width 0) (type default)) (fill (type none)))
+				(polyline (pts (xy 0.635 -0.635) (xy 2.54 -2.54)) (stroke (width 0) (type default)) (fill (type none)))
+				(circle (center 1.27 0) (radius 2.8194) (stroke (width 0.254) (type default)) (fill (type none)))
+				(polyline (pts (xy 2.286 1.778) (xy 1.778 2.286) (xy 1.27 1.27) (xy 2.286 1.778)) (stroke (width 0) (type default)) (fill (type outline)))
+			)
+			(symbol "MMBT3906_1_1"
+				(pin input line (at -5.08 0 0) (length 2.54) (name "B" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at 2.54 5.08 270) (length 2.54) (name "E" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+				(pin passive line (at 2.54 -5.08 90) (length 2.54) (name "C" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			)
+			(embedded_fonts no)
+		)
+
 	)
 	(rectangle
 		(start -146.05 66.04)
@@ -7664,7 +7723,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 123.19) (xy 173.99 129.54)
+			(xy 173.99 123.19) (xy 173.99 128.27)
 		)
 		(stroke
 			(width 0)
@@ -8524,16 +8583,6 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 -17.78) (xy 194.31 -17.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d7a013c8-18b0-4cf6-9845-72857edebdad")
-	)
-	(wire
-		(pts
 			(xy 251.46 39.37) (xy 261.62 39.37)
 		)
 		(stroke
@@ -8644,16 +8693,6 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 -17.78) (xy 173.99 -17.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "eaafb21c-bb5f-4779-9c32-786313e32df9")
-	)
-	(wire
-		(pts
 			(xy -64.77 85.09) (xy -69.85 85.09)
 		)
 		(stroke
@@ -8741,16 +8780,6 @@
 			(type default)
 		)
 		(uuid "f6e9d073-7e58-4ca7-b44d-b304e6425fdf")
-	)
-	(wire
-		(pts
-			(xy 167.64 -24.13) (xy 167.64 -17.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9f750fd-528d-4134-a55c-281b4a5e7068")
 	)
 	(wire
 		(pts
@@ -13899,7 +13928,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VDDA")
+		(lib_id "power:+3.3VA")
 		(at 167.64 -24.13 0)
 		(unit 1)
 		(body_style 1)
@@ -13920,7 +13949,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA"
+		(property "Value" "+3.3VA"
 			(at 167.64 -27.94 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13998,7 +14027,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "AD40xxBRMZ"
+		(property "Value" "AD4011BRMZ"
 			(at 240.9033 52.07 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14042,7 +14071,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C539308"
+		(property "LCSC" "C2839157"
 			(at 238.76 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -14053,7 +14082,7 @@
 				)
 			)
 		)
-		(property "MPN" "AD4011BCPZ-RL7"
+		(property "MPN" "AD4011BRMZ"
 			(at 238.76 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -14064,7 +14093,7 @@
 				)
 			)
 		)
-		(property "Mouser PN" "584-AD4011BCPZ-RL7"
+		(property "Mouser PN" "584-AD4011BRMZ"
 			(at 238.76 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -15189,206 +15218,6 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0106")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 176.53 -17.78 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "2b86a6b9-6643-4a42-8e75-2cac7a1600f4")
-		(property "Reference" "R34"
-			(at 171.45 -19.05 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "27"
-			(at 179.705 -19.05 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25078"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "AssemblyType" "SMT"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2" "Mouser"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2 PN" "603-RC0402JR-0727RL"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "RC0402JR-0727RL"
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Quantity" ""
-			(at 176.53 -17.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "PARTREV" ""
-			(at 176.53 -17.78 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ALT_Part_Number" ""
-			(at 176.53 -17.78 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Cost" ""
-			(at 176.53 -17.78 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3b871797-e2d6-48b1-b614-5138523e71c3")
-		)
-		(pin "2"
-			(uuid "b6c80d28-7e02-4765-8124-b30d6cd76271")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "R34")
 					(unit 1)
 				)
 			)
@@ -19364,7 +19193,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C161316"
+		(property "LCSC" "C1546"
 			(at -238.76 60.6552 0)
 			(hide yes)
 			(show_name no)
@@ -19430,7 +19259,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402CG101J500NT"
 			(at -234.95 59.69 90)
 			(hide yes)
 			(show_name no)
@@ -21986,7 +21815,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1523"
+		(property "LCSC" "C82219"
 			(at 219.71 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -22269,7 +22098,7 @@
 				)
 			)
 		)
-		(property "MPN" "MBR0540L-TP"
+		(property "MPN" "0402B473K500NT"
 			(at 156.21 134.62 0)
 			(hide yes)
 			(show_name no)
@@ -22381,7 +22210,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 210.82 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -22447,7 +22276,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC0402JR-0727RL"
+		(property "MPN" "0402WGF499JTCE"
 			(at 210.82 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -27866,7 +27695,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 210.82 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -27932,7 +27761,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC0402JR-0727RL"
+		(property "MPN" "0402WGF499JTCE"
 			(at 210.82 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -28895,6 +28724,349 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 152.4 -10.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a7b55ea5-e25d-45db-a049-8a7cef3d31b2")
+		(property "Reference" "R36" (at 158.496 -12.7 90) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "10k 1%" (at 152.4 -12.7 90) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 152.4 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 152.4 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Resistor, 10k, 1%, 0402" (at 152.4 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C60490" (at 152.4 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "MPN" "0402WGF1002TCE" (at 152.4 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Mouser PN" "660-RK73H1ETTPB1002F" (at 152.4 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "0cdec237-f975-47bb-b68e-67b88c8cf441"))
+		(pin "2" (uuid "03caaeff-2b6f-4cef-bfe4-13bee7ee4d58"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(junction (at 144.78 -13.97) (diameter 1.016) (color 0 0 0 0) (uuid "a893c261-37e1-497a-9036-10499d03be70"))
+	(junction (at 144.78 -6.35) (diameter 1.016) (color 0 0 0 0) (uuid "2594ccca-83fc-4ba4-a6dd-3fa6ba44fc05"))
+	(wire (pts (xy 144.78 -13.97) (xy 152.4 -13.97)) (stroke (width 0) (type default)) (uuid "177bf140-462b-49f8-9943-2f853dea283e"))
+	(wire (pts (xy 152.4 -13.97) (xy 152.4 -12.7)) (stroke (width 0) (type default)) (uuid "02af2866-31b1-46fa-b4b5-a302e6f4c264"))
+	(wire (pts (xy 144.78 -6.35) (xy 152.4 -6.35)) (stroke (width 0) (type default)) (uuid "5df582e2-2dc3-424a-af27-d843c3b3b5c9"))
+	(wire (pts (xy 152.4 -6.35) (xy 152.4 -7.62)) (stroke (width 0) (type default)) (uuid "a8d67162-42d1-4553-ac12-42fb870c1d3b"))
+	(symbol
+		(lib_id "Reference_Voltage:ADR4525")
+		(at 176.53 -17.78 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "562c394a-f2d2-44f4-9b57-ebd6405e749f")
+		(property "Reference" "U18" (at 176.53 -24.13 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "ADR4525" (at 176.53 -11.43 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 179.07 -25.4 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27) (italic yes))))
+		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADR4520_4525_4530_4533_4540_4550.pdf" (at 179.07 -26.67 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27) (italic yes))))
+		(property "Description" "2.500V, Ultralow Noise, High Accuracy Voltage Reference, SOIC-8" (at 176.53 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C2841029" (at 176.53 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "MPN" "ADR4525ARZ-R7" (at 176.53 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Mouser PN" "584-ADR4525ARZ-R7" (at 176.53 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "4f9e91cd-37a7-44a0-9c50-c7a5f898186d"))
+		(pin "2" (uuid "caed0837-d94e-4551-a271-afcaa97bf058"))
+		(pin "3" (uuid "42fecfc4-3238-4ac2-9753-949af194316e"))
+		(pin "4" (uuid "e8c9ccf6-5eb8-48fc-a856-3cbb2c05de30"))
+		(pin "5" (uuid "28319508-15d8-4133-93f8-ddd8fb98961d"))
+		(pin "6" (uuid "a60fe23a-ae42-49fa-a34d-6322d04fc016"))
+		(pin "7" (uuid "156c6690-1226-456c-8ad3-727a7b984dfb"))
+		(pin "8" (uuid "048f2da0-f01f-4718-93a0-55785631e7a4"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "U18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire (pts (xy 184.15 -17.78) (xy 194.31 -17.78)) (stroke (width 0) (type default)) (uuid "8ce97037-3bfc-41d1-87e9-5721a241ed0a"))
+	(wire (pts (xy 167.64 -24.13) (xy 167.64 -25.4)) (stroke (width 0) (type default)) (uuid "d4aeb753-b1c1-439b-b945-cffbab4163d2"))
+	(wire (pts (xy 167.64 -25.4) (xy 173.99 -25.4)) (stroke (width 0) (type default)) (uuid "c7c4e348-df22-4604-b15c-2ebb720a6eb8"))
+	(symbol
+		(lib_id "power:GNDA")
+		(at 173.99 -10.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7d7ad3a2-fb9e-4c35-b9c6-9e4942c55010")
+		(property "Reference" "#PWR0125" (at 173.99 -3.81 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GNDA" (at 173.99 -4.445 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 173.99 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 173.99 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 173.99 -10.16 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "71af3d99-982f-4cbe-9add-3f1c69887c0f"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0125")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 160.02 -20.32 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c131c247-c79e-461d-a23c-5aedba83f60c")
+		(property "Reference" "C43" (at 162.3568 -21.4884 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "100n" (at 162.3568 -19.177 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 160.02 -20.32 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 160.02 -20.32 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Unpolarized capacitor, small symbol" (at 160.02 -20.32 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C15255" (at 160.02 -20.32 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "MPN" "0402B104K500NT" (at 160.02 -20.32 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Mouser PN" "581-04025C104KAT2A" (at 160.02 -20.32 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "6f866001-36b6-41af-b9f1-4f0e34f8c536"))
+		(pin "2" (uuid "76c026b9-dd24-4270-9706-838f9edf8961"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "C43")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(junction (at 167.64 -25.4) (diameter 1.016) (color 0 0 0 0) (uuid "e2f2f32a-fb2b-45e7-82ad-d163bfb4b1ff"))
+	(wire (pts (xy 167.64 -25.4) (xy 160.02 -25.4)) (stroke (width 0) (type default)) (uuid "b219db5b-97fa-409c-b67c-973503be8612"))
+	(wire (pts (xy 160.02 -25.4) (xy 160.02 -22.86)) (stroke (width 0) (type default)) (uuid "7e705816-48f4-4a2e-978f-1b64bf8a193d"))
+	(symbol
+		(lib_id "power:GNDA")
+		(at 160.02 -17.78 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b82e8ad6-9312-4e52-b6de-c533963dc6dd")
+		(property "Reference" "#PWR0126" (at 160.02 -11.43 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GNDA" (at 160.02 -12.065 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 160.02 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 160.02 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 160.02 -17.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "e62b9879-ace4-4f0d-ae61-ef6799df2d70"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0126")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire (pts (xy 160.02 -17.78) (xy 160.02 -17.78)) (stroke (width 0) (type default)) (uuid "d623b7f8-bd28-47aa-86d8-c1ddcf39b22c"))
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 160.02 113.03 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8f3f7c19-551a-4ac9-88fd-633a0fd4f1ea")
+		(property "Reference" "R17" (at 160.02 106.934 90) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "1M" (at 160.02 109.474 90) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 160.02 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 160.02 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Resistor, 1M, 1%, 0402" (at 160.02 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C26083" (at 160.02 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "MPN" "0402WGF1004TCE" (at 160.02 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Mouser PN" "603-RC0402FR-071ML" (at 160.02 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "7cfe0611-e85e-4f2d-a7e8-b6d22549d8a8"))
+		(pin "2" (uuid "f75ff06f-1e50-4efa-86d8-3ef3c8ff8b9c"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3VA")
+		(at 157.48 113.03 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "98d43b2c-3efa-4d32-941d-1a4468e79c78")
+		(property "Reference" "#PWR0127" (at 153.67 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "+3.3VA" (at 151.13 113.03 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 157.48 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 157.48 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 157.48 113.03 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "813e46e2-1dd5-4daf-87a5-4fdb0394b994"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0127")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(junction (at 173.99 113.03) (diameter 1.016) (color 0 0 0 0) (uuid "b4cffb33-7e6f-4afc-be2d-678daa7fa768"))
+	(wire (pts (xy 162.56 113.03) (xy 173.99 113.03)) (stroke (width 0) (type default)) (uuid "5fd8a998-fc65-46f4-af88-0741ada1bf1b"))
+	(symbol
+		(lib_id "Transistor_BJT:MMBT3906")
+		(at 179.07 128.27 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f5fd4efa-28f6-4b91-aac7-f0761436c66e")
+		(property "Reference" "Q4" (at 184.15 127.0 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "MMBT3906" (at 184.15 129.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 184.15 132.08 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27) (italic yes)) (justify left)))
+		(property "Datasheet" "https://www.onsemi.com/pdf/datasheet/mmbt3906lt1-d.pdf" (at 179.07 128.27 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "PNP transistor, base/emitter/collector, SOT-23" (at 179.07 128.27 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C20526" (at 179.07 128.27 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "MPN" "MMBT3906" (at 179.07 128.27 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Mouser PN" "512-MMBT3906" (at 179.07 128.27 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "0c70453e-8ffe-4bf0-8763-972aafd43627"))
+		(pin "2" (uuid "ecec1ea3-e98b-42c1-9750-4c13b912e3da"))
+		(pin "3" (uuid "9a0b59bc-9417-41c3-8631-e84523698d90"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "Q4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3VA")
+		(at 181.61 123.19 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1d4e7f53-a84b-473b-9736-9ca6b2bc3c89")
+		(property "Reference" "#PWR0128" (at 181.61 116.84 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "+3.3VA" (at 181.61 116.205 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 181.61 123.19 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 181.61 123.19 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 181.61 123.19 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "831c2f5b-13bc-4121-a0f8-a5cc4c9f5a6c"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0128")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(junction (at 181.61 133.35) (diameter 1.016) (color 0 0 0 0) (uuid "188faf25-0e80-4221-82ad-61a2fb3662bd"))
+	(wire (pts (xy 181.61 133.35) (xy 186.69 133.35)) (stroke (width 0) (type default)) (uuid "d6db9bac-57a7-4ae9-a383-eb619d86c548"))
+	(wire (pts (xy 181.61 133.35) (xy 181.61 129.54)) (stroke (width 0) (type default)) (uuid "fb296530-e925-4086-878a-c43dfb2461b1"))
+	(wire (pts (xy 181.61 129.54) (xy 173.99 129.54)) (stroke (width 0) (type default)) (uuid "bff2700f-2c0e-4e66-b3a2-f82c9847e3c8"))
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 186.69 135.89 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "835c6a01-9688-49e3-bfb7-3a1b4d30a4b3")
+		(property "Reference" "R18" (at 192.786 133.35 90) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "100k" (at 186.69 133.35 90) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 186.69 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 186.69 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Resistor, 100k, 1%, 0402" (at 186.69 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "LCSC" "C25744" (at 186.69 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "MPN" "0402WGF1003TCE" (at 186.69 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Mouser PN" "603-RC0402FR-07100KL" (at 186.69 135.89 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "2abfaa85-ad2c-4ca3-b828-fce6407cd6b8"))
+		(pin "2" (uuid "fa79d0b8-7733-4032-9526-2e52e561f6dd"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at 186.69 138.43 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b2107094-d95b-4eb9-9e6c-7038835e74bd")
+		(property "Reference" "#PWR0129" (at 186.69 144.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GNDA" (at 186.69 144.145 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 186.69 138.43 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 186.69 138.43 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "" (at 186.69 138.43 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "c28d9385-8a29-4875-8e73-a82f6343de59"))
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0129")
 					(unit 1)
 				)
 			)
