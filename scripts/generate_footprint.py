@@ -1180,14 +1180,42 @@ def generate_kicad_footprint(
             f'(uuid "{deterministic_uuid(f"{ce.name}_gnd_ring")}"))'
         )
 
-    # Emit 360-deg Concentric Copper Guard Rings around High-Z Pogo Landing Pads (using gr_circle graphic lines)
+    # Emit Concentric Slotted (C-shaped) Guard Ring Pads around High-Z Pogo Landing Pads
     for p in geom.pogo_pads:
         if p.net_name in HIGH_Z_NETS:
+            # Map high-Z pin to guard ring pin number and notch direction:
+            # - WS_CIS_WIDE (Pin 2): Guard ring fed by Pin 3 (GUARD_WIDE).
+            #   Notch oriented at -90 deg (North in KiCad, toward Cis electrode J2 escape).
+            # - WS_CIS (Pin 5): Guard ring fed by Pin 4 (GUARD).
+            #   Notch oriented at 180 deg (West in KiCad, toward central wafer aperture).
+            guard_pin_num = "3" if p.net_name == "WS_CIS_WIDE" else "4"
+            notch_deg = -90.0 if p.net_name == "WS_CIS_WIDE" else 180.0
+
+            ring_mid = (spec.RING_INNER_R + spec.RING_OUTER_R) / 2.0  # 1.85 mm
+            ring_w = spec.RING_WIDTH  # 0.5 mm
+
+            theta_0 = math.radians(notch_deg)
+            theta_mid = theta_0 + math.pi
+            ax = r4(p.x + ring_mid * math.cos(theta_mid))
+            ay = r4(p.y + ring_mid * math.sin(theta_mid))
+
+            dx_c = -ring_mid * math.cos(theta_mid)
+            dy_c = -ring_mid * math.sin(theta_mid)
+
+            notch_half_deg = 40.0 if p.net_name == "WS_CIS_WIDE" else 30.0
+            t_start = theta_0 + math.radians(notch_half_deg)
+            t_end = theta_0 - math.radians(notch_half_deg)
+
+            sx = fmt4(dx_c + ring_mid * math.cos(t_start))
+            sy = fmt4(dy_c + ring_mid * math.sin(t_start))
+            ex = fmt4(dx_c + ring_mid * math.cos(t_end))
+            ey = fmt4(dy_c + ring_mid * math.sin(t_end))
+
             lines.append(
-                f'  (fp_circle (center {fmt4(p.x)} {fmt4(p.y)}) (end {fmt4(p.x + 1.45)} {fmt4(p.y)}) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Cu") (uuid "{deterministic_uuid(f"{fp_name}_guard_ring_cu_{p.pin_number}")}"))'
-            )
-            lines.append(
-                f'  (fp_circle (center {fmt4(p.x)} {fmt4(p.y)}) (end {fmt4(p.x + 1.45)} {fmt4(p.y)}) (stroke (width 0.25) (type solid)) (fill none) (layer "F.Mask") (uuid "{deterministic_uuid(f"{fp_name}_guard_ring_mask_{p.pin_number}")}"))'
+                f'  (pad "{guard_pin_num}" smd custom (at {fmt4(ax)} {fmt4(ay)}) (size 0.1 0.1) (layers "F.Cu") '
+                f'(clearance 0.3) (options (clearance outline) (anchor circle)) '
+                f'(primitives (gr_arc (start {sx} {sy}) (mid 0 0) (end {ex} {ey}) (width {fmt4(ring_w)}))) '
+                f'(uuid "{deterministic_uuid(f"{fp_name}_guard_ring_pad_{p.pin_number}")}"))'
             )
 
     lines.append(")")
@@ -1311,6 +1339,10 @@ def generate_library() -> Dict[str, str]:
             + generate_fluid_references(fluid_mode=fmode)
             + ")\n"
         )
+    geom = extract_cad_geometry()
+    out["PogoPin_Target_12Pin_Distributed"] = generate_kicad_footprint(
+        geom, footprint_name="PogoPin_Target_12Pin_Distributed", fluid_mode="drills"
+    )
     return out
 
 

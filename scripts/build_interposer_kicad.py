@@ -72,11 +72,18 @@ PIN_NET_MAP = {
 def annotate_pogo_12pin_nets(fp_str: str) -> str:
     def inject_pad_net(m):
         pnum = m.group(1)
+        pad_type = m.group(2)
+        pad_shape = m.group(3)
+        rest = m.group(4)
         net = PIN_NET_MAP.get(pnum)
         if net:
-            return f'(pad "{pnum}" smd circle {m.group(2)}(net "{net}") (uuid'
+            return f'(pad "{pnum}" {pad_type} {pad_shape} {rest}(net "{net}") (uuid'
         return m.group(0)
-    return re.sub(r'\(pad\s+"(\d+)"\s+smd\s+circle\s+([^\n]*?)\(uuid', inject_pad_net, fp_str)
+    return re.sub(
+        r'\(pad\s+"(\d+)"\s+(smd|np_thru_hole)\s+(circle|rect|custom)\s+([\s\S]*?)\(uuid',
+        inject_pad_net,
+        fp_str
+    )
 
 def get_single_pin_pogo_landings_fp_str():
     """
@@ -640,7 +647,7 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
         # GUARD_WIDE feeder: P3 feeding P2 GUARD_WIDE ring (routed north and east on F.Cu to clear P12 and P2)
         make_seg(p3_x, p3_y, p3_x, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
-        make_seg(p3_x, p2_y, p2_x - 1.45, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
+        make_seg(p3_x, p2_y, p2_x - 1.85, p2_y, 0.4, "F.Cu", "GUARD_WIDE"),
 
         # --- Trans Signal Routes (B.Cu direct & F.Cu excitation feed) ---
         # J11 (RE_TRANS): Pin 8 on B.Cu, direct short route to J11 pad on B.Cu

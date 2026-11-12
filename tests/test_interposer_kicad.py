@@ -669,7 +669,7 @@ class TestInterposerKiCad(unittest.TestCase):
 
         geom = extract_cad_geometry()
         self.assertEqual(geom.datum, (0.0, 0.0))
-        self.assertEqual(len(geom.pogo_pads), 12)
+        self.assertEqual(len(geom.pogo_pads), len(PIN_NET_SEQUENCE))
         self.assertEqual(len(geom.fluid_holes), 4)
         self.assertEqual([h[0] for h in geom.fluid_holes], ["H1", "H2", "H3", "H4"])
         for _, hx, hy, h_drill in geom.fluid_holes:
@@ -740,6 +740,48 @@ class TestInterposerKiCad(unittest.TestCase):
             for alias in LEGACY_ALIASES:
                 fp_file = lib / f"{alias}.kicad_mod"
                 self.assertTrue(fp_file.exists(), f"{fp_file} alias must exist")
+
+    def test_interposer_high_z_slotted_guard_rings(self):
+        """
+        Verify that WS_CIS (Pin 5) and WS_CIS_WIDE (Pin 2) on the Interposer have:
+        1. Slotted C-shaped guard ring pads (gr_arc, not closed fp_circle).
+        2. Real pin numbers (Pin 3 for GUARD_WIDE, Pin 4 for GUARD).
+        3. Real net assignments (GUARD_WIDE, GUARD).
+        """
+        import re
+        pcb_path = REPO_ROOT / "Interposer" / "Interposer.kicad_pcb"
+        pcb_txt = pcb_path.read_text(encoding="utf-8")
+
+        # Extract J_POGO1 footprint text
+        jpogo_match = re.search(r'\t\(footprint\s+"PogoPin_Target_12Pin_Distributed"[\s\S]*?\n\t\)', pcb_txt)
+        self.assertIsNotNone(jpogo_match, "J_POGO1 footprint must exist in Interposer.kicad_pcb")
+        jpogo_txt = jpogo_match.group(0)
+
+        # Verify no unnetted raw fp_circle on F.Cu around Pin 2 or Pin 5
+        self.assertNotIn('(fp_circle (center 2.3958 5.7794)', jpogo_txt,
+                         "Raw fp_circle around Pin 2 must be replaced with slotted guard pad")
+        self.assertNotIn('(fp_circle (center 5.6958 -0.0456)', jpogo_txt,
+                         "Raw fp_circle around Pin 5 must be replaced with slotted guard pad")
+
+        # Verify slotted guard pad for WS_CIS_WIDE (Pad 3, GUARD_WIDE, gr_arc)
+        pad3_guard_wide = re.search(
+            r'\(pad\s+"3"\s+smd\s+custom[\s\S]*?\(net\s+"GUARD_WIDE"\)[\s\S]*?\(primitives\s+\(gr_arc',
+            jpogo_txt
+        ) or re.search(
+            r'\(pad\s+"3"\s+smd\s+custom[\s\S]*?\(primitives\s+\(gr_arc[\s\S]*?\(net\s+"GUARD_WIDE"\)',
+            jpogo_txt
+        )
+        self.assertIsNotNone(pad3_guard_wide, "Pad 3 custom slotted guard ring for WS_CIS_WIDE must be present with net GUARD_WIDE")
+
+        # Verify slotted guard pad for WS_CIS (Pad 4, GUARD, gr_arc)
+        pad4_guard = re.search(
+            r'\(pad\s+"4"\s+smd\s+custom[\s\S]*?\(net\s+"GUARD"\)[\s\S]*?\(primitives\s+\(gr_arc',
+            jpogo_txt
+        ) or re.search(
+            r'\(pad\s+"4"\s+smd\s+custom[\s\S]*?\(primitives\s+\(gr_arc[\s\S]*?\(net\s+"GUARD"\)',
+            jpogo_txt
+        )
+        self.assertIsNotNone(pad4_guard, "Pad 4 custom slotted guard ring for WS_CIS must be present with net GUARD")
 
 if __name__ == "__main__":
     unittest.main()
