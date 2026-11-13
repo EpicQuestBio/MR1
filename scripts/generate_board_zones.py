@@ -332,7 +332,7 @@ def sanitize_silkscreen_over_guard(pcb_text: str) -> str:
             blk = re.sub(r'(\(fp_line[\s\S]*?\(layer\s+\")F\.SilkS(\"\))', r'\g<1>F.Fab\2', blk)
         return blk
 
-    targets = {'P4', 'P5', 'P6', 'P8', 'P2', 'U2', 'R1', 'C1', 'C19', 'C14', 'R32'}
+    targets = {'P4', 'P5', 'P6', 'P8', 'P2', 'U2', 'R1', 'C1', 'C19', 'R32'}
     new_blocks = []
     for blk in blocks:
         ref_m = re.search(r'\(property\s+\"Reference\"\s+\"([^\"]+)\"', blk)
