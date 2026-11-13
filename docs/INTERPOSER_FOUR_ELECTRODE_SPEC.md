@@ -63,6 +63,17 @@ flowchart TD
 | **Counter Sense** | **`CS`** | Senses potential directly at the Counter Electrode to eliminate lead/contact resistance. | Kelvin sense return to control loop |
 | **Floating Ground** | **`FloatGND` / `GNDA`** | The complete analog reference plane of the cell is isolated from mains Earth and digital USB GND. | Decoupled analog ground (low noise) |
 
+### Important EE Note: Kelvin 4-Wire Voltmeter vs. TIA Current-Sink Architecture
+In classical Electrical Engineering, a Kelvin 4-wire connection measures voltage drop across an unknown load using two high-impedance sense leads ($I_{\text{sense}} \approx 0$) while two separate force leads supply current.
+
+In a **nanopore flow cell with a Transimpedance Amplifier (TIA)**, the measurement role is inverted:
+1. **A TIA inverting input is a low-impedance current sink held at virtual ground**, NOT an open-circuit voltage voltmeter.
+2. If an excitation voltage drive (`>PORE_AMP` / `WE_POS`) and a TIA inverting input (`WS_CIS`) are placed in the **same liquid chamber**, the conductive 1M KCl electrolyte ($R_{\text{liquid}} \approx 3\text{ k}\Omega$) directly shorts the drive to virtual ground ($I_{\text{shunt}} \approx 67\,\mu\text{A}$ at $200\text{ mV}$), completely bypassing the nanopore ($R_{\text{pore}} \approx 1\text{ G}\Omega$, $I_{\text{pore}} \approx 200\text{ pA}$) and permanently railing the amplifier.
+3. Therefore, in MR1's TIA-based Kelvin readout:
+   - **Trans Chamber:** Carries the voltage drive (`>PORE_AMP`) and the near-pore Reference Sense tap (`RE_TRANS`), which establishes `Vbias` into the TIA non-inverting input ($+IN$).
+   - **Cis Chamber:** Carries the TIA summing node (`WS_CIS` into $-IN$), ensuring that 100% of current entering the TIA must pass through the nanopore lumen.
+   - **Common-Mode Cancellation:** Stage 2 LTC6268 difference amplifier subtracts $V_{\text{bias}}$, outputting single-ended $V_{\text{out}} = -10 \cdot I_{\text{pore}} R_1$.
+
 ---
 
 ## 3. Channel-Aligned Ag/AgCl Ribbon Architecture
