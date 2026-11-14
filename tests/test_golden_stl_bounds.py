@@ -183,7 +183,7 @@ class TestGoldenSTLAndPCBBounds(unittest.TestCase):
 
     def test_mold_geometry_and_interlocks(self):
         """Verify Left and Right mold halves match golden CAD block dimensions,
-        and mate at X=0 with 0 collision and exact alignment dowel pin engagement."""
+        and mate at X=0 with 0 collision and rounded alignment bump engagement."""
         left = Nanopore_Wafer_Mold_Left(is_nanopore=True)
         right = Nanopore_Wafer_Mold_Right(is_nanopore=True)
 
@@ -203,8 +203,8 @@ class TestGoldenSTLAndPCBBounds(unittest.TestCase):
         self.assertAlmostEqual(bb_l.min.X, -15.0, delta=0.1)
         self.assertAlmostEqual(bb_l.max.X, 0.0, delta=0.05)
 
-        # Right mold thickness spans X in [-4.8, 15.0] (4.8mm male dowel pins protrude past X=0)
-        self.assertAlmostEqual(bb_r.min.X, -4.8, delta=0.1)
+        # Right mold thickness spans X in [-3.0, 15.0] (rounded alignment bumps protrude past X=0)
+        self.assertAlmostEqual(bb_r.min.X, -MOLD_ALIGNMENT_BUMP_R, delta=0.1)
         self.assertAlmostEqual(bb_r.max.X, 15.0, delta=0.1)
 
         # Zero collision when mated at X=0

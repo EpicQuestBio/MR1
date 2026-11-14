@@ -224,6 +224,11 @@ BOLT_D = 4.2
 BOLT_HEAD_D = 7.5
 BOLT_HEAD_DEPTH = 3.5
 
+# Mold Rounded Alignment Bumps & Detents (3D printing tolerance & self-centering)
+MOLD_ALIGNMENT_BUMP_R = 3.0
+MOLD_ALIGNMENT_CLEARANCE = 0.25  # 3D printing clearance for smooth slip-fit self-centering
+MOLD_ALIGNMENT_DETENT_R = MOLD_ALIGNMENT_BUMP_R + MOLD_ALIGNMENT_CLEARANCE
+
 
 # [Printer Tolerances]
 # Adjust these values based on the manufacturing method.

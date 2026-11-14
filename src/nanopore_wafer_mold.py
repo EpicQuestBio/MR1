@@ -63,7 +63,7 @@ def build_base_mold_half(is_left=True):
     - Symmetric air bleed vents (1.5 x 1.5 mm up to Z=90)
     - 4 M4 clamping bolt through-holes with counterbores
     - Demolding pry notches (scallops) along top and bottom parting lines
-    - Precision alignment interlocks (female sockets on Left, male dowel pins on Right)
+    - Precision alignment interlocks (spherical detents on Left, rounded alignment bumps on Right)
     - Hexagonal gasket cavity cutout (0.8mm deep)
     """
     x_center = -MOLD_T / 2.0 if is_left else MOLD_T / 2.0
@@ -120,16 +120,19 @@ def build_base_mold_half(is_left=True):
             with Locations((0, 0, z_notch)):
                 Cylinder(radius=5.0, height=2.0, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
 
-        # 7. Alignment Interlocks (Pins on Right, Sockets on Left)
+        # 7. Alignment Interlocks (Rounded Bumps on Right, Mating Detents on Left)
+        # 3D printing tolerance & practical self-centering alignment:
+        # Spherical alignment bump on Right half (R = MOLD_ALIGNMENT_BUMP_R)
+        # Mating spherical detent on Left half (R = MOLD_ALIGNMENT_DETENT_R = BUMP_R + CLEARANCE)
         for y_pin in [-bolt_y_offset, bolt_y_offset]:
             if is_left:
-                # Female socket: D=4.2mm, depth 5.0mm into Left half (negative X)
-                with Locations((-2.5, y_pin, CAVITY_Z)):
-                    Cylinder(radius=2.1, height=5.1, rotation=(0, 90, 0), mode=Mode.SUBTRACT)
+                # Spherical detent (socket dimple) subtracted from Left half (X <= 0)
+                with Locations((0, y_pin, CAVITY_Z)):
+                    Sphere(radius=MOLD_ALIGNMENT_DETENT_R, mode=Mode.SUBTRACT)
             else:
-                # Male dowel pin: D=4.0mm, protruding 4.8mm into negative X from X=0
-                with Locations((-4.8 / 2.0, y_pin, CAVITY_Z)):
-                    Cylinder(radius=2.0, height=4.8, rotation=(0, 90, 0), mode=Mode.ADD)
+                # Spherical rounded alignment bump added to Right half, protruding into negative X
+                with Locations((0, y_pin, CAVITY_Z)):
+                    Sphere(radius=MOLD_ALIGNMENT_BUMP_R, mode=Mode.ADD)
 
         # 8. Main Hex Gasket Cavity Cutout (0.8mm deep per half)
         with BuildSketch(Plane.YZ.offset(0)):
@@ -247,7 +250,7 @@ def Nanopore_Wafer_Mold_Right(is_nanopore=True, gasket_type="top", multi_stage_g
     Right mold half (X > 0 in assembly).
     Forms the front channel face of the gasket sealed against Plate 3.
     Features:
-    - Male dowel alignment pins protruding 4.8mm from X=0
+    - Rounded alignment bumps protruding past X=0 into negative X
     - Opposing central clamping protective plug (D=2.0mm)
     - Port core pins meeting Left half at X=0
     - Positive microfluidic channel ridge along Cis path for Nanopore mold
@@ -413,7 +416,7 @@ def Bottom_Fluidic_Electrode_Mold_Plate():
     Features:
     - 4 Port Crush-Rib Sealing Grooves (depth 0.4mm, width 0.8mm) around fluid ports for leak-free seal against unprimed PP.
     - Annular Ag/AgCl pickoff ring grooves for RE_TRANS (ID 5.0mm, OD 6.4mm) and CE_GNDA (ID 8.0mm, OD 10.0mm).
-    - Port core pins, alignment dowels, and sprue runner.
+    - Port core pins, rounded alignment bumps, and sprue runner.
     """
     base = build_base_mold_half(is_left=False)
     with BuildPart(mode=Mode.PRIVATE) as p:
