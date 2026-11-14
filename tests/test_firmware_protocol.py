@@ -142,8 +142,8 @@ class TestFirmwareProtocol(unittest.TestCase):
 
     def test_sbu_orientation_detection_logic(self):
         """Verify USB-C SBU auto-polarity state machine and pin swap logic."""
-        PIN_SBU1 = 12
-        PIN_SBU2 = 13
+        PIN_SBU1 = 21
+        PIN_SBU2 = 26
 
         class MockI2cBus:
             def __init__(self, target_address: int, inverted_cable: bool = False):
@@ -151,8 +151,8 @@ class TestFirmwareProtocol(unittest.TestCase):
                 self.inverted_cable = inverted_cable
 
             def probe(self, sda_pin: int, scl_pin: int, addr: int) -> bool:
-                # Normal cable: SBU2 must be SDA (pin 13), SBU1 must be SCL (pin 12)
-                # Inverted cable: SBU1 must be SDA (pin 12), SBU2 must be SCL (pin 13)
+                # Normal cable: SBU2 must be SDA (pin 26), SBU1 must be SCL (pin 21)
+                # Inverted cable: SBU1 must be SDA (pin 21), SBU2 must be SCL (pin 26)
                 if not self.inverted_cable:
                     expected_sda, expected_scl = PIN_SBU2, PIN_SBU1
                 else:

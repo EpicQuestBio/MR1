@@ -91,7 +91,11 @@ bool AdcAD40xx::start_sampling(uint32_t sample_rate_hz) {
     esp_timer_create_args_t timer_args = {
         .callback = &adc_timer_callback,
         .arg = nullptr,
+#ifdef CONFIG_ESP_TIMER_SUPPORTS_ISR_DISPATCH_METHOD
         .dispatch_method = ESP_TIMER_ISR,
+#else
+        .dispatch_method = ESP_TIMER_TASK,
+#endif
         .name = "adc_100k"
     };
 

@@ -105,7 +105,7 @@ cd MR1_firmware && pio run   # same for Pump_firmware; upload with `--target upl
 ### Electrical and firmware
 - The 4-electrode net names are fixed: `WS_CIS` (working sense), `WE_POS` (working electrode, `>PORE_AMP`), `RE_TRANS` (reference), `CE_GNDA` (counter) and `GUARD`. Variants are `WS_CIS_WIDE`, `GUARD_WIDE`, `GUARD_CIS_A` and `GUARD_CIS_B`. Do not rename them.
 - The ADC **U13 (AD40xx)** is on the Cartridge Amplifier board. The dual DAC **U9 (MCP4822)** is on the MR1 main controller board.
-- Dual-route readout is selected by `PIN_ROUTE_SEL` (GPIO2), which drives the U17 SPDT switch:
+- Dual-route readout is selected by `PIN_ROUTE_SEL` (GPIO7, routed via R27 to J7 pin 4), which drives the U17 SPDT switch:
   - Route 1 is 10 GΩ, LMP7721, `ROUTE_SEL` LOW.
   - Route 2 is 100 kΩ, OPA2192/LTC6268, `ROUTE_SEL` HIGH. It is the 200 nm wide-pore path on `WS_CIS_WIDE`, about 106 kHz bandwidth.
   - Protocol pieces are `STATUS_ROUTE2_ACTIVE = (1<<7)`, `SET:ROUTE:<1|2>`, `GET:ROUTE` and `/api/route`.

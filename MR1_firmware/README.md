@@ -22,19 +22,21 @@ All pin definitions mirror the canonical **KiCad MR1 schematic** (`include/pinou
 
 | Signal Name | ESP32-S3 GPIO | Function / Bus | Connection / Component |
 | :--- | :--- | :--- | :--- |
-| **ADC_CNV** | GPIO 11 | SPI DMA / Timer | AD40xx Conversion Start trigger |
-| **ADC_SCK** | GPIO 10 | SPI Clock (up to 40 MHz) | AD40xx Serial Clock |
-| **ADC_SDO** | GPIO 9 | SPI MISO / DMA | AD40xx Data Output |
-| **PIN_ROUTE_SEL** | GPIO 2 | Digital Output | Amplifer Readout Route SPDT Switch (`ROUTE_SEL`) |
-| **DAC_CS_** | GPIO 6 | SPI Chip Select (Active Low) | MCP4822 DAC Chip Select |
-| **DAC_SCK** | GPIO 7 | SPI Clock (20 MHz) | MCP4822 SPI Bus Clock |
-| **DAC_SDI** | GPIO 8 | SPI MOSI | MCP4822 Serial Data In |
-| **DAC_LDAC_** | GPIO 5 | Synchronous Latch (Active Low) | MCP4822 Dual Channel Simultaneous Update |
+| **ADC_CNV** | GPIO 5 | SPI DMA / Timer | AD40xx Conversion Start trigger |
+| **ADC_SCK** | GPIO 8 | SPI Clock (up to 40 MHz) | AD40xx Serial Clock |
+| **ADC_SDO** | GPIO 6 | SPI MISO / DMA | AD40xx Data Output |
+| **PIN_ROUTE_SEL** | GPIO 7 | Digital Output | Amplifer Readout Route SPDT Switch (`ROUTE_SEL`) |
+| **DAC_CS_** | GPIO 12 | SPI Chip Select (Active Low) | MCP4822 DAC Chip Select |
+| **DAC_SCK** | GPIO 11 | SPI Clock (20 MHz) | MCP4822 SPI Bus Clock |
+| **DAC_SDI** | GPIO 10 | SPI MOSI | MCP4822 Serial Data In |
+| **DAC_LDAC_** | GPIO 9 | Synchronous Latch (Active Low) | MCP4822 Dual Channel Simultaneous Update |
 | **USB_DM** | GPIO 19 | Native USB D- | Direct USB-C receptacle |
 | **USB_DP** | GPIO 20 | Native USB D+ | Direct USB-C receptacle |
-| **PUMP_TX** | GPIO 17 | UART TX (115200 baud) | J22 Pump Connector Pin 2 |
+| **PUMP_TX** | GPIO 33 | UART TX (115200 baud) | J22 Pump Connector Pin 2 |
 | **PUMP_RX** | GPIO 47 | UART RX (115200 baud) | J22 Pump Connector Pin 3 |
-| **LEAK_SENSE** | GPIO 1 | ADC1_CH0 / Digital Input | Flow cell weep moat conductive traces |
+| **PG_VSSA / LEAK_SENSE** | GPIO 1 | Digital Input / Fault Monitor | VSSA (-2.49V) Power Good & emergency interlock |
+| **PG_VDDA** | GPIO 2 | Digital Input / Power Good | VDDA (+2.49V) Power Good monitor |
+| **PG_CP** | GPIO 3 | Digital Input / Power Good | Charge Pump (LM27762) Power Good monitor |
 | **STATUS_LED** | GPIO 38 | Digital Output | Onboard RGB / status indicator |
 
 ---
