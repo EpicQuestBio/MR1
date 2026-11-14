@@ -340,17 +340,17 @@ class TestPhysicsAndSimulations(unittest.TestCase):
         self.assertLess(guard_cmp["z_guard_active_ohm"], 0.1)
         self.assertGreater(guard_cmp["active_suppression_improvement_db"], 60.0)
 
-        # Full chain on Route 1 at 100 pA -> Route1_OUT = -1.0V -> U17 (ADG1219) -> U6 (ADA4940-1) -> AD4000
+        # Full chain on Route 1 at 100 pA -> Route1_OUT = -1.0V -> U17 (MAX4564) -> U6 (ADA4940-1) -> AD4000
         chain_r1 = self.opamp_sim.simulate_full_readout_chain(i_pore_a=100e-12, route_sel=0, v_bias_v=0.180)
         self.assertAlmostEqual(chain_r1["v_mux_in_v"], -1.0, places=4)
         self.assertAlmostEqual(chain_r1["f_3db_antialiasing_hz"], 2_947_314.0, delta=1000.0)
-        self.assertAlmostEqual(chain_r1["mux_ron_attenuation_factor"], 499.0 / (499.0 + 150.0), places=4)
+        self.assertAlmostEqual(chain_r1["mux_ron_attenuation_factor"], 499.0 / (499.0 + 40.0), places=4)
         self.assertGreater(chain_r1["adc_signed_code_16bit"], 10000)
 
         # Full chain on Route 2 at 5 uA -> Route2_OUT = -0.5V (at Vbias=0V)
         chain_r2 = self.opamp_sim.simulate_full_readout_chain(i_pore_a=5e-6, route_sel=1, v_bias_v=0.0)
         self.assertAlmostEqual(chain_r2["v_mux_in_v"], -0.5, places=4)
-        self.assertAlmostEqual(chain_r2["mux_ron_attenuation_factor"], 499.0 / (499.0 + 150.0 + 49.9), places=4)
+        self.assertAlmostEqual(chain_r2["mux_ron_attenuation_factor"], 499.0 / (499.0 + 40.0 + 49.9), places=4)
 
     def test_broad_range_5nm_to_200um_ionic_and_non_ionic_balancing(self):
         """Verify V_PORE and dual TIA routes (Route 1 & Route 2) balance across 5 nm to 200 um in ionic & non-ionic liquids."""

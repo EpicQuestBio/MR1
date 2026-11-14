@@ -550,20 +550,20 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('R3', '2'), nets.get('/Virtual_Ground', []), "R3 pin 2 must connect to Virtual_Ground")
         self.assertTrue(('R4', '1') in nets.get('GNDA', []) or ('R4', '1') in nets.get('/Vbias', []), "R4 must connect to GNDA")
 
-    def test_amplifier_route2_adg1219_multiplexer_integration(self):
-        """Ensure ADG1219BRMZ 2:1 precision SPDT analog switch is properly integrated into
-        Route 2 (U5 TIA feedback loop) for programmable dual-gain switching (100kΩ / 10kΩ)
+    def test_amplifier_route2_max4564_multiplexer_integration(self):
+        """Ensure MAX4564EUA+ precision dual-supply SPDT analog switch (µMAX-8) is properly integrated
+        into dual-route readout for Route 1 (LMP7721) vs Route 2 (OPA2192) selection
         controlled by ROUTE_SEL from MCU."""
         import subprocess
         # 1. Symbol existence & validation in MR1.kicad_sym
         sym_file = REPO_ROOT / "Amplifier" / "symbols" / "MR1.kicad_sym"
         self.assertTrue(sym_file.exists(), "Amplifier MR1.kicad_sym must exist")
         sym_txt = sym_file.read_text(encoding="utf-8")
-        self.assertIn('(symbol "ADG1219BRMZ"', sym_txt, "ADG1219BRMZ symbol must exist in MR1.kicad_sym")
+        self.assertIn('(symbol "MAX4564EUA+"', sym_txt, "MAX4564EUA+ symbol must exist in MR1.kicad_sym")
         for pin_num in range(1, 9):
-            self.assertIn(f'(number "{pin_num}"', sym_txt, f"Pin {pin_num} must exist in ADG1219BRMZ symbol")
+            self.assertIn(f'(number "{pin_num}"', sym_txt, f"Pin {pin_num} must exist in MAX4564EUA+ symbol")
         self.assertIn('(property "ki_keywords"', sym_txt)
-        self.assertIn('584-ADG1219BRMZ', sym_txt)
+        self.assertIn('700-MAX4564EUA+', sym_txt)
 
         # 2. Footprint in footprints.pretty
         fp_file = REPO_ROOT / "Amplifier" / "footprints.pretty" / "MSOP-8_3x3mm_P0.65mm.kicad_mod"
@@ -575,7 +575,7 @@ class TestInterposerKiCad(unittest.TestCase):
         # 3. Schematic component references
         sch_file = REPO_ROOT / "Amplifier" / "Amplifier.kicad_sch"
         sch_txt = sch_file.read_text(encoding="utf-8")
-        self.assertIn('"MR1:ADG1219BRMZ"', sch_txt)
+        self.assertIn('"MR1:MAX4564EUA+"', sch_txt)
         self.assertIn('"U17"', sch_txt, "U17 multiplexer must be instantiated in Amplifier.kicad_sch")
 
         # 4. Netlist verification using kicad-cli
@@ -599,27 +599,27 @@ class TestInterposerKiCad(unittest.TestCase):
             nodes = re.findall(r'\(node\s+\(ref\s+\"([^\"]+)\"\)\s+\(pin\s+\"([^\"]+)\"\)', m.group(0))
             nets[net_name] = nodes
 
-        # Verify U17 drain connects to Signal_Return (driving R45 differential ADC driver input)
-        d_net = [n for n, nodes in nets.items() if ('U17', '6') in nodes]
-        self.assertEqual(len(d_net), 1, "U17 pin 6 (D) must belong to exactly one net")
-        self.assertEqual(d_net[0], "/Signal_Return", "U17 Drain (pin 6) must connect to Signal_Return")
+        # Verify U17 COM (pin 1) connects to Signal_Return (driving R45 differential ADC driver input)
+        d_net = [n for n, nodes in nets.items() if ('U17', '1') in nodes]
+        self.assertEqual(len(d_net), 1, "U17 pin 1 (COM) must belong to exactly one net")
+        self.assertEqual(d_net[0], "/Signal_Return", "U17 COM (pin 1) must connect to Signal_Return")
         self.assertIn(('R45', '1'), nets[d_net[0]], "Signal_Return must feed R45 ADC driver resistor")
         # Ensure U16 (Route 1) and U5 (Route 2) do NOT connect directly to Signal_Return
         self.assertNotIn(('U16', '6'), nets[d_net[0]], "U16.6 must NOT short directly to Signal_Return")
         self.assertNotIn(('U5', '1'), nets[d_net[0]], "U5.1 must NOT short directly to Signal_Return")
         self.assertNotIn(('R32', '2'), nets[d_net[0]], "R32.2 must NOT short directly to Signal_Return")
 
-        # Verify U17 SA (pin 7) connects to Route 1 output (U16.6 post-gain stage)
+        # Verify U17 NC (pin 7) connects to Route 1 output (U16.6 post-gain stage)
         sa_net = [n for n, nodes in nets.items() if ('U17', '7') in nodes]
-        self.assertEqual(len(sa_net), 1, "U17 pin 7 (SA) must belong to exactly one net")
-        self.assertIn(('U16', '6'), nets[sa_net[0]], "U17 SA (pin 7) must connect to Route 1 OUT (U16 pin 6)")
-        self.assertIn(('R3', '1'), nets[sa_net[0]], "U17 SA must connect to U16 feedback resistor R3")
-        self.assertTrue(('C2', '1') in nets[sa_net[0]] or ('C9', '1') in nets[sa_net[0]], "U17 SA must connect to U16 feedback capacitor C2/C9")
+        self.assertEqual(len(sa_net), 1, "U17 pin 7 (NC) must belong to exactly one net")
+        self.assertIn(('U16', '6'), nets[sa_net[0]], "U17 NC (pin 7) must connect to Route 1 OUT (U16 pin 6)")
+        self.assertIn(('R3', '1'), nets[sa_net[0]], "U17 NC must connect to U16 feedback resistor R3")
+        self.assertTrue(('C2', '1') in nets[sa_net[0]] or ('C9', '1') in nets[sa_net[0]], "U17 NC must connect to U16 feedback capacitor C2/C9")
 
-        # Verify U17 SB (pin 5) connects to Route 2 output (U5.1 micropore TIA via R32)
-        sb_net = [n for n, nodes in nets.items() if ('U17', '5') in nodes]
-        self.assertEqual(len(sb_net), 1, "U17 pin 5 (SB) must belong to exactly one net")
-        self.assertIn(('R32', '2'), nets[sb_net[0]], "U17 SB (pin 5) must connect to Route 2 OUT via R32")
+        # Verify U17 NO (pin 6) connects to Route 2 output (U5.1 micropore TIA via R32)
+        sb_net = [n for n, nodes in nets.items() if ('U17', '6') in nodes]
+        self.assertEqual(len(sb_net), 1, "U17 pin 6 (NO) must belong to exactly one net")
+        self.assertIn(('R32', '2'), nets[sb_net[0]], "U17 NO (pin 6) must connect to Route 2 OUT via R32")
 
         # Verify U5 TIA local feedback loop (R10 100k, C3 15pF)
         u5_out_net = [n for n, nodes in nets.items() if ('U5', '1') in nodes]
@@ -635,21 +635,15 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('C3', '2'), wide_net, "C3 pin 2 must connect to WS_CIS_WIDE")
         self.assertIn(('P2', '1'), wide_net, "P2 Pin 1 (WS_CIS_WIDE SMT pin) must connect to WS_CIS_WIDE")
 
-        # Verify control line ROUTE_SEL
+        # Verify control line ROUTE_SEL on pin 5 (IN)
         route_net = nets.get("/ROUTE_SEL", [])
-        self.assertIn(('U17', '8'), route_net, "U17 IN (pin 8) must connect to /ROUTE_SEL")
+        self.assertIn(('U17', '5'), route_net, "U17 IN (pin 5) must connect to /ROUTE_SEL")
 
-        # Verify enable line
-        p3v3_net = nets.get("+3V3", []) + nets.get("+3.3VA", [])
-        self.assertIn(('U17', '1'), p3v3_net, "U17 EN (pin 1) must be tied to +3V3 or +3.3VA")
-
-        # Verify dual power supplies
-        vdda_net = nets.get("VDDA", [])
-        vssa_net = nets.get("VSSA", [])
-        gnda_net = nets.get("GNDA", [])
-        self.assertIn(('U17', '2'), vdda_net, "U17 VDD must connect to VDDA")
-        self.assertIn(('U17', '4'), vssa_net, "U17 VSS must connect to VSSA")
-        self.assertIn(('U17', '3'), gnda_net, "U17 GND must connect to GNDA")
+        # Verify power rails and enable: EN (pin 2)=GNDA, GND (pin 4)=GNDA, V+ (pin 8)=VDDA, V- (pin 3)=VSSA
+        self.assertIn(('U17', '2'), nets.get("GNDA", []), "U17 EN (pin 2) must connect to GNDA (permanently enabled)")
+        self.assertIn(('U17', '4'), nets.get("GNDA", []), "U17 GND (pin 4) must connect to GNDA")
+        self.assertIn(('U17', '8'), nets.get("VDDA", []), "U17 V+ (pin 8) must connect to VDDA")
+        self.assertIn(('U17', '3'), nets.get("VSSA", []), "U17 V- (pin 3) must connect to VSSA")
 
     def test_generate_footprint_script_and_pogo_target_6pin_distributed(self):
         """Verify that generate_footprint.py extracts CAD geometry from build123d

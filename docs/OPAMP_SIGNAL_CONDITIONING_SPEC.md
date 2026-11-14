@@ -17,10 +17,10 @@
 
 The daemon-pore analog signal chain is split across two boards connected via the 4-electrode Kelvin cell interposer:
 1. **Excitation Conditioning (`MR1` Board):** Synthesizes an ultra-low-noise, 18.66-bit effective composite bipolar bias potential $V_{\text{PORE}} \in [-2.482\text{ V}, +2.458\text{ V}]$ from a dual 12-bit SPI DAC (`U9` `MCP4822`), precision $+2.048\text{ V}$ voltage reference (`U13` `ADR4520`), and dual JFET-input op-amp (`U3A`/`U3B` `OPA2197`).
-2. **Dual-Route Current Readout & ADC Conditioning (`Amplifier` Board):** Converts transmembrane ionic current $I_{\text{pore}}$ into a differential voltage digitized by a 16-bit, 2 MSPS SAR ADC (`U13` `AD4000`) via two software-selectable analog routes (`U17` `ADG1219BRMZ`):
+2. **Dual-Route Current Readout & ADC Conditioning (`Amplifier` Board):** Converts transmembrane ionic current $I_{\text{pore}}$ into a differential voltage digitized by a 16-bit, 2 MSPS SAR ADC (`U13` `AD4000`) via two software-selectable analog routes (`U17` `MAX4564EUA+`):
    - **Route 1 (`ROUTE_SEL = 0`):** Femtoampere TIA (`U2` `LMP7721`, $1\text{ G}\Omega \parallel 2\text{ pF}$) + Reference-Cancelling $10.0\times$ Post-Gain Filter (`U16` `LTC6268`, $1\text{ k}\Omega \parallel 100\text{ nF}$).
    - **Route 2 (`ROUTE_SEL = 1`):** Wideband Micropore TIA (`U5A` `OPA2192IDR`, $100\text{ k}\Omega \parallel 15\text{ pF}$) + Active Guard Buffer (`U5B` `OPA2192IDR`).
-   - **Common ADC Front-End:** SPDT Route Switch (`U17` `ADG1219BRMZ`) $\rightarrow$ Fully Differential ADC Driver (`U6` `ADA4940-1`) $\rightarrow$ $2.95\text{ MHz}$ Differential RC Anti-Aliasing Filter ($R_{27}, R_{41}, C_{41}$) $\rightarrow$ 16-Bit ADC (`U13` `AD4000`).
+   - **Common ADC Front-End:** SPDT Route Switch (`U17` `MAX4564EUA+`) $\rightarrow$ Fully Differential ADC Driver (`U6` `ADA4940-1`) $\rightarrow$ $2.95\text{ MHz}$ Differential RC Anti-Aliasing Filter ($R_{27}, R_{41}, C_{41}$) $\rightarrow$ 16-Bit ADC (`U13` `AD4000`).
 
 ```
 ====================================================================================================
@@ -50,9 +50,9 @@ The daemon-pore analog signal chain is split across two boards connected via the
               U16 (LTC6268 Post-Gain, R4=100Ω to /Vbias, R3=1kΩ || C9=100nF, fc2=1.59kHz)
                 │  V_Route1_OUT = -10.0 * I_pore * 1GΩ  (Exact /Vbias Cancellation!)
                 ▼
-              U17.7 (SA) ──┐
-                           ├──► U17.6 (D: Signal_Return) ──► R45 (499Ω) ──► U6 (ADA4940-1 FDA)
-              U17.5 (SB) ──┘                                                   │  R27/R41 (27Ω) + C41 (1nF)
+              U17.7 (NC) ──┐
+                           ├──► U17.1 (COM: Signal_Return) ──► R45 (499Ω) ──► U6 (ADA4940-1 FDA)
+              U17.6 (NO) ──┘                                                   │  R27/R41 (27Ω) + C41 (1nF)
                 ▲                                                              ▼  (fc_AA = 2.95 MHz)
   ROUTE 2 (10-100µm Micropores, ±20.48 µA full-scale):                      U13 (AD4000 16-Bit ADC)
   /WS_CIS_WIDE ─► U5A (OPA2192 TIA, R10=100kΩ || C3=15pF, fc=106.1kHz) ──► R32 (49.9Ω)
@@ -174,20 +174,20 @@ $$i_n(f) = \sqrt{2 q I_b + \frac{4 k_B T}{R_1} + e_n^2 \left[\frac{1}{R_1^2} + \
 
 ## 5. Multiplexer (`U17`), Differential ADC Driver (`U6`), and 16-Bit ADC (`U13`)
 
-### 5.1 Route Multiplexer (`U17` `ADG1219BRMZ`) & FDA Input Impedance Interaction
-`U17` (`ADG1219BRMZ`) switches either `/Route1_OUT` (`SA`, Pin 7, when `ROUTE_SEL = 0`) or `/Route2_OUT` (`SB`, Pin 5, when `ROUTE_SEL = 1`) to `/Signal_Return` (`D`, Pin 6), which feeds input resistor $R_{45} = 499\,\Omega\ (0.1\%)$ of the fully differential ADC driver `U6` (`ADA4940-1`, configured with $R_{43} = R_{44} = R_{45} = R_{46} = 499\,\Omega$).
+### 5.1 Route Multiplexer (`U17` `MAX4564EUA+`) & FDA Input Impedance Interaction
+`U17` (`MAX4564EUA+`) switches either `/Route1_OUT` (`NC`, Pin 7, when `ROUTE_SEL = 0`) or `/Route2_OUT` (`NO`, Pin 6, when `ROUTE_SEL = 1`) to `/Signal_Return` (`COM`, Pin 1), which feeds input resistor $R_{45} = 499\,\Omega\ (0.1\%)$ of the fully differential ADC driver `U6` (`ADA4940-1`, configured with $R_{43} = R_{44} = R_{45} = R_{46} = 499\,\Omega$).
 
-Because `U17` has a finite on-resistance $R_{\text{on}} \approx 150\,\Omega$ (and Route 2 includes series resistor $R_{32} = 49.9\,\Omega$) directly in series with $R_{45} = 499\,\Omega$, the effective input resistance of the `U6` inverting signal branch is:
+Because `U17` has an on-resistance $R_{\text{on}} \approx 40\,\Omega$ ($60\,\Omega$ max at $\pm 2.5\text{V}$) (and Route 2 includes series resistor $R_{32} = 49.9\,\Omega$) directly in series with $R_{45} = 499\,\Omega$, the effective input resistance of the `U6` inverting signal branch is:
 - **Ideal Zero-Impedance FDA Gain:**
   $$G_{\text{FDA,ideal}} = -\frac{R_{46}}{R_{45}} = -\frac{499\,\Omega}{499\,\Omega} = \mathbf{-1.0000\text{ V/V}}$$
-- **Actual Hardware FDA Gain (including `U17` $R_{\text{on}} = 150\,\Omega$ and $R_{32}$):**
+- **Actual Hardware FDA Gain (including `U17` $R_{\text{on}} = 40\,\Omega$ and $R_{32}$):**
   - **Route 1 (`ROUTE_SEL = 0`):**
-    $$G_{\text{FDA,Route1}} = -\frac{R_{46}}{R_{45} + R_{\text{on,U17}}} = -\frac{499\,\Omega}{499\,\Omega + 150\,\Omega} = \mathbf{-0.7689\text{ V/V}}$$
+    $$G_{\text{FDA,Route1}} = -\frac{R_{46}}{R_{45} + R_{\text{on,U17}}} = -\frac{499\,\Omega}{499\,\Omega + 40\,\Omega} = \mathbf{-0.9258\text{ V/V}}$$
   - **Route 2 (`ROUTE_SEL = 1`):**
-    $$G_{\text{FDA,Route2}} = -\frac{R_{46}}{R_{45} + R_{\text{on,U17}} + R_{32}} = -\frac{499\,\Omega}{499\,\Omega + 150\,\Omega + 49.9\,\Omega} = \mathbf{-0.7140\text{ V/V}}$$
+    $$G_{\text{FDA,Route2}} = -\frac{R_{46}}{R_{45} + R_{\text{on,U17}} + R_{32}} = -\frac{499\,\Omega}{499\,\Omega + 40\,\Omega + 49.9\,\Omega} = \mathbf{-0.8473\text{ V/V}}$$
 
 > [!NOTE]
-> Firmware calibration on the host/MCU multiplies raw `AD4000` codes by $\frac{1}{0.7689} = 1.3006$ on Route 1 and $\frac{1}{0.7140} = 1.4006$ on Route 2 (or measures a two-point reference step) to account for the series switch resistance of `U17`.
+> Firmware calibration on the host/MCU multiplies raw `AD4000` codes by $\frac{1}{0.9258} = 1.0802$ on Route 1 and $\frac{1}{0.8473} = 1.1802$ on Route 2 (or measures a two-point reference step) to account for the series switch resistance of `U17`.
 
 ### 5.2 Differential Anti-Aliasing Filter (`R27`, `R41`, `C41`) & `U13` (`AD4000`)
 Between `U6` (`ADA4940-1`) differential outputs and `U13` (`AD4000` Pins `IN+`/`IN-`), series resistors $R_{27} = 27\,\Omega$ and $R_{41} = 27\,\Omega$ combine with differential capacitor $C_{41} = 1.0\text{ nF}$:
@@ -205,7 +205,7 @@ This absorbs the switched-capacitor charge kickback of the 2 MSPS `AD4000` SAR A
 | **Secondary / Output Filter** | $58.95\text{ kHz}$ ($27\,\Omega + 100\text{ nF}$) | $2.947\text{ MHz}$ (`AD4000` AA filter) | $2.947\text{ MHz}$ (`AD4000` AA filter) |
 | **Guard Ring Topology** | N/A (Low-Z driven WE) | Passive (`NT3` tied to `/Vbias`) | Active (`U5B` `OPA2192` unity buffer, $0.03\,\Omega$) |
 | **Full-Scale Signal Span** | $+2.4576\text{ V}$ to $-2.4900\text{ V}$ | $\pm 204.8\text{ pA}$ (at Stage 2 Out) | $\pm 20.48\,\mu\text{A}$ (at $V_{\text{bias}} = 0\text{ V}$) |
-| **Ideal LSB Step Size** | $-1.20\text{ mV}$ (Coarse)<br>$-12.0\,\mu\text{V}$ (Fine Vernier) | $6.25\text{ fA/LSB}$ (16-bit ideal)<br>$8.13\text{ fA/LSB}$ (with `U17` $R_{\text{on}}$) | $0.625\text{ nA/LSB}$ (16-bit ideal)<br>$0.875\text{ nA/LSB}$ (with `U17` $R_{\text{on}} + R_{32}$) |
+| **Ideal LSB Step Size** | $-1.20\text{ mV}$ (Coarse)<br>$-12.0\,\mu\text{V}$ (Fine Vernier) | $6.25\text{ fA/LSB}$ (16-bit ideal)<br>$6.75\text{ fA/LSB}$ (with `U17` $R_{\text{on}}$) | $0.625\text{ nA/LSB}$ (16-bit ideal)<br>$0.738\text{ nA/LSB}$ (with `U17` $R_{\text{on}} + R_{32}$) |
 
 ---
 

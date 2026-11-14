@@ -63,7 +63,7 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 
 ---
 
-### B. Route Two Netlist (OPA2192 Dual Micropore TIA & Active Guard Buffer) and Route Multiplexer (ADG1219)
+### B. Route Two Netlist (OPA2192 Dual Micropore TIA & Active Guard Buffer) and Route Multiplexer (MAX4564)
 
 | Net Name | Origin Pin | Destination Pins | Function / Routing Rule |
 | :--- | :--- | :--- | :--- |
@@ -71,14 +71,13 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 | **`GUARD_WIDE`** | `U5.7` (`OUT_B`) | `U5.6` (`-IN_B`), `J_POGO1.9`, `J_PAD1.2` | **Active Wideband Guard Shield:** Driven by low-impedance follower `U5B` ($< 0.1\,\Omega$) to eliminate capacitive crosstalk from microamp currents. Completely isolated from Route 1 passive guard. |
 | **`Vbias`** | MCP4822 / Summer | `U5.3` (`+IN_A`), `U5.5` (`+IN_B`), `R9.1` (1k) | **Quiet Non-Inverting Bias Reference:** Defines cell reference / virtual ground; decoupled with C0G cap `C14` to GNDA. |
 | **`Net-(U5A-~)`** | `U5.1` (`OUT_A`) | `R10.1`, `C3.1`, `R32.1` (49.9Ω) | **Route 2 Raw TIA Output:** Low-impedance op-amp output drives local feedback loop ($R_{10} \parallel C_3$) and isolation resistor `R32`. |
-| **`Route2_OUT`** | `R32.2` (49.9Ω) | `U17.5` (`SB`) | **Route 2 Mux Input:** Output of Route 2 OPA2192 TIA feeding Channel B (`SB`) of `U17`. Isolated from `Signal_Return`. |
-| **`Route1_OUT`** | `U16.6` (`OUT`) | `R3.1` (1k), `C9.1` (100nF), `U17.7` (`SA`) | **Route 1 Mux Input:** Output of Route 1 post-gain stage (`U16` LTC6268) feeding Channel A (`SA`) of `U17`. Isolated from `Signal_Return`. |
-| **`Signal_Return`**| `U17.6` (`D`) | `R45.1` (499Ω) | **Multiplexed ADC Input:** Multiplexer common drain output driving the `U6` differential ADC driver input resistor. |
-| **`/ROUTE_SEL`** | `J7.4` (via `R33` 27Ω) | `U17.8` (`IN`) | **Route Multiplexer Control:** 3.3V CMOS digital input from MCU/ESP32. Logic 0 (`ROUTE_SEL = 0`) = Route 1 (LMP7721 femtoamp TIA + LTC6268); Logic 1 (`ROUTE_SEL = 1`) = Route 2 (OPA2192 micropore TIA). |
-| **`+3V3`** | 3.3V Digital Rail | `U17.1` (`EN`) | **Switch Active-High Enable:** Permanently tied high to keep multiplexer active. |
-| **`VDDA`** | Positive Rail | `U5.8` (`V+`), `U17.2` (`VDD`), `C19.1`, `C40.1` | Positive Supply ($+2.5\text{V}$ / $+5.0\text{V}$). |
-| **`VSSA`** | Negative Rail | `U5.4` (`V-`), `U17.4` (`VSS`), `C20.1`, `C42.1` | Negative Supply ($-2.5\text{V}$ / $-5.0\text{V}$). |
-| **`GNDA`** | Main Star Ground | `U17.3` (`GND`), `C40.2`, `C42.2` | Clean analog ground return. |
+| **`Route2_OUT`** | `R32.2` (49.9Ω) | `U17.6` (`NO`) | **Route 2 Mux Input:** Output of Route 2 OPA2192 TIA feeding normally open pin (`NO`) of `U17`. Active when `/ROUTE_SEL = 1`. Isolated from `Signal_Return`. |
+| **`Route1_OUT`** | `U16.6` (`OUT`) | `R3.1` (1k), `C9.1` (100nF), `U17.7` (`NC`) | **Route 1 Mux Input:** Output of Route 1 post-gain stage (`U16` LTC6268) feeding normally closed pin (`NC`) of `U17`. Active when `/ROUTE_SEL = 0`. Isolated from `Signal_Return`. |
+| **`Signal_Return`**| `U17.1` (`COM`) | `R45.1` (499Ω) | **Multiplexed ADC Input:** Multiplexer common output driving the `U6` differential ADC driver input resistor. |
+| **`/ROUTE_SEL`** | `J7.4` (via `R33` 27Ω) | `U17.5` (`IN`) | **Route Multiplexer Control:** 3.3V CMOS digital input from MCU/ESP32. Logic 0 (`ROUTE_SEL = 0`) = Route 1 (LMP7721 femtoamp TIA + LTC6268); Logic 1 (`ROUTE_SEL = 1`) = Route 2 (OPA2192 micropore TIA). |
+| **`GNDA`** | Main Star Ground | `U17.2` (`EN`), `U17.4` (`GND`), `C40.2`, `C42.2` | Clean analog ground return. `EN` (Pin 2) is active-low enable tied to GNDA. |
+| **`VDDA`** | Positive Rail | `U5.8` (`V+`), `U17.8` (`V+`), `C19.1`, `C40.1` | Positive Supply ($+2.49\text{V}$). |
+| **`VSSA`** | Negative Rail | `U5.4` (`V-`), `U17.3` (`V-`), `C20.1`, `C42.1` | Negative Supply ($-2.49\text{V}$). |
 
 ---
 
@@ -113,7 +112,7 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 | **`C11`** | 1 | Bulk Analog Rail Decoupling | **$4.7\,\mu\text{F}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0805 SMD |
 | **`C12`** | 1 | Negative Rail Decoupling | **$100\text{ nF}$** | $\pm 10\%$ | $25\text{V}$ | X7R Ceramic | 0402 SMD |
 | **`U5`** | 2 | Dual Precision Rail-to-Rail Op-Amp | **TI OPA2192IDR** | — | $\pm 18\text{V}$ | $5\,\mu\text{V}$ offset, $10\text{ MHz}$ GBW | SOIC-8 |
-| **`U17`** | Both | Precision Low-Leakage SPDT Analog Switch | **ADI ADG1219BRMZ** | — | $\pm 16.5\text{V}$ | $< 1\text{ pA}$ leakage, $1.0\text{ pF}$ $C_\text{off}$, $< 1\text{ pC}$ $Q_\text{inj}$ | MSOP-8 |
+| **`U17`** | Both | Precision Low-Voltage Dual-Supply SPDT Analog Switch | **Maxim / ADI MAX4564EUA+** | — | $\pm 6.0\text{V}$ | $R_{\text{on}} \approx 40\,\Omega$, Rail-to-Rail, $\pm 1.8\text{V}$ to $\pm 6.0\text{V}$ | µMAX-8 / MSOP-8 |
 | **`R10`** | 2 | Wideband Micropore Feedback Resistor | **$100.0\text{ k}\Omega$** | **$\pm 1.0\%$** | $50\text{V}$ | **$\pm 25\text{ ppm/}^\circ\text{C}$ Thin Film** | 0402 SMD |
 | **`C3`** | 2 | Wideband Micropore Feedback Capacitor | **$15.0\text{ pF}$** | **$\pm 1.0\%$** | $50\text{V}$ | **C0G / NP0** ($Q > 1000$) | 0402 SMD |
 | **`R32`** | 2 | Output Isolation Damping Resistor | **$49.9\ \Omega$** | **$\pm 1.0\%$** | $50\text{V}$ | Thick Film | 0402 SMD |
@@ -132,7 +131,7 @@ The MR1 Cartridge Amplifier implements a **dual-route front-end architecture** d
 | **2** | **`R1`** | Ohmite / TE Connectivity | **`MOX-300001007FE`** or **`HB1100MFZRE`** | Mouser: `588-MOX-300001007FE`<br>DigiKey: `A106041-ND` | `HVC0805T1007JET` / `CRHV1206AF1G00FKET`<br>(or 10× [`C25488`](https://www.lcsc.com/search?q=C25488)) | $1\text{ G}\Omega \pm 1\%$, ultra-low shunt capacitance ($< 0.1\text{ pF}$), rated for high-impedance electrometer circuits. |
 | **3** | **`C1`** | Murata | **`GJM1555C1H2R0BB01D`** | Mouser: `81-GJM1555C1H2R0BB01D`<br>DigiKey: `490-GJM1555C1H2R0BB01D-ND` | [`C161316`](https://www.lcsc.com/search?q=C161316) (`GJM1555C1H2R0BB01D`)<br>Basic: [`C1544`](https://www.lcsc.com/search?q=C1544) | $2\text{ pF} \pm 0.1\text{ pF}$, C0G/NP0 dielectric completely prevents piezoelectric pump vibration microphonics. |
 | **4** | **`U5`** | Texas Instruments | **`OPA2192IDR`** | Mouser: `595-OPA2192IDR`<br>DigiKey: `296-48590-1-ND` | [`C110074`](https://www.lcsc.com/search?q=C110074) (`OPA2192IDR`) | Dual precision e-trim op-amp (SOIC-8): Unit 1 = Micropore TIA; Unit 2 = Low-Z Guard Buffer driving `GUARD_WIDE`. |
-| **5** | **`U17`** | Analog Devices | **`ADG1219BRMZ`** | Mouser: `584-ADG1219BRMZ`<br>DigiKey: `ADG1219BRMZ-ND` | [`C206796`](https://www.lcsc.com/search?q=C206796) (`ADG419BRMZ-REEL` eq.)<br>[`C2879206`](https://www.lcsc.com/search?q=C2879206) (`TMUX1108RSVR`) | High-voltage iCMOS SPDT 2:1 precision switch (MSOP-8): $< 1\text{ pA}$ leakage, $1.0\text{ pF}$ $C_\text{off}$, selects Route 1 vs Route 2 into ADC. |
+| **5** | **`U17`** | Maxim / Analog Devices | **`MAX4564EUA+`** | Mouser: `700-MAX4564EUA+`<br>DigiKey: `MAX4564EUA+-ND` | [`C2932971`](https://www.lcsc.com/search?q=MAX4564) | Precision dual-rail ($\pm 1.8\text{V}$ to $\pm 6.0\text{V}$) SPDT 2:1 switch (µMAX-8): $R_{\text{on}} \approx 40\,\Omega$, rail-to-rail signal swing, selects Route 1 vs Route 2 into ADC. |
 | **6** | **`R10`** | Yageo / Susumu | **`RC0402FR-07100KL`** | Mouser: `603-RC0402FR-07100KL`<br>DigiKey: `311-100KLRTR-ND` | [`C60491`](https://www.lcsc.com/search?q=C60491) (`RC0402FR-07100KL`)<br>Basic: [`C25741`](https://www.lcsc.com/search?q=C25741) | $100\text{ k}\Omega \pm 1\%$, micropore TIA feedback ($\pm 20.48\,\mu\text{A}$ range, $106.1\text{ kHz}$). |
 | **7** | **`C3`** | Wurth / Murata | **`885012005058`** or **`GRM1555C1H150JA01D`** | Mouser: `710-885012005058`<br>DigiKey: `732-885012005058-ND` | [`C33148`](https://www.lcsc.com/search?q=C33148) (`GRM1555C1H150JA01D`)<br>Basic: [`C1556`](https://www.lcsc.com/search?q=C1556) | $15\text{ pF} \pm 5\%$ C0G 0402; sets exact $-3\text{dB}$ cutoff to $106.1\text{ kHz}$ for Route 2 TIA. |
 | **8** | **`R32`** | Yageo | **`RC0402FR-0749R9L`** | Mouser: `603-RC0402FR-0749R9L`<br>DigiKey: `311-49.9LRTR-ND` | [`C4074199`](https://www.lcsc.com/search?q=C4074199) (`RC0402FR-0749R9L`)<br>Basic: [`C25091`](https://www.lcsc.com/search?q=C25091) | $49.9\ \Omega \pm 1\%$ isolation and transmission damping resistor for Route 2 output. |

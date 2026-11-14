@@ -96,9 +96,12 @@ class OpAmpSignalConditioningSimulation:
     OPA2192_AOL_DC = 3.162e6    # U5 DC open-loop gain (130 dB)
 
     # --- Multiplexer, Differential ADC Driver, and Anti-Aliasing Filter ---
-    ADG1219_RON_OHM = 150.0     # U17 (ADG1219BRMZ) typical on-resistance (Ohm)
-    ADG1219_ILEAK_A = 1.0e-12   # U17 typical off/on leakage current (1 pA)
-    ADG1219_CD_F = 2.6e-12      # U17 drain capacitance (2.6 pF)
+    MAX4564_RON_OHM = 40.0      # U17 (MAX4564EUA+) typical on-resistance (40 Ohm at +/-2.5V)
+    MAX4564_ILEAK_A = 10.0e-12  # U17 typical off/on leakage current (10 pA)
+    MAX4564_CD_F = 5.0e-12      # U17 COM capacitance (5 pF)
+    ADG1219_RON_OHM = MAX4564_RON_OHM  # Backwards compatibility alias
+    ADG1219_ILEAK_A = MAX4564_ILEAK_A
+    ADG1219_CD_F = MAX4564_CD_F
 
     R45_FDA_IN_P = 499.0        # U6 (ADA4940-1) input resistor from Signal_Return (Ohm)
     R43_FDA_IN_N = 499.0        # U6 input resistor from GNDA (Ohm)
