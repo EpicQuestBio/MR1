@@ -5321,7 +5321,7 @@
 	)
 	(hierarchical_label "ROUTE_SEL"
 		(shape input)
-		(at 142.24 66.04 180)
+		(at 142.24 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5442,7 +5442,7 @@
 	)
 	(hierarchical_label "ADC_SDO"
 		(shape input)
-		(at 142.24 63.5 180)
+		(at 142.24 66.04 180)
 		(effects
 			(font
 				(size 1.27 1.27)

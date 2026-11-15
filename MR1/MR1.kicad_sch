@@ -3410,7 +3410,7 @@
 			)
 		)
 		(pin "CS_" input
-			(at 146.05 78.74 270)
+			(at 146.05 86.36 270)
 			(uuid "daea41ea-9e41-469e-97f3-8f1b82cb8e21")
 			(effects
 				(font
@@ -3420,7 +3420,7 @@
 			)
 		)
 		(pin "LDAC_" input
-			(at 148.59 78.74 270)
+			(at 148.59 86.36 270)
 			(uuid "33327b94-6670-470d-be62-6a19e59428bb")
 			(effects
 				(font
@@ -3430,7 +3430,7 @@
 			)
 		)
 		(pin "SCK" input
-			(at 151.13 78.74 270)
+			(at 151.13 86.36 270)
 			(uuid "5ec1d6fd-31ba-42e1-a5a8-33e398f5cf24")
 			(effects
 				(font
@@ -3440,7 +3440,7 @@
 			)
 		)
 		(pin "SDI" input
-			(at 153.67 78.74 270)
+			(at 153.67 86.36 270)
 			(uuid "628d13aa-0f8b-4ac4-b7d7-9cc79e210b50")
 			(effects
 				(font
