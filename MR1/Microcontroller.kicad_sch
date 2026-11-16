@@ -5266,7 +5266,7 @@
 	)
 	(hierarchical_label "PG_VDDA"
 		(shape input)
-		(at 144.78 53.34 180)
+		(at 144.78 50.8 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5387,7 +5387,7 @@
 	)
 	(hierarchical_label "PG_VSSA"
 		(shape input)
-		(at 144.78 50.8 180)
+		(at 144.78 53.34 180)
 		(effects
 			(font
 				(size 1.27 1.27)
