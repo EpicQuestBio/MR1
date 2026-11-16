@@ -349,11 +349,6 @@ All calculations are covered under unit test suite `tests/test_physics_and_simul
     with open(dest, "w") as f:
         f.write(doc)
     print(f"Exported documentation and configuration table to: {dest}")
-    dest = Path(REPO_ROOT) / filepath
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    with open(dest, "w") as f:
-        f.write(doc)
-    print(f"Exported documentation and configuration table to: {dest}")
 
 
 def print_cli_summary():

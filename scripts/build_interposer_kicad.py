@@ -325,6 +325,17 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     center_x = INTERPOSER_CENTER_X
     center_y = INTERPOSER_CENTER_Y
 
+    def make_gr_line(x1, y1, x2, y2, width=0.2, layer="Edge.Cuts"):
+        return (
+            f'\t(gr_line\n'
+            f'\t\t(start {x1} {y1})\n'
+            f'\t\t(end {x2} {y2})\n'
+            f'\t\t(stroke (width {width}) (type default))\n'
+            f'\t\t(layer "{layer}")\n'
+            f'\t\t(uuid "{new_uuid()}")\n'
+            f'\t)'
+        )
+
     active_refs = {
         "U2", "U16", "J9",
         "R1", "R3", "R4", "R5", "R6", "R8", "R9",
@@ -420,11 +431,11 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
                 and "50.4542" in block_txt
                 and "68.001372" in block_txt
             ):
-                cavity_ec = (
-                    f'\t(gr_line (start 36.9542 68.001372) (end 36.9542 65.001372) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))\n'
-                    f'\t(gr_line (start 36.9542 65.001372) (end 50.4542 65.001372) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))\n'
-                    f'\t(gr_line (start 50.4542 65.001372) (end 50.4542 68.001372) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))'
-                )
+                cavity_ec = "\n".join([
+                    make_gr_line(36.9542, 68.001372, 36.9542, 65.001372),
+                    make_gr_line(36.9542, 65.001372, 50.4542, 65.001372),
+                    make_gr_line(50.4542, 65.001372, 50.4542, 68.001372),
+                ])
                 out_lines.append(cavity_ec)
                 continue
 
@@ -528,10 +539,10 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     # Board-level Edge.Cuts lines for the 6.20x6.20mm diamond cutout
     wafer_cutout_lines = [
-        f'\t(gr_line (start {center_x:.4f} {center_y - 4.3841:.4f}) (end {center_x + 4.3841:.4f} {center_y:.4f}) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))',
-        f'\t(gr_line (start {center_x + 4.3841:.4f} {center_y:.4f}) (end {center_x:.4f} {center_y + 4.3841:.4f}) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))',
-        f'\t(gr_line (start {center_x:.4f} {center_y + 4.3841:.4f}) (end {center_x - 4.3841:.4f} {center_y:.4f}) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))',
-        f'\t(gr_line (start {center_x - 4.3841:.4f} {center_y:.4f}) (end {center_x:.4f} {center_y - 4.3841:.4f}) (stroke (width 0.2) (type default)) (layer "Edge.Cuts") (uuid "{new_uuid()}"))',
+        make_gr_line(f"{center_x:.4f}", f"{center_y - 4.3841:.4f}", f"{center_x + 4.3841:.4f}", f"{center_y:.4f}"),
+        make_gr_line(f"{center_x + 4.3841:.4f}", f"{center_y:.4f}", f"{center_x:.4f}", f"{center_y + 4.3841:.4f}"),
+        make_gr_line(f"{center_x:.4f}", f"{center_y + 4.3841:.4f}", f"{center_x - 4.3841:.4f}", f"{center_y:.4f}"),
+        make_gr_line(f"{center_x - 4.3841:.4f}", f"{center_y:.4f}", f"{center_x:.4f}", f"{center_y - 4.3841:.4f}"),
     ]
     for wl in wafer_cutout_lines:
         out_lines.append(wl)
@@ -608,15 +619,25 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     p10_x, p10_y = pin_pos(10)
     p11_x, p11_y = pin_pos(11)
     p12_x, p12_y = pin_pos(12)
+    p13_x, p13_y = pin_pos(13)
+    p14_x, p14_y = pin_pos(14)
+    p15_x, p15_y = pin_pos(15)
+    p16_x, p16_y = pin_pos(16)
 
-    # Weep moat contour coordinates routed clear of all 4 fluid ports
-    w_p1 = (round(center_x + 21.30, 3), 56.500)
-    w_p2 = (round(center_x + 23.30, 3), round(center_y + 5.000, 3))
-    w_p3 = (round(center_x + 23.30, 3), round(center_y - 14.000, 3))
-    w_p4 = (round(center_x + 5.00, 3), round(center_y - 18.000, 3))
-    w_p5 = (round(center_x - 16.50, 3), round(center_y - 18.000, 3))
-    w_p6 = (round(center_x - 22.70, 3), round(center_y - 14.000, 3))
-    w_p7 = (round(center_x - 22.70, 3), round(center_y + 5.000, 3))
+    # Weep moat closed contour coordinates routed clear of all 4 fluid ports and inside hex Edge.Cuts
+    w_pts = [
+        (p11_x, p11_y),
+        (p11_x, round(center_y + 15.000, 3)),
+        (round(center_x + 18.000, 3), round(center_y + 15.000, 3)),
+        (round(center_x + 21.200, 3), round(center_y + 11.000, 3)),
+        (round(center_x + 21.200, 3), round(center_y - 11.000, 3)),
+        (round(center_x + 16.000, 3), round(center_y - 18.000, 3)),
+        (round(center_x - 16.000, 3), round(center_y - 18.000, 3)),
+        (round(center_x - 21.200, 3), round(center_y - 11.000, 3)),
+        (round(center_x - 21.200, 3), round(center_y + 11.000, 3)),
+        (round(center_x - 18.500, 3), p11_y),
+        (p11_x, p11_y),
+    ]
 
     def make_circle_keepout(cx, cy, radius):
         import math
@@ -634,11 +655,11 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_seg(p9_x, p9_y, j1_x, j1_y, 0.35, "B.Cu", ">PORE_AMP"),
         make_via(j1_x, j1_y, 0.7, 0.35, ">PORE_AMP"),
 
-        # J2 (WS_CIS_WIDE at j2_x, j2_y): Pin 2 on F.Cu escapes east through guard notch, routes north to Y=38, west to j2_x, then south to J2
-        make_seg(p2_x, p2_y, 43.3, p2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(43.3, p2_y, 43.3, 38.0, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(43.3, 38.0, j2_x, 38.0, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(j2_x, 38.0, j2_x, j2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        # J2 (WS_CIS_WIDE at j2_x, j2_y): Pin 2 on F.Cu escapes east through guard notch, routes south of central wafer cutout to Y=54.0, west to j2_x, then north to J2
+        make_seg(p2_x, p2_y, 43.600, p2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(43.600, p2_y, 43.600, 54.000, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(43.600, 54.000, j2_x, 54.000, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        make_seg(j2_x, 54.000, j2_x, j2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
 
         # GUARD feeder: P4 feeding P5 GUARD ring directly on F.Cu
         make_seg(p4_x, p4_y, p5_x - 1.85, p5_y, 0.4, "F.Cu", "GUARD"),
@@ -655,28 +676,47 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_seg(p7_x, p7_y, j10_x, j10_y, 0.4, "F.Cu", "CE_GNDA"),
         make_via(j10_x, j10_y, 0.7, 0.35, "CE_GNDA"),
 
-        # --- WEEP_SENSE Channel-Contouring Moat (F.Cu and B.Cu) ---
+        # --- WEEP_SENSE Channel-Contouring Closed Moat (F.Cu and B.Cu) ---
         make_via(p11_x, p11_y, 0.7, 0.35, "WEEP_SENSE"),
-        make_seg(p11_x, p11_y, p11_x, 56.500, 0.4, "B.Cu", "WEEP_SENSE"),
-        make_seg(p11_x, 56.500, w_p1[0], 56.500, 0.4, "B.Cu", "WEEP_SENSE"),
-        make_seg(w_p1[0], 56.500, w_p2[0], w_p2[1], 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(w_p2[0], w_p2[1], w_p3[0], w_p3[1], 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(w_p3[0], w_p3[1], w_p4[0], w_p4[1], 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(w_p4[0], w_p4[1], w_p5[0], w_p5[1], 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(w_p5[0], w_p5[1], w_p6[0], w_p6[1], 0.3, "B.Cu", "WEEP_SENSE"),
-        make_seg(w_p6[0], w_p6[1], w_p7[0], w_p7[1], 0.3, "B.Cu", "WEEP_SENSE"),
+        *[
+            make_seg(w_pts[k][0], w_pts[k][1], w_pts[k + 1][0], w_pts[k + 1][1], 0.3, "B.Cu", "WEEP_SENSE")
+            for k in range(len(w_pts) - 1)
+        ],
+        # F.Cu Moat Perimeter Segments (East and West sides outside fluid keepouts, 6 segments)
+        *[
+            make_seg(w_pts[k][0], w_pts[k][1], w_pts[k + 1][0], w_pts[k + 1][1], 0.3, "F.Cu", "WEEP_SENSE")
+            for k in (2, 3, 4, 6, 7, 8)
+        ],
+        # WEEP_SENSE stitch/transition vias
+        *[
+            make_via(w_pts[idx][0], w_pts[idx][1], 0.7, 0.35, "WEEP_SENSE")
+            for idx in (2, 5, 6, 9)
+        ],
 
-        # F.Cu Moat Perimeter Segments (outside gasket perimeter, >= 5 segments)
-        make_seg(w_p2[0], w_p2[1], w_p3[0], w_p3[1], 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(w_p3[0], w_p3[1], w_p4[0], w_p4[1], 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(w_p4[0], w_p4[1], w_p5[0], w_p5[1], 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(w_p5[0], w_p5[1], w_p6[0], w_p6[1], 0.3, "F.Cu", "WEEP_SENSE"),
-        make_seg(w_p6[0], w_p6[1], w_p7[0], w_p7[1], 0.3, "F.Cu", "WEEP_SENSE"),
-
-        # WEEP_SENSE stitch/transition vias (>= 2 vias)
-        make_via(w_p2[0], w_p2[1], 0.8, 0.4, "WEEP_SENSE"),
-        make_via(w_p3[0], w_p3[1], 0.8, 0.4, "WEEP_SENSE"),
-        make_via(w_p5[0], w_p5[1], 0.8, 0.4, "WEEP_SENSE"),
+        # --- GNDA Plane Stitching Vias & Sector Bridges Across Fluid Keepout Corridors ---
+        *[
+            make_via(gx, gy, 0.7, 0.35, "GNDA")
+            for gx, gy in [
+                (p1_x, p1_y),
+                (p10_x, p10_y),
+                (p12_x, p12_y),
+                (p13_x, p13_y),
+                (p14_x, p14_y),
+                (p15_x, p15_y),
+                (p16_x, p16_y),
+                (p1_x, 55.0),
+            ]
+        ],
+        make_seg(p10_x, p10_y, p15_x, p15_y, 0.4, "F.Cu", "GNDA"),
+        make_seg(p1_x, 55.0, p1_x, p1_y, 0.4, "F.Cu", "GNDA"),
+        make_seg(p15_x, p15_y, p13_x, p13_y, 0.4, "B.Cu", "GNDA"),
+        make_seg(p15_x, p15_y, 31.0, 36.0, 0.4, "B.Cu", "GNDA"),
+        make_seg(31.0, 36.0, p16_x, p16_y, 0.4, "B.Cu", "GNDA"),
+        make_seg(p13_x, p13_y, 56.4, 36.0, 0.4, "B.Cu", "GNDA"),
+        make_seg(56.4, 36.0, p14_x, p14_y, 0.4, "B.Cu", "GNDA"),
+        make_seg(p14_x, p14_y, 58.0, 46.0, 0.4, "B.Cu", "GNDA"),
+        make_seg(58.0, 46.0, p12_x, p12_y, 0.4, "B.Cu", "GNDA"),
+        make_seg(58.0, 46.0, p1_x, 55.0, 0.4, "B.Cu", "GNDA"),
 
         # --- Fluidic Isolation Keepout Zones (Zero Copper / Zero Ground over Fluid Path) ---
         # Port H1..H4 keepouts (5.5mm diameter circles around fluid ports to guarantee non-conductive boundary)
@@ -686,10 +726,10 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_circle_keepout(center_x + spec.FLUID_HOLES["H4"][0], center_y - spec.FLUID_HOLES["H4"][1], 2.75),
 
         # Cis fluid channel corridor keepout (H1 -> H2 along 30 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (copperpour not_allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks allowed) (vias allowed) (pads allowed) (copperpour not_allowed) (footprints allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
 
         # Trans fluid channel corridor keepout (H3 -> H4 along 150 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (copperpour not_allowed)) (polygon (pts (xy 63.657 32.580) (xy 25.551 54.580) (xy 23.751 51.462) (xy 61.857 29.462))))',
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks allowed) (vias allowed) (pads allowed) (copperpour not_allowed) (footprints allowed)) (polygon (pts (xy 63.657 32.580) (xy 25.551 54.580) (xy 23.751 51.462) (xy 61.857 29.462))))',
 
         # Central Nanopore Chip aperture copper/track keepout zone (>= 0.5mm clearance around 6.2x6.2mm diamond)
         f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x:.4f} {center_y - 5.5:.4f}) (xy {center_x + 5.5:.4f} {center_y:.4f}) (xy {center_x:.4f} {center_y + 5.5:.4f}) (xy {center_x - 5.5:.4f} {center_y:.4f}))))',

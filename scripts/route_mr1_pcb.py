@@ -73,6 +73,7 @@ def main():
         "ee198f29-8f36-436d-be1d-054fa38a0882", # C24 pad 1 short to U3B--
         "4ff2a2e6-4c2d-4f39-82f3-a9fcda8f8124", # +Vp_cm F.Cu bottleneck above U1 pad 12
         "fea49921-fab0-4282-bf68-1ca73f83ee3f", # diagonal Net-(D1-K) track crossing +Vp_cm corridor
+        "7ca4631a-5d01-4ffa-a72c-0b3053b798d3", # Dangling via Net-(U3B--) @ (65.95, 63.50) colliding with U13-OUT
     ]
     for u in uuids_to_remove:
         text, ok = remove_element_by_uuid(text, u)
@@ -103,6 +104,35 @@ def main():
     text = update_footprint_at(text, "R58", "(at 83.0 88.2 270)")
     text = update_footprint_at(text, "R57", "(at 84.5 88.2 270)")
 
+    # 3.5 Specific DRC corrections
+    # A. Fix C14 pad 2 starved thermal relief by setting solid connection (zone_connect 1)
+    c14_pad2_target = '(net "GNDA")\n\t\t\t(pintype "passive")\n\t\t\t(uuid "3a37d980-f2e7-4f03-af22-848d04068716")'
+    c14_pad2_replacement = '(net "GNDA")\n\t\t\t(pintype "passive")\n\t\t\t(zone_connect 1)\n\t\t\t(uuid "3a37d980-f2e7-4f03-af22-848d04068716")'
+    if c14_pad2_target in text:
+        text = text.replace(c14_pad2_target, c14_pad2_replacement)
+
+    # B. Relocate GNDA stitching via at (69.70, 55.55) to (69.70, 55.00) to clear hole-to-hole spacing
+    via_5555_target = '(at 69.7 55.55)\n\t\t(size 0.6)\n\t\t(drill 0.3)\n\t\t(layers "F.Cu" "B.Cu")\n\t\t(free yes)\n\t\t(net "GNDA")'
+    via_5555_replacement = '(at 69.7 55.0)\n\t\t(size 0.6)\n\t\t(drill 0.3)\n\t\t(layers "F.Cu" "B.Cu")\n\t\t(free yes)\n\t\t(net "GNDA")'
+    if via_5555_target in text:
+        text = text.replace(via_5555_target, via_5555_replacement)
+
+    # C. Nudge track /Power/+Vp 0.05 mm south to clear U4 Pad 3
+    track_vp_target1 = '(start 71.131081 84.45)\n\t\t(end 73.45 84.45)'
+    track_vp_replacement1 = '(start 71.131081 84.5)\n\t\t(end 73.45 84.5)'
+    track_vp_target2 = '(start 73.45 84.45)\n\t\t(end 73.65 84.65)'
+    track_vp_replacement2 = '(start 73.45 84.5)\n\t\t(end 73.65 84.65)'
+    if track_vp_target1 in text:
+        text = text.replace(track_vp_target1, track_vp_replacement1)
+    if track_vp_target2 in text:
+        text = text.replace(track_vp_target2, track_vp_replacement2)
+
+    # D. Connect +Vp_cm F.Cu trace to relocated via at (78.00, 82.15)
+    seg_vpcm_target = '(start 79.29 83.5)\n\t\t(end 77.715 81.925)'
+    seg_vpcm_replacement = '(start 79.29 83.5)\n\t\t(end 78.65 82.8)\n\t)\n\t(segment\n\t\t(start 78.65 82.8)\n\t\t(end 78 82.15)'
+    if seg_vpcm_target in text:
+        text = text.replace(seg_vpcm_target, seg_vpcm_replacement)
+
     # 4. Routing elements
     elements = []
     e_idx = 100
@@ -131,18 +161,16 @@ def main():
     elements.append(build_segment(65.0, 64.37, 65.5, 64.87, "F.Cu", "Net-(C24-Pad1)", get_id()))
     elements.append(build_segment(65.5, 64.87, 66.05, 65.23, "F.Cu", "Net-(C24-Pad1)", get_id()))
 
-    # D. Net-(U3B--): U3 pad 6 (66.5365, 61.898) connects south to (65.95, 63.5) on F.Cu
-    elements.append(build_segment(66.5365, 61.898, 66.5365, 62.50, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
-    elements.append(build_segment(66.5365, 62.50, 65.95, 63.0865, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
-    elements.append(build_segment(65.95, 63.0865, 65.95, 63.5, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
-    # Connect (65.95, 63.5) to R22 pad 2 (67.10, 64.53) on F.Cu: route south to Y=64.53 then east
-    elements.append(build_segment(65.95, 63.5, 65.95, 64.53, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
-    elements.append(build_segment(65.95, 64.53, 67.10, 64.53, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
+    # D. Net-(U3B--): U3 pad 6 (66.5365, 61.898) connects south to (65.80, 64.53) on F.Cu clearing Pad 5 and Via U13-OUT
+    elements.append(build_segment(66.5365, 61.898, 66.5365, 62.75, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
+    elements.append(build_segment(66.5365, 62.75, 65.80, 63.4865, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
+    elements.append(build_segment(65.80, 63.4865, 65.80, 64.53, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
+    # Connect (65.80, 64.53) to R22 pad 2 (67.10, 64.53) on F.Cu: route east
+    elements.append(build_segment(65.80, 64.53, 67.10, 64.53, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
     # Connect R13 pad 1 (65.06, 65.34) via B.Cu jumper to via (65.20, 63.41):
-    elements.append(build_segment(65.06, 65.34, 65.06, 65.90, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
-    elements.append(build_via(65.06, 65.90, "Net-(U3B--)", get_id()))
-    elements.append(build_segment(65.06, 65.90, 65.20, 65.90, "B.Cu", "Net-(U3B--)", get_id(), width=0.15))
-    elements.append(build_segment(65.20, 65.90, 65.20, 63.41, "B.Cu", "Net-(U3B--)", get_id(), width=0.15))
+    elements.append(build_segment(65.06, 65.34, 65.20, 65.40, "F.Cu", "Net-(U3B--)", get_id(), width=0.15))
+    elements.append(build_via(65.20, 65.40, "Net-(U3B--)", get_id()))
+    elements.append(build_segment(65.20, 65.40, 65.20, 63.41, "B.Cu", "Net-(U3B--)", get_id(), width=0.15))
     elements.append(build_via(65.20, 63.41, "Net-(U3B--)", get_id()))
 
     # E. Net-(U13-OUT): C26 pad 1 connection via clean B.Cu jumper
@@ -192,10 +220,10 @@ def main():
     elements.append(build_segment(76.5, 56.8, 74.4754, 56.8, "F.Cu", "/Insturmentation/SHIELD", get_id()))
 
     # K. U2 pin 7 to R20 pad 1 (/Power/-VIOC) via clean B.Cu jumper bypassing south of U2 at Y=75.20
-    elements.append(build_segment(68.775, 77.685, 67.70, 77.50, "F.Cu", "/Power/-VIOC", get_id(), width=0.15))
-    elements.append(build_via(67.70, 77.50, "/Power/-VIOC", get_id()))
-    elements.append(build_segment(67.70, 77.50, 67.70, 75.20, "B.Cu", "/Power/-VIOC", get_id(), width=0.15))
-    elements.append(build_segment(67.70, 75.20, 76.19, 75.20, "B.Cu", "/Power/-VIOC", get_id(), width=0.15))
+    elements.append(build_segment(68.775, 77.685, 67.90, 76.50, "F.Cu", "/Power/-VIOC", get_id(), width=0.15))
+    elements.append(build_via(67.90, 76.50, "/Power/-VIOC", get_id()))
+    elements.append(build_segment(67.90, 76.50, 67.90, 75.20, "B.Cu", "/Power/-VIOC", get_id(), width=0.15))
+    elements.append(build_segment(67.90, 75.20, 76.19, 75.20, "B.Cu", "/Power/-VIOC", get_id(), width=0.15))
     elements.append(build_segment(76.19, 75.20, 76.19, 77.50, "B.Cu", "/Power/-VIOC", get_id(), width=0.15))
     elements.append(build_via(76.19, 77.50, "/Power/-VIOC", get_id()))
     elements.append(build_segment(76.19, 77.50, 76.19, 77.985, "F.Cu", "/Power/-VIOC", get_id(), width=0.15))
@@ -225,13 +253,12 @@ def main():
     elements.append(build_segment(83.00, 84.40, 83.00, 86.51, "B.Cu", "/Power/PG_VDDA", get_id(), width=0.15))
     elements.append(build_via(83.00, 86.51, "/Power/PG_VDDA", get_id()))
 
-    # 3. PG_VSSA: from U2 pin 4 (71.675, 78.585) -> via (73.00, 78.585) -> south along X=73.00 to Y=84.00 (clears shifted GNDA vias at X=73.80) -> east along Y=84.00 to (84.50, 84.00) -> (84.50, 86.51) into R46 Pad 2
-    elements.append(build_segment(71.675, 78.585, 73.00, 78.585, "F.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
-    elements.append(build_via(73.00, 78.585, "/Power/PG_VSSA", get_id()))
-    elements.append(build_segment(73.00, 78.585, 73.00, 84.00, "B.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
-    elements.append(build_segment(73.00, 84.00, 84.50, 84.00, "B.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
-    elements.append(build_segment(84.50, 84.00, 84.50, 86.51, "B.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
-    elements.append(build_via(84.50, 86.51, "/Power/PG_VSSA", get_id()))
+    # 3. PG_VSSA: from U2 pin 4 (71.675, 78.585) -> via (73.00, 78.75) -> south along X=73.00 to Y=83.355 (clears shifted GNDA vias and -Vp track)
+    elements.append(build_segment(71.675, 78.585, 72.50, 78.585, "F.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
+    elements.append(build_segment(72.50, 78.585, 72.665, 78.75, "F.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
+    elements.append(build_segment(72.665, 78.75, 73.00, 78.75, "F.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
+    elements.append(build_via(73.00, 78.75, "/Power/PG_VSSA", get_id()))
+    elements.append(build_segment(73.00, 78.75, 73.00, 83.355026, "B.Cu", "/Power/PG_VSSA", get_id(), width=0.15))
 
     # O. Damping outputs to ESP32 (GPIO3, GPIO2, GPIO1) strictly planar
     # Column 1 (X=89.20): GPIO3 from R59 (X=81.5) -> via (81.5, 88.60) -> B.Cu (89.20, 88.60) -> peels off at Y=61.50 -> U8 pin 7 (88.969, 61.50)
@@ -258,10 +285,10 @@ def main():
     elements.append(build_via(89.90, 59.80, "/Microcontroller/GPIO1", get_id()))
     elements.append(build_segment(89.90, 59.80, 88.969, 59.80, "F.Cu", "/Microcontroller/GPIO1", get_id(), width=0.15))
 
-    # P. +Vp_cm jumper on B.Cu replacing F.Cu track 4ff2a2e6 (runs at Y=82.40 to clear VBUS via):
-    elements.append(build_via(77.715, 81.925, "/Power/+Vp_cm", get_id()))
-    elements.append(build_segment(77.715, 81.925, 77.715, 82.40, "B.Cu", "/Power/+Vp_cm", get_id(), width=0.2))
-    elements.append(build_segment(77.715, 82.40, 75.345, 82.40, "B.Cu", "/Power/+Vp_cm", get_id(), width=0.2))
+    # P. +Vp_cm jumper on B.Cu replacing F.Cu track:
+    elements.append(build_via(78.00, 82.15, "/Power/+Vp_cm", get_id()))
+    elements.append(build_segment(78.00, 82.15, 78.00, 82.40, "B.Cu", "/Power/+Vp_cm", get_id(), width=0.2))
+    elements.append(build_segment(78.00, 82.40, 75.345, 82.40, "B.Cu", "/Power/+Vp_cm", get_id(), width=0.2))
     elements.append(build_segment(75.345, 82.40, 75.345, 81.925, "B.Cu", "/Power/+Vp_cm", get_id(), width=0.2))
     elements.append(build_via(75.345, 81.925, "/Power/+Vp_cm", get_id()))
 
@@ -269,13 +296,13 @@ def main():
     # VBUS source at Pad 3 via (79.62, 80.50), routes south along Y=78.20 on B.Cu clearing thermal pad 13 and -VIOC
     elements.append(build_via(79.62, 80.50, "VBUS", get_id()))
     elements.append(build_segment(79.62, 80.50, 79.62, 78.20, "B.Cu", "VBUS", get_id(), width=0.15))
-    elements.append(build_segment(79.62, 78.20, 76.20, 78.20, "B.Cu", "VBUS", get_id(), width=0.15))
-    elements.append(build_segment(76.20, 78.20, 76.20, 79.50, "B.Cu", "VBUS", get_id(), width=0.15))
-    elements.append(build_via(76.20, 79.50, "VBUS", get_id()))
-    elements.append(build_segment(76.20, 79.50, 76.70, 79.50, "F.Cu", "VBUS", get_id(), width=0.15))
-    # Route north on B.Cu from (76.20, 79.50) to (76.50, 81.85) for Pin 12:
-    elements.append(build_segment(76.20, 79.50, 76.20, 81.85, "B.Cu", "VBUS", get_id(), width=0.15))
-    elements.append(build_segment(76.20, 81.85, 76.50, 81.85, "B.Cu", "VBUS", get_id(), width=0.15))
+    elements.append(build_segment(79.62, 78.20, 75.80, 78.20, "B.Cu", "VBUS", get_id(), width=0.15))
+    elements.append(build_segment(75.80, 78.20, 75.80, 79.50, "B.Cu", "VBUS", get_id(), width=0.15))
+    elements.append(build_via(75.80, 79.50, "VBUS", get_id()))
+    elements.append(build_segment(75.80, 79.50, 76.70, 79.50, "F.Cu", "VBUS", get_id(), width=0.15))
+    # Route north on B.Cu from (75.80, 79.50) to (76.50, 81.85) for Pin 12:
+    elements.append(build_segment(75.80, 79.50, 75.80, 81.85, "B.Cu", "VBUS", get_id(), width=0.15))
+    elements.append(build_segment(75.80, 81.85, 76.50, 81.85, "B.Cu", "VBUS", get_id(), width=0.15))
     elements.append(build_via(76.50, 81.85, "VBUS", get_id()))
     elements.append(build_segment(76.50, 81.85, 76.70, 81.50, "F.Cu", "VBUS", get_id(), width=0.15))
 

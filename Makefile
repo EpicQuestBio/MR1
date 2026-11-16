@@ -37,8 +37,14 @@ sim:
 	$(PYTHON) simulations/em_board_analysis.py
 	$(PYTHON) simulations/guard_ring_electrostatics.py
 	$(PYTHON) simulations/fluidic_dynamics_nanopore.py
+	$(PYTHON) simulations/four_electrode_cell_simulation.py
 	$(PYTHON) simulations/nanopore_electrokinetics.py
+	$(PYTHON) simulations/opamp_signal_conditioning.py
 	$(PYTHON) simulations/pore_dac_dynamics.py
+	$(PYTHON) simulations/micropore_configuration_table.py
+	$(PYTHON) simulations/flexure_living_hinge_fea.py
+	$(PYTHON) simulations/gcode_toolpath_fea.py
+	$(PYTHON) simulations/torque_cap_topology_optimization.py --export-stl exports/renders/torque_cap_optimized_arm.stl
 
 export:
 	$(PYTHON) scripts/export_manager.py --all
