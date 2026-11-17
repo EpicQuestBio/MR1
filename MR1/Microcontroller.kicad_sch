@@ -3420,7 +3420,7 @@
 	)
 	(text "sbu pins usb"
 		(exclude_from_sim no)
-		(at 58.674 162.052 0)
+		(at 44.45 159.766 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4226,7 +4226,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 48.26) (xy 180.34 48.26)
+			(xy 170.18 48.26) (xy 180.34 48.26)
 		)
 		(stroke
 			(width 0)
