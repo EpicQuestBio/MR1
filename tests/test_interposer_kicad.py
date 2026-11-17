@@ -541,14 +541,26 @@ class TestInterposerKiCad(unittest.TestCase):
         # Route 1: Passive quiet guard for LMP7721 via NT3
         self.assertIn('(label "GUARD"', sch_txt)
         self.assertIn(('NT3', '1'), nets.get('/GUARD', []), "NT3 Pin 1 must connect directly to GUARD net for LMP7721")
-        self.assertTrue(('NT3', '2') in nets.get('GNDA', []) or ('NT3', '2') in nets.get('/Vbias', []), "NT3 Pin 2 must connect to GNDA")
+        self.assertIn(('NT3', '2'), nets.get('GNDA', []), "NT3 Pin 2 must connect to GNDA")
         # Route 2: Active guard buffer for GUARD_WIDE using OPA2192 Unit 2
         self.assertIn('(label "GUARD_WIDE"', sch_txt)
         self.assertNotIn(('NT6', '1'), nets.get('/GUARD_WIDE', []), "NT6 must not tie active GUARD_WIDE")
-        # U16 LTC6268 Gain Stage: R3 feedback restored, R4 tied to GNDA/Vbias
+        # U16 LTC6268 Gain Stage: R3 feedback restored, R4 tied directly to GNDA
         self.assertIn(('R3', '1'), nets.get('/Route1_OUT', []), "R3 feedback loop must connect to U16 output (Route1_OUT)")
         self.assertIn(('R3', '2'), nets.get('/Virtual_Ground', []), "R3 pin 2 must connect to Virtual_Ground")
-        self.assertTrue(('R4', '1') in nets.get('GNDA', []) or ('R4', '1') in nets.get('/Vbias', []), "R4 must connect to GNDA")
+        self.assertIn(('R4', '1'), nets.get('GNDA', []), "R4 must connect directly to GNDA")
+        self.assertIn(('U2', '1'), nets.get('GNDA', []), "U2 +IN (pin 1) must connect directly to GNDA")
+        # 4-electrode Trans Kelvin potentiostat loop (U5B, R47=49.9R, R48=1M, R6=1k, C45=100nF)
+        self.assertIn(('U5', '5'), nets.get('/>PORE_AMP', []), "U5B +IN (pin 5) must connect to >PORE_AMP")
+        self.assertIn(('U5', '6'), nets.get('/KELVIN_FB', []), "U5B -IN (pin 6) must connect to /KELVIN_FB")
+        self.assertIn(('R6', '1'), nets.get('/KELVIN_FB', []), "R6 pin 1 must connect to /KELVIN_FB")
+        self.assertIn(('C45', '2'), nets.get('/KELVIN_FB', []), "C45 pin 2 must connect to /KELVIN_FB")
+        self.assertIn(('R47', '2'), nets.get('/CE_GNDA', []), "R47 pin 2 must connect to /CE_GNDA")
+        self.assertIn(('P7', '1'), nets.get('/CE_GNDA', []), "P7 must connect to /CE_GNDA")
+        self.assertIn(('R48', '2'), nets.get('/CE_GNDA', []), "R48 pin 2 must connect to /CE_GNDA")
+        self.assertIn(('R48', '1'), nets.get('/RE_TRANS', []), "R48 pin 1 must connect to /RE_TRANS")
+        self.assertIn(('R6', '2'), nets.get('/RE_TRANS', []), "R6 pin 2 must connect to /RE_TRANS")
+        self.assertIn(('P8', '1'), nets.get('/RE_TRANS', []), "P8 must connect to /RE_TRANS")
 
     def test_amplifier_route2_max4564_multiplexer_integration(self):
         """Ensure MAX4564EUA+ precision dual-supply SPDT analog switch (µMAX-8) is properly integrated
@@ -628,12 +640,26 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertIn(('C3', '1'), nets[u5_out_net[0]], "U5 pin 1 must connect to C3 (15pF)")
         self.assertIn(('R32', '1'), nets[u5_out_net[0]], "U5 pin 1 must connect to R32 (49.9R)")
 
-        # Verify summing node WS_CIS_WIDE
+        # Verify Cis Route 2 input isolation switch U19 (MAX4564EUA+) + R49 (0R) between P2 and summing node
         wide_net = nets.get("/WS_CIS_WIDE", [])
-        self.assertIn(('U5', '2'), wide_net, "U5 pin 2 (-IN) must connect to WS_CIS_WIDE")
-        self.assertIn(('R10', '2'), wide_net, "R10 pin 2 must connect to WS_CIS_WIDE")
-        self.assertIn(('C3', '2'), wide_net, "C3 pin 2 must connect to WS_CIS_WIDE")
-        self.assertIn(('P2', '1'), wide_net, "P2 Pin 1 (WS_CIS_WIDE SMT pin) must connect to WS_CIS_WIDE")
+        self.assertIn(('P2', '1'), wide_net, "P2 Pin 1 (WS_CIS_WIDE SMT pin) must connect to /WS_CIS_WIDE")
+        self.assertIn(('R49', '2'), wide_net, "R49 pin 2 must connect to /WS_CIS_WIDE")
+        u19_no_net = [n for n, nodes in nets.items() if ('U19', '6') in nodes]
+        self.assertEqual(len(u19_no_net), 1, "U19 pin 6 (NO) must belong to exactly one net")
+        self.assertIn(('R49', '1'), nets[u19_no_net[0]], "R49 pin 1 must connect to U19 NO (pin 6)")
+
+        wide_sum_net = nets.get("/WS_CIS_WIDE_SUM", [])
+        self.assertIn(('U19', '1'), wide_sum_net, "U19 COM (pin 1) must connect to /WS_CIS_WIDE_SUM")
+        self.assertIn(('U5', '2'), wide_sum_net, "U5 pin 2 (-IN) must connect to /WS_CIS_WIDE_SUM")
+        self.assertIn(('R10', '2'), wide_sum_net, "R10 pin 2 must connect to /WS_CIS_WIDE_SUM")
+        self.assertIn(('C3', '2'), wide_sum_net, "C3 pin 2 must connect to /WS_CIS_WIDE_SUM")
+        self.assertNotIn(('P2', '1'), wide_sum_net, "P2 must be isolated from U5A summing node when U19 is open")
+
+        self.assertIn(('U19', '5'), nets.get("/ROUTE_SEL", []), "U19 IN (pin 5) must connect to /ROUTE_SEL")
+        self.assertIn(('U19', '2'), nets.get("GNDA", []), "U19 EN (pin 2) must connect to GNDA")
+        self.assertIn(('U19', '4'), nets.get("GNDA", []), "U19 GND (pin 4) must connect to GNDA")
+        self.assertIn(('U19', '8'), nets.get("VDDA", []), "U19 V+ (pin 8) must connect to VDDA")
+        self.assertIn(('U19', '3'), nets.get("VSSA", []), "U19 V- (pin 3) must connect to VSSA")
 
         # Verify control line ROUTE_SEL on pin 5 (IN)
         route_net = nets.get("/ROUTE_SEL", [])

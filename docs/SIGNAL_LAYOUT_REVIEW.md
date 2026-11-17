@@ -210,3 +210,23 @@ While the current revisions of both boards achieve 100% passing DRC, full electr
    - Adding dedicated miniature test pads ($0.8\text{ mm}$ diameter) on the driven guard ring and weep-sense moat will allow high-throughput automated bed-of-nails factory testing of electrometer guard tracking and leak interlock trip latency.
 4. **Active Guard Enclosure on Interposer**:
    - Extend the concentric driven guard ring from the Cartridge Amplifier board into the PTFE interposer via a dedicated micro-coaxial shield sleeve, further suppressing stray capacitive coupling between the Cis/Trans flow streams.
+
+---
+
+## 8. 4-Electrode Trans Kelvin Potentiostat & Cis Dual-TIA Isolation
+
+Following the 4-electrode electrochemistry review, the Cartridge Amplifier (`Amplifier/Amplifier.kicad_sch`, `Amplifier/Amplifier.kicad_pcb`) and PTFE Interposer (`scripts/build_interposer_kicad.py`, `Interposer/Interposer.kicad_sch`, `Interposer/Interposer.kicad_pcb`) were updated to eliminate the Cis/Trans ground-reference coupling and dual-TIA offset/noise-gain interaction:
+
+1. **Direct `GNDA` Ground Reference (`Vbias` & `NT8` Removal)**:
+   - Removed `NT8` (`NetTie_2`) which previously shorted `CE_GNDA` (`P7`) directly to `GNDA`.
+   - Tied `U2.1`, `U5.3`, `U16.1`, `U16.4`, `R4.1`, `NT3.2`, and `NT5.2` directly to `GNDA` so Stage 2 (`U16` LTC6268) retains its $11\times$ closed-loop gain and `0 Ω` ground anchor whether the fluidic cell is wet or dry.
+2. **Trans-Side 4-Electrode Kelvin Potentiostat Loop (`U5B`, `R47`, `R48`, `R6`, `C45`)**:
+   - `U5B.+IN` (Pin 5) receives the bias command `>PORE_AMP`.
+   - `U5B.OUT` (Pin 7) drives the Trans Counter Electrode `CE_GNDA` (`P7` $\rightarrow$ `J10`) through isolation resistor `R47` ($49.9\,\Omega$).
+   - `U5B.-IN` (Pin 6, `/KELVIN_FB`) senses the Trans Reference Electrode `RE_TRANS` (`J11` $\rightarrow$ `P8`) via `R6` ($1\text{ k}\Omega$), with `C45` ($100\text{ nF}$) providing local HF loop stability and `R48` ($1\text{ M}\Omega$) providing dry-cell DC feedback.
+3. **Cis-Side Dual-TIA Isolation (`U19` MAX4564EUA+ & `R49` $0\,\Omega$)**:
+   - Added `U19` (`MAX4564EUA+`) in series with `R49` ($0\,\Omega$) between `P2` (`WS_CIS_WIDE`) and the `U5A` summing node (`/WS_CIS_WIDE_SUM`: `U5.2`, `R10.2`, `C3.2`), controlled by `/ROUTE_SEL` (`U19.5`).
+   - During Route 1 (`10 GΩ` `LMP7721`), `/ROUTE_SEL` is LOW (`U19` open), isolating `J2`/`P2` from `U5A`'s virtual ground while keeping `U5A`'s local feedback (`R10`/`C3`) closed.
+4. **Interposer Electrode Reassignment (`J1` $\rightarrow$ `WS_CIS`)**:
+   - Reassigned `J1` (`Cis_Sense_AgAgCl`) from `>PORE_AMP` to `WS_CIS` (`P5`), routed on `B.Cu` from `P5` to `J1` via `0.7/0.35 mm` vias.
+   - Left `P9` (`>PORE_AMP`) unconnected from all wet electrodes on the interposer so `>PORE_AMP` remains strictly on the Amplifier board (`U5B.+IN`).

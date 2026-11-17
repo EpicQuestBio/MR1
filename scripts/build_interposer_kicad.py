@@ -484,7 +484,7 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     # Ribbon electrode route targets aligned with liquid flow:
     # Cis channel (H3 at South-West -> Center -> H4 at North-East, 330 deg flow angle):
     #   J2: Cis Drive (WS_CIS_WIDE), near Inlet H3 at r = 15.5mm
-    #   J1: Cis Pre-pore / Sense (>PORE_AMP), near Nanopore at r = 7.0mm
+    #   J1: Cis Sense (WS_CIS), near Nanopore at r = 7.0mm
     j2_x, j2_y = round(center_x - 15.5 * 0.866025, 3), round(center_y + 15.5 * 0.500000, 3)
     j1_x, j1_y = round(center_x - 7.0 * 0.866025, 3), round(center_y + 7.0 * 0.500000, 3)
 
@@ -498,7 +498,7 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     # Mirrored rotations: J1 & J2 along H3 leg rotated 30.0 deg; J11 & J10 along H2 leg rotated 330.0 deg
     electrode_defs = [
         ("J2", "Cis_Drive_AgAgCl", j2_x, j2_y, 30.0, "F", "WS_CIS_WIDE"),
-        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", ">PORE_AMP"),
+        ("J1", "Cis_Sense_AgAgCl", j1_x, j1_y, 30.0, "F", "WS_CIS"),
         ("J11", "Trans_Sense_AgAgCl", j11_x, j11_y, 330.0, "B", "RE_TRANS"),
         ("J10", "Trans_Drive_AgAgCl", j10_x, j10_y, 330.0, "B", "CE_GNDA"),
     ]
@@ -650,10 +650,10 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
     new_segments = [
         # --- Cis Signal & Guard Routes ---
-        # J1 (>PORE_AMP at j1_x, j1_y): Pin 9 is at (p9_x, p9_y) on West side. Drops via to B.Cu, routes to J1
-        make_via(p9_x, p9_y, 0.7, 0.35, ">PORE_AMP"),
-        make_seg(p9_x, p9_y, j1_x, j1_y, 0.35, "B.Cu", ">PORE_AMP"),
-        make_via(j1_x, j1_y, 0.7, 0.35, ">PORE_AMP"),
+        # J1 (WS_CIS at j1_x, j1_y): Pin 5 is at (p5_x, p5_y). Drops via to B.Cu, routes to J1
+        make_via(p5_x, p5_y, 0.7, 0.35, "WS_CIS"),
+        make_seg(p5_x, p5_y, j1_x, j1_y, 0.35, "B.Cu", "WS_CIS"),
+        make_via(j1_x, j1_y, 0.7, 0.35, "WS_CIS"),
 
         # J2 (WS_CIS_WIDE at j2_x, j2_y): Pin 2 on F.Cu escapes east through guard notch, routes south of central wafer cutout to Y=54.0, west to j2_x, then north to J2
         make_seg(p2_x, p2_y, 43.600, p2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),

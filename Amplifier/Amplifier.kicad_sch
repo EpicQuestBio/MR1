@@ -7121,7 +7121,7 @@
 	)
 	(text "SM10B-SRSS-TB"
 		(exclude_from_sim no)
-		(at 3.81 295.91 0)
+		(at -731.52 67.31 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7131,7 +7131,7 @@
 	)
 	(text "3. Selecting the Precision ADC\nTo capture <1µV signals, you need a 24-bit or 32-bit Delta-Sigma ADC. The standard 12-bit or 16-bit SAR ADCs used in microcontrollers will not see the signal floor you have created.\n\nTop Recommendations:\n\nTI ADS1261 (24-bit / 32-bit mode):\n\nWhy: It has a built-in PGA (Programmable Gain Amplifier) that is extremely low noise.\n\nNoise Floor: Can resolve down to ~6 nV RMS at low data rates.\n\nAnalog Devices AD7177-2 (32-bit):\n\nWhy: True 32-bit output with a 10 kSPS rate. Excellent for DC precision."
 		(exclude_from_sim no)
-		(at 286.258 23.368 0)
+		(at -744.728 -44.45 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7163,7 +7163,7 @@
 	)
 	(text "consider cat 7 flat ribbon cable, 8 pairs, shielded"
 		(exclude_from_sim no)
-		(at 31.242 301.752 0)
+		(at -704.088 73.152 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7171,9 +7171,19 @@
 		)
 		(uuid "22b0d0e1-71a8-400d-b289-864cd95325b0")
 	)
+	(text "R_WIDE_EN"
+		(exclude_from_sim no)
+		(at -273.05 24.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "24d61f51-7f0b-4836-8fb4-13c113696f43")
+	)
 	(text "low noise voltage converters"
 		(exclude_from_sim no)
-		(at 154.94 -189.23 0)
+		(at 241.046 18.034 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7224,7 +7234,7 @@
 	)
 	(text "Stability in ultra-low noise regulators is dictated by the **Output Capacitance ()** and the **Noise Reduction Capacitance ()**. \nIf these ratios are wrong, the LDO will oscillate, turning your \"clean\" power supply into a radio transmitter.\n\n\n### 1. The LDO Component Values (The Critical Stage)\n\nThese regulators do not use standard voltage dividers. They use a precision current source architecture. You must use these specific values to minimize noise density.\n\n#### **Positive Rail: TPS7A94**\n\n* ** (Set Resistor):** **5.0 kΩ** (0.1% tolerance).\n* *Math:* . The internal  is 1mA. .\n\n\n* ** (Output Capacitor):** **2x 22µF** (or 1x 47µF) Ceramic X7R.\n* *Stability:* Must be . Larger is better for lower output impedance.\n* *Part:* Murata GRM32ER71E226KE15 (1210 size avoids DC bias capacitance loss).\n\n\n* ** (Noise Reduction / Soft Start):** **10 µF**.\n* *Function:* Filters the internal reference noise.\n* *Warning:* Do not exceed 22µF, or the startup time becomes excessively slow, potentially causing latch-up issues with the negative rail.\n\n\n\n#### **Negative Rail: LT3094**\n\n* ** (Set Resistor):** **49.9 kΩ** (0.1% tolerance).\n* *Math:* The internal precision current source is 100µA. .\n\n\n* ** (Output Capacitor):** **2x 22µF** (Ceramic X7R).\n* *Stability:* Requires low ESR. Do not use Tantalum here.\n\n\n* ** (Reference Capacitor):** **4.7 µF**.\n* *Function:* This capacitor is parallel to . It kills the thermal noise of the resistor and the reference current shot noise.\n\n\n* ** (Current Limit):** **Left Open** (unless you need to limit current below max).\n\n---\n\n### 2. The Input \"Capacitance Multiplier\" Values (Active Pre-Filter)\n\nThis circuit goes *between* your raw supply (TPS65131) and the LDOs. It smooths the high-frequency switching ripple so the LDO doesn't have to work as hard.\n\n**Constraint:** This circuit drops approx **0.7V to 1.0V**.\n\n* **Required Raw Input:** +/- 6.2V to +/- 6.5V.\n* **Output to LDO:** +/- 5.3V to +/- 5.5V.\n\n#### **Positive Side (NPN Transistor)**\n\n* **Transistor ():** **ZXTN2010A** or generic **BCP56**.\n* *Why:* Medium power, reasonable gain ().\n\n\n* **Base Resistor ():** **1.0 kΩ**.\n* *Function:* Sets the base current and forms the RC filter with .\n\n\n* **Base Capacitor ():** **100 µF** (Electrolytic or Tantalum is fine here).\n* **Protection Diode:** **1N4148** across Base-Emitter (Reverse biased).\n* *Why:* Protects the transistor during power-down if the input collapses faster than the capacitor discharges.\n\n\n\n**The Stability Math:**\n\n* **Cutoff Frequency:** .\n* **Result:** This crushes the 1MHz ripple from your switching regulator by >100dB before it even hits the LDO.\n\n#### **Negative Side (PNP Transistor)**\n\n* **Transistor ():** **ZXTP2012A** or generic **BCP53**.\n* **Base Resistor:** **1.0 kΩ**.\n* **Base Capacitor:** **100 µF**.\n* **Protection Diode:** **1N4148**.\n\n---\n\n### 3. Critical Layout & Stability Rules\n\nAt sub-1µV levels, component placement is as important as component value.\n\n1. **NO Ferrite Beads on LDO Outputs:**\n* Never place a ferrite bead directly after the TPS7A94 or LT3094. The inductive reactance will interact with  and cause ringing (oscillation) at 100kHz–1MHz.\n* *Correct placement:* Place ferrite beads **before** the Input Capacitance Multiplier.\n\n\n2. **The \"Star\" Ground:**\n* The \"Ground\" pin of the  resistor and the \"Ground\" pin of the  capacitor must connect to the **Load Ground** (where your op-amp is), *not* the LDO's thermal pad ground.\n* This is called a \"Kelvin Connection.\" If you ground them at the LDO, the current flowing through the PCB trace will create a voltage drop that looks like noise to the regulator.\n\n\n3. **DC Bias Effect:**\n* You are using 5V. If you buy a \"6.3V rated\" 22µF ceramic capacitor, at 5V it will actually only be **~8µF**. This loss of capacitance can destabilize the LDO.\n* **Rule:** Use **25V or 35V rated** capacitors for your 5V rails to ensure they retain their capacitance.\n\n\n\n### Summary Checklist for Ordering\n\n| Component | Value | Dielectric / Type | Rating | Note |\n| --- | --- | --- | --- | --- |\n| **LDO Output Caps** | 22µF (x2) | X7R Ceramic | **25V+** | Critical for stability |\n| **TPS7A94 ** | 5.0 kΩ | Thin Film | 0.1% | Low Temp Coefficient |\n| **LT3094 ** | 49.9 kΩ | Thin Film | 0.1% | Low Temp Coefficient |\n| **Cap Multiplier Base** | 100 µF | Electrolytic | 16V+ | Lowers ripple freq |\n| **Pass Transistor** | BCP56/53 | SOT-223 | 80V | Handles heat dissipation |\n\nIf you build this specific chain (TPS65131  Cap Multiplier  LDO  Hybrid Op-Amp Rail), you will likely hit the noise floor of your test equipment before you see the noise of the power supply."
 		(exclude_from_sim yes)
-		(at -207.01 -161.29 0)
+		(at -726.44 -338.836 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7235,7 +7245,7 @@
 	)
 	(text "https://www.vpi.us/bulk-cable-sf/super-flat-cat7-736#idTab9"
 		(exclude_from_sim no)
-		(at 29.21 278.13 0)
+		(at -706.12 49.53 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7252,6 +7262,16 @@
 			)
 		)
 		(uuid "6126dd1a-8607-4f12-a852-879706136f7c")
+	)
+	(text "R_ISO"
+		(exclude_from_sim no)
+		(at -252.73 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "654dee71-161a-4085-a912-1c8a3499ed1f")
 	)
 	(text "MG Chemicals 422C conformal coating"
 		(exclude_from_sim no)
@@ -7285,7 +7305,7 @@
 	)
 	(text "For high-speed nanopore sensing, the answer is definitive: **Do NOT tie them together.**\n\nYou should use **Separate Voltage References** (or at least strictly buffered separate paths) for your ADC and your Bias Driver.\n\nHere is the engineering reality of why sharing a \"Reference Rail\" will introduce a mysterious noise floor that you can't filter out.\n\n### 1. The \"Bully\" on the Bus: The SAR ADC\n\nThe 16-bit ADC you are using (like the MCP33131) is a **SAR (Successive Approximation Register)** converter.\n\n* **The Physics:** During a conversion (1 million times a second), the ADC connects its internal capacitor array to the VREF pin to charge up.\n* **The Effect:** This draws massive, high-frequency current spikes (\"gulps\") from the reference pin.\n* **The Consequence:** If you look at an ADC reference pin with a fast scope, it looks like a saw-blade. It is vibrating with high-frequency noise.\n\n### 2. The \"Victim\": The Nanopore Bias\n\nYour Driver Circuit (the OPA192 circuit) takes the VREF voltage and applies it *directly* to the liquid in the nanopore chamber.\n\n* **The Consequence:** If you tie the Driver VREF to the ADC VREF, you are essentially taking that \"saw-blade\" noise from the ADC and injecting it straight into your nanopore.\n* **The Result:** Your TIA will measure that noise as \"signal.\" You will see 1 MHz spikes in your baseline data, and you won't be able to filter them out because they are technically \"real\" currents caused by your noisy bias.\n\n### 3. Drift vs. Noise (Why Isolation Wins)\n\nUsually, engineers tie references together to prevent \"Drift Error\" (so the DAC and ADC track each other as the room warms up).\n\n* **For Thermometers:** This matters.\n* **For Nanopores:** This **does not matter**.\n* *Why:* You are looking for rapid *changes* (DNA blocking the pore) that happen in microseconds. You don't care if the absolute baseline drifts from 180.0 mV to 180.1 mV over 10 minutes.\n* *Priority:* You care about **Noise**. You need the Bias to be \"dead silent\" in the 100 kHz band.\n\n\n\n### The Recommended Architecture\n\n**1. The ADC Reference (The \"Stiff\" One)**\n\n* **Chip:** **REF3440** (or similar 4.096V / 2.5V reference).\n* **Critical Feature:** Needs a massive **Bypass Capacitor** (10 µF to 47 µF) placed *immediately* at the ADC reference pin. This acts as a tank to supply the \"gulps\" of current without the voltage drooping.\n\n**2. The Bias Reference (The \"Quiet\" One)**\n\n* **Chip:** **REF3425** (or similar).\n* **Critical Feature:** Heavy **Low-Pass Filtering**.\n* Put a simple RC filter (e.g., ) between the VREF chip and your Op-Amp.\n* Since the Op-Amp input draws almost zero current, this resistor won't cause a voltage drop, but it will kill any residual silicon noise from the reference chip.\n\n\n\n### Summary\n\nSpend the extra $2.00 and put a separate Reference Chip on your Driver Board. It physically isolates your sensitive \"Source\" (the Bias) from your noisy \"Measurement\" (the ADC).\n\n**Next Step:** Would you like to check the capacitor selection for the ADC reference? If you pick the wrong ceramic type (e.g., Y5V vs X7R), the piezo effect can turn your board vibrations into voltage noise."
 		(exclude_from_sim no)
-		(at -472.44 -104.14 0)
+		(at -950.468 -366.522 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7295,7 +7315,7 @@
 	)
 	(text "No, the schematic recipe I provided above is **Fixed Gain (10x)**. It uses a standard  resistor, so the zoom level is locked.\n\nSince you are removing the MAX9939 (which *was* a variable gain amplifier), you likely want to keep that functionality—especially since Nanopores vary wildly in current. A 1 nA pore needs different gain than a 100 pA pore.\n\nHere is how to build a **\"Safe\" Variable Gain Amplifier (PGA)** that creates that necessary 2.5V offset but allows you to switch zoom levels (e.g., 10x, 50x, 100x) using your ESP32.\n\n### The Solution: The \"Mux-Switched\" Feedback Loop\n\nInstead of a single  resistor, you use an **Analog Multiplexer (Switch)** to select one of several resistors in the feedback loop.\n\n### Component List\n\n1. **Op-Amp:** **OPA192** (Same as before).\n2. **Analog Switch:** **TMUX1104** (or ADG704).\n* *Why:* Extremely low capacitance and leakage. It acts like a digital rotary switch.\n\n\n3. **Resistor Bank (The \"Zoom\" Levels):**\n* **R_FB1:**  (Gain 10x) - *For big pores / baseline.*\n* **R_FB2:**  (Gain 50x) - *For typical sensing.*\n* **R_FB3:**  (Gain 100x) - *For tiny pores / DNA events.*\n* **R_FB4:**  (Gain 200x) - *Max Zoom.*\n\n\n\n### The Circuit Connections\n\nThis modifies the \"Level Shifter\" circuit I gave you earlier:\n\n1. **Input Path (Unchanged):**\n* TIA Output   Resistor  OPA192 Pin 2 (Inverting Input).\n\n\n2. **Bias Path (Unchanged):**\n* 2.5V Ref  Divider ()  OPA192 Pin 3 (Non-Inverting).\n* *Target:* Keep Pin 3 at **0.227V**.\n\n\n3. **The Feedback Path (The Change):**\n* Connect the **Common Pin (D)** of the TMUX1104 to the **Op-Amp Output (Pin 6)**.\n* Connect **Source Pin S1** to **R_FB1** ().\n* Connect **Source Pin S2** to **R_FB2** ().\n* Connect **Source Pin S3** to **R_FB3** ().\n* Connect **Source Pin S4** to **R_FB4** ().\n* *Tie the other ends of all four resistors together* and connect them to **OPA192 Pin 2 (Inverting Input)**.\n\n\n\n### Why this is better than the MAX9939\n\n* **Bipolar Safety:** Because we are summing into the *Inverting Node* (Pin 2) which is held at 0.227V, the switch never sees negative voltages. It is safe from the \"clipping\" issue that kills the MAX9939.\n* **Bandwidth:** The OPA192 has plenty of speed (10 MHz). Even at 100x gain, you have 100 kHz bandwidth.\n* **Control:** Your ESP32 simply toggles 2 GPIO pins (connected to the TMUX1104 address lines) to change the gain instantly from \"Overview\" to \"Deep Zoom.\""
 		(exclude_from_sim no)
-		(at 208.534 -66.04 0)
+		(at -736.854 -133.604 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7326,7 +7346,7 @@
 	)
 	(text "we need to play back a waveform"
 		(exclude_from_sim no)
-		(at -497.84 -180.086 0)
+		(at -975.868 -442.468 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7336,7 +7356,7 @@
 	)
 	(text "250ft 32AWG CAT7 STP Solid, 0.075\" Super Flat Bulk Ethernet Bare Copper Cable - White."
 		(exclude_from_sim no)
-		(at 31.75 281.94 0)
+		(at -703.58 53.34 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7346,13 +7366,23 @@
 	)
 	(text "Using an **Optically Isolated Current Source (LED + Photodiode)** is the \"Ferrari\" of dummy loads for nanopore amplifiers.\n\nWhile the resistor method (like in the EarlGrey PDF) is great for checking baseline noise, the LED/Photodiode method is superior for checking **bandwidth** and **step response** (simulating DNA events) because it solves the \"Probe Capacitance\" problem.\n\nHere is why the optical method is the secret weapon for verifying your 100 kHz bandwidth, and how to build one.\n\n### 1. The Physics: Why Resistors Lie\n\nWhen you test your amplifier with a function generator and a resistor:\n\n* **The Problem:** You have to connect a BNC cable from your Function Generator to the resistor. That cable adds **~50–100 pF** of capacitance to your sensitive input node.\n* **The Result:** You are testing the *cable's* bandwidth, not your amplifier's bandwidth. The heavy capacitance of the test gear hides the true speed of your PTFE/Rogers board.\n\n### 2. The Solution: The Optical Current Injector\n\nA photodiode acts as a **True Current Source** (Infinite Impedance), just like a real nanopore.\n\n* **How it works:**\n1. **Transmitter (Noisy Side):** You drive an LED with a function generator. You can pulse it to simulate a 100 kHz DNA event.\n2. **Receiver (Quiet Side):** A dark, shielded photodiode sits directly on your TIA input. It \"sees\" the light and generates a proportional current (e.g., 100 pA).\n\n\n* **The Magic:** There is **zero electrical connection** between the function generator and your amplifier. No ground loops. No cable capacitance. You are injecting pure signal directly into the amp.\n\n### 3. How to Build the \"Simulator Puck\"\n\nYou should build a dedicated \"Test Puck\" that looks exactly like your fluidic puck but contains electronics instead of water.\n\n**Components:**\n\n1. **LED:** A standard fast Red LED (e.g., Kingbright).\n2. **Photodiode:** You need a **PIN Photodiode** with extremely low capacitance ().\n* *Recommendation:* **Hamamatsu S1223** (or similar small-area silicon PIN).\n* *Warning:* Do not use a large solar cell; its capacitance will be huge (nF range) and ruin the test.\n\n\n\n**The Circuit:**\n\n* **Input (LED):** Connect the LED to a BNC connector on the *outside* of the shield.\n* **Output (PD):** Solder the Photodiode directly between the **Sense Input** and **Ground** (or Bias Voltage) on a spare copy of your Rogers Carrier Board.\n* **Optical Coupling:** Drill a hole in the PTFE board so the LED (Top) shines down on the Photodiode (Bottom). Seal it light-tight with black epoxy.\n\n### 4. Calibration Strategy\n\nThe only downside to optical testing is that you don't know exactly what \"5V\" on the LED equals in picoamps.\n\n**The \"Hybrid\" Dummy Load (Best Practice):**\nDesign your \"Simulator Puck\" with **both**:\n\n1. **A 1 G$\\Omega$ Resistor:** Connected to a stable DC voltage source.\n* *Use:* Sets the \"Baseline Current\" (e.g., 10 nA) to simulate the open pore.\n\n\n2. **The LED/Photodiode:** In parallel.\n* *Use:* Injects small \"AC Pulses\" (e.g., 100 pA dips) on top of that baseline.\n\n\n\n**Test Procedure:**\n\n1. Turn on the DC source. Your Amp reads 10 nA. (Verifies DC gain).\n2. Flash the LED with a 10 µs pulse. Your Amp should see a sharp dip. (Verifies 100 kHz bandwidth).\n\n### Summary\n\n* **Resistor Load:** Good for noise checks. Bad for speed checks (due to cable capacitance).\n* **LED/Photodiode Load:** The only accurate way to verify 100 kHz bandwidth without a wet lab.\n\n**Recommendation:** Since you are building a custom PCB stack anyway, add a footprint for a small photodiode on your \"Carrier Board\" design. You can populate one board as a \"Simulator\" to tune your ESP32/ADC code before you ever mess with salt water."
 		(exclude_from_sim no)
-		(at -469.9 68.58 0)
+		(at -947.928 -193.802 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
 		(uuid "bc1fef7a-9f17-4cc6-bd4f-69f601179e6c")
+	)
+	(text "C_COMP"
+		(exclude_from_sim no)
+		(at -233.68 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c46f1aa3-7165-4bf6-98ea-5989ece2eaf6")
 	)
 	(text "pins for holding the board in place while applying adhesive\n\nhttps://www.mcmaster.com/98378A208/"
 		(exclude_from_sim no)
@@ -7364,9 +7394,19 @@
 		)
 		(uuid "d042a9ad-89ce-417e-b825-5e85c07e2861")
 	)
+	(text "R_DRY"
+		(exclude_from_sim no)
+		(at -278.638 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d840b64a-8ffd-4481-8b4d-25c300837b86")
+	)
 	(text "SSH-003T-P0.2-H #32 to #28 (0.032 to 0.081) 0.4 to 0.8 23,000\n"
 		(exclude_from_sim no)
-		(at 27.94 289.56 0)
+		(at -707.39 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7386,7 +7426,7 @@
 	)
 	(text "SHR-10V-S"
 		(exclude_from_sim no)
-		(at 1.27 293.37 0)
+		(at -734.06 64.77 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7482,10 +7522,10 @@
 		(uuid "3561bb3e-3c76-4a4a-a6e9-78dd6b3224f2")
 	)
 	(junction
-		(at -180.34 95.25)
+		(at -180.34 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "49a9f6a4-c6df-410b-90ec-eb15800024cd")
+		(uuid "3b8bd33f-055e-45ca-a906-3d64911f4460")
 	)
 	(junction
 		(at -54.61 73.66)
@@ -7590,6 +7630,12 @@
 		(uuid "bc5dfe01-4fb2-48d2-a366-a9a40d204bcc")
 	)
 	(junction
+		(at -180.34 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c161df1c-f9b8-431f-9dc9-58b9946dcb9d")
+	)
+	(junction
 		(at -171.45 87.63)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7638,6 +7684,10 @@
 		(uuid "e9f4ffad-2b3e-4945-bc0b-d90879ed33cb")
 	)
 	(no_connect
+		(at -264.16 34.29)
+		(uuid "074e51cd-0968-46fc-a594-544933f8faab")
+	)
+	(no_connect
 		(at -115.57 85.09)
 		(uuid "ca14bbd1-e13c-4775-8a81-407460746570")
 	)
@@ -7654,6 +7704,16 @@
 			(type default)
 		)
 		(uuid "00c5017c-6fd5-4422-b7aa-78bd95ffa3ff")
+	)
+	(wire
+		(pts
+			(xy -181.61 95.25) (xy -180.34 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0271313c-7c2b-445f-9920-9301f30d8735")
 	)
 	(wire
 		(pts
@@ -7674,6 +7734,26 @@
 			(type default)
 		)
 		(uuid "02af2866-31b1-46fa-b4b5-a302e6f4c264")
+	)
+	(wire
+		(pts
+			(xy -256.54 74.93) (xy -261.62 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04bb70b2-b294-4c89-a4bf-ebe49e774738")
+	)
+	(wire
+		(pts
+			(xy -113.03 83.82) (xy -113.03 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07916d71-8c62-4283-9582-cc2cfba5cee6")
 	)
 	(wire
 		(pts
@@ -7704,16 +7784,6 @@
 			(type default)
 		)
 		(uuid "0c883d89-ca79-40bc-a01a-e93fa6810bf5")
-	)
-	(wire
-		(pts
-			(xy -251.46 74.93) (xy -243.84 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0e00d57b-eac0-4cd3-ab71-366993d8ed16")
 	)
 	(wire
 		(pts
@@ -7787,6 +7857,16 @@
 	)
 	(wire
 		(pts
+			(xy -243.84 36.83) (xy -241.3 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1947cf8f-47f0-4263-a046-bc5737dd1887")
+	)
+	(wire
+		(pts
 			(xy 17.78 120.65) (xy 25.4 120.65)
 		)
 		(stroke
@@ -7824,6 +7904,16 @@
 			(type default)
 		)
 		(uuid "1ffe6e2d-432e-4591-82df-245c2e57c71c")
+	)
+	(wire
+		(pts
+			(xy -229.87 64.77) (xy -220.98 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2120bf61-b189-4c95-aece-50dae1548976")
 	)
 	(wire
 		(pts
@@ -7867,7 +7957,7 @@
 	)
 	(wire
 		(pts
-			(xy -107.95 105.41) (xy -123.19 105.41)
+			(xy -107.95 105.41) (xy -125.73 105.41)
 		)
 		(stroke
 			(width 0)
@@ -7927,16 +8017,6 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 119.38) (xy 54.61 115.57)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "307bc7a6-dae5-4238-9c82-f06417e1680a")
-	)
-	(wire
-		(pts
 			(xy 153.67 276.86) (xy 153.67 279.4)
 		)
 		(stroke
@@ -7944,6 +8024,26 @@
 			(type default)
 		)
 		(uuid "30a9558b-7c8d-4acd-9866-f6c5587b42f5")
+	)
+	(wire
+		(pts
+			(xy -125.73 95.25) (xy -123.19 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "326380cb-a47e-460d-9510-491395900202")
+	)
+	(wire
+		(pts
+			(xy -256.54 44.45) (xy -256.54 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "327a826a-76dc-4514-81bf-2f39e4163860")
 	)
 	(wire
 		(pts
@@ -7977,13 +8077,13 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 132.08) (xy 54.61 132.08)
+			(xy -264.16 39.37) (xy -266.7 39.37)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "36b52dd7-fba7-42fe-9311-83d67fcbd793")
+		(uuid "35f37bb9-8b06-4330-b221-264faadb2a5b")
 	)
 	(wire
 		(pts
@@ -7994,16 +8094,6 @@
 			(type default)
 		)
 		(uuid "39a63e63-8465-4bbd-982a-97a8e6241d87")
-	)
-	(wire
-		(pts
-			(xy -110.49 86.36) (xy -113.03 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3ad5e506-342c-4ccf-bbbd-e7586c4bf74e")
 	)
 	(wire
 		(pts
@@ -8077,16 +8167,6 @@
 	)
 	(wire
 		(pts
-			(xy -181.61 95.25) (xy -180.34 95.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "444448a1-dc97-4b88-be6e-07ca6b17ecf6")
-	)
-	(wire
-		(pts
 			(xy -184.15 104.14) (xy -180.34 104.14)
 		)
 		(stroke
@@ -8094,6 +8174,16 @@
 			(type default)
 		)
 		(uuid "48eafa4a-ed47-4439-bf27-c9db29ff90fa")
+	)
+	(wire
+		(pts
+			(xy -274.32 86.36) (xy -269.24 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4940f4b9-1908-4638-9184-32caf1ee3cec")
 	)
 	(wire
 		(pts
@@ -8157,6 +8247,26 @@
 	)
 	(wire
 		(pts
+			(xy 49.53 115.57) (xy 49.53 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b46bb6a-5ec9-4764-b743-573d1e3d93c8")
+	)
+	(wire
+		(pts
+			(xy -212.09 39.37) (xy -207.01 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b85bb3d-1bec-4ca4-af7f-9ccde794fe68")
+	)
+	(wire
+		(pts
 			(xy 123.19 -12.7) (xy 134.62 -12.7)
 		)
 		(stroke
@@ -8174,6 +8284,16 @@
 			(type default)
 		)
 		(uuid "5e330abe-7dde-44d6-9f59-16dd583aaa81")
+	)
+	(wire
+		(pts
+			(xy -248.92 74.93) (xy -243.84 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5eafb26a-6440-4258-9220-b451490c385e")
 	)
 	(polyline
 		(pts
@@ -8217,6 +8337,26 @@
 	)
 	(wire
 		(pts
+			(xy -264.16 29.21) (xy -269.24 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cb8dee0-573b-4347-b4ed-44942d22ef11")
+	)
+	(wire
+		(pts
+			(xy -276.86 29.21) (xy -281.94 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cc98662-39e2-470d-a85f-0dc37884fe81")
+	)
+	(wire
+		(pts
 			(xy -189.23 24.13) (xy -189.23 19.05)
 		)
 		(stroke
@@ -8227,7 +8367,7 @@
 	)
 	(wire
 		(pts
-			(xy -220.98 77.47) (xy -228.6 77.47)
+			(xy -213.36 77.47) (xy -228.6 77.47)
 		)
 		(stroke
 			(width 0)
@@ -8264,16 +8404,6 @@
 			(type default)
 		)
 		(uuid "7424a1f9-5e2f-4422-9d57-ce6d25f8c2eb")
-	)
-	(wire
-		(pts
-			(xy -238.76 39.37) (xy -207.01 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7424d747-2a7b-4795-bf58-1d98b7cffe2c")
 	)
 	(wire
 		(pts
@@ -8367,6 +8497,16 @@
 	)
 	(wire
 		(pts
+			(xy -275.59 102.87) (xy -270.51 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a4b6ad4-b989-428f-92cc-a759a2b2efc2")
+	)
+	(wire
+		(pts
 			(xy -57.15 114.3) (xy -57.15 100.33)
 		)
 		(stroke
@@ -8447,13 +8587,23 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 119.38) (xy 73.66 119.38)
+			(xy 49.53 115.57) (xy 54.61 115.57)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "8473997f-88bc-4c3a-b050-7ade730033ac")
+	)
+	(wire
+		(pts
+			(xy -265.43 102.87) (xy -260.35 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84dd6040-b46b-4c9d-b90a-2c716f2bca23")
 	)
 	(polyline
 		(pts
@@ -8505,16 +8655,6 @@
 		)
 		(uuid "8a83b4b7-6c1d-4391-b940-2fb7bb9ee846")
 	)
-	(wire
-		(pts
-			(xy 68.58 132.08) (xy 59.69 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8ab5f9fb-2a71-4aba-83c3-f9ec8f2a7f5e")
-	)
 	(polyline
 		(pts
 			(xy -146.05 68.58) (xy -146.05 111.76)
@@ -8527,7 +8667,7 @@
 	)
 	(wire
 		(pts
-			(xy -123.19 105.41) (xy -123.19 95.25)
+			(xy -125.73 105.41) (xy -125.73 95.25)
 		)
 		(stroke
 			(width 0)
@@ -8674,16 +8814,6 @@
 			(type default)
 		)
 		(uuid "9c4e201b-5f11-4712-a1b2-c3d4e5f60001")
-	)
-	(wire
-		(pts
-			(xy -110.49 99.06) (xy -113.03 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e9c4776-b284-4c81-b13d-80046eb7d286")
 	)
 	(wire
 		(pts
@@ -8857,6 +8987,16 @@
 	)
 	(wire
 		(pts
+			(xy -254 24.13) (xy -254 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcc65094-cc8c-4c11-8023-93d25a40a8ee")
+	)
+	(wire
+		(pts
 			(xy 153.67 266.7) (xy 158.75 266.7)
 		)
 		(stroke
@@ -8894,6 +9034,26 @@
 			(type default)
 		)
 		(uuid "c4d5e6f7-a8b9-4c0d-1e2f-3a4b5c6d7e8f")
+	)
+	(wire
+		(pts
+			(xy -246.38 64.77) (xy -237.49 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4dc11bd-778f-4d22-bd5a-768bb0fdc6f7")
+	)
+	(wire
+		(pts
+			(xy -281.94 86.36) (xy -287.02 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c5e16ec7-6b98-49b8-9be5-c8adbdcfb9a0")
 	)
 	(wire
 		(pts
@@ -8937,16 +9097,6 @@
 	)
 	(wire
 		(pts
-			(xy -220.98 64.77) (xy -246.38 64.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cac2ae82-a51c-4d66-ad19-b084f2e332f3")
-	)
-	(wire
-		(pts
 			(xy -71.12 109.22) (xy -71.12 110.49)
 		)
 		(stroke
@@ -8964,6 +9114,16 @@
 			(type default)
 		)
 		(uuid "cb496d2e-715c-4741-9897-f5a7b8eb28d3")
+	)
+	(wire
+		(pts
+			(xy 49.53 118.11) (xy 38.1 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf3d8a78-d4a9-4e95-9cf8-778097a96a57")
 	)
 	(wire
 		(pts
@@ -9137,6 +9297,16 @@
 	)
 	(wire
 		(pts
+			(xy -180.34 105.41) (xy -180.34 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e89c9f79-ddc4-4618-8e76-a92b9ff87720")
+	)
+	(wire
+		(pts
 			(xy 153.67 248.92) (xy 153.67 250.19)
 		)
 		(stroke
@@ -9164,6 +9334,16 @@
 			(type default)
 		)
 		(uuid "eb4a8d84-df66-49c7-aa12-c73f89288e97")
+	)
+	(wire
+		(pts
+			(xy -243.84 31.75) (xy -241.3 31.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb9a30cd-0e5a-417a-9590-8e8ac8324f2c")
 	)
 	(wire
 		(pts
@@ -9224,6 +9404,16 @@
 			(type default)
 		)
 		(uuid "f0039020-0d16-46e5-aa84-21929f882ffe")
+	)
+	(wire
+		(pts
+			(xy -251.46 44.45) (xy -251.46 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f15665db-3f5c-41dc-bed6-f87191a4c4e3")
 	)
 	(wire
 		(pts
@@ -9336,7 +9526,7 @@
 		(uuid "fe0eb11c-0b21-49e6-b831-f8a9312d6e0b")
 	)
 	(image
-		(at 31.75 264.16)
+		(at -703.58 35.56)
 		(uuid "8a189fc4-9cc1-43ac-bf12-854de72a53a2")
 		(data "iVBORw0KGgoAAAANSUhEUgAAAm8AAADlCAYAAAAFghAfAAAABHNCSVQICAgIfAhkiAAAIABJREFU"
 			"eJzsfXmUXFW1/ldVt+apx3SS7swd0gkJCUHGBEGmBBIMPoTHAgQZRBAez7d+iBKXiiiKDxHx4Vuo"
@@ -10941,7 +11131,7 @@
 		)
 	)
 	(image
-		(at 33.02 240.03)
+		(at -702.31 11.43)
 		(scale 3.20589)
 		(uuid "adc99af3-c8f1-4eb3-b97a-79b7865c5460")
 		(data "iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAABHNCSVQICAgIfAhkiAAADmNJREFU"
@@ -11012,16 +11202,6 @@
 			"iVT0kEhFD4lU9JBIRQ+JVPSQSEUPiVT0kEhFD4n/Bz1G3WOaWZAzAAAAAElFTkSuQmCC"
 		)
 	)
-	(label "CE_GNDA"
-		(at 40.64 132.08 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "00a2ee76-0efd-4eb4-ba87-ff99d3a1619f")
-	)
 	(label "V_OCM_1V25"
 		(at 116.84 -25.4 0)
 		(effects
@@ -11031,6 +11211,16 @@
 			(justify left bottom)
 		)
 		(uuid "0940be65-8796-446d-b677-e7f568097060")
+	)
+	(label "RE_TRANS"
+		(at -269.24 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "09c7d50b-5ef2-4d0b-8d26-2641f158f6cd")
 	)
 	(label "WEEP_SENSE"
 		(at 31.75 186.69 180)
@@ -11052,16 +11242,6 @@
 		)
 		(uuid "1550a31e-154a-4c40-aefa-e1865f0b5005")
 	)
-	(label "GUARD_WIDE"
-		(at -251.46 74.93 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "15d378ae-48f4-46f3-9149-5acdf39b6782")
-	)
 	(label "Route2_OUT"
 		(at -162.56 41.91 180)
 		(effects
@@ -11072,23 +11252,13 @@
 		)
 		(uuid "15ff279f-1eee-495d-8452-bd857e862c94")
 	)
-	(label "Vbias"
-		(at -214.63 44.45 0)
+	(label "GNDA_SHLD"
+		(at 38.1 118.11 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
-		)
-		(uuid "1a2e6502-a1ce-4ad5-8461-e93064cafc15")
-	)
-	(label "GNDA_SHLD"
-		(at 73.66 119.38 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
 		)
 		(uuid "27ec4751-2eed-4bc3-b7c3-d46ade37ef2b")
 	)
@@ -11122,6 +11292,16 @@
 		)
 		(uuid "29ab95ab-4abf-4ae8-b224-3d399431b36d")
 	)
+	(label "WS_CIS_WIDE"
+		(at -281.94 29.21 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2d7ceec2-86cf-473c-8e1f-cb88b51d91f1")
+	)
 	(label "VREF_ADC"
 		(at 236.22 29.21 90)
 		(effects
@@ -11132,15 +11312,15 @@
 		)
 		(uuid "3060f88f-13c1-4bf5-91da-e58e9389f5ed")
 	)
-	(label "Vbias"
-		(at -110.49 86.36 90)
+	(label "KELVIN_FB"
+		(at -220.98 72.39 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "3d5127e6-1f63-4a06-a77a-d1791e8ed0c8")
+		(uuid "3ae3212a-e754-4dbb-81e9-cc780beb9a43")
 	)
 	(label "GDAC_EN"
 		(at 129.54 34.29 180)
@@ -11181,6 +11361,16 @@
 			(justify right bottom)
 		)
 		(uuid "460d68d1-705f-4bbf-9a2e-57ab836be155")
+	)
+	(label ">PORE_AMP"
+		(at -213.36 77.47 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "486ccc40-6114-4ff3-afeb-0accba848ced")
 	)
 	(label "Signal_Return"
 		(at 176.53 49.53 180)
@@ -11252,15 +11442,15 @@
 		)
 		(uuid "615929d1-cfd0-4094-a627-67a149ce3621")
 	)
-	(label "Vbias"
-		(at -107.95 113.03 270)
+	(label "GUARD_WIDE"
+		(at -275.59 102.87 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "671b492f-f421-42fc-8cb9-84a32a20db69")
+		(uuid "64aab600-ea4b-458a-a668-affe4d7ed454")
 	)
 	(label "Signal_Return"
 		(at -69.85 95.25 180)
@@ -11271,6 +11461,16 @@
 			(justify right bottom)
 		)
 		(uuid "6c073c37-fc37-4276-b198-a8088a631401")
+	)
+	(label "WS_CIS_WIDE_SUM"
+		(at -266.7 39.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6c1d3bf6-ac3b-4afe-a0f2-5360d758bfe8")
 	)
 	(label "SHIELD"
 		(at 45.72 113.03 180)
@@ -11322,15 +11522,35 @@
 		)
 		(uuid "801179ba-a644-4f68-825d-7fbc8a62d8a3")
 	)
-	(label "Vbias"
-		(at -220.98 77.47 180)
+	(label "CE_GNDA"
+		(at -287.02 86.36 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "81a0744f-f969-4665-a125-4f44c6fcfcc1")
+		(uuid "84f6d347-deed-4aa1-978f-a95c490cb684")
+	)
+	(label "CE_GNDA"
+		(at -261.62 74.93 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8753ef10-1dd9-49cd-9470-06be7ba19bed")
+	)
+	(label "WS_CIS_WIDE_SUM"
+		(at -212.09 39.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "90ef788c-ff00-4d9f-b917-ee8144b31ad2")
 	)
 	(label "GDAC_SDI"
 		(at 261.62 34.29 180)
@@ -11351,16 +11571,6 @@
 			(justify left bottom)
 		)
 		(uuid "9c4ab97b-89cc-4432-a7a1-10229dfd7500")
-	)
-	(label "Vbias"
-		(at -179.07 95.25 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9fae1fdb-ddf1-49ea-9477-819635f0c0ac")
 	)
 	(label "GDAC_SDO"
 		(at 129.54 29.21 180)
@@ -11402,16 +11612,6 @@
 		)
 		(uuid "acc7cc6c-ecee-4dca-8241-3aea7c6522c7")
 	)
-	(label "WS_CIS_WIDE"
-		(at -238.76 39.37 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ad061340-7425-4713-a9fb-a366bc990928")
-	)
 	(label "V_OCM_1V25"
 		(at 173.99 41.91 0)
 		(effects
@@ -11432,15 +11632,15 @@
 		)
 		(uuid "b10811b2-bc42-471b-aff0-a8f0491bd065")
 	)
-	(label "Vbias"
-		(at -110.49 99.06 270)
+	(label "ROUTE_SEL"
+		(at -241.3 31.75 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
-		(uuid "b1094c5c-1a6b-4f02-9b9f-2c94cbba9d9b")
+		(uuid "b3b42741-69aa-46dc-9e71-e5867b309de9")
 	)
 	(label "GNDA_WEEP"
 		(at 31.75 196.85 180)
@@ -11531,6 +11731,16 @@
 			(justify right bottom)
 		)
 		(uuid "e3c4fe2f-0fed-4250-810f-43d57adc25c3")
+	)
+	(label "KELVIN_FB"
+		(at -181.61 95.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e4ab0ca6-f04f-458a-888d-a64e133f9b47")
 	)
 	(label "GNDA_SHLD"
 		(at 86.36 154.94 180)
@@ -15259,6 +15469,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at -241.3 36.83 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "2b121f51-56b0-4389-93d8-5d99a2f2e980")
+		(property "Reference" "#PWR0139"
+			(at -241.3 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -237.998 36.83 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -241.3 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -241.3 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -241.3 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d188d79a-4e15-4021-afcb-180b46e1aef9")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0139")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 90.17 120.65 0)
 		(unit 1)
@@ -15732,6 +16019,107 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR051")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at -252.73 74.93 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "32882928-3758-43bc-a8b4-36d11ed27634")
+		(property "Reference" "R47"
+			(at -252.73 72.39 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "49.9"
+			(at -252.73 77.47 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at -252.73 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at -252.73 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "R_ISO Kelvin Force Isolation Resistor"
+			(at -252.73 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25120"
+			(at -252.73 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0402FR-0749R9L"
+			(at -252.73 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fc981cbd-8d54-46dc-9c6a-fae5e6cb117f")
+		)
+		(pin "2"
+			(uuid "c909efd8-92a3-44c0-b2f3-b4eff50ac0c5")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R47")
 					(unit 1)
 				)
 			)
@@ -16335,6 +16723,83 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#FLG01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at -180.34 105.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3a32f7ea-fe61-45f6-9bb4-901ce4169bda")
+		(property "Reference" "#PWR0136"
+			(at -180.34 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -180.34 108.712 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -180.34 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -180.34 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -180.34 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5b5c1f31-6388-463f-9dbe-bcab1ccd9f25")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0136")
 					(unit 1)
 				)
 			)
@@ -17650,6 +18115,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:VSSA")
+		(at -256.54 46.99 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "59c3a6d6-7753-49c2-afc8-9fed62560e92")
+		(property "Reference" "#PWR0140"
+			(at -256.54 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VSSA"
+			(at -256.54 51.308 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -256.54 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -256.54 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -256.54 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "87e21e87-5acb-41b9-975b-1390cd86ab66")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0140")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 149.86 21.59 90)
 		(unit 1)
@@ -18085,6 +18627,86 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:NetTie_2")
+		(at -267.97 102.87 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5d7867d3-678f-432f-b2b1-0d0b77c5936a")
+		(property "Reference" "NT5"
+			(at -267.97 97.79 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "NetTie_2"
+			(at -267.97 100.33 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
+			(at -267.97 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -267.97 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Net tie, 2 pins"
+			(at -267.97 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "90918bda-c903-499b-a1db-07f956e574a5")
+		)
+		(pin "2"
+			(uuid "cd6bdf10-156c-4aa0-8d55-7ed75847a7f1")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "NT5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:VSSA")
 		(at 147.32 116.84 0)
 		(unit 1)
@@ -18156,6 +18778,83 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR050")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at -260.35 102.87 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5eff4e61-ff17-4885-9703-95d5c32874dc")
+		(property "Reference" "#PWR0138"
+			(at -260.35 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -260.35 106.68 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -260.35 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -260.35 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -260.35 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9c68353a-e8e9-442f-a7a0-9f4f1ee7fb22")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0138")
 					(unit 1)
 				)
 			)
@@ -18932,6 +19631,160 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at -113.03 99.06 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "68caff8e-656c-43d5-be26-67608f63fdf5")
+		(property "Reference" "#PWR0137"
+			(at -113.03 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -113.03 102.87 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -113.03 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -113.03 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -113.03 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4aa7705b-2ac9-4297-8431-c81bba64899e")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0137")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VDDA")
+		(at -254 21.59 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6aec54fc-94da-49a2-bef3-3853369ad413")
+		(property "Reference" "#PWR0142"
+			(at -254 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VDDA"
+			(at -254 18.034 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -254 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -254 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -254 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1706ba70-fb05-49af-ab81-f9f710c4ed69")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0142")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+1V8")
 		(at 260.35 124.46 0)
 		(unit 1)
@@ -19285,6 +20138,83 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR083")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at -107.95 113.03 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6fee85b7-d2e6-41cc-a7c7-80ed2632d5c0")
+		(property "Reference" "#PWR0135"
+			(at -107.95 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -107.95 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -107.95 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -107.95 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -107.95 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "421ec91a-1fa3-488b-adb7-a8aff38165f0")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0135")
 					(unit 1)
 				)
 			)
@@ -19726,284 +20656,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 57.15 132.08 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "752301dc-a772-47b9-a103-d4e2739e9d0f")
-		(property "Reference" "NT8"
-			(at 57.15 127 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 57.15 129.54 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Quantity" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "PARTREV" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ALT_Part_Number" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Cost" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Alternate Part Number 1" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "AssemblyType" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Configuration" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Distributor 2 PN" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer_Name" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer_Part_Number" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Price/Stock" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "price" ""
-			(at 57.15 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "a6e94d4e-8fc8-4d1c-8c66-33f85020477e")
-		)
-		(pin "1"
-			(uuid "8603b2a8-4f3b-4c1d-87a1-beb91c55676f")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "NT8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GNDA")
 		(at 219.71 134.62 0)
 		(unit 1)
@@ -20153,6 +20805,83 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at -251.46 46.99 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7a55dcf9-c5cb-414c-aa5a-8565942f4b69")
+		(property "Reference" "#PWR0141"
+			(at -251.46 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -251.46 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -251.46 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -251.46 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -251.46 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fa4b5969-46b4-47d0-869d-7e9fa42b229d")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0141")
 					(unit 1)
 				)
 			)
@@ -20587,6 +21316,83 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR057")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at -214.63 44.45 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7fe80d7b-3b62-42df-900c-dc3284b76def")
+		(property "Reference" "#PWR0133"
+			(at -214.63 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -214.63 48.26 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -214.63 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -214.63 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -214.63 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7c328611-4e70-433e-b090-fe0a9fdf224b")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0133")
 					(unit 1)
 				)
 			)
@@ -23900,6 +24706,107 @@
 	)
 	(symbol
 		(lib_id "Device:R")
+		(at -273.05 29.21 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "af2a2490-2d72-466c-aace-ae14700bcb4b")
+		(property "Reference" "R49"
+			(at -273.05 26.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at -273.05 31.75 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at -273.05 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at -273.05 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "R_WIDE_EN Wideband Route Selector Jumper"
+			(at -273.05 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17168"
+			(at -273.05 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0402JR-070RL"
+			(at -273.05 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "341f3fb4-d8b5-45e7-b122-3461001a7d02")
+		)
+		(pin "2"
+			(uuid "ad15c675-cebf-498c-a0a4-a7c25893845e")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R49")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
 		(at 153.67 254 0)
 		(unit 1)
 		(body_style 1)
@@ -24598,6 +25505,136 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR016")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "MR1:MAX4564EUA+")
+		(at -254 34.29 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c0eb3aeb-2aad-4cda-b8f1-f007a1395f52")
+		(property "Reference" "U19"
+			(at -247.396 43.688 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MAX4564EUA+"
+			(at -264.922 23.622 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "footprints:MSOP-8_3x3mm_P0.65mm"
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/MAX4564.pdf"
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Low-Voltage, Dual-Supply, SPDT Analog Switch with Enable, uMAX-8 (Route 2 Isolation)"
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Analog Devices / Maxim Integrated"
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "MAX4564EUA+"
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Mouser PN" "700-MAX4564EUA+"
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "de8cffb8-d182-443d-bc00-862409eaef15")
+		)
+		(pin "2"
+			(uuid "65a6625b-d915-4b92-af3b-e4e5e246a07c")
+		)
+		(pin "3"
+			(uuid "7ca4ed73-a9fb-41e0-8c2d-f3144101624f")
+		)
+		(pin "4"
+			(uuid "daae1d1a-d69c-459c-a0e8-5d0cc2b3b15d")
+		)
+		(pin "5"
+			(uuid "63a264c8-536f-45da-a1e4-b15d0cf18622")
+		)
+		(pin "6"
+			(uuid "64c579c3-356f-418f-b294-80aee304467e")
+		)
+		(pin "7"
+			(uuid "abe60b77-2804-4132-b913-bb4f06140c69")
+		)
+		(pin "8"
+			(uuid "8a261da7-882a-47c0-babf-d937e6e7a872")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "U19")
 					(unit 1)
 				)
 			)
@@ -25312,7 +26349,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 68.58 132.08 90)
+		(at -113.03 83.82 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -25320,9 +26357,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "cf2be972-6c80-41e8-b660-010f0d6756bb")
-		(property "Reference" "#PWR029"
-			(at 74.93 132.08 0)
+		(uuid "cf33ecb5-0db3-4c89-b71c-4e7e041479cb")
+		(property "Reference" "#PWR0134"
+			(at -113.03 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25333,18 +26370,17 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 71.882 132.08 90)
+			(at -109.728 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" ""
-			(at 68.58 132.08 0)
+			(at -113.03 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25355,7 +26391,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 68.58 132.08 0)
+			(at -113.03 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25365,8 +26401,8 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 68.58 132.08 0)
+		(property "Description" ""
+			(at -113.03 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25377,12 +26413,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "94cbddde-b8ec-4187-b0ff-f5a895169195")
+			(uuid "2c82a16a-8429-452d-a3a6-45b394f5de2f")
 		)
 		(instances
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR029")
+					(reference "#PWR0134")
 					(unit 1)
 				)
 			)
@@ -25800,6 +26836,107 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR010")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at -233.68 64.77 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "dd05fbd2-af62-4bbd-9a6e-3b493d38cd3c")
+		(property "Reference" "C45"
+			(at -236.982 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100pF"
+			(at -236.982 68.072 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at -233.68 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at -233.68 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "C_COMP Kelvin Loop Compensation Capacitor"
+			(at -233.68 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1546"
+			(at -233.68 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GRM1555C1H101JA01D"
+			(at -233.68 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0dd32fef-7abb-41ca-a17b-09e55eee0538")
+		)
+		(pin "2"
+			(uuid "0d09c4a3-7380-40cd-9cb2-04d951d24a57")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "C45")
 					(unit 1)
 				)
 			)
@@ -28740,6 +29877,107 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at -278.13 86.36 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ff979dc7-ff92-4d52-8a6b-67b32eebb07b")
+		(property "Reference" "R48"
+			(at -278.13 83.82 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100k"
+			(at -278.13 88.9 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at -278.13 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at -278.13 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "R_DRY Dry-Cell Feedback Resistor"
+			(at -278.13 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25741"
+			(at -278.13 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0402FR-07100KL"
+			(at -278.13 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2000d896-b4b2-4a6d-a110-b082a1fca4e6")
+		)
+		(pin "2"
+			(uuid "5f5229f2-2b36-44af-b024-d7f2a268e051")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "R48")
 					(unit 1)
 				)
 			)

@@ -601,7 +601,7 @@
 	(label "WS_CIS" (at 170.0 67.3 270) (effects (font (size 1.27 1.27))))
 	(label ">PORE_AMP" (at 170.0 92.7 90) (effects (font (size 1.27 1.27))))
 
-	(label ">PORE_AMP" (at 237.3 48.73 180) (effects (font (size 1.27 1.27))))
+	(label "WS_CIS" (at 237.3 48.73 180) (effects (font (size 1.27 1.27))))
 	(label "GUARD" (at 237.3 52.54 180) (effects (font (size 1.27 1.27))))
 	(label "WS_CIS_WIDE" (at 237.3 73.73 180) (effects (font (size 1.27 1.27))))
 	(label "GUARD_WIDE" (at 237.3 77.54 180) (effects (font (size 1.27 1.27))))
