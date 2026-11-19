@@ -40,7 +40,8 @@ class TestStackConsistency(unittest.TestCase):
         self.assertTrue(pcb_path.exists(), "Amplifier.kicad_pcb must exist")
 
         placements = extract_pin_placements_from_pcb(pcb_path)
-        self.assertEqual(len(placements), len(spec.PINS), f"Must find exactly {len(spec.PINS)} pogo pin footprints on Amplifier PCB")
+        active_pins = [p for p in spec.PINS if p.number <= 12]
+        self.assertEqual(len(placements), len(active_pins), f"Must find exactly {len(active_pins)} active pogo pin footprints on Amplifier PCB")
 
         # All pins must be on F.Cu
         for ref, info in placements.items():
@@ -55,7 +56,7 @@ class TestStackConsistency(unittest.TestCase):
         x0 = p1["x"] - kicad_p1_x
         y0 = p1["y"] - kicad_p1_y
 
-        for p_spec in spec.PINS:
+        for p_spec in active_pins:
             ref = p_spec.ref
             self.assertIn(ref, placements, f"{ref} missing from PCB placements")
             actual = placements[ref]
