@@ -14,119 +14,115 @@
 		(comment 3 "Filtered +5V_MR1_CLEAN output rail to MR1 Nanopore Reader via USB-C")
 		(comment 4 "Low-noise 3.3V LDO for STM32, pressure sensors, and I2C peripherals")
 	)
-	(lib_symbols
-		(symbol "power:GND"
-			(power)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR" (at 0 -6.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(property "Value" "GND" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(pin "1" (power_in) (at 0 0 90) (length 0))
+	(lib_symbols)
+	(hierarchical_label "+3V3"
+		(shape output)
+		(at 64.77 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
-		(symbol "power:+3V3"
-			(power)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR" (at 0 6.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(property "Value" "+3V3" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(pin "1" (power_in) (at 0 0 270) (length 0))
+		(uuid "0c8917be-2855-4791-aae0-5960f8b482f0")
+	)
+	(hierarchical_label "VMOTOR"
+		(shape output)
+		(at 68.58 74.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
-		(symbol "power:+5V"
-			(power)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR" (at 0 6.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(property "Value" "+5V" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(pin "1" (power_in) (at 0 0 270) (length 0))
+		(uuid "0e264e35-234e-4260-9c3e-1fc29ff902ea")
+	)
+	(hierarchical_label "+VBUS_PD"
+		(shape output)
+		(at 87.63 72.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
-		(symbol "power:+VBUS_PD"
-			(power)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR" (at 0 6.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(property "Value" "+VBUS_PD" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(pin "1" (power_in) (at 0 0 270) (length 0))
+		(uuid "553e5570-5f1f-4736-8f52-0b1a7473c1d1")
+	)
+	(hierarchical_label "PD_I2C_SCL"
+		(shape input)
+		(at 87.63 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
+		(uuid "792eabfb-63b5-4743-bd49-fd9f30d3cf45")
 	)
-	(sheet_instances
-		(path "/a1000001-0001-4000-8000-000000000001"
-			(page "2")
+	(hierarchical_label "MR1_PWR_EN"
+		(shape input)
+		(at 82.55 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
+		(uuid "7c37b9b7-3d21-40f3-b7d2-629ea6cddf65")
 	)
-	(hierarchical_label "+VBUS_PD" (shape output) (at 40.0 40.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000001")
+	(hierarchical_label "PD_CC2"
+		(shape bidirectional)
+		(at 86.36 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9dc436a2-a2f3-41d4-bc1c-2b4a797a96f8")
 	)
-	(hierarchical_label "VMOTOR" (shape output) (at 40.0 50.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000002")
+	(hierarchical_label "+5V_MR1_CLEAN"
+		(shape output)
+		(at 68.58 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c55c1a3e-c7bd-4673-ba32-c4c9999d66b1")
 	)
-	(hierarchical_label "+5V_MR1_CLEAN" (shape output) (at 40.0 60.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000003")
+	(hierarchical_label "PD_CC1"
+		(shape bidirectional)
+		(at 87.63 120.65 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "df93c3b9-2e2c-4047-a3ad-5ecc3a07e7cf")
 	)
-	(hierarchical_label "+3V3" (shape output) (at 40.0 70.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000004")
+	(hierarchical_label "PD_ALERT_"
+		(shape output)
+		(at 83.82 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e5895aa9-b343-4eec-9de7-359e1eed131c")
 	)
-	(hierarchical_label "PD_CC1" (shape bidirectional) (at 40.0 80.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000005")
-	)
-	(hierarchical_label "PD_CC2" (shape bidirectional) (at 40.0 90.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000006")
-	)
-	(hierarchical_label "PD_I2C_SCL" (shape input) (at 40.0 100.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000007")
-	)
-	(hierarchical_label "PD_I2C_SDA" (shape bidirectional) (at 40.0 110.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000008")
-	)
-	(hierarchical_label "PD_ALERT_" (shape output) (at 40.0 120.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000009")
-	)
-	(hierarchical_label "MR1_PWR_EN" (shape input) (at 40.0 130.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1010001-0000-4000-8000-000000000010")
-	)
-
-	(text "=== 1. USB-PD SINK CONTROLLER (STMicroelectronics STUSB4500) ===\nAutonomous Type-C Power Delivery Sink Controller\nAuto-negotiates 9V or 12V PDO from Host/Charger for pump motors\nExposes I2C slave interface to STM32 for telemetry & PDO adjustment"
-		(at 60.0 30.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1020001-0000-4000-8000-000000000001")
-	)
-
-	(text "=== 2. SYNCHRONOUS BUCK REGULATOR (TPS54302 / LMR33630) ===\nWide Input Range (4.5V - 28V) -> High-Efficiency +5V Output (up to 3A)\nPowers internal logic and provides isolated power to MR1 Reader"
-		(at 60.0 65.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1020001-0000-4000-8000-000000000002")
-	)
-
-	(text "=== 3. CLEAN 5V OUTPUT FOR MR1 NANOPORE READER ===\nTPS22916 Soft-Start Ultra-Low RDSon Load Switch\nPi-Filter (Ferrite Bead + 22uF X7R ceramic + 100nF C0G)\nDelivers clean, ripple-free 5V power to MR1 over the USB-C link"
-		(at 60.0 100.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1020001-0000-4000-8000-000000000003")
-	)
-
-	(text "=== 4. 3.3V LOGIC SUPPLY (LD39050 Low-Noise LDO) ===\n500mA ultra-low noise LDO from 5V rail (PSRR > 65dB)\nPowers STM32 MCU, I2C pressure transducers, and USB multiplexers"
-		(at 60.0 135.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a1020001-0000-4000-8000-000000000004")
+	(hierarchical_label "PD_I2C_SDA"
+		(shape bidirectional)
+		(at 87.63 102.87 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f70cffaf-6b5a-41f3-a1e1-67576e11c8ae")
 	)
 )

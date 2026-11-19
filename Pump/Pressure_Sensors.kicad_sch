@@ -14,67 +14,49 @@
 		(comment 3 "Transducer 1: Cis Chamber Feed Line (0 to 15 psi gauge / 1/8\" hose barb)")
 		(comment 4 "Transducer 2: Trans Chamber Recirculation Line (0 to 5 psi gauge / 1/8\" hose barb)")
 	)
-	(lib_symbols
-		(symbol "power:GND"
-			(power)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR" (at 0 -6.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(property "Value" "GND" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(pin "1" (power_in) (at 0 0 90) (length 0))
+	(lib_symbols)
+	(hierarchical_label "PRESS_ALERT_"
+		(shape output)
+		(at 116.84 96.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
-		(symbol "power:+3V3"
-			(power)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR" (at 0 6.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(property "Value" "+3V3" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-			(pin "1" (power_in) (at 0 0 270) (length 0))
+		(uuid "13120d38-e2d7-4131-9323-f0cb4a29bf53")
+	)
+	(hierarchical_label "PRESS_I2C_SCL"
+		(shape input)
+		(at 120.65 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
+		(uuid "79ebf1a9-2803-4b05-bec9-9766b42b743d")
 	)
-	(sheet_instances
-		(path "/a3000001-0001-4000-8000-000000000001"
-			(page "4")
+	(hierarchical_label "PRESS_I2C_SDA"
+		(shape bidirectional)
+		(at 118.11 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
 		)
+		(uuid "7ded9c4f-0a31-4aca-88a4-2bfd6b93674f")
 	)
-	(hierarchical_label "+3V3" (shape input) (at 40.0 40.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3010001-0000-4000-8000-000000000001")
-	)
-	(hierarchical_label "PRESS_I2C_SCL" (shape input) (at 40.0 50.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3010001-0000-4000-8000-000000000002")
-	)
-	(hierarchical_label "PRESS_I2C_SDA" (shape bidirectional) (at 40.0 60.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3010001-0000-4000-8000-000000000003")
-	)
-	(hierarchical_label "PRESS_ALERT_" (shape output) (at 40.0 70.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3010001-0000-4000-8000-000000000004")
-	)
-
-	(text "=== PRESSURE TRANSDUCER 1 (U6: ABP2MANT015PG2A3XX) ===\nMeasurement: Cis Chamber Pump Outlet / In-line Feed Pressure\nRange: 0 to 15 psi (0 to 103 kPa gauge)\nResolution: 24-bit delta-sigma, +/- 0.25% FSS accuracy\nPort Type: 1/8\" axial hose barb connected in-line with TUBE_FEED (FEP)\nI2C Address: 0x28 (Standard Honeywell I2C Address)\nPurpose: Detects fluidic resistance, pore clogging, bubble formation, and priming pressure"
-		(at 60.0 30.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3020001-0000-4000-8000-000000000001")
-	)
-
-	(text "=== PRESSURE TRANSDUCER 2 (U7: ABP2MANT005PG2A3XX) ===\nMeasurement: Trans Chamber Recirculation / Waste Pressure\nRange: 0 to 5 psi (0 to 34.5 kPa gauge)\nResolution: 24-bit delta-sigma, +/- 0.25% FSS accuracy\nPort Type: 1/8\" axial hose barb connected in-line with TUBE_TRANS_LINE (PEEK)\nI2C Address: 0x38 (Alternate I2C Address)\nPurpose: Monitors backpressure, prevents membrane ballooning, verifies waste flow"
-		(at 60.0 85.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3020001-0000-4000-8000-000000000002")
-	)
-
-	(text "=== SAFETY & OVERPRESSURE INTERLOCK ===\nOpen-drain interrupt line (PRESS_ALERT_) asserted if line pressure exceeds\nprogrammed ceiling (e.g. > 10 psi on Cis feed), triggering immediate pump pause\nto protect fragile silicon nanopore chip and cast silicone gaskets from blowout."
-		(at 60.0 140.0 0)
-		(effects (font (size 1.27 1.27)) (justify left))
-		(uuid "a3020001-0000-4000-8000-000000000003")
+	(hierarchical_label "+3V3"
+		(shape input)
+		(at 116.84 105.41 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e800e1d5-8a78-4512-ad9d-db2006c7a7f3")
 	)
 )
