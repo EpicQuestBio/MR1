@@ -3756,7 +3756,18 @@
 					)
 				)
 			)
-			(symbol "MAX4564EUA+_0_1"
+						(property "LCSC" "C2682333"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+(symbol "MAX4564EUA+_0_1"
 				(rectangle
 					(start -7.62 7.62)
 					(end 7.62 -7.62)
@@ -4560,7 +4571,18 @@
 					)
 				)
 			)
-			(symbol "PogoPin_MillMax_SMT_1Pin_0_1"
+						(property "LCSC" "C5221285"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+(symbol "PogoPin_MillMax_SMT_1Pin_0_1"
 				(rectangle
 					(start -2.54 2.54)
 					(end 2.54 -2.54)
@@ -4679,7 +4701,18 @@
 					)
 				)
 			)
-			(symbol "PogoPin_MillMax_SMT_1Pin_Guarded_0_1"
+						(property "LCSC" "C5221285"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+(symbol "PogoPin_MillMax_SMT_1Pin_Guarded_0_1"
 				(rectangle
 					(start -2.54 3.81)
 					(end 2.54 -3.81)
@@ -12913,6 +12946,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9cec7f19-d082-400d-8150-79b93b26c958")
 		)
@@ -13354,6 +13398,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c8eead3b-08e4-413b-992d-049633a2de98")
 		)
@@ -13501,6 +13556,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P12)"
 			(at 36.83 196.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15000,6 +15066,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P9)"
 			(at 36.83 166.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16876,7 +16953,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -17284,17 +17361,6 @@
 				)
 			)
 		)
-		(property "LCSC" ""
-			(at -54.61 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
 		(property "Manufacturer" "Analog Devices / Maxim Integrated"
 			(at -54.61 90.17 0)
 			(hide yes)
@@ -17319,6 +17385,17 @@
 		)
 		(property "Mouser PN" "700-MAX4564EUA+"
 			(at -54.61 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2682333"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17943,6 +18020,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P3)"
 			(at 91.44 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18670,6 +18758,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P11)"
 			(at 36.83 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21218,6 +21317,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6d55b885-73e8-4f84-8063-69a4846aeb69")
 		)
@@ -21611,6 +21721,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P8)"
 			(at 36.83 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22441,6 +22562,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P1)"
 			(at 91.44 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25672,6 +25804,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C2682333"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "de8cffb8-d182-443d-bc00-862409eaef15")
 		)
@@ -25954,6 +26097,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P2)"
 			(at 91.44 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -27064,6 +27218,17 @@
 		)
 		(property "Description" "Mill-Max Single Pogo Pin SMT (P4)"
 			(at 91.44 185.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C5221285"
+			(at 0 0 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
