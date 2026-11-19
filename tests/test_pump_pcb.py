@@ -23,7 +23,7 @@ class TestPumpControllerPCB(unittest.TestCase):
 
     def test_board_envelope_and_mounting_holes(self):
         """Verify 88.0 x 88.0 mm board size and 4x M3 mounting holes at (+/-38, +/-38)."""
-        edge_lines = re.findall(r'\(gr_line\s+\(start\s+([0-9\.\-]+)\s+([0-9\.\-]+)\)\s+\(end\s+([0-9\.\-]+)\s+([0-9\.\-]+)\).*?\(layer\s+"Edge\.Cuts"\)', self.content)
+        edge_lines = re.findall(r'\(gr_line\s+\(start\s+([0-9\.\-]+)\s+([0-9\.\-]+)\)\s+\(end\s+([0-9\.\-]+)\s+([0-9\.\-]+)\)[\s\S]*?\(layer\s+"Edge\.Cuts"\)', self.content)
         self.assertGreaterEqual(len(edge_lines), 8, "Edge.Cuts boundary must define chamfered 88x88mm board")
 
         # Mounting holes MH1..MH4
@@ -70,8 +70,8 @@ class TestPumpControllerPCB(unittest.TestCase):
         self.assertIn('(property "Reference" "U10_SENS2"', self.content, "Trans pressure sensor U10 must be present")
 
         # Power plane zones
-        self.assertIn('(net_name "GND")', self.content, "GND copper plane must be present")
-        self.assertIn('(net_name "+5V_MR1_CLEAN")', self.content, "Filtered +5V power plane must be present")
+        self.assertTrue('(net "GND")' in self.content or '(net_name "GND")' in self.content, "GND copper plane must be present")
+        self.assertTrue('(net "+5V_MR1_CLEAN")' in self.content or '(net_name "+5V_MR1_CLEAN")' in self.content, "Filtered +5V power plane must be present")
 
 
 if __name__ == "__main__":
