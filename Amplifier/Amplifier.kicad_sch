@@ -9022,16 +9022,6 @@
 	)
 	(wire
 		(pts
-			(xy -180.34 95.25) (xy -171.45 95.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b35c9806-1307-45b5-9418-8d761cf1992a")
-	)
-	(wire
-		(pts
 			(xy 163.83 -25.4) (xy 163.83 -20.32)
 		)
 		(stroke
@@ -9272,16 +9262,6 @@
 	)
 	(wire
 		(pts
-			(xy -180.34 95.25) (xy -180.34 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d76b32db-7830-496b-aedb-4906bb51343f")
-	)
-	(wire
-		(pts
 			(xy 251.46 39.37) (xy 261.62 39.37)
 		)
 		(stroke
@@ -9319,16 +9299,6 @@
 			(type default)
 		)
 		(uuid "de1dd7fe-e5df-422f-aa80-8531bd6a383d")
-	)
-	(wire
-		(pts
-			(xy -171.45 95.25) (xy -171.45 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "df416cf4-41c1-4652-9ad9-e6f4999fb880")
 	)
 	(wire
 		(pts
@@ -30292,6 +30262,83 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "FID3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDA")
+		(at -171.45 92.71 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c28d9385-8a29-4875-8e73-a82f6343de58")
+		(property "Reference" "#PWR0199"
+			(at -171.45 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -171.45 96.012 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -171.45 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -171.45 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -171.45 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c28d9385-8a29-4875-8e73-a82f6343de57")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0199")
 					(unit 1)
 				)
 			)
