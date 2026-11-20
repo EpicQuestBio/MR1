@@ -679,9 +679,9 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_via(p8_x, p8_y, 0.7, 0.35, "RE_TRANS"),
         make_seg(p8_x, p8_y, j11_x, j11_y, 0.35, "B.Cu", "RE_TRANS"),
 
-        # J10 (CE_GNDA at j10_x, j10_y): Pin 7 on F.Cu routes north of WEEP_SENSE on F.Cu, drops via to J10 on B.Cu
-        make_seg(p7_x, p7_y, j10_x, j10_y, 0.4, "F.Cu", "CE_GNDA"),
-        make_via(j10_x, j10_y, 0.7, 0.35, "CE_GNDA"),
+        # J10 (CE_GNDA at j10_x, j10_y): Pin 7 drops via to B.Cu, routes directly to J10
+        make_via(p7_x, p7_y, 0.7, 0.35, "CE_GNDA"),
+        make_seg(p7_x, p7_y, j10_x, j10_y, 0.35, "B.Cu", "CE_GNDA"),
 
         # --- WEEP_SENSE Channel-Contouring Closed Moat (F.Cu and B.Cu) ---
         make_via(p11_x, p11_y, 0.7, 0.35, "WEEP_SENSE"),
