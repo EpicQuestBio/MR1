@@ -4852,7 +4852,7 @@
 				)
 			)
 		)
-		(property "Value" "100p"
+		(property "Value" "100pF"
 			(at 76.2 15.24 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5076,7 +5076,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "ADR4520"
+		(property "Value" "ADR4520 (2.048V Ultra-Low Noise Ref)"
 			(at 35.56 41.9099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5388,7 +5388,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 92.964 46.228 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5431,7 +5431,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 92.71 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -5789,7 +5789,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 137.795 73.66 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5832,7 +5832,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 134.62 74.93 0)
 			(hide yes)
 			(show_name no)

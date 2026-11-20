@@ -1040,7 +1040,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (Analog Filter Comp)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "0094b3d8-615d-4335-b7a9-18110d990465")
@@ -1815,7 +1815,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "c1814996-7c67-4b03-9cde-e262cc8f67c1")
@@ -3776,7 +3776,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "4b122547-42a5-48b3-a891-b0fff05607e9")
@@ -4127,7 +4127,7 @@
 				)
 			)
 		)
-		(property "Value" "12p"
+		(property "Value" "12pF C0G (RTC Load)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "71dc7075-7208-4f9d-9835-64727c930fa9")
@@ -5146,7 +5146,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "b0cd56ce-e754-4eb0-940f-d5d0eaa61c28")
@@ -6945,7 +6945,7 @@
 				)
 			)
 		)
-		(property "Value" "12p"
+		(property "Value" "12pF C0G (RTC Load)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "6d300c2b-0f71-415e-b1a1-4c387b715bca")
@@ -7881,7 +7881,7 @@
 				)
 			)
 		)
-		(property "Value" "ADR4520"
+		(property "Value" "ADR4520 (2.048V Ultra-Low Noise Ref)"
 			(at 0 3.4 0)
 			(layer "F.Fab")
 			(uuid "800a88d6-9a33-4570-91a5-1585844ab601")
@@ -8658,7 +8658,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "e2143660-01f6-4811-8734-17a13c280a72")
@@ -9009,7 +9009,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "d3f603f1-c4c6-442d-8afd-b8f92b0dbbc4")
@@ -10032,7 +10032,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "a0df08cd-7be1-4fa5-84fa-3e2fe7569775")
@@ -11203,7 +11203,7 @@
 				)
 			)
 		)
-		(property "Value" "100p"
+		(property "Value" "100pF"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "da79855b-0061-4639-8680-b772014e3f41")
@@ -11488,7 +11488,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "3aac7b33-4aad-4d5e-bcc4-5766bd94ca80")
@@ -12432,7 +12432,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "11ac7a2a-81f7-408b-838d-51247d3fcbc6")
@@ -15990,7 +15990,7 @@
 				)
 			)
 		)
-		(property "Value" "5.1k"
+		(property "Value" "5.1k 1% (USB-C CC2 Rd)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "063534ba-fb69-47e7-a6f5-9e1c0403746b")
@@ -17136,7 +17136,7 @@
 				)
 			)
 		)
-		(property "Value" "24.9k 0.1%"
+		(property "Value" "24.9k 0.1% (LT3045 Set)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "cc699f78-46b4-4d3b-bb28-1b398ffa1a05")
@@ -18170,7 +18170,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "8f1b719b-998f-44e3-a687-f5efe2f86ce8")
@@ -20406,7 +20406,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "1528de04-0814-483c-bf3e-eb5fd67e72e9")
@@ -21391,7 +21391,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "15ba1949-3c45-47e9-9fb1-d9cfe6cf33ed")
@@ -23838,7 +23838,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "05a2d42b-89cd-463a-8a06-07100981e4bb")
@@ -25534,7 +25534,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "1b49c968-f2b2-4750-957f-1832cb838eb5")
@@ -27107,7 +27107,7 @@
 				)
 			)
 		)
-		(property "Value" "24.9k 0.1%"
+		(property "Value" "24.9k 0.1% (LT3094 Set)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "1c3cf2b7-4235-4a48-9988-7c16559f1575")
@@ -27627,7 +27627,7 @@
 				)
 			)
 		)
-		(property "Value" "5.1k"
+		(property "Value" "5.1k 1% (USB-C CC1 Rd)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "746efef0-ac66-4b83-a6de-7f09556259e3")
@@ -28100,7 +28100,7 @@
 				)
 			)
 		)
-		(property "Value" "9.16k"
+		(property "Value" "9.16k 0.1% (LM27762 +2.8V FB)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "25ffa655-1903-403a-9476-3853ae92a3ea")
@@ -29278,7 +29278,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "70093681-b571-47e4-9eee-8804911d27fd")
@@ -30258,7 +30258,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "7e9d53b8-3dbc-4b64-8d7c-efbd2aa7c3ff")
@@ -33744,7 +33744,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (Analog Filter Comp)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "cbc0493b-b7a9-4b23-ace2-de8ce6423269")
@@ -34828,7 +34828,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "7c55910e-b39d-4be0-8218-2f7c1998ed7c")
@@ -35179,7 +35179,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "d5b14323-8b3e-4650-bd90-23c129bbf85f")
@@ -35530,7 +35530,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "27R 1% (USB D+ Damping)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "c76f81e0-2523-4cf9-8eb3-b5529bdac224")
@@ -35829,7 +35829,7 @@
 				)
 			)
 		)
-		(property "Value" "9.09k"
+		(property "Value" "9.09k 0.1% (LM27762 -2.8V FB)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "64e89853-f2a2-4894-b2bc-e14ba54cb16a")
@@ -37340,7 +37340,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "6283c56f-6c57-4e0d-958b-cfa12c852de7")
@@ -37691,7 +37691,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "27R 1% (USB D- Damping)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "fcd98bad-6ea9-4868-970d-faaf4a365bf7")

@@ -5555,7 +5555,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 67.31 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5598,7 +5598,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -6471,7 +6471,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 64.77 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6514,7 +6514,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -7052,7 +7052,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 72.39 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7095,7 +7095,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -7990,7 +7990,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 54.61 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8033,7 +8033,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -8268,7 +8268,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 74.93 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8311,7 +8311,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -8784,7 +8784,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 62.23 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8827,7 +8827,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -9636,7 +9636,7 @@
 				)
 			)
 		)
-		(property "Value" "12p"
+		(property "Value" "12pF C0G (RTC Load)"
 			(at 46.9963 100.33 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9836,7 +9836,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 49.53 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9879,7 +9879,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -10238,7 +10238,7 @@
 				)
 			)
 		)
-		(property "Value" "12p"
+		(property "Value" "12pF C0G (RTC Load)"
 			(at 46.9963 113.03 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10750,7 +10750,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 69.85 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10793,7 +10793,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -11307,7 +11307,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 59.69 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11350,7 +11350,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -11507,7 +11507,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 57.15 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11550,7 +11550,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -11863,7 +11863,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 77.47 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11906,7 +11906,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -12063,7 +12063,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 236.855 44.45 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12106,7 +12106,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 233.68 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -13708,7 +13708,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 236.855 41.91 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13751,7 +13751,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 233.68 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -13908,7 +13908,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 168.275 52.07 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13951,7 +13951,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 165.1 53.34 0)
 			(hide yes)
 			(show_name no)

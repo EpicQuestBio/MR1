@@ -368,7 +368,7 @@
 				)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "a0245cc9-6b69-4ff2-8365-ffd08743b224")
@@ -879,7 +879,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (TIA Comp)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "ef3dd6a3-3955-4b15-a826-95dfaf9eb502")
@@ -1194,7 +1194,7 @@
 				)
 			)
 		)
-		(property "Value" "15pF"
+		(property "Value" "15pF C0G 50V (Path 2 Comp)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "40ca8b10-1578-46aa-902a-9041e85de7ba")
@@ -2371,7 +2371,7 @@
 				)
 			)
 		)
-		(property "Value" "47nF"
+		(property "Value" "47nF C0G 25V (AD4011 Diff Filter)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "69dbc3a2-d212-4587-a8d8-d0b9750d1302")
@@ -2530,7 +2530,7 @@
 				)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "100k 0.1% Thin-Film (Path 2 TIA)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "4bc4fe87-85cd-46b2-85d6-1e1d9f59a87f")
@@ -3017,7 +3017,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (TIA Comp)"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "681f07e1-f164-4d90-8e87-45968ddd09ce")
@@ -6120,7 +6120,7 @@
 				)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "b17e5b14-9b20-4b48-9c42-678c85b30549")
@@ -7589,7 +7589,7 @@
 				)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "0.1uF 50V X7R (MAX6070 Noise Bypass)"
 			(at 0 1.16 0)
 			(layer "F.Fab")
 			(uuid "6b993d96-2709-4137-bb15-19da33009a7c")
@@ -8119,7 +8119,7 @@
 				)
 			)
 		)
-		(property "Value" "1G"
+		(property "Value" "1.0G 1% High-Meg (HVC0805)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "8fa3d3bd-5d75-427e-b1b2-385384f63a72")
@@ -9388,7 +9388,7 @@
 				)
 			)
 		)
-		(property "Value" "49.9"
+		(property "Value" "49.9R 0.1% (ADC Kickback Filter)"
 			(at 0 1.17 90)
 			(layer "F.Fab")
 			(uuid "706efe13-bdff-402d-87df-74795548433a")
@@ -9953,7 +9953,7 @@
 				)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "100nF"
 			(at 0 1.16 90)
 			(layer "F.Fab")
 			(uuid "58dd1d9a-411e-4385-90e8-9c0a9eefa513")
@@ -12673,7 +12673,7 @@
 				)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "ef54914a-3f1c-4920-8130-52a038d1759f")
@@ -13306,7 +13306,7 @@
 				)
 			)
 		)
-		(property "Value" "49.9"
+		(property "Value" "49.9R 0.1% (ADC Kickback Filter)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "531379ea-ef32-4cda-8026-083a6260220e")
@@ -16943,7 +16943,7 @@
 				)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 0 1.17 0)
 			(layer "F.Fab")
 			(uuid "33c5f909-f566-4733-8c5e-c5b315a66378")
@@ -18350,7 +18350,7 @@
 				)
 			)
 		)
-		(property "Value" "MAX6070BAUT25+T"
+		(property "Value" "MAX6070B (2.500V 4.8uVp-p Ref)"
 			(at 0 2.4 0)
 			(layer "F.Fab")
 			(uuid "eb2d42d0-efef-4daf-b0d5-b246d4305deb")

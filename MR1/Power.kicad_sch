@@ -8064,7 +8064,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "27R 1% (USB D+ Damping)"
 			(at 128.27 111.4044 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8220,7 +8220,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "27R 1% (USB D- Damping)"
 			(at 128.27 146.9644 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8770,7 +8770,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1k"
+		(property "Value" "5.1k 1% (USB-C CC2 Rd)"
 			(at 76.6572 141.097 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9005,7 +9005,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "5.1k"
+		(property "Value" "5.1k 1% (USB-C CC1 Rd)"
 			(at 84.2772 141.097 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9834,7 +9834,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 128.27 193.9544 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9877,7 +9877,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 128.27 196.85 0)
 			(hide yes)
 			(show_name no)
@@ -10991,7 +10991,7 @@
 				)
 			)
 		)
-		(property "Value" "24.9k 0.1%"
+		(property "Value" "24.9k 0.1% (LT3094 Set)"
 			(at 120.65 80.01 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11834,7 +11834,7 @@
 				)
 			)
 		)
-		(property "Value" "9.09k"
+		(property "Value" "9.09k 0.1% (LM27762 -2.8V FB)"
 			(at 85.09 88.9 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15209,7 +15209,7 @@
 				)
 			)
 		)
-		(property "Value" "24.9k 0.1%"
+		(property "Value" "24.9k 0.1% (LT3045 Set)"
 			(at 120.65 50.8 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16493,7 +16493,7 @@
 				)
 			)
 		)
-		(property "Value" "27"
+		(property "Value" "49.9"
 			(at 128.27 158.3944 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16536,7 +16536,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C25120"
 			(at 128.27 161.29 0)
 			(hide yes)
 			(show_name no)
@@ -18866,7 +18866,7 @@
 				)
 			)
 		)
-		(property "Value" "9.16k"
+		(property "Value" "9.16k 0.1% (LM27762 +2.8V FB)"
 			(at 85.09 96.52 90)
 			(show_name no)
 			(do_not_autoplace no)

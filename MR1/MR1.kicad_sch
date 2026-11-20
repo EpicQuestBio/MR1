@@ -1856,7 +1856,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (Analog Filter Comp)"
 			(at 222.25 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3014,7 +3014,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (Analog Filter Comp)"
 			(at 220.98 106.68 90)
 			(show_name no)
 			(do_not_autoplace no)

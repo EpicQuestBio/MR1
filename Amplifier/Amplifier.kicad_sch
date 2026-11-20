@@ -12161,7 +12161,7 @@
 				)
 			)
 		)
-		(property "Value" "1G"
+		(property "Value" "1.0G 1% High-Meg (HVC0805)"
 			(at -160.02 74.93 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12382,7 +12382,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (TIA Comp)"
 			(at -158.75 66.04 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13910,7 +13910,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4074199"
+		(property "LCSC" "C25120"
 			(at 137.16 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -14068,7 +14068,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 194.818 26.67 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14576,7 +14576,7 @@
 				)
 			)
 		)
-		(property "Value" "2pF"
+		(property "Value" "2.0pF C0G 50V (TIA Comp)"
 			(at -92.71 95.25 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15810,7 +15810,7 @@
 				)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "100k 0.1% Thin-Film (Path 2 TIA)"
 			(at -195.58 26.67 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18074,7 +18074,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MAX6070BAUT25+T"
+		(property "Value" "MAX6070B (2.500V 4.8uVp-p Ref)"
 			(at 175.26 -24.13 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20150,7 +20150,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 183.896 31.75 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20704,7 +20704,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25488"
+		(property "LCSC" "C26083"
 			(at 151.892 283.21 90)
 			(hide yes)
 			(show_name no)
@@ -21115,7 +21115,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4074199"
+		(property "LCSC" "C25120"
 			(at -181.61 41.91 0)
 			(hide yes)
 			(show_name no)
@@ -21817,7 +21817,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25744"
+		(property "LCSC" "C60491"
 			(at 166.37 285.75 0)
 			(hide yes)
 			(show_name no)
@@ -22005,7 +22005,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C17408"
+		(property "LCSC" "C25097"
 			(at -139.7 88.392 90)
 			(hide yes)
 			(show_name no)
@@ -22333,7 +22333,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "47nF"
+		(property "Value" "47nF C0G 25V (AD4011 Diff Filter)"
 			(at 222.25 40.6462 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22852,7 +22852,7 @@
 				)
 			)
 		)
-		(property "Value" "49.9"
+		(property "Value" "49.9R 0.1% (ADC Kickback Filter)"
 			(at 213.995 40.64 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23353,7 +23353,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C17513"
+		(property "LCSC" "C25149"
 			(at -109.728 99.06 90)
 			(hide yes)
 			(show_name no)
@@ -23903,7 +23903,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "0.1uF 50V X7R (MAX6070 Noise Bypass)"
 			(at 158.75 -11.43 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -24404,7 +24404,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C49678"
+		(property "LCSC" "C15255"
 			(at -129.8448 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -24663,7 +24663,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4074199"
+		(property "LCSC" "C25120"
 			(at 137.16 26.67 0)
 			(hide yes)
 			(show_name no)
@@ -24965,7 +24965,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C17168"
+		(property "LCSC" "C25740"
 			(at -273.05 29.21 0)
 			(hide yes)
 			(show_name no)
@@ -25493,7 +25493,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4074199"
+		(property "LCSC" "C25120"
 			(at 137.16 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -25870,7 +25870,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "100nF"
 			(at 152.1968 -20.447 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -26196,7 +26196,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4074199"
+		(property "LCSC" "C25120"
 			(at 137.16 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -26665,7 +26665,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 186.69 52.07 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -28680,7 +28680,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C4074199"
+		(property "LCSC" "C25120"
 			(at 137.16 29.21 0)
 			(hide yes)
 			(show_name no)
@@ -28915,7 +28915,7 @@
 				)
 			)
 		)
-		(property "Value" "49.9"
+		(property "Value" "49.9R 0.1% (ADC Kickback Filter)"
 			(at 213.995 35.56 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -29577,7 +29577,7 @@
 				)
 			)
 		)
-		(property "Value" "15pF"
+		(property "Value" "15pF C0G 50V (Path 2 Comp)"
 			(at -194.31 17.78 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -29901,7 +29901,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499 (0.1%)"
+		(property "Value" "499R 0.1% (Diff ADC Driver)"
 			(at 188.722 54.102 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -30176,7 +30176,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25741"
+		(property "LCSC" "C60491"
 			(at -278.13 86.36 0)
 			(hide yes)
 			(show_name no)
