@@ -97,7 +97,7 @@ This document outlines the step-by-step strategy for porting the MR1 Nanopore Re
 
 ## 10. Production-Fidelity Routing (`assembly.py` ↔ `wiring/*.yaml`)
 - [x] Upgrade `route_tubing()` to implement all 5 fluid lines from `reader_tubing.yaml`:
-    - All lines use standardized **1/8" barb fittings** (uniform 1/8" ID × 1/4" OD cross-section).
+    - All lines use standardized **1/16" microbore fittings** (1/16" OD × 0.020" ID, ~0.5 mm ID cross-section, reducing dead volume from 8.0 mL to <150 µL).
     - `TUBE_PUMP`: PharMed BPT (0.12 m) — Buffer reservoir → Peristaltic pump.
     - `TUBE_FEED`: FEP (0.22 m) — Pump → Cis inlet (210°).
     - `TUBE_TRANS_LINE`: PEEK (0.18 m) — Trans outlet (150°) → Waste.

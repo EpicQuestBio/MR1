@@ -22,16 +22,18 @@ This document provides the complete, authoritative Bill of Materials for the **M
 
 ## 2. Microfluidic Tubing, Adapters & Fittings
 
+To eliminate reagent dilution and achieve low dead-volume (<150 µL total loop volume) for precious biological nanopore analytes, all lines utilize standardized **1/16" OD (~1.59 mm) microbore tubing** and 1/16" micro-barb / 1/4-28 flat-bottom fittings (mirroring `wiring/reader_tubing.yaml`):
+
 | Item Description | Sourcing / Part Number | Qty | Role & Notes | Sourcing Link |
 | :--- | :--- | :---: | :--- | :--- |
-| **1/8" ID x 1/8" NPT Natural PP Adapter** | U.S. Plastic Item 64774 | 4 | Threads into Plate 1 Base Hex for bottom fluidic coupling | [U.S. Plastic 64774](https://www.usplastic.com/catalog/item.aspx?itemid=28545&catid=551) |
-| **Alternative 1/8" NPT PP Adapter** | Industrial Spec BFA-18-2-PP | 4 | Drop-in alternative for threaded fluid ports | [Industrial Spec BFA-18-2-PP](https://www.industrialspec.com/shop/plastic-fittings/plastic-tube-fittings/plastic-tube-connectors/male-thread-x-barb-plastic-tube-connectors/bfa-series-npt-threads/bfa-18-2-pp.html) |
-| **Female Luer Panel Mount to 1/8" Barb** | FluidControl24 FTLLB230-1 | 8 | 1/4-28 UNF panel mount. 4 for Reader side wall, 4 for Pump housing | [FluidControl24 FTLLB230-1](https://www.fluidcontrol24.com/ftllb230-1-female-luer-fitting-female-luer-thread-style-panel-mount-1-4-28-unf-to-barb-1-8-3-2-mm-id-tubing-white-nylon.html) |
-| **Bulkhead Luer Lock Adapter** | Ark-Plas LJX39-PP0 / Item 96550 | 8 | ISO standard precision-molded luer lock bulkheads | [Ark-Plas Fitting](https://www.ark-plas.com/) |
-| **FEP Tubing (1/8" ID x 1/4" OD)** | Chemfluor / Saint-Gobain | 1 m | Low-protein-binding feed line from pump to Cis chamber ($210^\circ$) | [McMaster 52365K13](https://www.mcmaster.com/52365K13/) |
-| **PharMed BPT Peristaltic Tubing (1/8" ID)** | Saint-Gobain PharMed BPT | 1 m | High-fatigue-life tubing installed inside peristaltic pump rollers | [Cole-Parmer 96880-06](https://www.coleparmer.com/) |
-| **Silicone Tubing (1/8" ID x 1/4" OD)** | Platinum-Cured Lab Grade | 2 m | Flexible drain lines for Cis outlet ($30^\circ$) and Trans inlet ($330^\circ$) | [McMaster 5188K42](https://www.mcmaster.com/5188K42/) |
-| **PEEK Tubing (1/8" OD)** | High-Purity Chromatography | 1 m | Rigid inert line for Trans chamber recirculation/waste ($150^\circ$) | [Cole-Parmer PEEK](https://www.coleparmer.com/) |
+| **1/16" Barb x 1/8" NPT Natural PP Adapter** | Cole-Parmer / McMaster | 4 | Threads into Plate 1 Base Hex for bottom fluidic microbore coupling | [McMaster 5463K361](https://www.mcmaster.com/) |
+| **Alternative 1/16" Barb x 1/4-28 Adapter** | Idex Health & Science P-658 | 4 | Inert Tefzel/PEEK flat-bottom microfluidic fitting for zero dead volume | [Idex Health & Science](https://www.idex-hs.com/) |
+| **Female Luer Panel Mount to 1/16" Barb** | FluidControl24 FTLLB210-1 | 8 | 1/4-28 UNF panel mount for 1/16" ID/OD microbore tubing. 4 for Reader, 4 for Pump | [FluidControl24](https://www.fluidcontrol24.com/) |
+| **Bulkhead Luer Lock Adapter (Microbore)** | Ark-Plas LJX39-PP0-16 | 8 | ISO standard precision microbore luer lock bulkheads | [Ark-Plas Fitting](https://www.ark-plas.com/) |
+| **FEP Microbore Tubing (1/16" OD x 0.020" ID)** | Chemfluor / Saint-Gobain (0.5 mm ID) | 1 m | Ultra-low protein binding feed line from pump to Cis chamber ($210^\circ$, ~40 µL/m) | [Cole-Parmer 06406-60](https://www.coleparmer.com/) |
+| **PharMed BPT Peristaltic Tubing (0.51 mm ID)** | Saint-Gobain PharMed BPT (0.51 mm ID x 2.11 mm OD) | 1 m | High-fatigue-life microbore tubing inside Takasago/peristaltic pump head | [Cole-Parmer 96880-00](https://www.coleparmer.com/) |
+| **Silicone Microbore Tubing (1/16" OD x 1/32" ID)** | Platinum-Cured Lab Grade (0.8 mm ID) | 2 m | Flexible microbore drain lines for Cis outlet ($30^\circ$) and Trans inlet ($330^\circ$) | [McMaster 5188K11](https://www.mcmaster.com/) |
+| **PEEK Microbore Tubing (1/16" OD x 0.020" ID)** | High-Purity Chromatography PEEK (0.5 mm ID) | 1 m | Rigid inert line for Trans chamber recirculation/waste ($150^\circ$, ~40 µL/m) | [Cole-Parmer PEEK](https://www.coleparmer.com/) |
 
 ---
 

@@ -241,9 +241,9 @@ if PRINTER_TYPE == "FDM":
 else:
     TOLERANCE = 0.05
 
-# [Routing Parameters]
-TUBE_ID = 3.2 # 1/8" ID
-TUBE_OD = 6.35 # 1/4" OD
+# [Routing Parameters - High-Purity Microbore Tubing (1/16" OD x 0.020" ID)]
+TUBE_ID = 0.5   # 0.020" ID microbore (~0.508 mm, minimizes fluid dead volume to <150 uL)
+TUBE_OD = 1.6   # 1/16" OD microbore (~1.588 mm)
 MIN_BEND_RADIUS_TUBE = 10.0
 
 WIRE_GAUGE = 0.64 # 22 AWG diameter approx 0.64mm
