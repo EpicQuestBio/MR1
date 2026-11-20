@@ -663,11 +663,10 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_seg(p5_x, p5_y, j1_x, j1_y, 0.35, "B.Cu", "WS_CIS"),
         make_via(j1_x, j1_y, 0.7, 0.35, "WS_CIS"),
 
-        # J2 (WS_CIS_WIDE at j2_x, j2_y): Pin 2 on F.Cu escapes east through guard notch, routes south of central wafer cutout to Y=54.0, west to j2_x, then north to J2
-        make_seg(p2_x, p2_y, 43.600, p2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(43.600, p2_y, 43.600, 54.000, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(43.600, 54.000, j2_x, 54.000, 0.35, "F.Cu", "WS_CIS_WIDE"),
-        make_seg(j2_x, 54.000, j2_x, j2_y, 0.35, "F.Cu", "WS_CIS_WIDE"),
+        # J2 (WS_CIS_WIDE at j2_x, j2_y): Pin 2 drops via to B.Cu, routes directly to J2, and pops up via to J2 on F.Cu
+        make_via(p2_x, p2_y, 0.7, 0.35, "WS_CIS_WIDE"),
+        make_seg(p2_x, p2_y, j2_x, j2_y, 0.35, "B.Cu", "WS_CIS_WIDE"),
+        make_via(j2_x, j2_y, 0.7, 0.35, "WS_CIS_WIDE"),
 
         # GUARD feeder: P4 feeding P5 GUARD ring directly on F.Cu
         make_seg(p4_x, p4_y, p5_x - 1.85, p5_y, 0.4, "F.Cu", "GUARD"),
