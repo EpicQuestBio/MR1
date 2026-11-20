@@ -339,9 +339,30 @@ This document outlines the step-by-step strategy for porting the MR1 Nanopore Re
     - Honeywell ABP2 Cis & Trans pressure transducer footprints with I2C interfaces.
 
 ## 23. PCB Routing & Fabrication Milestones
-- [ ] Complete copper trace routing and ground plane pours for `MR1` Main Reader Board (111 footprints, placement complete).
-- [ ] Complete copper trace routing and ground plane pours for `Amplifier` Cartridge Board (48 footprints, placement complete).
+- [x] Complete copper trace routing and ground plane pours for `MR1` Main Reader Board (111 footprints, 0 unrouted nets, split GNDA/GND isolation verified, single-point net-tie at U1, 0 DRC violations).
+- [x] Complete copper trace routing and ground plane pours for `Amplifier` Cartridge Board (79 footprints, 0 unrouted nets, single-sided F.Cu active layout, Rogers RO4350B substrate, continuous guard ring shielding LMP7721, 0 DRC violations).
 - [x] Complete remaining copper trace routing segments for `Interposer` PTFE Board (12 coax target landing sites, guard feeder traces, weep sense moat, via-in-pad transitions, 0 critical shorts).
-- [ ] Complete copper trace routing and ground plane pours for `Pump` Controller Board (18 footprints).
+- [ ] Complete copper trace routing and ground plane pours for `Pump` Controller Board (target for Release Candidate 0.2).
 - [x] Execute tagged Gerber release workflow (`python scripts/export_manager.py --release-tag <version>` / `make release-gerbers VERSION=<version>`) prior to first physical fabrication run.
+
+## 24. Rev 2 Optimizations & Architectural Evaluations
+- [ ] **Interposer `J2` (`WS_CIS_WIDE`) Direct Via Drop & Diagonal Route**:
+    - *Current (Rev 1)*: Pad 1 $(30.28, 49.77)$ routes on `F.Cu` downward around the southern perimeter of the central wafer cutout to `P2` $(38.5, 46.5)$, creating a $26.4\text{ mm}$ loop length.
+    - *Proposed (Rev 2)*: Drop directly to `B.Cu` through a microvia positioned immediately behind Pad 1, then route diagonally straight across `B.Cu` to `P2` through a second via.
+    - *Evaluation Criteria*: Reduces trace run from $26.4\text{ mm}$ down to $\sim 9.5\text{ mm}$ ($>60\%$ reduction in trace length and stray capacitance for the wide-pore $106\text{ kHz}$ path); requires evaluating clearance against the lower Trans gasket compression perimeter and rigid backing anvil.
+- [ ] **Interposer Active Guard Ring Refinement**:
+    - Evaluate adding a secondary concentric `GUARD_WIDE` ring on `B.Cu` beneath `WS_CIS_WIDE` to provide 3D coaxial shielding across substrate transitions.
+- [ ] **Amplifier Input Parasitic Minimization**:
+    - Evaluate removing solder mask entirely from the `F.Cu` input node (Pad 1 of `P1` to LMP7721 pin 1) or utilizing PTFE teflon standoffs/air-wiring for sub-fA current resolution.
+- [ ] **Pump Board Integration**:
+    - Consolidate Pump board onto the unified system bus architecture and complete automated KiCad DRC verification.
+
+## 25. Production Readiness & JLCPCB SMT Fab Checklist (Release Candidate 0.1)
+- [x] Regenerate full manufacturing exports (`make export-kicad`, Gerbers, drills, BOMs, POS placement files).
+- [x] Verify manifest hashes with `make manifest` (255 tracked deliverables).
+- [x] Confirm 100% green unit and E2E regression tests (`python run_tests.py` - 182/182 passing).
+- [ ] Pre-flight JLCPCB SMT placement visual inspection (verify rotation and pin 1 alignment for `U8` ESP32-S3, `U13` AD4011, `U2` LMP7721, `U1` LM27762, `U9` MCP4822, diodes `D1`/`D2`).
+- [ ] Review prototype MOQ pricing and component stock availability in LCSC catalog.
+- [ ] Tag git commit `v0.1` and package release candidate zip bundles.
+
 

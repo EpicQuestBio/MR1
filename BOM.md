@@ -100,3 +100,34 @@ This document provides the complete, authoritative Bill of Materials for the **M
 | **W_FFC (Interconnect)**| Molex Premo-Flex 15166-0158 / Würth 687614150002 | [`15166-0158`](https://www.molex.com/en-us/products/part-detail/151660158) / [`687614150002`](https://www.we-online.com/en/components/products/687614150002) | 14P FFC | 1 | 14-conductor, 0.5 mm pitch, 150 mm length, Type B (opposite-side contacts) flat flexible cable for single-axis U-bend interconnect |
 | **J_POGO1 (Amp/Int)**| Mill-Max 821-22-012-10-000101 / 824-22-012 | [`C49451500`](https://www.lcsc.com/search?q=C49451500) (`PG2541` series eq.) | 12-Pin DIL | 1 pr | 12-Pin guarded spring pogo header & ENIG target pad array (legacy layout) |
 | **Motors** | Diitao / Kamoer 12V Peristaltic Pump | — | DC Gearbox | 2 | Peristaltic pump heads for Cis and Trans automated fluid delivery |
+
+---
+
+## 6. JLCPCB Prototype & Minimum Order Quantity (MOQ) Component Pricing
+
+JLCPCB prototype SMT assembly has a standard minimum order quantity (MOQ) of **5 boards** for PCB fabrication and assembly. Components sourced directly from the LCSC/JLCPCB parts library have individual purchasing MOQs (typically 1–5 units for active ICs and connectors, and 10–50 units for standard basic 0402 passives).
+
+### 6.1. Component BOM Cost by Subsystem (Components Only)
+
+The table below breaks down the raw component BOM cost per board and for a prototype batch of 5 boards ($N = 5$):
+
+| Subsystem Board | Unique BOM Lines | Total SMT Placements | Component BOM Cost (Per Board) | Component BOM Cost (MOQ Qty 5) | Dominant Cost Drivers |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **MR1 Main Board** | 43 | 111 | **$26.00** | **$130.00** | ADR4520 ref ($4.80), LT3094/LT3045 LDOs ($6.50), ESP32-S3 ($3.20), MCP4822 ($2.10), LM27762 ($1.85) |
+| **Cartridge Amplifier** | 41 | 79 | **$51.20** | **$256.00** | AD4011 ADC ($14.00), LMP7721 TIA ($8.50), P1–P12 Mill-Max pogos ($4.62), LTC6268 ($4.50), 1 GΩ R1 ($4.50), ADA4940-1 ($3.80) |
+| **PTFE Interposer** | 1 | 0 | **$0.00** | **$0.00** | Pure passive microfluidic interface (uses Ag/AgCl foil and ENIG pogo landing targets; no SMT components) |
+| **Pump Controller** | 20 | 27 | **$29.00** | **$145.00** | ABP2 Cis/Trans pressure sensors ($17.00), STM32G431 ($3.10), STUSB4500 ($2.40), dual DRV8837C drivers ($1.50) |
+| **Total System Electronics** | **105** | **217** | **$106.20** | **$531.00** | Complete 4-board electronics set |
+
+### 6.2. Total PCBA Prototype Cost per Board (Qty 5 Batch: Fab + SMT Setup + Components)
+
+For a standard prototype run of 5 fully assembled sets from JLCPCB:
+
+| Board | Substrate / Layer Count | Bare PCB Fab (5 pcs) | JLCPCB SMT Setup, Stencil & Solder Fees | Component BOM (5 pcs) | Total Batch Cost (5 Boards) | Total Assembled Cost (Per Board) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **MR1 Main Board** | 4-Layer FR-4 (JLC04161H, ENIG) | $22.00 | $83.00 | $130.00 | **$235.00** | **$47.00** |
+| **Cartridge Amplifier** | 2-Layer Rogers RO4350B (ENIG) | $55.00 | $69.00 | $256.00 | **$380.00** | **$76.00** |
+| **PTFE Interposer** | 2-Layer Rogers RO4350B (ENIG) | $50.00 | $0.00 *(Bare PCB)* | $0.00 | **$50.00** | **$10.00** |
+| **Pump Controller** | 2-Layer / 4-Layer FR-4 (HASL/ENIG) | $18.00 | $47.00 | $145.00 | **$210.00** | **$42.00** |
+| **Full System Set** | — | **$145.00** | **$199.00** | **$531.00** | **$875.00** | **$175.00 / set** |
+
