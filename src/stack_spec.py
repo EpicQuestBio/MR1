@@ -152,8 +152,8 @@ FLUID_HOLES: Dict[str, Tuple[float, float]] = {
     "H3": (-FLUID_PORT_X, -FLUID_PORT_Y),
     "H4": (FLUID_PORT_X, FLUID_PORT_Y),
 }
-CIS_FLOW = ("H1", "H2")
-TRANS_FLOW = ("H3", "H4")
+CIS_FLOW = ("H3", "H4")
+TRANS_FLOW = ("H1", "H2")
 
 
 # ---------------------------------------------------------------------------

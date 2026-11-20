@@ -254,6 +254,7 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
     fab_layer = f"{layer}.Fab"
     cu_layer = f"{layer}.Cu"
     mask_layer = f"{layer}.Mask"
+    mirror_eff = " (justify mirror)" if layer == "B" else ""
     return (
         f'\t(footprint "footprints:Electrode_Guard_Shield"\n'
         f'\t\t(locked yes)\n'
@@ -266,13 +267,13 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t\t(at 0 -1.6 {rot:.1f})\n'
         f'\t\t\t(layer "{silk_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
-        f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)))\n'
+        f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)){mirror_eff})\n'
         f'\t\t)\n'
         f'\t\t(property "Value" "{val}"\n'
         f'\t\t\t(at 0 1.6 {rot:.1f})\n'
         f'\t\t\t(layer "{fab_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
-        f'\t\t\t(effects (font (size 0.6 0.6) (thickness 0.10)))\n'
+        f'\t\t\t(effects (font (size 0.6 0.6) (thickness 0.10)){mirror_eff})\n'
         f'\t\t)\n'
         f'\t\t(property "Footprint" "footprints:Electrode_Guard_Shield"\n'
         f'\t\t\t(at 0 0 {rot:.1f})\n'
@@ -284,7 +285,7 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t(fp_line (start 0.9525 0.635) (end 0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_line (start 0.9525 -0.635) (end -0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_line (start -0.9525 -0.635) (end -0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_text user "Ag/AgCl" (at 0 0 {rot:.1f}) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08))))\n'
+        f'\t\t(fp_text user "Ag/AgCl" (at 0 0 {rot:.1f}) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08)){mirror_eff}))\n'
         f'\t\t(pad "1" smd roundrect\n'
         f'\t\t\t(at 0 0 {rot:.1f})\n'
         f'\t\t\t(size 1.905 1.27)\n'
@@ -310,6 +311,11 @@ def get_fluid_overlay_fp_str(center_x: float, center_y: float) -> str:
         fp_txt,
         count=1,
         flags=re.MULTILINE
+    )
+    fp_txt = re.sub(
+        r'\(property\s+"Reference"\s+"[^"]*"',
+        '(property "Reference" "SYM_FLUID1"',
+        fp_txt,
     )
     fp_txt = re.sub(r'\(uuid\s+"[^"]+"\)', lambda m: f'(uuid "{new_uuid()}")', fp_txt)
     indented_lines = ["\t" + l if l.strip() else "" for l in fp_txt.splitlines()]
@@ -472,11 +478,13 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
     out_lines.append(get_fluid_overlay_fp_str(center_x, center_y))
 
     # 2. Add Fluid Holes H1..H4 with 5.0mm OD landing pads for hermetic sealing
+    # H3: Cis In (Bottom-Left), H4: Cis Out (Top-Right)
+    # H1: Trans In (Top-Left), H2: Trans Out (Bottom-Right)
     hole_defs = [
-        ("H1", "Port_Cis_In_H1", round(center_x - spec.FLUID_PORT_X, 4), round(center_y - spec.FLUID_PORT_Y, 4)),
-        ("H2", "Port_Cis_Out_H2", round(center_x + spec.FLUID_PORT_X, 4), round(center_y + spec.FLUID_PORT_Y, 4)),
-        ("H3", "Port_Trans_In_H3", round(center_x - spec.FLUID_PORT_X, 4), round(center_y + spec.FLUID_PORT_Y, 4)),
-        ("H4", "Port_Trans_Out_H4", round(center_x + spec.FLUID_PORT_X, 4), round(center_y - spec.FLUID_PORT_Y, 4)),
+        ("H3", "Port_Cis_In_H3", round(center_x - spec.FLUID_PORT_X, 4), round(center_y + spec.FLUID_PORT_Y, 4)),
+        ("H4", "Port_Cis_Out_H4", round(center_x + spec.FLUID_PORT_X, 4), round(center_y - spec.FLUID_PORT_Y, 4)),
+        ("H1", "Port_Trans_In_H1", round(center_x - spec.FLUID_PORT_X, 4), round(center_y - spec.FLUID_PORT_Y, 4)),
+        ("H2", "Port_Trans_Out_H2", round(center_x + spec.FLUID_PORT_X, 4), round(center_y + spec.FLUID_PORT_Y, 4)),
     ]
     for href, hval, hx, hy in hole_defs:
         out_lines.append(generate_fluid_hole_footprint(href, hval, hx, hy))
@@ -725,11 +733,11 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         make_circle_keepout(center_x + spec.FLUID_HOLES["H3"][0], center_y - spec.FLUID_HOLES["H3"][1], 2.75),
         make_circle_keepout(center_x + spec.FLUID_HOLES["H4"][0], center_y - spec.FLUID_HOLES["H4"][1], 2.75),
 
-        # Cis fluid channel corridor keepout (H1 -> H2 along 30 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
-        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks allowed) (vias allowed) (pads allowed) (copperpour not_allowed) (footprints allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
-
-        # Trans fluid channel corridor keepout (H3 -> H4 along 150 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
+        # Cis fluid channel corridor keepout (H3 -> H4 along -30 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
         f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks allowed) (vias allowed) (pads allowed) (copperpour not_allowed) (footprints allowed)) (polygon (pts (xy 63.657 32.580) (xy 25.551 54.580) (xy 23.751 51.462) (xy 61.857 29.462))))',
+
+        # Trans fluid channel corridor keepout (H1 -> H2 along 30 deg, width 3.6mm) - strictly isolates fluid path from ground copperpour
+        f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks allowed) (vias allowed) (pads allowed) (copperpour not_allowed) (footprints allowed)) (polygon (pts (xy 61.857 54.580) (xy 23.751 32.580) (xy 25.551 29.462) (xy 63.657 51.462))))',
 
         # Central Nanopore Chip aperture copper/track keepout zone (>= 0.5mm clearance around 6.2x6.2mm diamond)
         f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts (xy {center_x:.4f} {center_y - 5.5:.4f}) (xy {center_x + 5.5:.4f} {center_y:.4f}) (xy {center_x:.4f} {center_y + 5.5:.4f}) (xy {center_x - 5.5:.4f} {center_y:.4f}))))',

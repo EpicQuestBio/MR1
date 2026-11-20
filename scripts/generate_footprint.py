@@ -668,24 +668,24 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
         )
 
     # 1. Flow Channel Centerlines (Clipped outside guard/bare copper keepout on Silk):
-    # Cis channel: H1 (-17.3205, -10.0) -> H2 (17.3205, 10.0), slope = +30 deg
-    cis_c_segs = clip_segment_outside_box(-17.3205, -10.0, 17.3205, 10.0, *FLUID_SILK_KEEPOUT_BOX)
-    for idx, ((xa, ya), (xb, yb)) in enumerate(cis_c_segs):
-        lines.append(
-            f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_channel_cis_{idx}")}"))\n'
-        )
-    lines.append(
-        f'  (fp_text user "CIS FLOW (H1 -> H2)" (at -5.0 -3.5 30) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_label")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
-    )
-
-    # Trans channel: H3 (-17.3205, 10.0) -> H4 (17.3205, -10.0), slope = -30 deg
-    trans_c_segs = clip_segment_outside_box(-17.3205, 10.0, 17.3205, -10.0, *FLUID_SILK_KEEPOUT_BOX)
+    # Trans channel: H1 (-17.3205, -10.0) -> H2 (17.3205, 10.0), slope = +30 deg
+    trans_c_segs = clip_segment_outside_box(-17.3205, -10.0, 17.3205, 10.0, *FLUID_SILK_KEEPOUT_BOX)
     for idx, ((xa, ya), (xb, yb)) in enumerate(trans_c_segs):
         lines.append(
             f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_channel_trans_{idx}")}"))\n'
         )
     lines.append(
-        f'  (fp_text user "TRANS FLOW (H3 -> H4)" (at -5.0 3.5 330) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_label")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
+        f'  (fp_text user "TRANS FLOW (H1 -> H2)" (at -5.0 -3.5 30) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_label")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
+    )
+
+    # Cis channel: H3 (-17.3205, 10.0) -> H4 (17.3205, -10.0), slope = -30 deg
+    cis_c_segs = clip_segment_outside_box(-17.3205, 10.0, 17.3205, -10.0, *FLUID_SILK_KEEPOUT_BOX)
+    for idx, ((xa, ya), (xb, yb)) in enumerate(cis_c_segs):
+        lines.append(
+            f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_channel_cis_{idx}")}"))\n'
+        )
+    lines.append(
+        f'  (fp_text user "CIS FLOW (H3 -> H4)" (at -5.0 3.5 330) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_label")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
     )
 
     # 2. Physical Channel Boundaries (Width = 1.4 mm, half-width = 0.7 mm, Clipped on Silk):

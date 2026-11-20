@@ -77,8 +77,8 @@ class TestStackSpec(unittest.TestCase):
         self.assertEqual(S.kicad_xy(0.0, 0.0), (0.0, 0.0))
 
     def test_fluid_x_topology(self):
-        self.assertEqual(S.CIS_FLOW, ("H1", "H2"))
-        self.assertEqual(S.TRANS_FLOW, ("H3", "H4"))
+        self.assertEqual(S.CIS_FLOW, ("H3", "H4"))
+        self.assertEqual(S.TRANS_FLOW, ("H1", "H2"))
 
     def test_pins_clear_fluid_channels_and_ports(self):
         """Verify that every pogo pin site maintains safe clearance from microfluidic channels and ports."""
