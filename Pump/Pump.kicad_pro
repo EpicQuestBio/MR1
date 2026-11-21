@@ -499,7 +499,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.12,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -508,7 +508,7 @@
         "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2147483647,
+        "priority": -1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "tuning_profile": "",
@@ -665,7 +665,7 @@
         "uuid": "cc93d521-16a7-4cfb-bf6e-12e26615f249"
       }
     ],
-    "used_designators": "J6-7",
+    "used_designators": "J6-7,U11-12",
     "variants": []
   },
   "sheets": [
