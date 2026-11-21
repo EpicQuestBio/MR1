@@ -231,8 +231,7 @@ def generate_fluid_hole_footprint(ref: str, val: str, x: float, y: float) -> str
         f'\t\t\t(hide yes)\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t)\n'
-        f'\t\t(fp_circle (center 0 0) (end 2.5 0) (stroke (width 0.15) (type solid)) (fill none) (layer "F.SilkS") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_circle (center 0 0) (end 2.5 0) (stroke (width 0.15) (type solid)) (fill none) (layer "B.SilkS") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_circle (center 0 0) (end 2.5 0) (stroke (width 0.15) (type solid)) (fill none) (layer "Cmts.User") (uuid "{new_uuid()}"))\n'
         f'\t\t(pad "" np_thru_hole circle\n'
         f'\t\t\t(at 0 0)\n'
         f'\t\t\t(size 2.1 2.1)\n'
@@ -265,7 +264,7 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t(tags "electrode ag_agcl ribbon microfluidic guard")\n'
         f'\t\t(property "Reference" "{ref}"\n'
         f'\t\t\t(at 0 -1.6 {rot:.1f})\n'
-        f'\t\t\t(layer "{silk_layer}")\n'
+        f'\t\t\t(layer "{fab_layer}")\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t\t(effects (font (size 0.7 0.7) (thickness 0.12)){mirror_eff})\n'
         f'\t\t)\n'
@@ -281,10 +280,10 @@ def generate_channel_electrode_pad_fp(ref: str, val: str, x: float, y: float, ro
         f'\t\t\t(hide yes)\n'
         f'\t\t\t(uuid "{new_uuid()}")\n'
         f'\t\t)\n'
-        f'\t\t(fp_line (start -0.9525 0.635) (end 0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_line (start 0.9525 0.635) (end 0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_line (start 0.9525 -0.635) (end -0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
-        f'\t\t(fp_line (start -0.9525 -0.635) (end -0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{silk_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start -0.9525 0.635) (end 0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{fab_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start 0.9525 0.635) (end 0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{fab_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start 0.9525 -0.635) (end -0.9525 -0.635) (stroke (width 0.1) (type default)) (layer "{fab_layer}") (uuid "{new_uuid()}"))\n'
+        f'\t\t(fp_line (start -0.9525 -0.635) (end -0.9525 0.635) (stroke (width 0.1) (type default)) (layer "{fab_layer}") (uuid "{new_uuid()}"))\n'
         f'\t\t(fp_text user "Ag/AgCl" (at 0 0 {rot:.1f}) (layer "{fab_layer}") (uuid "{new_uuid()}") (effects (font (size 0.4 0.4) (thickness 0.08)){mirror_eff}))\n'
         f'\t\t(pad "1" smd roundrect\n'
         f'\t\t\t(at 0 0 {rot:.1f})\n'
@@ -656,6 +655,30 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
         pts_str = " ".join(pts)
         return f'\t(zone (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (keepout (tracks not_allowed) (vias not_allowed) (copperpour not_allowed)) (polygon (pts {pts_str})))'
 
+    def make_mask_poly(pts, layer):
+        pts_str = " ".join([f"(xy {x:.4f} {y:.4f})" for x, y in pts])
+        return (
+            f'\t(gr_poly\n'
+            f'\t\t(pts {pts_str})\n'
+            f'\t\t(stroke (width 0.1) (type solid))\n'
+            f'\t\t(fill yes)\n'
+            f'\t\t(layer "{layer}")\n'
+            f'\t\t(uuid "{new_uuid()}")\n'
+            f'\t)'
+        )
+
+    def make_mask_circle(cx, cy, radius, layer):
+        return (
+            f'\t(gr_circle\n'
+            f'\t\t(center {cx:.4f} {cy:.4f})\n'
+            f'\t\t(end {cx + radius:.4f} {cy:.4f})\n'
+            f'\t\t(stroke (width 0.1) (type solid))\n'
+            f'\t\t(fill yes)\n'
+            f'\t\t(layer "{layer}")\n'
+            f'\t\t(uuid "{new_uuid()}")\n'
+            f'\t)'
+        )
+
     new_segments = [
         # --- Cis Signal & Guard Routes ---
         # J1 (WS_CIS at j1_x, j1_y): Pin 5 is at (p5_x, p5_y). Drops via to B.Cu, routes to J1
@@ -746,6 +769,41 @@ def build_interposer_pcb(out_dir: Path = DEFAULT_INTERPOSER_DIR):
 
         # Full-board GNDA copper pour zone covering both F.Cu and B.Cu
         f'\t(zone (net "GNDA") (layers "F.Cu" "B.Cu") (uuid "{new_uuid()}") (hatch edge 0.5) (connect_pads (clearance 0.25)) (min_thickness 0.2) (fill yes (thermal_gap 0.3) (thermal_bridge_width 0.3) (island_removal_mode 0)) (polygon (pts (xy {center_x - 14.99:.2f} {center_y + 25.99:.2f}) (xy {center_x - 26.95:.2f} {center_y + 25.99:.2f}) (xy {center_x - 27.95:.2f} {center_y + 24.99:.2f}) (xy {center_x - 27.95:.2f} {center_y - 25.65:.2f}) (xy {center_x - 26.61:.2f} {center_y - 26.99:.2f}) (xy {center_x + 27.73:.2f} {center_y - 26.99:.2f}) (xy {center_x + 30.70:.2f} {center_y - 24.02:.2f}) (xy {center_x + 30.70:.2f} {center_y + 26.73:.2f}) (xy {center_x - 14.25:.2f} {center_y + 26.73:.2f}))))',
+
+        # --- Solder Mask Openings (Bare Teflon Substrate & ENIG Pads over Microfluidic Corridors & Seals) ---
+        # 1. Cis channel corridor solder mask opening (F.Mask and B.Mask)
+        make_mask_poly([(63.657, 32.580), (25.551, 54.580), (23.751, 51.462), (61.857, 29.462)], "F.Mask"),
+        make_mask_poly([(63.657, 32.580), (25.551, 54.580), (23.751, 51.462), (61.857, 29.462)], "B.Mask"),
+
+        # 2. Trans channel corridor solder mask opening (F.Mask and B.Mask)
+        make_mask_poly([(61.857, 54.580), (23.751, 32.580), (25.551, 29.462), (63.657, 51.462)], "F.Mask"),
+        make_mask_poly([(61.857, 54.580), (23.751, 32.580), (25.551, 29.462), (63.657, 51.462)], "B.Mask"),
+
+        # 3. Central Nanopore Chip aperture / Gasket diamond solder mask opening (F.Mask and B.Mask)
+        make_mask_poly([
+            (center_x, center_y - 5.5),
+            (center_x + 5.5, center_y),
+            (center_x, center_y + 5.5),
+            (center_x - 5.5, center_y),
+        ], "F.Mask"),
+        make_mask_poly([
+            (center_x, center_y - 5.5),
+            (center_x + 5.5, center_y),
+            (center_x, center_y + 5.5),
+            (center_x - 5.5, center_y),
+        ], "B.Mask"),
+
+        # 4. Fluid Port H1..H4 5.5mm diameter landing seal solder mask openings (F.Mask and B.Mask)
+        *[
+            make_mask_circle(center_x + hx, center_y - hy, 2.75, ml)
+            for ml in ("F.Mask", "B.Mask")
+            for hx, hy in [
+                (spec.FLUID_HOLES["H1"][0], spec.FLUID_HOLES["H1"][1]),
+                (spec.FLUID_HOLES["H2"][0], spec.FLUID_HOLES["H2"][1]),
+                (spec.FLUID_HOLES["H3"][0], spec.FLUID_HOLES["H3"][1]),
+                (spec.FLUID_HOLES["H4"][0], spec.FLUID_HOLES["H4"][1]),
+            ]
+        ],
     ]
 
     final_lines = out_lines + new_segments + [")"]

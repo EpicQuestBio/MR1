@@ -200,7 +200,7 @@ def export_kicad(verbose=True):
             print(f"  Processing {b_name}...")
 
         # 1. Gerbers
-        g_cmd = [kicad_cli, "pcb", "export", "gerbers", "--output", str(b["gerber_dir"]) + os.sep, str(b["pcb"])]
+        g_cmd = [kicad_cli, "pcb", "export", "gerbers", "--subtract-soldermask", "--output", str(b["gerber_dir"]) + os.sep, str(b["pcb"])]
         subprocess.run(g_cmd, check=True, capture_output=True)
 
         # 2. Drill

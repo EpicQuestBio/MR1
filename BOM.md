@@ -55,7 +55,7 @@ To eliminate reagent dilution and achieve low dead-volume (<150 µL total loop v
 | :--- | :--- | :---: | :--- | :--- |
 | **MR1 Main Board** | 4-Layer FR4 High-TG, ENIG finish, 1.6 mm | 80.0 x 60.0 mm | Core ESP32-S3 DAQ motherboard with split GNDA/GND & VDDA/3V3 planes, dual DAC, USB-C | `exports/MR1_Gerbers.zip` |
 | **Cartridge Amplifier** | 2-Layer 0.8 mm FR4/Rogers, ENIG, guarded | 55.0 x 51.96 mm | Femtoampere LMP7721 transimpedance amplifier mounted beneath cell | `exports/Amplifier_Gerbers.zip` |
-| **PTFE Interposer** | 2-Layer Rogers RO4350B / PTFE (0.8 mm, er=2.1) | 55.0 x 51.96 mm | Passive microfluidic flowcell barrier with 12-pin guarded pogo target | `Interposer/Interposer.kicad_pcb` |
+| **PTFE Interposer** | 2-Layer PTFE Teflon ZYF300CA-C (0.76 mm / 0.8 mm, ENIG 1 U", 1 oz Cu, $D_k=2.94$, $D_f=0.0016$) | 55.0 x 51.96 mm | Passive microfluidic flowcell barrier with 12-pin guarded pogo target, bare Teflon channel mask relief | `Interposer/Interposer.kicad_pcb` |
 | **Rigid Backing Anvil** | 6.0 mm Delrin (POM-H) / Anodized Aluminum 6061-T6 | 55.0 x 51.96 mm | Clamps 2-layer PTFE interposer against 12 pogo spring loads (~9.6 N total load) preventing viscoelastic creep | `exports/Bottom_Pusher_Plate.step` |
 | **Pump Controller Hub** | 4-Layer FR4 High-TG, 1.6 mm, 2 oz copper | 88.0 x 88.0 mm | STM32G431 MCU, STUSB4500 USB-PD sink, dual DRV8837C, ABP2 sensors | `Pump/Pump.kicad_pcb` |
 
@@ -129,7 +129,31 @@ For a standard prototype run of 5 fully assembled sets from JLCPCB:
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
 | **MR1 Main Board** | 4-Layer FR-4 (JLC04161H, ENIG) | $22.00 | $83.00 | $130.00 | **$235.00** | **$47.00** |
 | **Cartridge Amplifier** | 2-Layer Rogers RO4350B (ENIG) | $55.00 | $69.00 | $256.00 | **$380.00** | **$76.00** |
-| **PTFE Interposer** | 2-Layer Rogers RO4350B (ENIG) | $50.00 | $0.00 *(Bare PCB)* | $0.00 | **$50.00** | **$10.00** |
-| **Pump Controller** | 2-Layer / 4-Layer FR-4 (HASL/ENIG) | $18.00 | $47.00 | $145.00 | **$210.00** | **$42.00** |
-| **Full System Set** | — | **$145.00** | **$199.00** | **$531.00** | **$875.00** | **$175.00 / set** |
+| **PTFE Interposer** | 2-Layer PTFE Teflon ZYF300CA-C (0.76 mm, ENIG 1 U", 1 oz Cu) | $70.24 | $0.00 *(Bare PCB)* | $0.00 | **$70.24** | **$14.05** |
+| **Pump Controller** *(Optional)* | 2-Layer / 4-Layer FR-4 (HASL/ENIG) | $18.00 | $47.00 | $145.00 | **$210.00** | **$42.00** |
+| **Full System Set (w/ Pump)** | — | **$165.24** | **$199.00** | **$531.00** | **$895.24** | **$179.05 / set** |
+
+> [!NOTE]
+> **Verified JLCPCB PTFE Quote Breakdown (5 pcs)**:
+> - Special Offer Base Teflon 2-layer Fab: $50.00
+> - Surface Finish (ENIG 1 U"): $16.90
+> - Via Plating Method (Horizontal Electroless Copper Plating): $3.34
+> - **Total Fab (Web Price)**: **$70.24** (*$68.24 via JLCPCB Desktop Client*).
+> - Estimated Shipping (UPS Express Saver DDP, 2–4 business days): **$25.99**.
+
+---
+
+### 6.3. RC1 Standalone MR1 Reader Prototype Order (Without Pump)
+
+For Release Candidate 1 (RC1), the automated syringe pump module is deferred. The complete standalone MR1 reader consists of a 3-board electronics set (Main Board, Cartridge Amplifier, and PTFE Interposer):
+
+| Standalone Item | Fab / SMT Specification | Batch Qty | Unit Cost | Extended Cost (Batch of 5) |
+| :--- | :--- | :---: | :---: | :---: |
+| **MR1 Main Reader Board** | 4-Layer FR-4, ENIG, Full JLCPCB SMT Assembly | 5 pcs | $47.00 | $235.00 |
+| **Cartridge Amplifier Board** | 2-Layer Rogers RO4350B, ENIG, Full JLCPCB SMT Assembly | 5 pcs | $76.00 | $380.00 |
+| **PTFE Interposer Board** | 2-Layer PTFE Teflon ZYF300CA-C (0.76 mm), ENIG 1 U", Bare PCB | 5 pcs | $14.05 | $70.24 |
+| **Subtotal Electronics Fab & Assembly** | **3-Board Reader Set (5 complete instruments)** | **5 sets** | **$137.05** | **$685.24** |
+| **Estimated Shipping (UPS Express Saver / DDP)** | Consolidated delivery (0.5 kg total weight) | 1 order | — | ~$25.99 – $32.00 |
+| **Total Estimated RC1 Prototype Order** | **5 Complete Standalone MR1 Readers** | **5 sets** | **~$142.25** | **~$711.23 – $717.24** |
+
 

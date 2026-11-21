@@ -634,8 +634,10 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
         ("H3", -FLUID_PORT_X, FLUID_PORT_Y),
         ("H4", FLUID_PORT_X, -FLUID_PORT_Y),
     ]
-    silk_layer = f"{layer}.SilkS"
+    # Microfluidic channels, port markers, and keepouts must reside on Cmts.User
+    # to avoid printing silkscreen ink in flow channels or under gasket seals.
     cmts_layer = "Cmts.User"
+    silk_layer = cmts_layer if fluid_mode == "silkscreen_only" else f"{layer}.SilkS"
 
     for name, x, y in ports:
         y_txt = y - 2.2 if y < 0 else y + 2.2
@@ -645,21 +647,21 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
                 f'(size {FLUID_DRILL_DIA} {FLUID_DRILL_DIA}) (drill {FLUID_DRILL_DIA}) (layers "*.Cu" "*.Mask") (uuid "{deterministic_uuid(f"fluid_pad_{name}")}"))\n'
             )
             lines.append(
-                f'  (fp_text user "{name}" (at {x:.4f} {y_txt:.4f} 0) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
+                f'  (fp_text user "{name}" (at {x:.4f} {y_txt:.4f} 0) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
             )
         else:
-            # Silkscreen reference circle and crosshair
+            # Comment reference circle and crosshair on Cmts.User
             lines.append(
-                f'  (fp_circle (center {x:.4f} {y:.4f}) (end {x:.4f} {y + FLUID_DRILL_DIA/2.0:.4f}) (stroke (width 0.15) (type solid)) (fill none) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_silk_circ_{name}")}"))\n'
+                f'  (fp_circle (center {x:.4f} {y:.4f}) (end {x:.4f} {y + FLUID_DRILL_DIA/2.0:.4f}) (stroke (width 0.15) (type solid)) (fill none) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_silk_circ_{name}")}"))\n'
             )
             lines.append(
-                f'  (fp_line (start {x-1.5:.4f} {y:.4f}) (end {x+1.5:.4f} {y:.4f}) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_silk_h_{name}")}"))\n'
+                f'  (fp_line (start {x-1.5:.4f} {y:.4f}) (end {x+1.5:.4f} {y:.4f}) (stroke (width 0.12) (type solid)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_silk_h_{name}")}"))\n'
             )
             lines.append(
-                f'  (fp_line (start {x:.4f} {y-1.5:.4f}) (end {x:.4f} {y+1.5:.4f}) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_silk_v_{name}")}"))\n'
+                f'  (fp_line (start {x:.4f} {y-1.5:.4f}) (end {x:.4f} {y+1.5:.4f}) (stroke (width 0.12) (type solid)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_silk_v_{name}")}"))\n'
             )
             lines.append(
-                f'  (fp_text user "REF_{name}" (at {x:.4f} {y_txt:.4f} 0) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
+                f'  (fp_text user "REF_{name}" (at {x:.4f} {y_txt:.4f} 0) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_txt_{name}")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
             )
 
         # Port keepout circle on comment layer (D = 5.0mm, r = 2.5mm)
@@ -667,12 +669,12 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
             f'  (fp_circle (center {x:.4f} {y:.4f}) (end {x:.4f} {y+2.5:.4f}) (stroke (width 0.12) (type dash)) (fill none) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_port_keepout_circ_{name}")}"))\n'
         )
 
-    # 1. Flow Channel Centerlines (Clipped outside guard/bare copper keepout on Silk):
+    # 1. Flow Channel Centerlines (on Cmts.User):
     # Trans channel: H1 (-17.3205, -10.0) -> H2 (17.3205, 10.0), slope = +30 deg
     trans_c_segs = clip_segment_outside_box(-17.3205, -10.0, 17.3205, 10.0, *FLUID_SILK_KEEPOUT_BOX)
     for idx, ((xa, ya), (xb, yb)) in enumerate(trans_c_segs):
         lines.append(
-            f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_channel_trans_{idx}")}"))\n'
+            f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_channel_trans_{idx}")}"))\n'
         )
     lines.append(
         f'  (fp_text user "TRANS FLOW (H1 -> H2)" (at -5.0 -3.5 30) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_channel_trans_label")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
@@ -682,13 +684,13 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
     cis_c_segs = clip_segment_outside_box(-17.3205, 10.0, 17.3205, -10.0, *FLUID_SILK_KEEPOUT_BOX)
     for idx, ((xa, ya), (xb, yb)) in enumerate(cis_c_segs):
         lines.append(
-            f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"fluid_channel_cis_{idx}")}"))\n'
+            f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.15) (type dash)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"fluid_channel_cis_{idx}")}"))\n'
         )
     lines.append(
         f'  (fp_text user "CIS FLOW (H3 -> H4)" (at -5.0 3.5 330) (layer "{cmts_layer}") (uuid "{deterministic_uuid("fluid_channel_cis_label")}") (effects (font (size 0.8 0.8) (thickness 0.12)){mirror_str}))\n'
     )
 
-    # 2. Physical Channel Boundaries (Width = 1.4 mm, half-width = 0.7 mm, Clipped on Silk):
+    # 2. Physical Channel Boundaries (Width = 1.4 mm, half-width = 0.7 mm, on Cmts.User):
     # Cis channel normal = (-1/2, sqrt(3)/2) -> offset = +- (-0.35, 0.6062)
     walls = [
         ("fluid_channel_cis_wall1", -17.6705, -9.3938, 16.9705, 10.6062),
@@ -699,11 +701,10 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
     for tag, x1, y1, x2, y2 in walls:
         for idx, ((xa, ya), (xb, yb)) in enumerate(clip_segment_outside_box(x1, y1, x2, y2, *FLUID_SILK_KEEPOUT_BOX)):
             lines.append(
-                f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.12) (type solid)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"{tag}_{idx}")}"))\n'
+                f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.12) (type solid)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"{tag}_{idx}")}"))\n'
             )
 
-    # 3. Fluid Keepout Corridor Boundaries (0.5 mm clearance outside channel, total offset = 1.2 mm):
-    # Drawn full on Cmts.User, clipped on SilkS
+    # 3. Fluid Keepout Corridor Boundaries (0.5 mm clearance outside channel, total offset = 1.2 mm, on Cmts.User):
     corridors = [
         ("fluid_keepout_cis1", -17.9205, -8.9608, 16.7205, 11.0392),
         ("fluid_keepout_cis2", -16.7205, -11.0392, 17.9205, 8.9608),
@@ -714,10 +715,6 @@ def generate_fluid_references(fluid_mode: str = "silkscreen_only", layer: str = 
         lines.append(
             f'  (fp_line (start {x1:.4f} {y1:.4f}) (end {x2:.4f} {y2:.4f}) (stroke (width 0.12) (type solid)) (layer "{cmts_layer}") (uuid "{deterministic_uuid(f"{tag}_cmts")}"))\n'
         )
-        for idx, ((xa, ya), (xb, yb)) in enumerate(clip_segment_outside_box(x1, y1, x2, y2, *FLUID_SILK_KEEPOUT_BOX)):
-            lines.append(
-                f'  (fp_line (start {xa:.4f} {ya:.4f}) (end {xb:.4f} {yb:.4f}) (stroke (width 0.12) (type dash)) (layer "{silk_layer}") (uuid "{deterministic_uuid(f"{tag}_silk_{idx}")}"))\n'
-            )
 
     # 4. Central Nanopore Wafer Die Boundary (4.0 x 4.0 mm rotated 45 deg, half-diagonal = 2.8284 mm):
     # Placed on Cmts.User so visible in CAD without printing over bare copper or violating silk keepout

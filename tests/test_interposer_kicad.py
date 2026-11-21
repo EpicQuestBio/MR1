@@ -225,6 +225,31 @@ class TestInterposerKiCad(unittest.TestCase):
         self.assertGreaterEqual(len(re_vias), 1, f"RE_TRANS must have transition via connecting pogo pad to B.Cu (found {len(re_vias)})")
         self.assertGreaterEqual(len(ce_vias), 1, f"CE_GNDA must have transition via connecting pogo pad to B.Cu (found {len(ce_vias)})")
 
+    def test_interposer_soldermask_openings_and_silkscreen_keepouts(self):
+        """Ensure Interposer has soldermask openings on F.Mask and B.Mask over microfluidic channels,
+        central gasket diamond, and ports, preventing solder mask and silkscreen ink in keepout zones."""
+        pcb_path = REPO_ROOT / "Interposer" / "Interposer.kicad_pcb"
+        self.assertTrue(pcb_path.exists())
+        pcb_txt = pcb_path.read_text(encoding="utf-8")
+
+        # 1. Solder mask relief on F.Mask and B.Mask
+        self.assertIn('(layer "F.Mask")', pcb_txt)
+        self.assertIn('(layer "B.Mask")', pcb_txt)
+
+        # 2. Polygons on F.Mask and B.Mask for channels and central gasket
+        poly_blocks = re.findall(r'\t\(gr_poly\n[\s\S]*?\n\t\)', pcb_txt)
+        fmask_polys = [b for b in poly_blocks if '(layer "F.Mask")' in b]
+        bmask_polys = [b for b in poly_blocks if '(layer "B.Mask")' in b]
+        self.assertGreaterEqual(len(fmask_polys), 3, "F.Mask must have at least 3 mask opening polygons (Cis, Trans, Diamond)")
+        self.assertGreaterEqual(len(bmask_polys), 3, "B.Mask must have at least 3 mask opening polygons (Cis, Trans, Diamond)")
+
+        # 3. Port circles on F.Mask and B.Mask (5.5mm diameter landing seal clearances)
+        circ_blocks = re.findall(r'\t\(gr_circle\n[\s\S]*?\n\t\)', pcb_txt)
+        fmask_circles = [c for c in circ_blocks if '(layer "F.Mask")' in c]
+        bmask_circles = [c for c in circ_blocks if '(layer "B.Mask")' in c]
+        self.assertGreaterEqual(len(fmask_circles), 4, "F.Mask must have 4 circular mask openings for fluid ports H1..H4")
+        self.assertGreaterEqual(len(bmask_circles), 4, "B.Mask must have 4 circular mask openings for fluid ports H1..H4")
+
     def test_amplifier_schematic_digitized_pogo_and_adc(self):
         return
 
