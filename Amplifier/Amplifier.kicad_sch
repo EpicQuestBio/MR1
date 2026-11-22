@@ -14057,7 +14057,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499R 0.1% (Diff ADC Driver)"
+		(property "Value" "10k 1% (Diff ADC Driver)"
 			(at 194.818 26.67 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14100,7 +14100,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25132"
+		(property "LCSC" "C60490"
 			(at 189.23 30.988 90)
 			(hide yes)
 			(show_name no)
@@ -20139,7 +20139,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499R 0.1% (Diff ADC Driver)"
+		(property "Value" "10k 1% (Diff ADC Driver)"
 			(at 183.896 31.75 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20182,7 +20182,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25132"
+		(property "LCSC" "C60490"
 			(at 180.34 30.988 90)
 			(hide yes)
 			(show_name no)
@@ -22322,7 +22322,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "47nF C0G 25V (AD4011 Diff Filter)"
+		(property "Value" "1nF 50V (AD4011 Diff Filter)"
 			(at 222.25 40.6462 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22366,7 +22366,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C82219"
+		(property "LCSC" "C1523"
 			(at 219.71 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -26953,7 +26953,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499R 0.1% (Diff ADC Driver)"
+		(property "Value" "10k 1% (Diff ADC Driver)"
 			(at 186.69 52.07 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -26996,7 +26996,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25132"
+		(property "LCSC" "C60490"
 			(at 181.61 51.308 90)
 			(hide yes)
 			(show_name no)
@@ -30189,7 +30189,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "499R 0.1% (Diff ADC Driver)"
+		(property "Value" "10k 1% (Diff ADC Driver)"
 			(at 188.722 54.102 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -30232,7 +30232,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25132"
+		(property "LCSC" "C60490"
 			(at 190.5 47.752 90)
 			(hide yes)
 			(show_name no)

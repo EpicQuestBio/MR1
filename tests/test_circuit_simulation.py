@@ -185,10 +185,12 @@ class TestAmplifierCircuitSimulation(unittest.TestCase):
         self.assertAlmostEqual(res["route1_fc_hz"], 79.5, delta=5.0)
         # DNA translocation 25% blockade response at ADC input
         self.assertLess(abs(res["v_diff_dna_blockade"]), abs(res["v_diff_open_pore"]))
-        # Route 2 wideband TIA (~94 kOhm loaded, ~106 kHz TIA pole, ~33 kHz ADC AA pole)
-        self.assertGreater(res["route2_tia_z_dc_ohm"], 85.0e3)
+        # Route 2 wideband TIA (~99.6 kOhm loaded, ~112 kHz TIA & ADC bandwidth)
+        self.assertGreater(res["route2_tia_z_dc_ohm"], 98.0e3)
         self.assertGreater(res["route2_tia_fc_hz"], 90.0e3)
-        self.assertAlmostEqual(res["route2_adc_fc_hz"], 33.0e3, delta=5.0e3)
+        self.assertGreater(res["route2_adc_fc_hz"], 90.0e3)
+        # Verify < 3% attenuation across U17 MUX + FDA (R43-R46 = 10k)
+        self.assertGreater(abs(res["v_adc_diff_op"] / res["v_r1_out_dc"]), 0.97)
 
 
 if __name__ == "__main__":
