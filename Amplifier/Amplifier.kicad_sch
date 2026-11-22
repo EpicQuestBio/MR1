@@ -3745,6 +3745,17 @@
 					)
 				)
 			)
+			(property "LCSC_1" "C2682333"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(property "ki_keywords" "analog switch multiplexer spdt 2:1 dual-supply max4564"
 				(at 0 0 0)
 				(show_name no)
@@ -3756,18 +3767,7 @@
 					)
 				)
 			)
-						(property "LCSC" "C2682333"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-(symbol "MAX4564EUA+_0_1"
+			(symbol "MAX4564EUA+_0_1"
 				(rectangle
 					(start -7.62 7.62)
 					(end 7.62 -7.62)
@@ -4560,6 +4560,17 @@
 					)
 				)
 			)
+			(property "LCSC" "C5221285"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(property "ki_keywords" "pogo pin smt mill-max"
 				(at 0 0 0)
 				(show_name no)
@@ -4571,18 +4582,7 @@
 					)
 				)
 			)
-						(property "LCSC" "C5221285"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-(symbol "PogoPin_MillMax_SMT_1Pin_0_1"
+			(symbol "PogoPin_MillMax_SMT_1Pin_0_1"
 				(rectangle
 					(start -2.54 2.54)
 					(end 2.54 -2.54)
@@ -4690,6 +4690,17 @@
 					)
 				)
 			)
+			(property "LCSC" "C5221285"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(property "ki_keywords" "pogo pin smt guard mill-max"
 				(at 0 0 0)
 				(show_name no)
@@ -4701,18 +4712,7 @@
 					)
 				)
 			)
-						(property "LCSC" "C5221285"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-(symbol "PogoPin_MillMax_SMT_1Pin_Guarded_0_1"
+			(symbol "PogoPin_MillMax_SMT_1Pin_Guarded_0_1"
 				(rectangle
 					(start -2.54 3.81)
 					(end 2.54 -3.81)
@@ -5473,6 +5473,102 @@
 								(size 1.27 1.27)
 							)
 						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Mechanical:Fiducial"
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "FID"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Fiducial"
+				(at 0 3.175 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Fiducial Marker"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "fiducial marker"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Fiducial*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Fiducial_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type background)
 					)
 				)
 			)
@@ -7103,102 +7199,7 @@
 			)
 			(embedded_fonts no)
 		)
-			(symbol "Mechanical:Fiducial"
-			(exclude_from_sim no)
-			(in_bom no)
-			(on_board yes)
-			(in_pos_files yes)
-			(property "Reference" "FID"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Fiducial"
-				(at 0 3.175 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Fiducial Marker"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "fiducial marker"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Fiducial*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Fiducial_0_1"
-				(circle
-					(center 0 0)
-					(radius 1.27)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-)
+	)
 	(rectangle
 		(start -146.05 66.04)
 		(end -93.98 119.38)
@@ -7650,12 +7651,6 @@
 		(uuid "3561bb3e-3c76-4a4a-a6e9-78dd6b3224f2")
 	)
 	(junction
-		(at -180.34 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3b8bd33f-055e-45ca-a906-3d64911f4460")
-	)
-	(junction
 		(at -54.61 73.66)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7756,12 +7751,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bc5dfe01-4fb2-48d2-a366-a9a40d204bcc")
-	)
-	(junction
-		(at -180.34 95.25)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c161df1c-f9b8-431f-9dc9-58b9946dcb9d")
 	)
 	(junction
 		(at -171.45 87.63)
@@ -12110,6 +12099,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -161.29 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "605235c8-5d5f-4094-ad41-fe7600b69472")
 		)
@@ -12346,6 +12346,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -162.56 72.39 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "7f78a9d2-6b50-4974-8d76-7914f391cee9")
 		)
@@ -12557,6 +12568,17 @@
 			)
 		)
 		(property "price" ""
+			(at -162.56 67.31 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -162.56 67.31 90)
 			(hide yes)
 			(show_name no)
@@ -12788,6 +12810,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -185.42 95.25 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "91ee1933-d261-4618-a63b-767aa3f267ba")
 		)
@@ -12957,6 +12990,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 91.44 195.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9cec7f19-d082-400d-8150-79b93b26c958")
 		)
@@ -13049,6 +13093,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 187.96 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 187.96 83.82 0)
 			(hide yes)
 			(show_name no)
@@ -13152,6 +13207,17 @@
 			)
 		)
 		(property "Mouser PN" "710-885012205037"
+			(at -71.12 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -71.12 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -13409,6 +13475,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 36.83 176.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c8eead3b-08e4-413b-992d-049633a2de98")
 		)
@@ -13567,6 +13644,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 36.83 196.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13750,8 +13838,8 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "14612f01-96b3-43eb-ba40-b766ffa0a6e0")
@@ -13821,6 +13909,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 217.17 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 217.17 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -14031,6 +14130,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 137.16 36.83 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c6f6ba9b-edc5-4379-b9a4-3cd6489209e8")
 		)
@@ -14124,6 +14234,17 @@
 		)
 		(property "Mouser PN" ""
 			(at 189.23 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 189.23 29.21 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14414,6 +14535,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 238.76 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "5"
 			(uuid "8fcc1a18-6a85-4139-ab27-76f30f0463ed")
 		)
@@ -14459,8 +14591,8 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "1731147d-8c99-40ea-b3d0-248cbec38d22")
@@ -14530,6 +14662,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 147.32 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 147.32 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -14751,6 +14894,17 @@
 			)
 		)
 		(property "price" ""
+			(at -91.44 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -91.44 99.06 90)
 			(hide yes)
 			(show_name no)
@@ -15077,6 +15231,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 36.83 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15439,6 +15604,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 135.89 303.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "e5f7fab0-d651-4dc4-bc2a-0d9eda3b184d")
 		)
@@ -15693,8 +15869,8 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "2bbb1abc-90e7-4ed7-aea1-149d6cc3649d")
@@ -15764,6 +15940,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 90.17 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 90.17 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -15985,6 +16172,17 @@
 			)
 		)
 		(property "price" ""
+			(at -198.12 24.13 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -198.12 24.13 90)
 			(hide yes)
 			(show_name no)
@@ -16252,6 +16450,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -252.73 74.93 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "fc981cbd-8d54-46dc-9c6a-fae5e6cb117f")
 		)
@@ -16498,6 +16707,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 25.4 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 25.4 116.84 0)
 			(hide yes)
 			(show_name no)
@@ -16777,6 +16997,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 194.31 -15.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "7aa9b960-162d-49ac-9a26-507e28c95b72")
 		)
@@ -17014,6 +17245,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 167.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(instances
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
@@ -17092,6 +17334,17 @@
 		)
 		(property "LCSC" "C442654"
 			(at 239.522 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 241.3 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17282,6 +17535,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -27.94 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "90bab566-596a-4c0f-b25c-a22a5631b2d9")
 		)
@@ -17396,6 +17660,17 @@
 		)
 		(property "LCSC" "C2682333"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at -54.61 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17861,6 +18136,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 247.65 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "5"
 			(uuid "de2bea66-e0ae-43ed-a3d9-2bfe1fa1f4fd")
 		)
@@ -18040,6 +18326,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 91.44 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e13d4a42-20bf-444a-9d1e-28720949129d")
 		)
@@ -18152,6 +18449,17 @@
 			)
 		)
 		(property "Manufacturer" "Analog Devices / Maxim Integrated"
+			(at 173.99 -17.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 173.99 -17.78 0)
 			(hide yes)
 			(show_name no)
@@ -18686,6 +18994,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -186.69 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "6ec3553f-59d4-4638-b03d-86ed2628c2d6")
 		)
@@ -18778,6 +19097,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 36.83 186.69 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "53eabc87-5a05-4e70-bc5f-512315a239b2")
 		)
@@ -18845,6 +19175,17 @@
 			)
 		)
 		(property "Description" "Net tie, 2 pins"
+			(at -267.97 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -267.97 102.87 0)
 			(hide yes)
 			(show_name no)
@@ -19288,6 +19629,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -115.57 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "8"
 			(uuid "aa74d665-d5fa-47f8-a1b2-3ce59bb260c9")
 		)
@@ -19398,6 +19750,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 173.99 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 173.99 83.82 0)
 			(hide yes)
 			(show_name no)
@@ -19570,6 +19933,17 @@
 		)
 		(property "LCSC" "C60491"
 			(at 181.102 289.56 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 182.88 289.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19770,6 +20144,17 @@
 		)
 		(property "Cost" ""
 			(at 107.95 -25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 107.95 -25.4 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20032,8 +20417,8 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "6c3e7036-40e2-40ca-9a08-6b903c10259c")
@@ -20103,6 +20488,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 133.35 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 133.35 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -20206,6 +20602,17 @@
 		)
 		(property "Mouser PN" ""
 			(at 180.34 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 180.34 29.21 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20620,6 +21027,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 153.67 295.91 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "3"
 			(uuid "7a660dd7-f1c2-489c-82ce-ed6d18779704")
 		)
@@ -20717,6 +21135,17 @@
 		)
 		(property "Mouser PN" ""
 			(at 153.67 283.21 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 153.67 283.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21236,6 +21665,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -181.61 41.91 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "202acf40-28a2-49e2-af10-5b13db5b58f4")
 		)
@@ -21319,6 +21759,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 36.83 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21649,6 +22100,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 213.36 127 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9e1d978c-946c-4cec-90f5-3e631e86583a")
 		)
@@ -21732,6 +22194,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 36.83 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21840,6 +22313,17 @@
 			)
 		)
 		(property "Mouser PN" "603-RC0402FR-07100KL"
+			(at 166.37 285.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 166.37 285.75 0)
 			(hide yes)
 			(show_name no)
@@ -22148,6 +22632,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -139.7 90.17 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ebad943e-5278-44b6-bfd7-e00bb2639c1d")
 		)
@@ -22295,6 +22790,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 260.35 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c4cd0f34-12ff-46ed-b25d-91848434151d")
 		)
@@ -22378,6 +22884,17 @@
 			)
 		)
 		(property "LCSC" "C82219"
+			(at 219.71 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 219.71 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -22490,6 +23007,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 123.19 -21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a76597ef-b560-43b3-9aa7-9eb15fdd69fe")
 		)
@@ -22573,6 +23101,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 91.44 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22704,6 +23243,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 135.89 280.67 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "bebe42de-ba04-46c4-a9bb-64fbf82a1a7d")
 		)
@@ -22806,6 +23356,17 @@
 			)
 		)
 		(property "Mouser PN" "603-RC0402FR-071ML"
+			(at 153.67 242.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 153.67 242.57 0)
 			(hide yes)
 			(show_name no)
@@ -23016,6 +23577,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 210.82 41.91 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a876d0b4-f323-47ce-8f38-511793c000c4")
 		)
@@ -23196,6 +23768,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -142.24 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "75edeaa1-d317-4b2f-a326-4308ba7ae32a")
 		)
@@ -23365,6 +23948,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at -107.95 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -107.95 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -23608,6 +24202,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 34.29 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "e58b7b2a-e89c-4007-8d47-886a2af8355c")
 		)
@@ -23707,8 +24312,8 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a13b37c3-451f-419b-a10c-b869f577bda6")
@@ -23778,6 +24383,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 217.17 33.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 217.17 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -23980,6 +24596,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 156.21 -12.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "b2c3d4e5-f6a1-4b2c-9d3e-4f5a6b7c8d9e")
 		)
@@ -23990,6 +24617,261 @@
 			(project "Amplifier"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "C44")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:Fiducial")
+		(at 40.64 30.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a1d10001-f1d1-4000-8000-000000000001")
+		(property "Reference" "FID1"
+			(at 40.64 24.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fiducial_1mm_Mask2mm"
+			(at 40.64 26.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
+			(at 40.64 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fiducial Marker"
+			(at 40.64 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 40.64 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "FID1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:Fiducial")
+		(at 55.88 30.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a1d10002-f1d2-4000-8000-000000000002")
+		(property "Reference" "FID2"
+			(at 55.88 24.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fiducial_1mm_Mask2mm"
+			(at 55.88 26.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
+			(at 55.88 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 55.88 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fiducial Marker"
+			(at 55.88 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 55.88 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "FID2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:Fiducial")
+		(at 71.12 30.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a1d10003-f1d3-4000-8000-000000000003")
+		(property "Reference" "FID3"
+			(at 71.12 24.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Fiducial_1mm_Mask2mm"
+			(at 71.12 26.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
+			(at 71.12 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 71.12 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fiducial Marker"
+			(at 71.12 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 71.12 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "FID3")
 					(unit 1)
 				)
 			)
@@ -24324,6 +25206,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 134.62 -17.78 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "0cdec237-f975-47bb-b68e-67b88c8cf441")
 		)
@@ -24416,6 +25309,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at -130.81 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -130.81 107.95 0)
 			(hide yes)
 			(show_name no)
@@ -24784,6 +25688,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 137.16 26.67 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f4371019-b1fe-4e50-affa-c17128a33c3d")
 		)
@@ -24805,8 +25720,8 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "ade7d62e-3fa4-49c9-a45e-be841bb6a48b")
@@ -24876,6 +25791,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 121.92 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 121.92 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -24987,6 +25913,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -273.05 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "341f3fb4-d8b5-45e7-b122-3461001a7d02")
 		)
@@ -25071,6 +26008,17 @@
 		)
 		(property "LCSC" "C60491"
 			(at 151.892 254 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 153.67 254 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -25414,6 +26362,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -107.95 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "77efdc22-0fb2-4d3d-bd1c-c2f9635c1819")
 		)
@@ -25604,6 +26563,17 @@
 			)
 		)
 		(property "Cost" ""
+			(at 137.16 31.75 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 137.16 31.75 90)
 			(hide yes)
 			(show_name no)
@@ -25815,6 +26785,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -254 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "de8cffb8-d182-443d-bc00-862409eaef15")
 		)
@@ -25947,6 +26928,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 149.86 -21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6f866001-36b6-41af-b9f1-4f0e34f8c536")
 		)
@@ -26041,6 +27033,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at -171.45 92.71 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c28d9385-8a29-4875-8e73-a82f6343de58")
+		(property "Reference" "#PWR0199"
+			(at -171.45 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDA"
+			(at -171.45 96.012 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at -171.45 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at -171.45 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at -171.45 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c28d9385-8a29-4875-8e73-a82f6343de57")
+		)
+		(instances
+			(project "Amplifier"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "#PWR0199")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "MR1:PogoPin_MillMax_SMT_1Pin_Guarded")
 		(at 91.44 165.1 0)
 		(unit 1)
@@ -26108,6 +27177,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 91.44 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -26307,6 +27387,17 @@
 			)
 		)
 		(property "Cost" ""
+			(at 137.16 34.29 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 137.16 34.29 90)
 			(hide yes)
 			(show_name no)
@@ -26721,6 +27812,17 @@
 		)
 		(property "Mouser PN" ""
 			(at 181.61 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 181.61 49.53 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -27146,6 +28248,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -233.68 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "0dd32fef-7abb-41ca-a17b-09e55eee0538")
 		)
@@ -27229,6 +28342,17 @@
 		)
 		(property "LCSC" "C5221285"
 			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
+			(at 91.44 185.42 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -27515,6 +28639,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -196.85 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e93f0749-838e-4184-b368-cf1cf7aa1d38")
 		)
@@ -27646,6 +28781,17 @@
 			)
 		)
 		(property "Mouser PN" "595-OPA2192IDR"
+			(at -236.22 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at -236.22 74.93 0)
 			(hide yes)
 			(show_name no)
@@ -28108,6 +29254,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 57.15 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "eabdae75-f1f5-4f3a-a1c1-73ce1e15c2dd")
 		)
@@ -28436,6 +29593,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 241.3 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 241.3 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -28801,6 +29969,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 137.16 29.21 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "b86da386-ec27-4879-bb67-2c8562b9257c")
 		)
@@ -29079,6 +30258,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 210.82 36.83 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ef2f2384-66b8-46dc-955b-98ff68205f4b")
 		)
@@ -29195,6 +30385,17 @@
 			)
 		)
 		(property "price" "$4.57"
+			(at 194.31 39.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 194.31 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -29376,6 +30577,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 201.93 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "3"
 			(uuid "c72329f2-6dc3-450a-9f2c-93122355c0ff")
 		)
@@ -29528,6 +30740,17 @@
 			)
 		)
 		(property "Mouser PN" "512-MMBT3906"
+			(at 163.83 266.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 163.83 266.7 0)
 			(hide yes)
 			(show_name no)
@@ -29762,6 +30985,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -198.12 19.05 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f5693432-3bc7-47be-88fe-cd2688f6f280")
 		)
@@ -29854,6 +31088,17 @@
 			)
 		)
 		(property "Mouser PN" ""
+			(at 219.71 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 219.71 130.81 0)
 			(hide yes)
 			(show_name no)
@@ -29966,6 +31211,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at 190.5 49.53 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e65fd541-17d2-47f7-9739-847e2cf83d82")
 		)
@@ -30048,6 +31304,17 @@
 			)
 		)
 		(property "LCSC" "C2856818"
+			(at 154.94 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Enable" ""
 			(at 154.94 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -30198,6 +31465,17 @@
 				)
 			)
 		)
+		(property "Sim.Enable" ""
+			(at -278.13 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "2000d896-b4b2-4a6d-a110-b082a1fca4e6")
 		)
@@ -30213,303 +31491,7 @@
 			)
 		)
 	)
-		(symbol
-		(lib_id "Mechanical:Fiducial")
-		(at 40.64 30.48 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a1d10001-f1d1-4000-8000-000000000001")
-		(property "Reference" "FID1"
-			(at 40.64 24.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Fiducial_1mm_Mask2mm"
-			(at 40.64 26.67 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
-			(at 40.64 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 40.64 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Fiducial Marker"
-			(at 40.64 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "FID1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:Fiducial")
-		(at 55.88 30.48 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a1d10002-f1d2-4000-8000-000000000002")
-		(property "Reference" "FID2"
-			(at 55.88 24.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Fiducial_1mm_Mask2mm"
-			(at 55.88 26.67 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
-			(at 55.88 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 55.88 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Fiducial Marker"
-			(at 55.88 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "FID2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:Fiducial")
-		(at 71.12 30.48 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a1d10003-f1d3-4000-8000-000000000003")
-		(property "Reference" "FID3"
-			(at 71.12 24.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Fiducial_1mm_Mask2mm"
-			(at 71.12 26.67 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
-			(at 71.12 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 71.12 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Fiducial Marker"
-			(at 71.12 30.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "FID3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at -171.45 92.71 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c28d9385-8a29-4875-8e73-a82f6343de58")
-		(property "Reference" "#PWR0199"
-			(at -171.45 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at -171.45 96.012 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at -171.45 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at -171.45 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at -171.45 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c28d9385-8a29-4875-8e73-a82f6343de57")
-		)
-		(instances
-			(project "Amplifier"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "#PWR0199")
-					(unit 1)
-				)
-			)
-		)
-	)
-(sheet_instances
+	(sheet_instances
 		(path "/"
 			(page "1")
 		)
