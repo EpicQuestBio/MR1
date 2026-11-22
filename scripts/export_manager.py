@@ -15,6 +15,8 @@ Orchestrates all project deliverable exports:
 
 import os
 import sys
+import re
+import csv
 import json
 import shutil
 import hashlib
@@ -137,6 +139,138 @@ def export_footprints(verbose=True):
         return False
 
 
+def natural_sort_key(s):
+    """Sort strings containing numbers in natural human order (e.g. C1, C2, ..., C10)."""
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', str(s))]
+
+
+def format_jlcpcb_cpl_and_bom(b_name, pos_file, bom_file, pos_dir):
+    """
+    Format Pick-and-Place (CPL) and Bill of Materials (BOM) files to strictly comply
+    with JLCPCB SMT automated ingestion standards:
+      1. CPL headers: Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+      2. BOM headers: Comment,Designator,Footprint,LCSC Part #
+      3. Filter out non-SMT/virtual items (fiducials, net ties, silkscreen symbols, mounting holes, test points)
+         for active SMT boards (Amplifier, MR1, Pump).
+      4. For Interposer (passive substrate), preserve references for testing and fabrication documentation.
+      5. Strip footprint library prefixes (e.g., 'Capacitor_SMD:C_0402_1005Metric' -> 'C_0402_1005Metric').
+      6. Standardize Layer to 'Top' or 'Bottom'.
+      7. Enforce exact 1:1 match of designators between BOM and CPL on SMT boards.
+      8. Produce both '<Board>-pos.csv' and '<Board>_CPL.csv' in the pos directory.
+    """
+    if not pos_file.exists() or not bom_file.exists():
+        return
+
+    # Parse raw KiCad POS file
+    pos_rows = []
+    with open(pos_file, mode="r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            pos_rows.append(row)
+
+    # Parse raw KiCad BOM file
+    bom_rows = []
+    with open(bom_file, mode="r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            bom_rows.append(row)
+
+    is_smt_board = (b_name != "Interposer")
+    enforce_1to1 = (b_name in ("Amplifier", "MR1"))
+    non_smt_prefixes = ("FID", "NT", "SYM", "MH", "H", "TP", "REF", "W", "NP")
+
+    # Filter & format CPL
+    filtered_cpl = []
+    for r in pos_rows:
+        ref = (r.get("Ref") or r.get("Designator") or "").strip(' \t\n\r"')
+        if not ref:
+            continue
+        if is_smt_board and any(ref.upper().startswith(p) for p in non_smt_prefixes):
+            continue
+
+        val = (r.get("Val") or r.get("Value") or "").strip(' \t\n\r"')
+        pkg = (r.get("Package") or "").strip(' \t\n\r"')
+        if ":" in pkg:
+            pkg = pkg.split(":", 1)[1]
+
+        # Ignore virtual silkscreen packages if any slipped through
+        if is_smt_board and "SILKSCREEN" in pkg.upper():
+            continue
+
+        pos_x = float(r.get("PosX") or r.get("Mid X") or 0.0)
+        pos_y = float(r.get("PosY") or r.get("Mid Y") or 0.0)
+        rot = float(r.get("Rot") or r.get("Rotation") or 0.0)
+        layer = (r.get("Side") or r.get("Layer") or "top").strip(' \t\n\r"').capitalize()
+
+        filtered_cpl.append({
+            "Designator": ref,
+            "Val": val,
+            "Package": pkg,
+            "Mid X": f"{pos_x:.4f}",
+            "Mid Y": f"{pos_y:.4f}",
+            "Rotation": f"{rot:.1f}",
+            "Layer": layer,
+        })
+
+    # Sort CPL by natural designator order
+    filtered_cpl.sort(key=lambda x: natural_sort_key(x["Designator"]))
+    cpl_designator_set = {r["Designator"] for r in filtered_cpl}
+
+    # Filter & format BOM
+    filtered_bom = []
+    for r in bom_rows:
+        ref = (r.get("Refs") or r.get("Reference") or r.get("Designator") or "").strip(' \t\n\r"')
+        if not ref:
+            continue
+        dnp = (r.get("DNP") or r.get("dnp") or "").strip(' \t\n\r"')
+        if is_smt_board and dnp:
+            continue
+        if is_smt_board and any(ref.upper().startswith(p) for p in non_smt_prefixes):
+            continue
+        if enforce_1to1 and ref not in cpl_designator_set:
+            continue
+
+        val = (r.get("Value") or r.get("Comment") or "").strip(' \t\n\r"')
+        fp = (r.get("Footprint") or "").strip(' \t\n\r"')
+        if ":" in fp:
+            fp = fp.split(":", 1)[1]
+        lcsc = (r.get("LCSC") or r.get("LCSC Part #") or "").strip(' \t\n\r"')
+
+        filtered_bom.append({
+            "Comment": val,
+            "Designator": ref,
+            "Footprint": fp,
+            "LCSC Part #": lcsc,
+        })
+
+    # Sort BOM by natural designator order
+    filtered_bom.sort(key=lambda x: natural_sort_key(x["Designator"]))
+
+    # If SMT board with synchronized schematic/PCB, ensure CPL only contains components that exist in BOM (true 1:1 match)
+    if enforce_1to1:
+        bom_designator_set = {r["Designator"] for r in filtered_bom}
+        filtered_cpl = [r for r in filtered_cpl if r["Designator"] in bom_designator_set]
+
+    # Write formatted CPL (both <Board>-pos.csv and <Board>_CPL.csv)
+    cpl_fieldnames = ["Designator", "Val", "Package", "Mid X", "Mid Y", "Rotation", "Layer"]
+    cpl_path_alias = pos_dir / f"{b_name}_CPL.csv"
+
+    for target_pos_file in [pos_file, cpl_path_alias]:
+        with open(target_pos_file, mode="w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=cpl_fieldnames, quoting=csv.QUOTE_MINIMAL)
+            writer.writeheader()
+            for row in filtered_cpl:
+                writer.writerow(row)
+
+    # Write formatted BOM
+    bom_fieldnames = ["Comment", "Designator", "Footprint", "LCSC Part #"]
+    with open(bom_file, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=bom_fieldnames, quoting=csv.QUOTE_ALL)
+        writer.writeheader()
+        for row in filtered_bom:
+            writer.writerow(row)
+
+
 def export_kicad(verbose=True):
     """Export CAD-driven footprints, Gerbers, drill, pos, BOM, and PDF schematics."""
     export_footprints(verbose=verbose)
@@ -234,7 +368,10 @@ def export_kicad(verbose=True):
         ]
         subprocess.run(b_cmd, check=True, capture_output=True)
 
-        # 6. Create ready-to-order Gerber ZIP archive
+        # 6. Post-process CPL and BOM for JLCPCB SMT ingestion compliance
+        format_jlcpcb_cpl_and_bom(b_name, pos_out, bom_out, b["pos_dir"])
+
+        # 7. Create ready-to-order Gerber ZIP archive
         zip_path = EXPORTS_DIR / b["zip_name"]
         with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
             for g_file in b["gerber_dir"].iterdir():
@@ -448,6 +585,12 @@ def archive_release(version, verbose=True):
             dst_sch = release_dir / f"{b_name}_Schematic_{sha}.pdf"
             shutil.copy2(sch_src, dst_sch)
             release_files.append(dst_sch)
+
+        cpl_src = EXPORTS_DIR / f"pos_{b_name.lower()}" / f"{b_name}_CPL.csv"
+        if cpl_src.exists():
+            dst_cpl = release_dir / f"{b_name}_CPL_{sha}.csv"
+            shutil.copy2(cpl_src, dst_cpl)
+            release_files.append(dst_cpl)
 
     # Generate SHA256SUMS.txt
     sha256_path = release_dir / "SHA256SUMS.txt"
