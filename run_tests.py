@@ -83,6 +83,9 @@ if __name__ == '__main__':
     t20 = load_module('test_signal_viewer_bundle', os.path.join(REPO_ROOT, 'tests', 'test_signal_viewer_bundle.py'))
     suite.addTests(loader.loadTestsFromModule(t20))
 
+    t21 = load_module('test_circuit_simulation', os.path.join(REPO_ROOT, 'tests', 'test_circuit_simulation.py'))
+    suite.addTests(loader.loadTestsFromModule(t21))
+
     if "--e2e" in sys.argv:
         t_e2e = load_module('test_signal_viewer_e2e', os.path.join(REPO_ROOT, 'tests', 'e2e', 'test_signal_viewer_e2e.py'))
         suite.addTests(loader.loadTestsFromModule(t_e2e))
