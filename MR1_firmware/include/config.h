@@ -21,6 +21,12 @@
 #define MIN_SAMPLE_RATE_HZ           1000
 #define ADC_TIMER_PERIOD_US            10   // 10 microseconds @ 100 kHz
 
+// ADC Reference & Cartridge Amplifier Readout Calibration (U18 MAX6070 + Dual Route)
+#define ADC_VREF_V                 2.500f   // U18 MAX6070BAUT25+T precision reference (±2.500V diff)
+#define ADC_VOCM_V                 1.250f   // R25/R36 10k/10k mid-scale common-mode
+#define AMP_ROUTE1_GAIN_OHMS    10.784e9f   // Route 1: 1.0 GOhm * 11.0x (U16) * 0.9804x (U17+10k)
+#define AMP_ROUTE2_GAIN_OHMS     97.69e3f   // Route 2: 100 kOhm * 0.9769x (R32+U17+10k)
+
 #define SAMPLES_PER_FRAME              64   // Binary packet payload size
 #define RING_BUFFER_FRAME_COUNT        32   // Ring buffer capacity (2048 samples)
 

@@ -76,22 +76,22 @@ Binary packets are emitted continuously at $1{,}562.5\text{ Hz}$ when streaming 
 | `8..11` | `timestamp_us` | `uint32_t` | Hardware microsecond timer synchronized to ADC conversion start |
 | `12..13` | `sample_count` | `uint16_t` | Number of samples in payload (Nominal = 64) |
 | `14..15` | `status_flags` | `uint16_t` | Hardware bitmask (`b0`=Active, `b1`=Leak, `b2`=Pump Conn, `b3`=Pump Run, `b4`=Pump Estop) |
-| `16..143` | `samples[64]` | `int16_t[64]` | 64 signed differential ADC conversion codes ($\pm 32768 = \pm 2.048\text{ V}$) |
+| `16..143` | `samples[64]` | `int16_t[64]` | 64 signed differential ADC conversion codes ($\pm 32768 = \pm 2.500\text{ V}$ via `U18` `MAX6070BAUT25+T`) |
 | `144..145` | `crc16` | `uint16_t` | CRC-16-CCITT (`0x1021`, init `0xFFFF`) calculated over bytes `0..143` |
 
 > [!NOTE]
 > Physical variables that update at slower rates (applied bias voltage, ambient temperature, Cis/Trans fluid pressures) are communicated out-of-band via the 10 Hz Telemetry JSON channel or SBU link, preserving maximum USB throughput and zero sample jitter for the 100 kHz electrophysiology stream.
 
 ### 2.3 Physical Current Conversion Equation
-To compute the true ionic nanopore current $I_{pore}$ in Amperes from the 16-bit signed integer $S_{adc}$:
+To compute the true ionic nanopore current $I_{pore}$ in Amperes from the 16-bit signed integer $S_{adc}$ (with `U18` $V_{ref} = 2.500\text{ V}$):
 
-$$V_{adc} = S_{adc} \cdot \left(\frac{V_{ref}}{2^{15}}\right) = S_{adc} \cdot \left(\frac{2.048\text{ V}}{32768}\right) = S_{adc} \cdot 62.5\,\mu\text{V}$$
+$$V_{adc} = S_{adc} \cdot \left(\frac{V_{ref}}{2^{15}}\right) = S_{adc} \cdot \left(\frac{2.500\text{ V}}{32768}\right) = S_{adc} \cdot 76.294\,\mu\text{V}$$
 
-$$I_{pore} = \frac{V_{adc}}{R_{feedback}} = \frac{S_{adc} \cdot 62.5 \times 10^{-6}\text{ V}}{1.0 \times 10^9\,\Omega} = S_{adc} \cdot 62.5\text{ fA}$$
+$$I_{pore} = \frac{V_{adc}}{G_{\text{eff}}}$$
 
-- **Current Resolution:** $62.5\text{ fA/LSB}$ (with $1\text{ G}\Omega$ feedback resistor).
-- **Full-Scale Dynamic Range:** $\pm 2.048\text{ nA}$.
-- **RMS Noise Floor:** $< 1.2\text{ pA RMS}$ at $10\text{ kHz}$ bandwidth on PTFE interposer with driven guard ring.
+- **Route 1 (Sub-5 nm Nanopores, $G_{\text{eff}} = 10.784\text{ G}\Omega$):** $7.075\text{ fA/LSB}$, full-scale **$\pm 231.8\text{ pA}$** (`U2` $1\text{ G}\Omega$ $\times$ `U16` $11.0\times$ $\times$ `U17`/`U6` $0.9804\times$).
+- **Route 2 (Wideband Micropores, $G_{\text{eff}} = 97.69\text{ k}\Omega$):** $0.781\text{ nA/LSB}$, full-scale **$\pm 25.59\,\mu\text{A}$** (`U5A` $100\text{ k}\Omega$ $\times$ `R32`/`U17`/`U6` $0.9769\times$).
+- **RMS Noise Floor (Route 1):** $\sim 45\text{ fA}_{\text{rms}}$ over $80\text{ Hz}$ bandwidth on PTFE interposer with driven guard ring.
 
 ---
 

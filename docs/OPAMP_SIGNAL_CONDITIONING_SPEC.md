@@ -300,3 +300,21 @@ Run the standalone op-amp signal conditioning simulation and unit tests with:
 # Run the full physics and op-amp unit test suite (22 tests)
 .venv/bin/python3 -m unittest tests/test_physics_and_simulations.py -v
 ```
+
+
+---
+
+## 7. RC1 Hardware As-Drawn Calibration & Live `ngspice` Verification (November 2026)
+
+Direct netlist extraction from [`Amplifier/Amplifier.kicad_sch`](file:///home/loki/Projects/MR1/Amplifier/Amplifier.kicad_sch) via [`simulations/kicad_spice_validator.py`](file:///home/loki/Projects/MR1/simulations/kicad_spice_validator.py) (`libngspice.so.0` + `NANOPORE_CELL` 4-electrode SPICE model) verified the following hardware updates and calibrated scaling constants:
+
+1. **4-Electrode Kelvin Potentiostat (`U5B` OPA2192):** Drives `CE_GNDA` so `RE_TRANS` locks to `>PORE_AMP` while holding `WS_CIS` at true `GNDA` ($0\text{ V}$). Because `WS_CIS` is at `GNDA`, `U16` (`LTC6268`) ties `R4` ($100\ \Omega$) directly to `GNDA` without a `+IN` shunt resistor (`R5`), yielding Stage 2 gain $1 + R_3/R_4 = \mathbf{11.0\times}$ (`C2 = 2.0 pF`).
+2. **ADC Reference & Common-Mode (`U18` MAX6070BAUT25+T):** Provides **$V_{\text{REF}} = 2.500\text{ V}$** and **$V_{\text{OCM}} = 1.250\text{ V}$** ($\pm 2.500\text{ V}$ differential full-scale, $76.294\,\mu\text{V/LSB}$ at 16-bit).
+3. **MUX Attenuation & Anti-Aliasing Fix (`R43–R46`, `C41`):**
+   - `R43–R46` scaled from $499\,\Omega$ to **$10\text{ k}\Omega$** (`C60490`), reducing `U17` (`MAX4564`, $R_{\text{on}} \approx 150\,\Omega$) signal loss from $32.3\%$ down to **$1.95\%$**.
+   - `C41` updated from $47\text{ nF}$ ($33.9\text{ kHz}$) to **$1.0\text{ nF}$** (`C1523`, $f_{c,\text{aa}} = 1.595\text{ MHz}$ with $49.9\,\Omega$ series resistors), restoring Route 2's full **$112.2\text{ kHz}$** bandwidth at the ADC.
+4. **Calibrated Firmware & DAQ Constants (`MR1_firmware/include/config.h`, `scripts/daq_client.py`):**
+   - `ADC_VREF_V = 2.500`
+   - **Route 1 (`ROUTE1_GAIN_OHMS`):** **$10.784\text{ G}\Omega$** ($7.075\text{ fA/LSB}$, $\pm 231.8\text{ pA}$ full-scale)
+   - **Route 2 (`ROUTE2_GAIN_OHMS`):** **$97.69\text{ k}\Omega$** ($0.781\text{ nA/LSB}$, $\pm 25.59\,\mu\text{A}$ full-scale)
+5. **Weep-Sense Safety Interlock (`Q4` MMBT3906 + `Q3` BSS138 + `U14` LP5907):** Pulls `U14` `EN` low ($< 0.05\text{ V}$) on electrolyte breach ($10\text{ k}\Omega$), shutting down `+1V8`.

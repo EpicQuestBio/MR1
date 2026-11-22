@@ -32,6 +32,9 @@ from scripts.daq_client import (
     StreamFrame,
     MockSerialPort,
     DaqClient,
+    ADC_VREF_DEFAULT,
+    ROUTE1_GAIN_OHMS,
+    ROUTE2_GAIN_OHMS,
     STREAM_MAGIC_WORD,
     SAMPLES_PER_FRAME,
     FRAME_SIZE_BYTES,
@@ -155,21 +158,22 @@ class TestDaqClient(unittest.TestCase):
         client = DaqClient(port="MOCK", is_mock=True)
         client.connect()
         try:
-            # Default Route 1: gain = 10 Gigaohm (1G TIA * 10 post-stage)
+            # Default Route 1: calibrated gain = 10.784 GOhm, vref = 2.500 V
             self.assertEqual(client.active_route, 1)
-            self.assertEqual(client.gain_ohms, 10e9)
+            self.assertEqual(client.vref, ADC_VREF_DEFAULT)
+            self.assertEqual(client.gain_ohms, ROUTE1_GAIN_OHMS)
 
-            # Switch to Route 2: gain = 100 kOhm
+            # Switch to Route 2: calibrated gain = 97.69 kOhm
             resp = client.set_route(2)
             self.assertIn("OK:ROUTE:2", resp)
             self.assertEqual(client.active_route, 2)
-            self.assertEqual(client.gain_ohms, 100e3)
+            self.assertEqual(client.gain_ohms, ROUTE2_GAIN_OHMS)
 
             # Switch back to Route 1
             resp = client.set_route(1)
             self.assertIn("OK:ROUTE:1", resp)
             self.assertEqual(client.active_route, 1)
-            self.assertEqual(client.gain_ohms, 10e9)
+            self.assertEqual(client.gain_ohms, ROUTE1_GAIN_OHMS)
         finally:
             client.disconnect()
 

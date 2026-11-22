@@ -62,12 +62,17 @@ def calculate_crc16(data: bytes) -> int:
     return crc
 
 
-def raw_to_current(raw_sample: int, vref: float = 4.096, gain_ohms: float = 1e9) -> float:
+ADC_VREF_DEFAULT = 2.500      # U18 MAX6070BAUT25+T precision reference (±2.500 V diff)
+ROUTE1_GAIN_OHMS = 10.784e9   # Route 1: 1.0 GOhm * 11.0x (U16) * 0.9804x (U17+10k)
+ROUTE2_GAIN_OHMS = 97.69e3    # Route 2: 100 kOhm * 0.9769x (R32+U17+10k)
+
+
+def raw_to_current(raw_sample: int, vref: float = ADC_VREF_DEFAULT, gain_ohms: float = ROUTE1_GAIN_OHMS) -> float:
     """
     Converts 16-bit differential ADC raw sample to pore ionic current in Amperes.
     Differential range: -32768 to +32767 -> -Vref to +Vref.
-    I_pore = V_adc / R_feedback.
-    Default gain_ohms = 1.0e9 (1 Gigaohm transimpedance gain -> 1 nA / 1 V).
+    I_pore = V_adc / gain_ohms.
+    Default gain_ohms = 10.784e9 (Route 1 calibrated transimpedance).
     """
     v_adc = (raw_sample / 32768.0) * vref
     return v_adc / gain_ohms
@@ -464,7 +469,7 @@ class DaqClient:
         port: str,
         baud: int = 921600,
         gain_ohms: Optional[float] = None,
-        vref: float = 4.096,
+        vref: float = ADC_VREF_DEFAULT,
         is_mock: bool = False
     ):
         self.port_name = port
@@ -473,7 +478,7 @@ class DaqClient:
         self.is_mock = is_mock
         self.active_route = 1
         self.user_specified_gain = (gain_ohms is not None)
-        self.gain_ohms = gain_ohms if gain_ohms is not None else 10e9  # Default Route 1: 1G * 10 = 10G
+        self.gain_ohms = gain_ohms if gain_ohms is not None else ROUTE1_GAIN_OHMS
 
         self.serial_port = None
         self.is_running = False
@@ -577,7 +582,7 @@ class DaqClient:
         if "OK:ROUTE" in res:
             self.active_route = route
             if not self.user_specified_gain:
-                self.gain_ohms = 10e9 if route == 1 else 100e3
+                self.gain_ohms = ROUTE1_GAIN_OHMS if route == 1 else ROUTE2_GAIN_OHMS
         return res
 
     def start_streaming(self):
@@ -675,7 +680,7 @@ class DaqClient:
                         if detected_route != self.active_route:
                             self.active_route = detected_route
                             if not self.user_specified_gain:
-                                self.gain_ohms = 10e9 if detected_route == 1 else 100e3
+                                self.gain_ohms = ROUTE1_GAIN_OHMS if detected_route == 1 else ROUTE2_GAIN_OHMS
 
                         # Sequence continuity check
                         if self.last_frame_index is not None:
