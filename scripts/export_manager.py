@@ -252,7 +252,8 @@ def format_jlcpcb_cpl_and_bom(b_name, pos_file, bom_file, pos_dir):
         filtered_cpl = [r for r in filtered_cpl if r["Designator"] in bom_designator_set]
 
     # Write formatted CPL (both <Board>-pos.csv and <Board>_CPL.csv)
-    cpl_fieldnames = ["Designator", "Val", "Package", "Mid X", "Mid Y", "Rotation", "Layer"]
+    # Strictly conform to JLCPCB SMT ingestion standard: Designator,Mid X,Mid Y,Layer,Rotation
+    cpl_fieldnames = ["Designator", "Mid X", "Mid Y", "Layer", "Rotation"]
     cpl_path_alias = pos_dir / f"{b_name}_CPL.csv"
 
     for target_pos_file in [pos_file, cpl_path_alias]:
@@ -260,7 +261,13 @@ def format_jlcpcb_cpl_and_bom(b_name, pos_file, bom_file, pos_dir):
             writer = csv.DictWriter(f, fieldnames=cpl_fieldnames, quoting=csv.QUOTE_MINIMAL)
             writer.writeheader()
             for row in filtered_cpl:
-                writer.writerow(row)
+                writer.writerow({
+                    "Designator": row["Designator"],
+                    "Mid X": row["Mid X"],
+                    "Mid Y": row["Mid Y"],
+                    "Layer": row["Layer"],
+                    "Rotation": row["Rotation"],
+                })
 
     # Write formatted BOM
     bom_fieldnames = ["Comment", "Designator", "Footprint", "LCSC Part #"]
