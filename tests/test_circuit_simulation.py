@@ -29,6 +29,7 @@ from simulations.amplifier_circuit_simulation import (
     AmplifierCircuitSimulation,
     CircuitParameters,
 )
+from simulations.kicad_spice_validator import run_kicad_spice_validation
 
 
 class TestAmplifierCircuitSimulation(unittest.TestCase):
@@ -165,6 +166,29 @@ class TestAmplifierCircuitSimulation(unittest.TestCase):
         # Clean up temp file
         if tmp_cir.exists():
             tmp_cir.unlink()
+
+    def test_live_kicad_schematic_ngspice_validation(self):
+        """Export live netlist from Amplifier.kicad_sch and run libngspice with NANOPORE_CELL."""
+        res = run_kicad_spice_validation()
+        self.assertTrue(Path(res["testbench_cir"]).exists())
+        # Power & Reference
+        self.assertAlmostEqual(res["v_ref_adc"], 2.500, places=2)
+        self.assertAlmostEqual(res["v_ocm_1v25"], 1.250, places=2)
+        self.assertAlmostEqual(res["v_1v8_dry"], 1.800, places=2)
+        # Weep sense safety interlock under 10k electrolyte breach
+        self.assertLess(res["v_1v8_wet"], 0.05)
+        self.assertLess(res["v_weep_pull_wet"], 0.05)
+        # 4-electrode Kelvin potentiostat locks RE_TRANS to >PORE_AMP (0.180 V)
+        self.assertAlmostEqual(res["v_re_trans"], 0.180, places=3)
+        # Route 1 as drawn (U2=-1G, U16=1+1k/100=11x => -11 GOhm, fc ~ 79.6 Hz)
+        self.assertAlmostEqual(res["route1_z_dc_ohm"], 11.0e9, delta=0.2e9)
+        self.assertAlmostEqual(res["route1_fc_hz"], 79.5, delta=5.0)
+        # DNA translocation 25% blockade response at ADC input
+        self.assertLess(abs(res["v_diff_dna_blockade"]), abs(res["v_diff_open_pore"]))
+        # Route 2 wideband TIA (~94 kOhm loaded, ~106 kHz TIA pole, ~33 kHz ADC AA pole)
+        self.assertGreater(res["route2_tia_z_dc_ohm"], 85.0e3)
+        self.assertGreater(res["route2_tia_fc_hz"], 90.0e3)
+        self.assertAlmostEqual(res["route2_adc_fc_hz"], 33.0e3, delta=5.0e3)
 
 
 if __name__ == "__main__":

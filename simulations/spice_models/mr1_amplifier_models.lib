@@ -1,0 +1,121 @@
+* MR1 Cartridge Amplifier Board — SPICE Component & Nanopore Cell Models
+* Created by Lawrence R. Kincheloe III / Molecular Reality Corp (2026).
+* SPDX-License-Identifier: CC0-1.0
+*
+* Compatible with KiCad 10 Built-in Simulator (ngspice) and standalone ngspice.
+
+* =============================================================================
+* 1. 4-ELECTRODE NANOPORE ELECTROCHEMICAL CELL SPICE MODEL
+* =============================================================================
+* Models the microfluidic cis/trans chambers, Ag/AgCl electrodes, SiNx membrane
+* capacitance, and a DNA-translocation-modulated ionic pore conductance.
+*
+* Pins:
+*   WS_CIS   - Working Sense / Cis electrode (connects to P5.1 or P2.1)
+*   RE_TRANS - Reference electrode in Trans chamber (connects to P8.1)
+*   CE_GNDA  - Counter electrode in Trans chamber (connects to P7.1)
+*   GNDA     - Analog ground / shield reference
+*   BLK_CTRL - Blockade control voltage (0V = open pore, 1V = DNA blockade)
+*
+.subckt NANOPORE_CELL WS_CIS RE_TRANS CE_GNDA GNDA BLK_CTRL
++ params: R_OPEN=1.8G BLK_FRAC=0.25 C_MEM=15p R_TRANS=1k R_CIS=100
+
+* Trans chamber access & reference tap
+R_TRANS_ACCESS CE_GNDA RE_TRANS {R_TRANS}
+* Cis chamber access resistance
+R_CIS_ACCESS WS_CIS PORE_CIS {R_CIS}
+* Membrane capacitance (SiNx + wafer + interposer)
+C_MEMBRANE PORE_CIS CE_GNDA {C_MEM}
+* Time-varying nanopore ionic current (Ohm's law modulated by DNA blockade)
+* When V(BLK_CTRL)=0: I = V(PORE_CIS, RE_TRANS) / R_OPEN
+* When V(BLK_CTRL)=1: conductance drops by BLK_FRAC
+B_PORE PORE_CIS RE_TRANS I = { V(PORE_CIS, RE_TRANS) / R_OPEN * (1.0 - BLK_FRAC * min(max(V(BLK_CTRL), 0), 1)) }
+.ends NANOPORE_CELL
+
+* =============================================================================
+* 2. AMPLIFIER BOARD ACTIVE IC MACROMODELS (Exact KiCad Pinouts)
+* =============================================================================
+
+* U2: LMP7721MA (SOIC-8: 1=+IN, 2=NC/GUARD, 3=V-, 4=OUT, 6=V+, 7=NC/GUARD, 8=-IN)
+.subckt LMP7721_KICAD INP NC1 VEE OUT VCC NC2 INN
+R_INP INP 0 1T
+R_INN INN 0 1T
+R_SUPP VCC VEE 10k
+* Dominant pole: A0 = 1e6 (120 dB), GBW = 17 MHz -> fp = 17 Hz
+E_GAIN INT 0 INP INN 1.0e6
+R_POLE INT POLE 1k
+C_POLE POLE 0 9.36u
+E_OUT OUT 0 POLE 0 1.0
+.ends LMP7721_KICAD
+
+* U16: LTC6268IS8 (SOIC-8: 2=-IN, 3=+IN, 5=V-, 6=OUT, 7=V+, 8=~SHDN)
+.subckt LTC6268_KICAD INN INP VEE OUT VCC SHDN
+R_INP INP 0 1T
+R_INN INN 0 1T
+R_SUPP VCC VEE 10k
+* Dominant pole: A0 = 1e5 (100 dB), GBW = 500 MHz -> fp = 5 kHz
+E_GAIN INT 0 INP INN 1.0e5
+R_POLE INT POLE 1k
+C_POLE POLE 0 31.8n
+E_OUT OUT 0 POLE 0 1.0
+.ends LTC6268_KICAD
+
+* U5: OPA2192IDR (Dual SOIC-8: 1=OUTA, 2=-INA, 3=+INA, 4=V-, 5=+INB, 6=-INB, 7=OUTB, 8=V+)
+.subckt OPA2192_KICAD OUTA INNA INPA VEE INPB INNB OUTB VCC
+R_SUPP VCC VEE 10k
+* Channel A (Wideband Micropore TIA)
+E_GAINA INTA 0 INPA INNA 1.0e6
+R_PA INTA PA 1k
+C_PA PA 0 15.9u
+E_OUTA OUTA 0 PA 0 1.0
+* Channel B (4-Electrode Kelvin Potentiostat Driver)
+E_GAINB INTB 0 INPB INNB 1.0e6
+R_PB INTB PB 1k
+C_PB PB 0 15.9u
+E_OUTB OUTB 0 PB 0 1.0
+.ends OPA2192_KICAD
+
+* U6: ADA4940-1ACPZ (LFCSP-16: 1=-FB, 2=+IN, 3=-IN, 4=+FB, 5..8=V+, 9=VOCM, 10=+OUT, 11=-OUT, 12=~DIS, 13..16=V-, 17=EP)
+.subckt ADA4940_KICAD FBN INP INN FBP VCC1 VCC2 VCC3 VCC4 VOCM OUTP OUTN DIS VEE1 VEE2 VEE3 VEE4 EP
+R_FBP FBP OUTP 1m
+R_FBN FBN OUTN 1m
+R_SUPP VCC1 VEE1 10k
+* Differential gain: A0 = 1e5, GBW = 260 MHz -> fp = 2.6 kHz
+E_DIFF INT 0 INP INN 1.0e5
+R_PD INT PD 1k
+C_PD PD 0 61.2n
+* Balanced differential outputs centered on V(VOCM) (high-Z VOCM input)
+B_OUTP OUTP 0 V = { V(VOCM) + 0.5*V(PD) }
+B_OUTN OUTN 0 V = { V(VOCM) - 0.5*V(PD) }
+.ends ADA4940_KICAD
+
+* U17 / U19: MAX4564EUA / ADG1219 (8-pin: 1=COM, 2=GND, 3=V-, 4=GND, 5=IN, 6=NO, 7=NC, 8=V+)
+.subckt MAX4564_KICAD COM GND1 VEE GND2 SEL NO NC VCC
+R_NC COM NC R = { 1.0 / ( (1.0/150.0) * 0.5*(1.0 - tanh(20.0*(V(SEL, GND1) - 1.4))) + 1.0e-9 ) }
+R_NO COM NO R = { 1.0 / ( (1.0/150.0) * 0.5*(1.0 + tanh(20.0*(V(SEL, GND1) - 1.4))) + 1.0e-9 ) }
+.ends MAX4564_KICAD
+
+* U18: MAX6070BAUT25+T (SOT-23-6: 1=FILTER, 2=GND, 3=EN, 4=VIN, 5=OUTS, 6=OUTF)
+.subckt MAX6070_KICAD FILTER GND EN VIN OUTS OUTF
+B_REF OUTF GND V = { 2.500 * 0.5 * (1.0 + tanh(20.0 * (V(EN, GND) - 1.2))) * 0.5 * (1.0 + tanh(20.0 * (V(VIN, GND) - 2.7))) }
+R_FILT OUTF FILTER 10k
+R_SENSE OUTF OUTS 10m
+.ends MAX6070_KICAD
+
+* U14: LP5907MFX-1.8 (SOT-23-5: 1=IN, 2=GND, 3=EN, 4=NC, 5=OUT)
+.subckt LP5907_1V8_KICAD VIN GND EN NC OUT
+B_LDO OUT GND V = { 1.800 * 0.5 * (1.0 + tanh(20.0 * (V(EN, GND) - 1.2))) * 0.5 * (1.0 + tanh(20.0 * (V(VIN, GND) - 2.2))) }
+R_OUT OUT GND 10k
+.ends LP5907_1V8_KICAD
+
+* U13: AD4011 SAR ADC Input Load Model (1=REF, 2=VDD, 3=IN+, 4=IN-, 5=GND, 6=CNV, 7=SDO, 8=SCK, 9=SDI, 10=VIO)
+.subckt AD4011_KICAD REF VDD INP INN GND CNV SDO SCK SDI VIO
+C_INP INP GND 2p
+C_INN INN GND 2p
+R_REF REF GND 100k
+.ends AD4011_KICAD
+
+* Discrete Semiconductors
+.model MMBT3906 PNP(IS=1.4e-14 BF=200 VAF=100 IKF=0.15 ISE=1e-13 NE=1.5)
+.model BSS138_NMOS NMOS(VTO=1.3 KP=0.15 LAMBDA=0.01 RD=1.0 RS=1.0)
+.model BAT54_SCHOTTKY D(IS=1e-7 RS=1.0 N=1.05 BV=30 IBV=10u CJO=10p)
