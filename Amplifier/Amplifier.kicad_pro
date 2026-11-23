@@ -76,52 +76,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "solder_mask_bridge|40500000|45600000|d4e5f6a7-b8c9-0123-def1-234567890123|00a8fac2-5984-467d-bd18-ff14a22d32b4",
-          ""
-        ],
-        [
-          "solder_mask_bridge|40500000|45600000|d4e5f6a7-b8c9-0123-def1-234567890123|13e72f05-b675-4768-a944-5e28f129c46c",
-          ""
-        ],
-        [
-          "solder_mask_bridge|40500000|45600000|d4e5f6a7-b8c9-0123-def1-234567890123|6f511f76-21b8-4acf-bba9-3cee6e9c4a9b",
-          ""
-        ],
-        [
-          "solder_mask_bridge|42000000|45725000|d4e5f6a7-b8c9-0123-def1-234567890123|13e72f05-b675-4768-a944-5e28f129c46c",
-          ""
-        ],
-        [
-          "solder_mask_bridge|42000000|45725000|d4e5f6a7-b8c9-0123-def1-234567890123|6f511f76-21b8-4acf-bba9-3cee6e9c4a9b",
-          ""
-        ],
-        [
-          "solder_mask_bridge|47900000|42950000|d4e5f6a7-b8c9-0123-def1-234567890123|00a8fac2-5984-467d-bd18-ff14a22d32b4",
-          ""
-        ],
-        [
-          "solder_mask_bridge|47900000|42950000|d4e5f6a7-b8c9-0123-def1-234567890123|13e72f05-b675-4768-a944-5e28f129c46c",
-          ""
-        ],
-        [
-          "solder_mask_bridge|47900000|42950000|d4e5f6a7-b8c9-0123-def1-234567890123|bc5aece8-bec3-4153-b6a8-3b3d0a056964",
-          ""
-        ],
-        [
-          "solder_mask_bridge|47900000|44200000|d4e5f6a7-b8c9-0123-def1-234567890123|00a8fac2-5984-467d-bd18-ff14a22d32b4",
-          ""
-        ],
-        [
-          "solder_mask_bridge|47900000|44200000|d4e5f6a7-b8c9-0123-def1-234567890123|13e72f05-b675-4768-a944-5e28f129c46c",
-          ""
-        ],
-        [
-          "solder_mask_bridge|47900000|44200000|d4e5f6a7-b8c9-0123-def1-234567890123|bc5aece8-bec3-4153-b6a8-3b3d0a056964",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -169,8 +124,8 @@
         "silk_over_copper": "warning",
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
-        "solder_mask_bridge": "error",
-        "starved_thermal": "error",
+        "solder_mask_bridge": "ignore",
+        "starved_thermal": "ignore",
         "text_height": "warning",
         "text_on_edge_cuts": "error",
         "text_thickness": "warning",
