@@ -2517,7 +2517,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C442654"
+		(property "LCSC" "C76888"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3969,7 +3969,7 @@
 				)
 			)
 		)
-		(property "Value" "MAX4564EUA+"
+		(property "Value" "MAX4564EUA+T"
 			(at 0 2.45 0)
 			(layer "F.Fab")
 			(uuid "354f661a-e2ed-4805-b4ee-44b1e7d5db94")
@@ -4015,7 +4015,7 @@
 				)
 			)
 		)
-		(property "MPN" "MAX4564EUA+"
+		(property "MPN" "MAX4564EUA+T"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7808,7 +7808,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C529241"
+		(property "LCSC" "C468516"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14072,7 +14072,7 @@
 				)
 			)
 		)
-		(property "Value" "MAX4564EUA+"
+		(property "Value" "MAX4564EUA+T"
 			(at 0 2.45 0)
 			(layer "F.Fab")
 			(uuid "903f0285-4843-4d76-861f-fc6daae6e0db")
@@ -14131,7 +14131,7 @@
 				)
 			)
 		)
-		(property "MPN" "MAX4564EUA+"
+		(property "MPN" "MAX4564EUA+T"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -20260,7 +20260,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C442654"
+		(property "LCSC" "C76888"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -21021,7 +21021,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C713292"
+		(property "LCSC" "C490752"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")

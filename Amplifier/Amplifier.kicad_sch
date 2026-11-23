@@ -3658,7 +3658,7 @@
 					)
 				)
 			)
-			(property "Value" "MAX4564EUA+"
+			(property "Value" "MAX4564EUA+T"
 				(at 8.636 9.398 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3712,7 +3712,7 @@
 					)
 				)
 			)
-			(property "MPN" "MAX4564EUA+"
+			(property "MPN" "MAX4564EUA+T"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -17127,7 +17127,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C442654"
+		(property "LCSC" "C76888"
 			(at 239.522 71.12 90)
 			(hide yes)
 			(show_name no)
@@ -17355,7 +17355,7 @@
 				)
 			)
 		)
-		(property "Value" "MAX4564EUA+"
+		(property "Value" "MAX4564EUA+T"
 			(at -65.532 79.502 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17409,7 +17409,7 @@
 				)
 			)
 		)
-		(property "MPN" "MAX4564EUA+"
+		(property "MPN" "MAX4564EUA+T"
 			(at -54.61 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -18155,7 +18155,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C713292"
+		(property "LCSC" "C490752"
 			(at 173.99 -17.78 0)
 			(hide yes)
 			(show_name no)
@@ -21675,7 +21675,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C442654"
+		(property "LCSC" "C76888"
 			(at 213.36 128.778 90)
 			(hide yes)
 			(show_name no)
@@ -25987,7 +25987,7 @@
 				)
 			)
 		)
-		(property "Value" "MAX4564EUA+"
+		(property "Value" "MAX4564EUA+T"
 			(at -264.922 23.622 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -26041,7 +26041,7 @@
 				)
 			)
 		)
-		(property "MPN" "MAX4564EUA+"
+		(property "MPN" "MAX4564EUA+T"
 			(at -254 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -29497,7 +29497,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C529241"
+		(property "LCSC" "C468516"
 			(at 194.31 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -29668,7 +29668,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C529241"
+		(property "LCSC" "C468516"
 			(at 201.93 96.52 0)
 			(hide yes)
 			(show_name no)
