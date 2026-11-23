@@ -12208,7 +12208,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at -162.56 70.612 90)
 			(hide yes)
 			(show_name no)
@@ -17083,7 +17083,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "HZ0402A152R-10"
+		(property "Value" "BLM15HD182SN1D"
 			(at 243.84 72.3518 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21632,7 +21632,7 @@
 				)
 			)
 		)
-		(property "Value" "HZ0402A152R-10"
+		(property "Value" "BLM15HD182SN1D"
 			(at 213.3219 123.19 90)
 			(show_name no)
 			(do_not_autoplace no)
