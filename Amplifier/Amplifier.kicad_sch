@@ -3809,7 +3809,7 @@
 							)
 						)
 					)
-					(number "2"
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3827,7 +3827,7 @@
 							)
 						)
 					)
-					(number "3"
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3845,7 +3845,7 @@
 							)
 						)
 					)
-					(number "4"
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3863,7 +3863,7 @@
 							)
 						)
 					)
-					(number "5"
+					(number "7"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3899,7 +3899,7 @@
 							)
 						)
 					)
-					(number "7"
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3917,7 +3917,7 @@
 							)
 						)
 					)
-					(number "8"
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -14363,7 +14363,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "AD4011BRMZ"
+		(property "Value" "AD4007BRMZ-RL7"
 			(at 240.9033 52.07 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14407,7 +14407,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C2839157"
+		(property "LCSC" "C649158"
 			(at 238.76 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -14418,7 +14418,7 @@
 				)
 			)
 		)
-		(property "MPN" "AD4011BRMZ"
+		(property "MPN" "AD4007BRMZ-RL7"
 			(at 238.76 39.37 0)
 			(hide yes)
 			(show_name no)

@@ -89,10 +89,10 @@ B_OUTP OUTP 0 V = { V(VOCM) + 0.5*V(PD) }
 B_OUTN OUTN 0 V = { V(VOCM) - 0.5*V(PD) }
 .ends ADA4940_KICAD
 
-* U17 / U19: MAX4564EUA / ADG1219 (8-pin: 1=COM, 2=GND, 3=V-, 4=GND, 5=IN, 6=NO, 7=NC, 8=V+)
-.subckt MAX4564_KICAD COM GND1 VEE GND2 SEL NO NC VCC
-R_NC COM NC R = { 1.0 / ( (1.0/150.0) * 0.5*(1.0 - tanh(20.0*(V(SEL, GND1) - 1.4))) + 1.0e-9 ) }
-R_NO COM NO R = { 1.0 / ( (1.0/150.0) * 0.5*(1.0 + tanh(20.0*(V(SEL, GND1) - 1.4))) + 1.0e-9 ) }
+* U17 / U19: MAX4564EUA+T (MSOP-8: 1=COM, 2=V-, 3=GND, 4=V+, 5=NC, 6=NO, 7=IN, 8=~EN)
+.subckt MAX4564_KICAD COM VEE GND VCC NC NO SEL EN
+R_NC COM NC R = { 1.0 / ( (1.0/150.0) * 0.5*(1.0 - tanh(20.0*(V(SEL, GND) - 1.4))) * 0.5*(1.0 - tanh(20.0*(V(EN, GND) - 1.4))) + 1.0e-9 ) }
+R_NO COM NO R = { 1.0 / ( (1.0/150.0) * 0.5*(1.0 + tanh(20.0*(V(SEL, GND) - 1.4))) * 0.5*(1.0 - tanh(20.0*(V(EN, GND) - 1.4))) + 1.0e-9 ) }
 .ends MAX4564_KICAD
 
 * U18: MAX6070BAUT25+T (SOT-23-6: 1=FILTER, 2=GND, 3=EN, 4=VIN, 5=OUTS, 6=OUTF)
