@@ -318,3 +318,9 @@ Direct netlist extraction from [`Amplifier/Amplifier.kicad_sch`](file:///home/lo
    - **Route 1 (`ROUTE1_GAIN_OHMS`):** **$10.784\text{ G}\Omega$** ($7.075\text{ fA/LSB}$, $\pm 231.8\text{ pA}$ full-scale)
    - **Route 2 (`ROUTE2_GAIN_OHMS`):** **$97.69\text{ k}\Omega$** ($0.781\text{ nA/LSB}$, $\pm 25.59\,\mu\text{A}$ full-scale)
 5. **Weep-Sense Safety Interlock (`Q4` MMBT3906 + `Q3` BSS138 + `U14` LP5907):** Pulls `U14` `EN` low ($< 0.05\text{ V}$) on electrolyte breach ($10\text{ k}\Omega$), shutting down `+1V8`.
+
+### 7.1 Cis Dual-Virtual-Ground & `CE_GNDA` Current Return Architecture
+- **Trans Drive (`U5B` $\to$ `CE_GNDA`):** `>PORE_AMP` enters `U5B` `+IN` directly on the Amplifier board (`J7` Pin 14), and `U5B` drives **`CE_GNDA`** (`P7` $\to$ `J10`) until **`RE_TRANS`** (`P8` $\to$ `J11`) matches `>PORE_AMP`. Because the 4-electrode cell is driven from the Trans side by `U5B`, pogo landing **`P9`** (`>PORE_AMP`) on the Interposer is a **legacy/spare no-connect pad**.
+- **Cis Virtual-Ground Return (`WS_CIS` & `WS_CIS_WIDE`):** Both `J1` (`WS_CIS`, Route 1) and `J2` (`WS_CIS_WIDE`, Route 2) sit in the Cis chamber and return ionic current to **`GNDA` ($0\text{ V}$) virtual ground** (`U2` `+IN = GNDA` and `U5A` `+IN = GNDA`).
+  - **Route 1 (`ROUTE_SEL = 0`):** `U19` (`MAX4564`) is **OPEN**, isolating `WS_CIS_WIDE` (`J2`) so 100% of fA/pA current flows into the unswitched `U2` (`LMP7721`, $3\text{ fA}$ bias) summing node with zero switch leakage.
+  - **Route 2 (`ROUTE_SEL = 1`):** `U19` **CLOSES**, connecting `J2` to `U5A`'s $100\text{ k}\Omega$ virtual ground so $\mu\text{A}$-scale micropore currents flow cleanly through `U5A`.

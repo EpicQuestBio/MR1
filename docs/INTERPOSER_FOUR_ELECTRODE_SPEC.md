@@ -234,3 +234,14 @@ See `docs/ECO_WEEP_SENSE_BUFFER_INTERLOCK.md` for complete rework directives and
 - **Default High-Gain Configuration:** The default ultra-high-gain TIA configuration ($R_{f,\text{eff}} = 1\text{ G}\Omega$, $V_{\text{max}} = \pm 2.048\text{ V}$) is engineered specifically for sub-$5\text{ nm}$ apertures drawing under $\pm 2.048\text{ nA}$ of total baseline current.
 - **Pores Drawing $> 2\text{ nA}$:** Operating pores larger than $5\text{ nm}$ at standard bias voltages ($> 100\text{ mV}$) will exceed the $\pm 2.048\text{ nA}$ dynamic threshold, causing the front-end amplifier to saturate against the power rails.
 - **Scaling To Larger Pores:** To measure larger apertures ($5\text{ nm} - 100\text{ nm}$) or higher currents ($\mu\text{A}$ to $\text{mA}$ regime), developers must either lower the applied transmembrane bias voltage or swap/switch the primary feedback resistor to a lower value ($100\text{ M}\Omega$, $10\text{ M}\Omega$, or $1\text{ M}\Omega$), or use external gain adjustment resistors.
+
+
+---
+
+## 9. RC1 4-Electrode Interposer Pad Mapping & Current Return Path
+
+As implemented in [`Interposer/Interposer.kicad_pcb`](file:///home/loki/Projects/MR1/Interposer/Interposer.kicad_pcb) and [`Amplifier/Amplifier.kicad_sch`](file:///home/loki/Projects/MR1/Amplifier/Amplifier.kicad_sch):
+- **Trans Chamber:** `J10` (`Trans_Drive_AgAgCl`) connects to **`CE_GNDA`** (`P7`, driven by Kelvin potentiostat `U5B`), and `J11` (`Trans_Sense_AgAgCl`) connects to **`RE_TRANS`** (`P8`, feedback to `U5B` `-IN` via `R6`).
+- **Cis Chamber:** `J1` (`Cis_Sense_AgAgCl`) connects directly to **`WS_CIS`** (`P5` $\to$ `U2` `LMP7721` $1\text{ G}\Omega$ TIA at `GNDA` virtual ground), and `J2` (`Cis_Drive_AgAgCl`) connects to **`WS_CIS_WIDE`** (`P2` $\to$ `U19` `MAX4564` $\to$ `U5A` $100\text{ k}\Omega$ TIA at `GNDA` virtual ground).
+- **Why `P9` (`>PORE_AMP`) is Unconnected on the Interposer:** `>PORE_AMP` feeds `U5B` `+IN` directly on the Amplifier board (`J7` Pin 14 $\to$ `U5.5`), so `P9` on `J_POGO1` is a legacy/spare landing pad with no trace needed on the Interposer.
+- **Current Return & Switch Isolation:** `CE_GNDA` current flows through the nanopore and returns via `WS_CIS` (Route 1) or `WS_CIS_WIDE` (Route 2) to `GNDA` virtual ground. `U19` isolates `WS_CIS_WIDE` in Route 1 so the femtoampere `U2` summing node has zero analog-switch leakage.
