@@ -86,4 +86,6 @@ Thumbs.db
 releases/
 *.gpg
 *.sources
+datasheets/catalog/*.pdf
+datasheets/amplifier/*.pdf
 
