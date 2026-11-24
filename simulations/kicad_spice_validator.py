@@ -345,13 +345,26 @@ def run_kicad_spice_validation() -> Dict[str, Any]:
     tb_path.parent.mkdir(parents=True, exist_ok=True)
     tb_path.write_text("\n".join(r1_lines + ["", ".tran 100u 40m", ".end", ""]))
 
+    def net_node(base: str) -> str:
+        if base in parsed["nets"]:
+            return base
+        for k in parsed["nets"]:
+            if k.endswith("_" + base):
+                return k
+        return base
+
+    n_vref = net_node("VREF_ADC")
+    n_ocm = net_node("V_OCM_1V25")
+    n_r1_out = net_node("Route1_OUT")
+    n_r2_out = net_node("Route2_OUT")
+
     ng.run_circuit(r1_lines + [".end"], "op")
-    v_ref_adc = float(ng.get_vector("VREF_ADC")[0])
-    v_ocm = float(ng.get_vector("V_OCM_1V25")[0])
+    v_ref_adc = float(ng.get_vector(n_vref)[0])
+    v_ocm = float(ng.get_vector(n_ocm)[0])
     v_1v8_dry = float(ng.get_vector("P1V8")[0])
     v_re_trans = float(ng.get_vector("RE_TRANS")[0])
     v_u2_out = float(ng.get_vector("Net_C1_Pad1")[0])
-    v_r1_out = float(ng.get_vector("Route1_OUT")[0])
+    v_r1_out = float(ng.get_vector(n_r1_out)[0])
     v_adc_diff_op = float(ng.get_vector("Net_U13_NEG_IN_POS")[0] - ng.get_vector("Net_U13_NEG_IN_NEG")[0])
 
     # Run Transient DNA blockade
@@ -371,7 +384,7 @@ def run_kicad_spice_validation() -> Dict[str, Any]:
     ac_r1_lines.append("I_AC_R1 0 WS_CIS DC 0 AC 1p")
     ng.run_circuit(ac_r1_lines + [".end"], "ac dec 20 0.1 10MEG")
     freqs_r1 = np.real(ng.get_vector("frequency"))
-    v_r1_ac = ng.get_vector("Route1_OUT")
+    v_r1_ac = ng.get_vector(n_r1_out)
     z_r1_mag = np.abs(v_r1_ac) / 1e-12
     z_r1_dc = float(z_r1_mag[0])
     idx_3db_r1 = np.argmin(np.abs(z_r1_mag - z_r1_dc / math.sqrt(2.0)))
@@ -384,7 +397,7 @@ def run_kicad_spice_validation() -> Dict[str, Any]:
     ac_r2_lines.append("I_AC_R2 0 WS_CIS_WIDE DC 0 AC 1u")
     ng.run_circuit(ac_r2_lines + [".end"], "ac dec 20 10 10MEG")
     freqs_r2 = np.real(ng.get_vector("frequency"))
-    v_r2_out_ac = ng.get_vector("Route2_OUT")
+    v_r2_out_ac = ng.get_vector(n_r2_out)
     v_adc_r2_ac = ng.get_vector("Net_U13_NEG_IN_POS") - ng.get_vector("Net_U13_NEG_IN_NEG")
     z_r2_tia_dc = float(np.abs(v_r2_out_ac[0]) / 1e-6)
     z_r2_adc_mag = np.abs(v_adc_r2_ac) / 1e-6
@@ -398,7 +411,7 @@ def run_kicad_spice_validation() -> Dict[str, Any]:
     )
     ng.run_circuit(wet_lines + [".end"], "op")
     v_1v8_wet = float(ng.get_vector("P1V8")[0])
-    v_weep_pull_wet = float(ng.get_vector("R_WEEP_PULL")[0])
+    v_weep_pull_wet = float(ng.get_vector(net_node("R_WEEP_PULL"))[0])
 
     return {
         "testbench_cir": str(tb_path),
