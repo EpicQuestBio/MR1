@@ -8421,7 +8421,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
+		(property "LCSC" "C25756"
 			(at 120.65 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -8579,7 +8579,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
+		(property "LCSC" "C25756"
 			(at 120.65 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -8814,7 +8814,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25212"
+		(property "LCSC" "C25905"
 			(at 74.93 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -9049,7 +9049,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25212"
+		(property "LCSC" "C25905"
 			(at 82.55 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -9754,7 +9754,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23737"
+		(property "LCSC" "C2762589"
 			(at 146.558 66.294 0)
 			(hide yes)
 			(show_name no)
@@ -11033,7 +11033,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25327"
+		(property "LCSC" "C25874"
 			(at 121.412 81.28 90)
 			(hide yes)
 			(show_name no)
@@ -11137,7 +11137,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C107849"
+		(property "LCSC" "C727112"
 			(at 227.965 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -11451,7 +11451,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
+		(property "LCSC" "C25756"
 			(at 120.65 189.23 0)
 			(hide yes)
 			(show_name no)
@@ -12825,7 +12825,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25275"
+		(property "LCSC" "C25756"
 			(at 120.65 168.91 0)
 			(hide yes)
 			(show_name no)
@@ -13207,7 +13207,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23737"
+		(property "LCSC" "C2762589"
 			(at 142.748 37.084 0)
 			(hide yes)
 			(show_name no)
@@ -15251,7 +15251,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25327"
+		(property "LCSC" "C25874"
 			(at 121.412 52.07 90)
 			(hide yes)
 			(show_name no)
@@ -16012,7 +16012,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C107849"
+		(property "LCSC" "C727112"
 			(at 238.125 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -18909,7 +18909,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25991"
+		(property "LCSC" "C11549"
 			(at 85.09 99.06 0)
 			(hide yes)
 			(show_name no)

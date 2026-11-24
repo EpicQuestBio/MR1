@@ -53,6 +53,26 @@
     "status": "OK",
     "stock": 594
   },
+  "C11549": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C11549",
+    "mpn": "0402WGF9091TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "9.09k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C11549_0402WGF9091TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C11549",
+    "status": "OK",
+    "stock": 27800
+  },
   "C11702": {
     "brand": "UNI-ROYAL",
     "lcsc": "C11702",
@@ -864,6 +884,86 @@
     "status": "OK",
     "stock": 135600
   },
+  "C25756": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C25756",
+    "mpn": "0402WGF1502TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "15k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C25756_0402WGF1502TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25756",
+    "status": "OK",
+    "stock": 948600
+  },
+  "C25765": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C25765",
+    "mpn": "0402WGF2002TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "20k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C25765_0402WGF2002TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25765",
+    "status": "OK",
+    "stock": 740700
+  },
+  "C25769": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C25769",
+    "mpn": "0402WGF2402TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "24k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C25769_0402WGF2402TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25769",
+    "status": "OK",
+    "stock": 1369800
+  },
+  "C25874": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C25874",
+    "mpn": "0402WGF2492TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "24.9k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C25874_0402WGF2492TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25874",
+    "status": "OK",
+    "stock": 394000
+  },
   "C25879": {
     "brand": "UNI-ROYAL",
     "lcsc": "C25879",
@@ -903,6 +1003,26 @@
     "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25900",
     "status": "OK",
     "stock": 4371900
+  },
+  "C25905": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C25905",
+    "mpn": "0402WGF5101TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "5.1k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C25905_0402WGF5101TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25905",
+    "status": "OK",
+    "stock": 2207900
   },
   "C25991": {
     "brand": "UNI-ROYAL",
@@ -966,9 +1086,67 @@
     "status": "OK",
     "stock": 5387
   },
+  "C2680319": {
+    "brand": "TI",
+    "lcsc": "C2680319",
+    "mpn": "TPS22916CYFPR",
+    "package": "DSBGA-4(0.7x0.7)",
+    "params": {
+      "Control Input Logic": "Active High",
+      "Features": "Soft-start;Reverse current blocking;Output discharge function",
+      "Maximum Continuous Current": "2A",
+      "Operating Temperature": "-40\u2103~+85\u2103",
+      "Operating Voltage": "1V~5.5V",
+      "RDS(on)": "60m\u03a9",
+      "Type": "Load Switch",
+      "number of channels": "1"
+    },
+    "pdf_file": "datasheets/catalog/C2680319_TPS22916CYFPR.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/33404d4a4e83fbb3cc4c9a6b6e6c8d0c.pdf?productCode=C2680319",
+    "status": "OK",
+    "stock": 20
+  },
   "C2682333": {
     "lcsc": "C2682333",
     "status": "NOT_IN_LCSC"
+  },
+  "C26974": {
+    "brand": "UNI-ROYAL",
+    "lcsc": "C26974",
+    "mpn": "0402WGF3242TCE",
+    "package": "0402",
+    "params": {
+      "Operating Temperature": "-55\u2103~+155\u2103",
+      "Power(Watts)": "62.5mW",
+      "Resistance": "32.4k\u03a9",
+      "Temperature Coefficient": "\u00b1100ppm/\u2103",
+      "Tolerance": "\u00b11%",
+      "Type": "Thick Film Resistor",
+      "Voltage Rating": "50V"
+    },
+    "pdf_file": "datasheets/catalog/C26974_0402WGF3242TCE.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C26974",
+    "status": "OK",
+    "stock": 12300
+  },
+  "C2762589": {
+    "brand": "Samsung Electro-Mechanics",
+    "lcsc": "C2762589",
+    "mpn": "CL05A226MQ6ZUN8",
+    "package": "0402",
+    "params": {
+      "Capacitance": "22uF",
+      "Temperature Coefficient": "X5R",
+      "Tolerance": "\u00b120%",
+      "Voltage Rating": "6.3V"
+    },
+    "pdf_file": "datasheets/catalog/C2762589_CL05A226MQ6ZUN8.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/09ea745abad3986829bc96366969cc56.pdf?productCode=C2762589",
+    "status": "OK",
+    "stock": 445
   },
   "C2856818": {
     "brand": "XUNPU",
@@ -1359,6 +1537,28 @@
     "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/4a21f579cbd8ed3a7bfff8b4bbd49e52.pdf?productCode=C7095263",
     "status": "OK",
     "stock": 442
+  },
+  "C727112": {
+    "brand": "TWGMC",
+    "lcsc": "C727112",
+    "mpn": "1N4148WT",
+    "package": "SOD-523",
+    "params": {
+      "Current - Rectified": "125mA",
+      "Diode Configuration": "Standalone",
+      "Non-Repetitive Peak Forward Surge Current": "-",
+      "Operating Junction Temperature Range": "-65\u2103~+150\u2103",
+      "Pd - Power Dissipation": "150mW",
+      "Reverse Leakage Current (Ir)": "1uA",
+      "Reverse Recovery Time (trr)": "4ns",
+      "Voltage - DC Reverse (Vr) (Max)": "100V",
+      "Voltage - Forward(Vf@If)": "1.25V@150mA"
+    },
+    "pdf_file": "datasheets/catalog/C727112_1N4148WT.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/651a8ca74bcffb2cb389d52cf25a1fdc.pdf?productCode=C727112",
+    "status": "OK",
+    "stock": 842650
   },
   "C76888": {
     "brand": "muRata",
