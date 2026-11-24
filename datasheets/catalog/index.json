@@ -1212,6 +1212,32 @@
     "status": "OK",
     "stock": 519700
   },
+  "C42372555": {
+    "brand": "hanxia",
+    "lcsc": "C42372555",
+    "mpn": "HX JN1.27-2x5 TP H4.9",
+    "package": "SMD,P=1.27mm",
+    "params": {
+      "Connector Type": "IDC Header",
+      "Contact Material": "Copper",
+      "Contact Plating": "Gold",
+      "Current Rating": "1A",
+      "Mounting Type": "Surface Mount,Vertical",
+      "Number of PINs Per Row": "5",
+      "Number of Positions or Pins": "2x5P",
+      "Number of Rows": "2",
+      "Operating Temperature": "-40\u2103~+105\u2103",
+      "Pitch": "1.27mm",
+      "Row spacing": "1.27mm",
+      "Voltage Rating": "500V",
+      "colour": "Black"
+    },
+    "pdf_file": "datasheets/catalog/C42372555_HX_JN1.27-2x5_TP_H4.9.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/32db00bee3ed4e0537057af0077f80f5.pdf?productCode=C42372555",
+    "status": "OK",
+    "stock": 12490
+  },
   "C45783": {
     "brand": "Samsung Electro-Mechanics",
     "lcsc": "C45783",
@@ -1415,6 +1441,25 @@
     "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/b426be3ce22c6de3e0c3a2248e49159e.pdf?productCode=C60491",
     "status": "OK",
     "stock": 13340600
+  },
+  "C620155": {
+    "brand": "YXC Crystal Oscillators",
+    "lcsc": "C620155",
+    "mpn": "X321532768KGD2SI",
+    "package": "SMD3215-2P",
+    "params": {
+      "Equivalent Series Resistance(ESR)": "70k\u03a9",
+      "Frequency": "32.768kHz",
+      "Frequency Stability": "\u00b130ppm",
+      "Load Capacitance": "12.5pF",
+      "Normal temperature Frequency Tolerance": "\u00b120ppm",
+      "Operating Temperature": "-40\u2103~+85\u2103"
+    },
+    "pdf_file": "datasheets/catalog/C620155_X321532768KGD2SI.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/9c4953c4f5db0fe8f1ca74319d40a024.pdf?productCode=C620155",
+    "status": "OK",
+    "stock": 141885
   },
   "C649158": {
     "brand": "ADI",

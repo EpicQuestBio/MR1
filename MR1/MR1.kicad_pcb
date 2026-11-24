@@ -1978,7 +1978,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2165,7 +2165,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C14902"
+		(property "LCSC" "C2143"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3941,7 +3941,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5179,7 +5179,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -8823,7 +8823,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9172,7 +9172,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10065,7 +10065,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -11521,7 +11521,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -12597,7 +12597,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -18281,7 +18281,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -20571,7 +20571,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -21554,7 +21554,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -21860,7 +21860,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C521634"
+		(property "LCSC" "C42372555"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -24003,7 +24003,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -25138,7 +25138,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C91275"
+		(property "LCSC" "C620155"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -25699,7 +25699,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -29443,7 +29443,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -30369,7 +30369,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -34993,7 +34993,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -35344,7 +35344,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -37505,7 +37505,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25078"
+		(property "LCSC" "C87044"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -42337,14 +42337,6 @@
 		(uuid "2c96ed27-6a04-4c20-bbf3-99a595ccd0e9")
 	)
 	(segment
-		(start 63.45294 64.78275)
-		(end 62.978243 64.78275)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "GNDA")
-		(uuid "2e342697-f56f-4de7-8c9b-35190b52c754")
-	)
-	(segment
 		(start 62.632749 65.128244)
 		(end 62.632749 65.89525)
 		(width 0.2)
@@ -42473,14 +42465,6 @@
 		(uuid "b9d3fb4a-9dbb-49a3-b243-6da5f10ab2e1")
 	)
 	(segment
-		(start 62.978243 64.78275)
-		(end 62.632749 65.128244)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "GNDA")
-		(uuid "c746fb5f-924c-408a-8864-92b22f25706b")
-	)
-	(segment
 		(start 63.01275 58.89275)
 		(end 63.150249 58.89275)
 		(width 0.2)
@@ -42522,7 +42506,7 @@
 	)
 	(segment
 		(start 62.436 59.827001)
-		(end 63.282749 60.67375)
+		(end 63.282749 59.827001)
 		(width 0.2)
 		(layer "F.Cu")
 		(net "GNDA")
@@ -45308,8 +45292,8 @@
 		(uuid "cbbc6349-e576-4f01-9189-6ee88f5d6453")
 	)
 	(segment
-		(start 71.131081 84.45)
-		(end 73.45 84.45)
+		(start 71.131081 84.47)
+		(end 73.45 84.47)
 		(width 0.2)
 		(layer "F.Cu")
 		(net "/Power/+Vp")
@@ -45444,7 +45428,7 @@
 		(uuid "aee9c08d-5124-4e7a-af18-9236713e0d7c")
 	)
 	(segment
-		(start 76.2 79.53)
+		(start 75.0 79.53)
 		(end 76.7 79.53)
 		(width 0.15)
 		(layer "F.Cu")
@@ -45532,7 +45516,7 @@
 		(uuid "b0b0b0b0-cccc-dddd-eeee-000000000203")
 	)
 	(via
-		(at 76.2 79.53)
+		(at 75.0 78.6)
 		(size 0.5)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
@@ -45581,14 +45565,14 @@
 	)
 	(segment
 		(start 76.2 78.2)
-		(end 76.2 79.53)
+		(end 75.0 78.6)
 		(width 0.15)
 		(layer "B.Cu")
 		(net "VBUS")
 		(uuid "b0b0b0b0-cccc-dddd-eeee-000000000206")
 	)
 	(segment
-		(start 76.2 79.53)
+		(start 75.0 78.6)
 		(end 76.2 81.85)
 		(width 0.15)
 		(layer "B.Cu")
@@ -56311,6 +56295,22 @@
 			"fd8471b6-2207-4290-8736-9a8a8168e383" "fe6e6d63-9a0f-4045-b2df-7faf7f0480de"
 			"ffcfe5ae-6a4c-4aea-b2e5-939c1b8408a0" "ffd1fe68-2efc-46ea-a89f-00f4dbd7be7a"
 		)
+	)
+	(segment
+		(start 63.282749 59.827001)
+		(end 63.282749 60.67375)
+		(width 0.25)
+		(layer "F.Cu")
+		(net "GNDA")
+		(uuid "e99e3c3a-d002-4532-9cff-ca7a226a6c61")
+	)
+	(segment
+		(start 75.0 78.6)
+		(end 75.0 79.53)
+		(width 0.2)
+		(layer "F.Cu")
+		(net "VBUS")
+		(uuid "b0b0b0b0-cccc-dddd-eeee-000000000210")
 	)
 	(embedded_fonts no)
 )
