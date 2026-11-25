@@ -453,6 +453,102 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Mechanical:Fiducial"
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "FID"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Fiducial"
+				(at 0 3.175 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Fiducial Marker"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "fiducial marker"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Fiducial*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Fiducial_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Mechanical:MountingHole_Pad"
 			(pin_numbers
 				(hide yes)
@@ -943,102 +1039,7 @@
 			)
 			(embedded_fonts no)
 		)
-			(symbol "Mechanical:Fiducial"
-			(exclude_from_sim no)
-			(in_bom no)
-			(on_board yes)
-			(in_pos_files yes)
-			(property "Reference" "FID"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Fiducial"
-				(at 0 3.175 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Fiducial Marker"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "fiducial marker"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Fiducial*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Fiducial_0_1"
-				(circle
-					(center 0 0)
-					(radius 1.27)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-)
+	)
 	(text "Stability in ultra-low noise regulators is dictated by the **Output Capacitance ()** and the **Noise Reduction Capacitance ()**. \nIf these ratios are wrong, the LDO will oscillate, turning your \"clean\" power supply into a radio transmitter.\n\n\n### 1. The LDO Component Values (The Critical Stage)\n\nThese regulators do not use standard voltage dividers. They use a precision current source architecture. You must use these specific values to minimize noise density.\n\n#### **Positive Rail: TPS7A94**\n\n* ** (Set Resistor):** **5.0 kΩ** (0.1% tolerance).\n* *Math:* . The internal  is 1mA. .\n\n\n* ** (Output Capacitor):** **2x 22µF** (or 1x 47µF) Ceramic X7R.\n* *Stability:* Must be . Larger is better for lower output impedance.\n* *Part:* Murata GRM32ER71E226KE15 (1210 size avoids DC bias capacitance loss).\n\n\n* ** (Noise Reduction / Soft Start):** **10 µF**.\n* *Function:* Filters the internal reference noise.\n* *Warning:* Do not exceed 22µF, or the startup time becomes excessively slow, potentially causing latch-up issues with the negative rail.\n\n\n\n#### **Negative Rail: LT3094**\n\n* ** (Set Resistor):** **49.9 kΩ** (0.1% tolerance).\n* *Math:* The internal precision current source is 100µA. .\n\n\n* ** (Output Capacitor):** **2x 22µF** (Ceramic X7R).\n* *Stability:* Requires low ESR. Do not use Tantalum here.\n\n\n* ** (Reference Capacitor):** **4.7 µF**.\n* *Function:* This capacitor is parallel to . It kills the thermal noise of the resistor and the reference current shot noise.\n\n\n* ** (Current Limit):** **Left Open** (unless you need to limit current below max).\n\n---\n\n### 2. The Input \"Capacitance Multiplier\" Values (Active Pre-Filter)\n\nThis circuit goes *between* your raw supply (TPS65131) and the LDOs. It smooths the high-frequency switching ripple so the LDO doesn't have to work as hard.\n\n**Constraint:** This circuit drops approx **0.7V to 1.0V**.\n\n* **Required Raw Input:** +/- 6.2V to +/- 6.5V.\n* **Output to LDO:** +/- 5.3V to +/- 5.5V.\n\n#### **Positive Side (NPN Transistor)**\n\n* **Transistor ():** **ZXTN2010A** or generic **BCP56**.\n* *Why:* Medium power, reasonable gain ().\n\n\n* **Base Resistor ():** **1.0 kΩ**.\n* *Function:* Sets the base current and forms the RC filter with .\n\n\n* **Base Capacitor ():** **100 µF** (Electrolytic or Tantalum is fine here).\n* **Protection Diode:** **1N4148** across Base-Emitter (Reverse biased).\n* *Why:* Protects the transistor during power-down if the input collapses faster than the capacitor discharges.\n\n\n\n**The Stability Math:**\n\n* **Cutoff Frequency:** .\n* **Result:** This crushes the 1MHz ripple from your switching regulator by >100dB before it even hits the LDO.\n\n#### **Negative Side (PNP Transistor)**\n\n* **Transistor ():** **ZXTP2012A** or generic **BCP53**.\n* **Base Resistor:** **1.0 kΩ**.\n* **Base Capacitor:** **100 µF**.\n* **Protection Diode:** **1N4148**.\n\n---\n\n### 3. Critical Layout & Stability Rules\n\nAt sub-1µV levels, component placement is as important as component value.\n\n1. **NO Ferrite Beads on LDO Outputs:**\n* Never place a ferrite bead directly after the TPS7A94 or LT3094. The inductive reactance will interact with  and cause ringing (oscillation) at 100kHz–1MHz.\n* *Correct placement:* Place ferrite beads **before** the Input Capacitance Multiplier.\n\n\n2. **The \"Star\" Ground:**\n* The \"Ground\" pin of the  resistor and the \"Ground\" pin of the  capacitor must connect to the **Load Ground** (where your op-amp is), *not* the LDO's thermal pad ground.\n* This is called a \"Kelvin Connection.\" If you ground them at the LDO, the current flowing through the PCB trace will create a voltage drop that looks like noise to the regulator.\n\n\n3. **DC Bias Effect:**\n* You are using 5V. If you buy a \"6.3V rated\" 22µF ceramic capacitor, at 5V it will actually only be **~8µF**. This loss of capacitance can destabilize the LDO.\n* **Rule:** Use **25V or 35V rated** capacitors for your 5V rails to ensure they retain their capacitance.\n\n\n\n### Summary Checklist for Ordering\n\n| Component | Value | Dielectric / Type | Rating | Note |\n| --- | --- | --- | --- | --- |\n| **LDO Output Caps** | 22µF (x2) | X7R Ceramic | **25V+** | Critical for stability |\n| **TPS7A94 ** | 5.0 kΩ | Thin Film | 0.1% | Low Temp Coefficient |\n| **LT3094 ** | 49.9 kΩ | Thin Film | 0.1% | Low Temp Coefficient |\n| **Cap Multiplier Base** | 100 µF | Electrolytic | 16V+ | Lowers ripple freq |\n| **Pass Transistor** | BCP56/53 | SOT-223 | 80V | Handles heat dissipation |\n\nIf you build this specific chain (TPS65131  Cap Multiplier  LDO  Hybrid Op-Amp Rail), you will likely hit the noise floor of your test equipment before you see the noise of the power supply."
 		(exclude_from_sim yes)
 		(at -292.1 124.46 0)
@@ -1679,6 +1680,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:Fiducial")
+		(at 227.33 102.87 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "158ebb98-4ce8-4b87-ad42-c06981da4d96")
+		(property "Reference" "FID2"
+			(at 229.87 100.33 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Fiducial_1mm_Mask2mm"
+			(at 229.87 102.87 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
+			(at 227.33 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 227.33 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fiducial Marker"
+			(at 227.33 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "FID2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:Earth")
 		(at 227.33 90.17 0)
 		(unit 1)
@@ -2215,235 +2292,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:Fiducial")
-		(at 198.12 102.87 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a8c09683-9893-4dd6-b020-d6ac958efe8b")
-		(property "Reference" "FID1"
-			(at 200.66 100.33 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Fiducial_1mm_Mask2mm"
-			(at 200.66 102.87 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
-			(at 198.12 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 198.12 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Fiducial Marker"
-			(at 198.12 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "FID1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:Fiducial")
-		(at 227.33 102.87 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "158ebb98-4ce8-4b87-ad42-c06981da4d96")
-		(property "Reference" "FID2"
-			(at 229.87 100.33 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Fiducial_1mm_Mask2mm"
-			(at 229.87 102.87 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
-			(at 227.33 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 227.33 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Fiducial Marker"
-			(at 227.33 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "FID2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:Fiducial")
-		(at 198.12 118.11 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ae310afd-1c00-4acb-a49c-3b69164c959c")
-		(property "Reference" "FID3"
-			(at 200.66 115.57 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Fiducial_1mm_Mask2mm"
-			(at 200.66 118.11 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
-			(at 198.12 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 198.12 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Fiducial Marker"
-			(at 198.12 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "MR1"
-				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
-					(reference "FID3")
-					(unit 1)
-				)
-			)
-		)
-	)
-
-	(symbol
 		(lib_id "power:Earth")
 		(at 198.12 74.93 0)
 		(unit 1)
@@ -2829,6 +2677,158 @@
 			(project "MR1"
 				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
 					(reference "#PWR0115")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:Fiducial")
+		(at 198.12 102.87 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a8c09683-9893-4dd6-b020-d6ac958efe8b")
+		(property "Reference" "FID1"
+			(at 200.66 100.33 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Fiducial_1mm_Mask2mm"
+			(at 200.66 102.87 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
+			(at 198.12 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 198.12 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fiducial Marker"
+			(at 198.12 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "FID1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:Fiducial")
+		(at 198.12 118.11 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ae310afd-1c00-4acb-a49c-3b69164c959c")
+		(property "Reference" "FID3"
+			(at 200.66 115.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Fiducial_1mm_Mask2mm"
+			(at 200.66 118.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask2mm"
+			(at 198.12 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 198.12 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Fiducial Marker"
+			(at 198.12 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "MR1"
+				(path "/0fac162c-ca5e-4358-934a-30718aa12176"
+					(reference "FID3")
 					(unit 1)
 				)
 			)

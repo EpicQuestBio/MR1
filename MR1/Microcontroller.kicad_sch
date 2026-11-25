@@ -9445,7 +9445,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Custom Footprints:SW_SPST_6mm_gull wing"
+		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
 			(at 214.63 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -9478,7 +9478,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C481177"
+		(property "LCSC" "C318884"
 			(at 214.63 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -9544,7 +9544,7 @@
 				)
 			)
 		)
-		(property "MPN" "TS04-66-43-BK-160-SMT"
+		(property "MPN" "TS-1187A-B-A-B"
 			(at 214.63 127 0)
 			(hide yes)
 			(show_name no)
@@ -10047,7 +10047,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Custom Footprints:SW_SPST_6mm_gull wing"
+		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
 			(at 240.03 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -10080,7 +10080,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C481177"
+		(property "LCSC" "C318884"
 			(at 240.03 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -10146,7 +10146,7 @@
 				)
 			)
 		)
-		(property "MPN" "TS04-66-43-BK-160-SMT"
+		(property "MPN" "TS-1187A-B-A-B"
 			(at 240.03 127 0)
 			(hide yes)
 			(show_name no)

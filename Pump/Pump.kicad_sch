@@ -971,7 +971,7 @@
 			)
 		)
 		(property "Value" "22uF"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1043,7 +1043,7 @@
 		(dnp no)
 		(uuid "0beab46b-9872-4028-aabf-0151b9b0d2cb")
 		(property "Reference" "J5"
-			(at 100 97.46 0)
+			(at 101.6 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1135,7 +1135,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1207,7 +1207,7 @@
 		(dnp no)
 		(uuid "184148a9-5599-42a1-8945-c579d3093182")
 		(property "Reference" "U6"
-			(at 100 97.46 0)
+			(at 109.22 96.012 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1217,7 +1217,7 @@
 			)
 		)
 		(property "Value" "TS3USB221"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1381,7 +1381,7 @@
 			)
 		)
 		(property "Value" "100k"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1453,7 +1453,7 @@
 		(dnp no)
 		(uuid "48fc0a57-502e-475f-bfab-55adceff7c63")
 		(property "Reference" "R2"
-			(at 100 97.46 0)
+			(at 111.506 102.616 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1463,7 +1463,7 @@
 			)
 		)
 		(property "Value" "32.4k"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1545,7 +1545,7 @@
 			)
 		)
 		(property "Value" "4.7uH"
-			(at 100 102.54 0)
+			(at 106.934 98.806 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1627,7 +1627,7 @@
 			)
 		)
 		(property "Value" "TPS54302"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1709,7 +1709,7 @@
 			)
 		)
 		(property "Value" "TPS22916"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1781,7 +1781,7 @@
 		(dnp no)
 		(uuid "821968b8-d827-481e-a764-520de35e71d1")
 		(property "Reference" "U4"
-			(at 100 97.46 0)
+			(at 95.758 96.012 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1791,7 +1791,7 @@
 			)
 		)
 		(property "Value" "LD39050_3V3"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1863,7 +1863,7 @@
 		(dnp no)
 		(uuid "825720c5-d7d6-49d9-b2a6-33dd03e418b3")
 		(property "Reference" "J4"
-			(at 100 97.46 0)
+			(at 98.552 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1873,7 +1873,7 @@
 			)
 		)
 		(property "Value" "PUMP2_MOTOR"
-			(at 100.838 104.902 0)
+			(at 129.794 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1955,7 +1955,7 @@
 			)
 		)
 		(property "Value" "10uF"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2027,7 +2027,7 @@
 		(dnp no)
 		(uuid "94eba370-edf6-4f54-8cfa-f85edf27faf2")
 		(property "Reference" "U2"
-			(at 100 97.46 0)
+			(at 104.648 96.012 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2037,7 +2037,7 @@
 			)
 		)
 		(property "Value" "STUSB4500"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2119,7 +2119,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2201,7 +2201,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2283,7 +2283,7 @@
 			)
 		)
 		(property "Value" "PUMP1_MOTOR"
-			(at 100 102.54 0)
+			(at 106.426 84.836 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2365,7 +2365,7 @@
 			)
 		)
 		(property "Value" "10uF"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2447,7 +2447,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2519,7 +2519,7 @@
 		(dnp no)
 		(uuid "e24062ce-f30c-4574-a0ec-5dc8835c2d37")
 		(property "Reference" "J1"
-			(at 100 97.46 0)
+			(at 99.822 95.504 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2683,7 +2683,7 @@
 		(dnp no)
 		(uuid "f1b8cff7-186c-46ed-bb5e-e968756fe8c7")
 		(property "Reference" "U10"
-			(at 100 97.46 0)
+			(at 95.758 94.234 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2693,7 +2693,7 @@
 			)
 		)
 		(property "Value" "ABP2_005PG_TRANS"
-			(at 100 102.54 0)
+			(at 120.396 128.016 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2775,7 +2775,7 @@
 			)
 		)
 		(property "Value" "DRV8837C"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2857,7 +2857,7 @@
 			)
 		)
 		(property "Value" "DRV8837C"
-			(at 100 102.54 0)
+			(at 128.956 119.558 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

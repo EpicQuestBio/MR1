@@ -3034,7 +3034,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 327.66 172.72 0)
+		(at 265.43 82.55 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3044,7 +3044,7 @@
 		(dnp no)
 		(uuid "48ba0a1c-2e0d-483a-9df9-a3facb198320")
 		(property "Reference" "R202"
-			(at 330.2 171.45 0)
+			(at 267.97 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3055,7 +3055,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 330.2 173.99 0)
+			(at 267.97 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3066,7 +3066,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 327.66 172.72 0)
+			(at 265.43 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3077,7 +3077,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 327.66 172.72 0)
+			(at 265.43 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3088,7 +3088,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 327.66 172.72 0)
+			(at 265.43 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3099,7 +3099,7 @@
 			)
 		)
 		(property "MR1_Role" "Status LED current limit"
-			(at 327.66 172.72 0)
+			(at 265.43 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4086,7 +4086,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 312.42 172.72 0)
+		(at 250.19 82.55 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4096,7 +4096,7 @@
 		(dnp no)
 		(uuid "d6110926-969c-4894-90f0-eba4a0bcce10")
 		(property "Reference" "D201"
-			(at 314.96 171.45 0)
+			(at 252.73 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4107,7 +4107,7 @@
 			)
 		)
 		(property "Value" "GREEN"
-			(at 314.96 173.99 0)
+			(at 252.73 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4118,7 +4118,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
-			(at 312.42 172.72 0)
+			(at 250.19 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4129,7 +4129,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 312.42 172.72 0)
+			(at 250.19 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4140,7 +4140,7 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
-			(at 312.42 172.72 0)
+			(at 250.19 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4151,7 +4151,7 @@
 			)
 		)
 		(property "MR1_Role" "Status LED"
-			(at 312.42 172.72 0)
+			(at 250.19 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

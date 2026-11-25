@@ -1195,6 +1195,33 @@
     "status": "OK",
     "stock": 2328
   },
+  "C318884": {
+    "brand": "XKB Connection",
+    "lcsc": "C318884",
+    "mpn": "TS-1187A-B-A-B",
+    "package": "SMD-4P,5.1x5.1mm",
+    "params": {
+      "Actuator Style": "Round Button",
+      "Actuator/Cap Color": "Gold",
+      "Circuit": "SPST",
+      "Contact Current": "50mA",
+      "Height": "1.5mm",
+      "Length": "5.1mm",
+      "Mounting Type": "Surface Mount,Vertical",
+      "Operating Force": "1.6N",
+      "Operating Temperature": "-30\u2103~+85\u2103",
+      "Switching Life": "100,000 cycles",
+      "Voltage Rating": "12V",
+      "Width": "5.1mm",
+      "With Lamp": "No",
+      "with Bracket": "Without Bracket"
+    },
+    "pdf_file": "datasheets/catalog/C318884_TS-1187A-B-A-B.pdf",
+    "pdf_status": "OK",
+    "pdf_url": "https://datasheet.lcsc.com/datasheet/pdf/56c8799ae5193945a16a1ffbe378246a.pdf?productCode=C318884",
+    "status": "OK",
+    "stock": 347040
+  },
   "C32949": {
     "brand": "Samsung Electro-Mechanics",
     "lcsc": "C32949",

@@ -3137,9 +3137,184 @@
 		)
 		(uuid "f41cc683-b73d-4043-a00b-824545bf1133")
 	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 95.25 72.39 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3907933a-93b5-48ad-bb7c-4e5a034e0973")
+		(property "Netclass" "precision"
+			(at 95.9485 69.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at 0 17.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 124.46 34.29 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a6b2c14f-905d-4b87-b03a-233686005305")
+		(property "Netclass" "precision"
+			(at 125.1585 31.75 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at 29.21 -20.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 59.6312 40.64 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ac52c9ca-d1a3-40bc-9548-3df9a33fb314")
+		(property "Netclass" "precision"
+			(at 60.3297 38.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at -35.6188 -13.97 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 49.53 34.29 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e14d6845-802e-4899-b199-bf91d68918aa")
+		(property "Netclass" "precision"
+			(at 50.2285 31.75 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at -45.72 -20.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 82.55 34.29 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f80571a0-c222-4808-be2f-ce590e32ec23")
+		(property "Netclass" "precision"
+			(at 83.2485 31.75 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at -12.7 -20.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
 	(symbol
 		(lib_id "power:VDDA")
-		(at 152.4 87.63 0)
+		(at 127 101.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3150,7 +3325,7 @@
 		(fields_autoplaced yes)
 		(uuid "09f3d384-a63c-40d5-81b7-e068bb681d5e")
 		(property "Reference" "#PWR060"
-			(at 152.4 91.44 0)
+			(at 127 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3161,7 +3336,7 @@
 			)
 		)
 		(property "Value" "VDDA"
-			(at 152.4 84.074 0)
+			(at 127 98.044 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3171,7 +3346,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 152.4 87.63 0)
+			(at 127 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3182,7 +3357,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 152.4 87.63 0)
+			(at 127 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3193,7 +3368,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VDDA\""
-			(at 152.4 87.63 0)
+			(at 127 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4469,7 +4644,7 @@
 	)
 	(symbol
 		(lib_id "Amplifier_Operational:OPA2156xDGK")
-		(at 154.94 95.25 0)
+		(at 129.54 109.22 0)
 		(unit 3)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4480,7 +4655,7 @@
 		(fields_autoplaced yes)
 		(uuid "3c15bd5b-f2c8-4dcb-aba6-aa1eff6108ee")
 		(property "Reference" "U3"
-			(at 153.67 93.9799 0)
+			(at 128.27 107.9499 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4491,7 +4666,7 @@
 			)
 		)
 		(property "Value" "OPA197xD"
-			(at 153.67 96.5199 0)
+			(at 128.27 110.4899 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4502,7 +4677,7 @@
 			)
 		)
 		(property "Footprint" "Package_SO:VSSOP-8_3x3mm_P0.65mm"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4513,7 +4688,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/opa2156.pdf"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4524,7 +4699,7 @@
 			)
 		)
 		(property "Description" "Dual 36V, Ultra Low Noise, Rail-to-Rail Input/Output, Low Offset Voltage, Operational Amplifier, VSSOP-8"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4535,7 +4710,7 @@
 			)
 		)
 		(property "LCSC" "C133554"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4546,7 +4721,7 @@
 			)
 		)
 		(property "MPN" "OPA197IDGKT"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4557,7 +4732,7 @@
 			)
 		)
 		(property "Mouser PN" "595-OPA197IDGKT"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4568,7 +4743,7 @@
 			)
 		)
 		(property "price" "$1.53"
-			(at 154.94 95.25 0)
+			(at 129.54 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5970,7 +6145,7 @@
 	)
 	(symbol
 		(lib_id "power:VSSA")
-		(at 152.4 102.87 180)
+		(at 127 116.84 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5981,7 +6156,7 @@
 		(fields_autoplaced yes)
 		(uuid "8dd8964b-6f1e-4f7f-8a2f-3785a6e6fbcb")
 		(property "Reference" "#PWR062"
-			(at 152.4 99.06 0)
+			(at 127 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5992,7 +6167,7 @@
 			)
 		)
 		(property "Value" "VSSA"
-			(at 152.4 108.585 0)
+			(at 127 122.555 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6002,7 +6177,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 152.4 102.87 0)
+			(at 127 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6013,7 +6188,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 152.4 102.87 0)
+			(at 127 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6024,7 +6199,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VSSA\""
-			(at 152.4 102.87 0)
+			(at 127 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

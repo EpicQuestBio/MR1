@@ -1963,6 +1963,546 @@
 			(embedded_fonts no)
 		)
 	)
+	(junction
+		(at 247.65 100.33)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "14383f92-b5e4-4921-8d52-c343c117ccfb")
+	)
+	(junction
+		(at 181.61 226.06)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1bacf4d8-05e5-4ae7-bceb-da3a7755d66e")
+	)
+	(junction
+		(at 262.89 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5bf6fb87-3178-41ae-9d3f-5d55370b8538")
+	)
+	(junction
+		(at 247.65 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "68069925-ff4b-44d5-b55d-91c7216f0c1e")
+	)
+	(junction
+		(at 264.16 120.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6e98d8a4-98af-48d8-9f4f-af51987cbb84")
+	)
+	(junction
+		(at 262.89 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8b1b58fd-6a5c-48f1-b06a-17e37f1109e5")
+	)
+	(no_connect
+		(at 222.25 119.38)
+		(uuid "5b04fcba-de2a-4e61-b9b7-ba64b378cd47")
+	)
+	(no_connect
+		(at 222.25 106.68)
+		(uuid "667f0ed8-b094-4060-bc83-600106e4ba63")
+	)
+	(no_connect
+		(at 222.25 109.22)
+		(uuid "b3c7ec44-677e-4d5a-a8fe-e409c9f4ab7a")
+	)
+	(no_connect
+		(at 191.77 121.92)
+		(uuid "c05e21e4-ffcc-4838-a4c0-c5ec417f211e")
+	)
+	(no_connect
+		(at 222.25 124.46)
+		(uuid "d6a34b0b-5c00-4cd6-9a0d-0528cb07a80b")
+	)
+	(no_connect
+		(at 222.25 121.92)
+		(uuid "f989ccf0-649f-4565-a484-8463bb1c9215")
+	)
+	(wire
+		(pts
+			(xy 247.65 90.17) (xy 247.65 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c06cc60-8a91-4f59-a721-547b2da7403d")
+	)
+	(wire
+		(pts
+			(xy 157.48 226.06) (xy 140.97 226.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1381008c-1374-414e-8589-d18d1100ab6d")
+	)
+	(wire
+		(pts
+			(xy 185.42 132.08) (xy 185.42 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15bc596b-e8a1-4319-b923-dd2a8ad04d21")
+	)
+	(wire
+		(pts
+			(xy 177.8 234.95) (xy 181.61 234.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "17efc3db-6f82-4588-8d50-898032920afa")
+	)
+	(wire
+		(pts
+			(xy 247.65 97.79) (xy 247.65 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b1fdbd2-50da-4158-af5e-1017617d7820")
+	)
+	(wire
+		(pts
+			(xy 247.65 119.38) (xy 251.46 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ec01127-1939-46da-bb47-a72cd3756945")
+	)
+	(wire
+		(pts
+			(xy 173.99 91.44) (xy 191.77 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "220d8c6b-114d-4ae0-9bdb-39f3aa5ecdd5")
+	)
+	(wire
+		(pts
+			(xy 195.58 226.06) (xy 195.58 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "221b56ee-4f79-44cc-961f-af88a62f5f95")
+	)
+	(wire
+		(pts
+			(xy 189.23 99.06) (xy 189.23 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "254f1ec0-1775-4fbf-b771-6e84203c7edc")
+	)
+	(wire
+		(pts
+			(xy 140.97 226.06) (xy 140.97 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "257c1096-f5b6-4854-9e2e-b8b008b997be")
+	)
+	(wire
+		(pts
+			(xy 171.45 124.46) (xy 171.45 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2a933772-3972-4987-9cfa-24b321aab102")
+	)
+	(wire
+		(pts
+			(xy 264.16 137.16) (xy 264.16 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2cb0b949-1162-4a21-8a97-51c3844e2ee6")
+	)
+	(wire
+		(pts
+			(xy 191.77 106.68) (xy 189.23 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d66366e-6150-414d-8888-8f4e5154852d")
+	)
+	(wire
+		(pts
+			(xy 189.23 104.14) (xy 191.77 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "38324123-ea8e-4161-9eaf-fa1bf5d8de0e")
+	)
+	(wire
+		(pts
+			(xy 262.89 119.38) (xy 262.89 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3a89b454-c72d-44a5-b932-0ff04b659dfd")
+	)
+	(wire
+		(pts
+			(xy 247.65 113.03) (xy 247.65 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f5feaf8-1714-4732-8561-70cfec28f076")
+	)
+	(wire
+		(pts
+			(xy 189.23 106.68) (xy 189.23 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "498ef514-2842-4bdf-976a-ffd028fae1f5")
+	)
+	(wire
+		(pts
+			(xy 223.52 82.55) (xy 214.63 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c2b7c62-1f43-4296-a9fa-bf1b8d9ea4e9")
+	)
+	(wire
+		(pts
+			(xy 262.89 86.36) (xy 262.89 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4eaa0cfe-8c6d-4e6d-9b74-7bc444c7eafb")
+	)
+	(wire
+		(pts
+			(xy 247.65 86.36) (xy 262.89 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fb33b3b-e8ce-48ae-914e-b9d69f7fdb51")
+	)
+	(wire
+		(pts
+			(xy 259.08 119.38) (xy 262.89 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "667529b7-6725-44a6-81e1-1ac68e6fcfe5")
+	)
+	(wire
+		(pts
+			(xy 212.09 86.36) (xy 212.09 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6851ce15-5536-4a0a-9aa4-8c4a11ee5de1")
+	)
+	(wire
+		(pts
+			(xy 185.42 127) (xy 191.77 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "688ef3fd-3dd0-4510-b20b-2988f58daf88")
+	)
+	(wire
+		(pts
+			(xy 214.63 82.55) (xy 214.63 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e27a938-84e7-46a4-97bd-a9abaacd46b8")
+	)
+	(wire
+		(pts
+			(xy 237.49 101.6) (xy 247.65 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89f2cdc1-667e-4241-a8fe-9f1461cfb905")
+	)
+	(wire
+		(pts
+			(xy 181.61 226.06) (xy 195.58 226.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9397d7e0-3d67-4451-913e-297be2205ddc")
+	)
+	(wire
+		(pts
+			(xy 212.09 71.12) (xy 223.52 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9457736b-bd15-4cfa-85ac-1b73cce0bdc0")
+	)
+	(wire
+		(pts
+			(xy 264.16 120.65) (xy 262.89 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f21b869-f914-4248-ad4b-0c4d1197796e")
+	)
+	(wire
+		(pts
+			(xy 152.4 228.6) (xy 157.48 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1c68aa3-a81c-444a-a746-2344873330cb")
+	)
+	(wire
+		(pts
+			(xy 189.23 96.52) (xy 191.77 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "adac365a-03cb-4489-8fde-f0cf650652c5")
+	)
+	(wire
+		(pts
+			(xy 181.61 234.95) (xy 181.61 233.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b056318c-77db-4e9f-a858-c0f28cf6b338")
+	)
+	(wire
+		(pts
+			(xy 191.77 124.46) (xy 171.45 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b7d60fdc-0e6c-42ce-9970-a1f4c0046903")
+	)
+	(wire
+		(pts
+			(xy 247.65 105.41) (xy 247.65 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd8c2636-09c5-4e83-9840-c5fc5601547d")
+	)
+	(wire
+		(pts
+			(xy 173.99 92.71) (xy 173.99 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4b7a43c-e5ba-49f1-a442-7e4feb3ae96f")
+	)
+	(wire
+		(pts
+			(xy 262.89 120.65) (xy 262.89 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4c51ae2-5d3f-4aa8-93d0-0294a14d7dbf")
+	)
+	(wire
+		(pts
+			(xy 140.97 228.6) (xy 144.78 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c563b317-b8b7-4ede-85d6-5c15c5707c3f")
+	)
+	(wire
+		(pts
+			(xy 177.8 226.06) (xy 181.61 226.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb79dc71-8ebe-4123-81e4-893f5441e1be")
+	)
+	(wire
+		(pts
+			(xy 264.16 120.65) (xy 264.16 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5b94b0f-c6b4-4559-942a-894992307bde")
+	)
+	(wire
+		(pts
+			(xy 222.25 111.76) (xy 238.76 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "da9dfc2b-8194-433d-b1b8-7305b7d82f83")
+	)
+	(wire
+		(pts
+			(xy 247.65 100.33) (xy 255.27 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcee817b-1abe-49aa-8fce-b01fda256723")
+	)
+	(wire
+		(pts
+			(xy 238.76 137.16) (xy 264.16 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e22dbbff-e779-4117-a125-4bdd086b24ea")
+	)
+	(wire
+		(pts
+			(xy 271.78 120.65) (xy 264.16 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e310b0e0-ad8b-4177-9c57-e12112b41725")
+	)
+	(wire
+		(pts
+			(xy 191.77 99.06) (xy 189.23 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e520cf9c-20f1-43c3-84da-1bd46e254162")
+	)
+	(wire
+		(pts
+			(xy 247.65 101.6) (xy 247.65 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e54fb14d-9cf4-4430-abe7-1c4b69c31f03")
+	)
+	(wire
+		(pts
+			(xy 222.25 101.6) (xy 229.87 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e71af90a-049c-454a-8861-a97607ff306c")
+	)
+	(wire
+		(pts
+			(xy 177.8 231.14) (xy 177.8 234.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f20b4bf5-661b-4ae2-acf2-b494f713eb53")
+	)
+	(wire
+		(pts
+			(xy 238.76 111.76) (xy 238.76 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f281d166-e554-4c44-8c3f-3afcf42f9a40")
+	)
+	(wire
+		(pts
+			(xy 262.89 86.36) (xy 278.13 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f81872c4-026d-4987-868b-6de3603728af")
+	)
 	(hierarchical_label "+3V3"
 		(shape output)
 		(at 64.77 91.44 0)
@@ -1987,7 +2527,7 @@
 	)
 	(hierarchical_label "+VBUS_PD"
 		(shape output)
-		(at 87.63 72.39 0)
+		(at 271.78 120.65 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2031,7 +2571,7 @@
 	)
 	(hierarchical_label "+5V_MR1_CLEAN"
 		(shape output)
-		(at 68.58 67.31 0)
+		(at 138.43 214.63 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2075,7 +2615,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 228.6 251.46 0)
+		(at 109.22 224.79 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2085,7 +2625,7 @@
 		(dnp no)
 		(uuid "05a7ced1-60cd-4d05-b963-29f0fff639e6")
 		(property "Reference" "C108"
-			(at 231.14 250.19 0)
+			(at 111.76 223.52 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2096,7 +2636,7 @@
 			)
 		)
 		(property "Value" "22uF 10V"
-			(at 231.14 252.73 0)
+			(at 111.76 226.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2107,7 +2647,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
-			(at 228.6 251.46 0)
+			(at 109.22 224.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2118,7 +2658,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 251.46 0)
+			(at 109.22 224.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2129,7 +2669,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 228.6 251.46 0)
+			(at 109.22 224.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2140,7 +2680,7 @@
 			)
 		)
 		(property "MR1_Role" "Buck output"
-			(at 228.6 251.46 0)
+			(at 109.22 224.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2361,7 +2901,7 @@
 		(dnp no)
 		(uuid "0e30e080-7926-4862-a9fd-994b6c6a37fd")
 		(property "Reference" "U103"
-			(at 170.18 227.33 0)
+			(at 171.704 235.712 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2372,7 +2912,7 @@
 			)
 		)
 		(property "Value" "TPS22917DBV"
-			(at 170.18 229.87 0)
+			(at 160.02 222.25 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2465,7 +3005,7 @@
 		(dnp no)
 		(uuid "12dd0b79-3b0d-4f8b-a9ca-477be821377f")
 		(property "Reference" "U104"
-			(at 215.9 227.33 0)
+			(at 217.17 235.712 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2476,7 +3016,7 @@
 			)
 		)
 		(property "Value" "TLV70233"
-			(at 215.9 229.87 0)
+			(at 208.788 222.25 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2556,7 +3096,7 @@
 	)
 	(symbol
 		(lib_id "Regulator_Switching:TPS54302")
-		(at 121.92 228.6 0)
+		(at 88.9 222.25 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2566,7 +3106,7 @@
 		(dnp no)
 		(uuid "1363eaa3-96d2-4bdd-a814-767c0051695f")
 		(property "Reference" "U102"
-			(at 124.46 227.33 0)
+			(at 93.218 228.854 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2577,7 +3117,7 @@
 			)
 		)
 		(property "Value" "TPS54302"
-			(at 124.46 229.87 0)
+			(at 84.074 215.9 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2588,7 +3128,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
-			(at 121.92 228.6 0)
+			(at 88.9 222.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2599,7 +3139,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps54302.pdf"
-			(at 121.92 228.6 0)
+			(at 88.9 222.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2610,7 +3150,7 @@
 			)
 		)
 		(property "Description" "3A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6"
-			(at 121.92 228.6 0)
+			(at 88.9 222.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2621,7 +3161,7 @@
 			)
 		)
 		(property "MR1_Role" "Buck VBUS_SNK -> +5V 3A (SOT-23-6; replaces SOIC-8 placeholder U3)"
-			(at 121.92 228.6 0)
+			(at 88.9 222.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2660,7 +3200,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 45.72 251.46 0)
+		(at 227.33 82.55 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2670,7 +3210,7 @@
 		(dnp no)
 		(uuid "13cb00c4-ab75-43a5-aa0c-303d5fdec508")
 		(property "Reference" "C102"
-			(at 48.26 250.19 0)
+			(at 226.06 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2681,7 +3221,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 48.26 252.73 0)
+			(at 228.6 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2692,7 +3232,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 45.72 251.46 0)
+			(at 227.33 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2703,7 +3243,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 45.72 251.46 0)
+			(at 227.33 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2714,7 +3254,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 45.72 251.46 0)
+			(at 227.33 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2725,7 +3265,7 @@
 			)
 		)
 		(property "MR1_Role" "STUSB4500 VREG_1V2 (pin 21) to GND"
-			(at 45.72 251.46 0)
+			(at 227.33 82.55 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2752,7 +3292,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 167.64 251.46 0)
+		(at 156.21 273.05 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2762,7 +3302,7 @@
 		(dnp no)
 		(uuid "286b84af-6696-4a4a-973f-41790622e2fc")
 		(property "Reference" "C105"
-			(at 170.18 250.19 0)
+			(at 158.75 271.78 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2773,7 +3313,7 @@
 			)
 		)
 		(property "Value" "10uF 50V X7R"
-			(at 170.18 252.73 0)
+			(at 158.75 274.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2784,7 +3324,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
-			(at 167.64 251.46 0)
+			(at 156.21 273.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2795,7 +3335,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 251.46 0)
+			(at 156.21 273.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2806,7 +3346,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 167.64 251.46 0)
+			(at 156.21 273.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2817,7 +3357,7 @@
 			)
 		)
 		(property "MR1_Role" "Buck input bulk"
-			(at 167.64 251.46 0)
+			(at 156.21 273.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2844,7 +3384,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 243.84 251.46 0)
+		(at 195.58 232.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2854,7 +3394,7 @@
 		(dnp no)
 		(uuid "2c00f75a-e465-4b1e-beaf-474f8d80afa7")
 		(property "Reference" "C109"
-			(at 246.38 250.19 0)
+			(at 198.12 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2865,7 +3405,7 @@
 			)
 		)
 		(property "Value" "22uF 10V"
-			(at 246.38 252.73 0)
+			(at 198.12 233.68 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2876,7 +3416,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
-			(at 243.84 251.46 0)
+			(at 195.58 232.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2887,7 +3427,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 251.46 0)
+			(at 195.58 232.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2898,7 +3438,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 243.84 251.46 0)
+			(at 195.58 232.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2909,7 +3449,7 @@
 			)
 		)
 		(property "MR1_Role" "Buck output"
-			(at 243.84 251.46 0)
+			(at 195.58 232.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3028,7 +3568,7 @@
 	)
 	(symbol
 		(lib_id "Interface_USB:STUSB4500QTR")
-		(at 30.48 228.6 0)
+		(at 207.01 109.22 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3038,7 +3578,7 @@
 		(dnp no)
 		(uuid "366b6a2a-17d8-42a9-be5f-9af494a3668b")
 		(property "Reference" "U101"
-			(at 33.02 227.33 0)
+			(at 209.55 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3049,7 +3589,7 @@
 			)
 		)
 		(property "Value" "STUSB4500QTR"
-			(at 33.02 229.87 0)
+			(at 201.168 114.808 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3060,7 +3600,7 @@
 			)
 		)
 		(property "Footprint" "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.7mm"
-			(at 30.48 228.6 0)
+			(at 207.01 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3071,7 +3611,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.st.com/resource/en/datasheet/stusb4500.pdf"
-			(at 30.48 228.6 0)
+			(at 207.01 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3082,7 +3622,7 @@
 			)
 		)
 		(property "Description" "Stand-alone USB PD controller (with sink Auto-run mode), QFN-24"
-			(at 30.48 228.6 0)
+			(at 207.01 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3093,7 +3633,7 @@
 			)
 		)
 		(property "MR1_Role" "USB-PD sink controller (replaces placeholder U2)"
-			(at 30.48 228.6 0)
+			(at 207.01 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3189,7 +3729,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 182.88 251.46 0)
+		(at 182.88 271.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3199,7 +3739,7 @@
 		(dnp no)
 		(uuid "4239af8b-1eca-4678-8f5d-9ee3be8bc570")
 		(property "Reference" "C106"
-			(at 185.42 250.19 0)
+			(at 185.42 270.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3210,7 +3750,7 @@
 			)
 		)
 		(property "Value" "100nF 50V"
-			(at 185.42 252.73 0)
+			(at 185.42 273.05 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3221,7 +3761,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 182.88 251.46 0)
+			(at 182.88 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3232,7 +3772,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 182.88 251.46 0)
+			(at 182.88 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3243,7 +3783,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 182.88 251.46 0)
+			(at 182.88 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3254,7 +3794,7 @@
 			)
 		)
 		(property "MR1_Role" "Buck input HF, close to VIN/GND"
-			(at 182.88 251.46 0)
+			(at 182.88 271.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3372,6 +3912,98 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 171.45 135.89 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "540b5996-0624-4e53-9af5-f28d4a7233b7")
+		(property "Reference" "R110"
+			(at 173.99 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 173.99 137.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 171.45 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 171.45 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 171.45 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MR1_Role" "Q101 gate-source pull-up (keeps switch off when idle)"
+			(at 171.45 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2c4f1ceb-c061-4d28-9dda-1291ad717b1f")
+		)
+		(pin "2"
+			(uuid "7fe3f769-8628-4579-9c38-5b820df24199")
+		)
+		(instances
+			(project "Pump"
+				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249/a1000001-0001-4000-8000-000000000001"
+					(reference "R110")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:L")
 		(at 213.36 251.46 0)
 		(unit 1)
@@ -3465,7 +4097,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 289.56 251.46 0)
+		(at 278.13 90.17 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3475,7 +4107,7 @@
 		(dnp no)
 		(uuid "591bfdf9-d734-4fe5-aeee-eaa7e6d2bc98")
 		(property "Reference" "C110"
-			(at 292.1 250.19 0)
+			(at 280.67 88.9 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3486,7 +4118,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 292.1 252.73 0)
+			(at 280.67 91.44 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3497,7 +4129,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 289.56 251.46 0)
+			(at 278.13 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3508,7 +4140,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 289.56 251.46 0)
+			(at 278.13 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3519,7 +4151,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 289.56 251.46 0)
+			(at 278.13 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3530,7 +4162,7 @@
 			)
 		)
 		(property "MR1_Role" "TPS22917 VIN decoupling"
-			(at 289.56 251.46 0)
+			(at 278.13 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3557,7 +4189,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 60.96 251.46 0)
+		(at 227.33 71.12 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3567,7 +4199,7 @@
 		(dnp no)
 		(uuid "6083afa7-a09c-49b1-bb25-43aa3d1dc7e9")
 		(property "Reference" "C103"
-			(at 63.5 250.19 0)
+			(at 226.06 68.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3578,7 +4210,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 63.5 252.73 0)
+			(at 228.6 68.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3589,7 +4221,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 60.96 251.46 0)
+			(at 227.33 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3600,7 +4232,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 60.96 251.46 0)
+			(at 227.33 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3611,7 +4243,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 60.96 251.46 0)
+			(at 227.33 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3622,7 +4254,7 @@
 			)
 		)
 		(property "MR1_Role" "STUSB4500 VREG_2V7 (pin 23) to GND"
-			(at 60.96 251.46 0)
+			(at 227.33 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3649,7 +4281,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 320.04 251.46 0)
+		(at 260.35 227.33 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3659,7 +4291,7 @@
 		(dnp no)
 		(uuid "646834a2-04e9-4825-a719-c979174c7d8e")
 		(property "Reference" "C112"
-			(at 322.58 250.19 0)
+			(at 262.89 226.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3670,7 +4302,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 322.58 252.73 0)
+			(at 262.89 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3681,7 +4313,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 320.04 251.46 0)
+			(at 260.35 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3692,7 +4324,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 320.04 251.46 0)
+			(at 260.35 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3703,7 +4335,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 320.04 251.46 0)
+			(at 260.35 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3714,7 +4346,7 @@
 			)
 		)
 		(property "MR1_Role" "TLV70233 input"
-			(at 320.04 251.46 0)
+			(at 260.35 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3741,7 +4373,8 @@
 	)
 	(symbol
 		(lib_id "Transistor_FET:DMP3099L")
-		(at 76.2 228.6 0)
+		(at 260.35 100.33 0)
+		(mirror x)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3751,7 +4384,7 @@
 		(dnp no)
 		(uuid "6c8770fb-64af-426a-b787-1f6aedb8be15")
 		(property "Reference" "Q101"
-			(at 78.74 227.33 0)
+			(at 262.89 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3762,7 +4395,7 @@
 			)
 		)
 		(property "Value" "DMP3099L"
-			(at 78.74 229.87 0)
+			(at 262.89 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3773,7 +4406,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 76.2 228.6 0)
+			(at 260.35 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3784,7 +4417,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/DMP3099L.pdf"
-			(at 76.2 228.6 0)
+			(at 260.35 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3795,7 +4428,7 @@
 			)
 		)
 		(property "Description" "-3.8A Id, -30V Vds, P-Channel MOSFET, SOT-23"
-			(at 76.2 228.6 0)
+			(at 260.35 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3806,7 +4439,7 @@
 			)
 		)
 		(property "MR1_Role" "VBUS power-path PMOS, gate driven by VBUS_EN_SNK (pin 16)"
-			(at 76.2 228.6 0)
+			(at 260.35 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3836,7 +4469,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 198.12 251.46 0)
+		(at 148.59 228.6 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3846,7 +4479,7 @@
 		(dnp no)
 		(uuid "7121b9d8-d802-408f-9e99-ba5e463c9fc4")
 		(property "Reference" "C107"
-			(at 200.66 250.19 0)
+			(at 149.86 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3857,7 +4490,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 200.66 252.73 0)
+			(at 147.32 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3868,7 +4501,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 198.12 251.46 0)
+			(at 148.59 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3879,7 +4512,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 198.12 251.46 0)
+			(at 148.59 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3890,7 +4523,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 198.12 251.46 0)
+			(at 148.59 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3901,7 +4534,7 @@
 			)
 		)
 		(property "MR1_Role" "Buck BOOT-SW bootstrap"
-			(at 198.12 251.46 0)
+			(at 148.59 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3928,7 +4561,8 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 30.48 251.46 0)
+		(at 255.27 119.38 90)
+		(mirror x)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3938,7 +4572,7 @@
 		(dnp no)
 		(uuid "754af613-e6f7-44e9-b519-fe03960ea4a8")
 		(property "Reference" "C101"
-			(at 33.02 250.19 0)
+			(at 254 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3949,7 +4583,7 @@
 			)
 		)
 		(property "Value" "100nF 50V"
-			(at 33.02 252.73 0)
+			(at 256.54 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3960,7 +4594,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 30.48 251.46 0)
+			(at 255.27 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3971,7 +4605,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 30.48 251.46 0)
+			(at 255.27 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3982,7 +4616,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 30.48 251.46 0)
+			(at 255.27 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3993,7 +4627,7 @@
 			)
 		)
 		(property "MR1_Role" "STUSB4500 VDD (pin 24) decoupling; VDD tied to VBUS"
-			(at 30.48 251.46 0)
+			(at 255.27 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4019,8 +4653,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 304.8 251.46 0)
+		(lib_id "Device:R")
+		(at 181.61 229.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4028,9 +4662,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "8abe5b64-a27b-4d0e-8783-f7d895facd0a")
-		(property "Reference" "C111"
-			(at 307.34 250.19 0)
+		(uuid "7924ef6c-05d2-406b-a009-a0bdbe0c3b00")
+		(property "Reference" "R111"
+			(at 184.15 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4040,8 +4674,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1nF"
-			(at 307.34 252.73 0)
+		(property "Value" "1k (verify)"
+			(at 184.15 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4051,8 +4685,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 304.8 251.46 0)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 181.61 229.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4063,7 +4697,284 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 304.8 251.46 0)
+			(at 181.61 229.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 181.61 229.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MR1_Role" "VBUS -> VBUS_VS_DISCH (pin 18) sense/discharge series R"
+			(at 181.61 229.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7ec6f10c-bede-4482-9c38-3ea483372112")
+		)
+		(pin "2"
+			(uuid "fb5eeb42-c54e-444b-b106-d8863ccd103a")
+		)
+		(instances
+			(project "Pump"
+				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249/a1000001-0001-4000-8000-000000000001"
+					(reference "R111")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 233.68 101.6 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "79c66d3f-0f6c-4719-bb81-6f4bc245c11f")
+		(property "Reference" "R109"
+			(at 232.41 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22k"
+			(at 234.95 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 233.68 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 233.68 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 233.68 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MR1_Role" "ALERT (pin 19) open-drain pull-up to +3V3"
+			(at 233.68 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "47b7c4d3-9ee3-4723-9616-fe4c79e823aa")
+		)
+		(pin "2"
+			(uuid "66583007-8d77-4541-a1b8-66d2cc93aab5")
+		)
+		(instances
+			(project "Pump"
+				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249/a1000001-0001-4000-8000-000000000001"
+					(reference "R109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 247.65 109.22 0)
+		(mirror x)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "83fd59b1-c419-4059-afb1-b7eb4aebfb68")
+		(property "Reference" "R108"
+			(at 250.19 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100"
+			(at 250.19 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 247.65 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 247.65 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 247.65 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MR1_Role" "VBUS -> VBUS_VS_DISCH (pin 18) sense/discharge series R"
+			(at 247.65 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4173e598-e0f7-4977-83ad-4599e371d6b2")
+		)
+		(pin "2"
+			(uuid "7135d4da-8e5e-4205-bfa2-e101885124bf")
+		)
+		(instances
+			(project "Pump"
+				(path "/cc93d521-16a7-4cfb-bf6e-12e26615f249/a1000001-0001-4000-8000-000000000001"
+					(reference "R108")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 245.11 227.33 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8abe5b64-a27b-4d0e-8783-f7d895facd0a")
+		(property "Reference" "C111"
+			(at 247.65 226.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1nF"
+			(at 247.65 228.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 245.11 227.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 245.11 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4074,7 +4985,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 304.8 251.46 0)
+			(at 245.11 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4085,7 +4996,7 @@
 			)
 		)
 		(property "MR1_Role" "TPS22917 CT slew-rate cap (sets soft-start)"
-			(at 304.8 251.46 0)
+			(at 245.11 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4112,7 +5023,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 106.68 251.46 0)
+		(at 173.99 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4122,7 +5033,7 @@
 		(dnp no)
 		(uuid "8ef76537-aff0-4e97-a581-802aa34ced79")
 		(property "Reference" "R103"
-			(at 109.22 250.19 0)
+			(at 176.53 95.25 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4133,7 +5044,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 109.22 252.73 0)
+			(at 176.53 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4144,7 +5055,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 106.68 251.46 0)
+			(at 173.99 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4155,7 +5066,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 106.68 251.46 0)
+			(at 173.99 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4166,7 +5077,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 106.68 251.46 0)
+			(at 173.99 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4177,7 +5088,7 @@
 			)
 		)
 		(property "MR1_Role" "ATTACH (pin 11) open-drain pull-up to +3V3"
-			(at 106.68 251.46 0)
+			(at 173.99 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4204,7 +5115,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 121.92 251.46 0)
+		(at 185.42 135.89 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4214,7 +5125,7 @@
 		(dnp no)
 		(uuid "a7ad743e-8cc0-4348-a500-967094c7ff1b")
 		(property "Reference" "R104"
-			(at 124.46 250.19 0)
+			(at 187.96 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4225,7 +5136,7 @@
 			)
 		)
 		(property "Value" "100k"
-			(at 124.46 252.73 0)
+			(at 187.96 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4236,7 +5147,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 121.92 251.46 0)
+			(at 185.42 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4247,7 +5158,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 121.92 251.46 0)
+			(at 185.42 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4258,7 +5169,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 121.92 251.46 0)
+			(at 185.42 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4269,7 +5180,7 @@
 			)
 		)
 		(property "MR1_Role" "Q101 gate-source pull-up (keeps switch off when idle)"
-			(at 121.92 251.46 0)
+			(at 185.42 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4296,7 +5207,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 335.28 251.46 0)
+		(at 275.59 227.33 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4306,7 +5217,7 @@
 		(dnp no)
 		(uuid "bccdb6e6-77a1-4262-9019-e9f1a3544d2d")
 		(property "Reference" "C113"
-			(at 337.82 250.19 0)
+			(at 278.13 226.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4317,7 +5228,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 337.82 252.73 0)
+			(at 278.13 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4328,7 +5239,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 335.28 251.46 0)
+			(at 275.59 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4339,7 +5250,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 335.28 251.46 0)
+			(at 275.59 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4350,7 +5261,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 335.28 251.46 0)
+			(at 275.59 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4361,7 +5272,7 @@
 			)
 		)
 		(property "MR1_Role" "TLV70233 output"
-			(at 335.28 251.46 0)
+			(at 275.59 227.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4388,7 +5299,8 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 259.08 251.46 0)
+		(at 247.65 93.98 0)
+		(mirror x)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4398,7 +5310,7 @@
 		(dnp no)
 		(uuid "f550eeff-08cd-4a0b-bfde-a508d4d07247")
 		(property "Reference" "R106"
-			(at 261.62 250.19 0)
+			(at 250.19 95.25 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4409,7 +5321,7 @@
 			)
 		)
 		(property "Value" "100k 1%"
-			(at 261.62 252.73 0)
+			(at 250.19 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4420,7 +5332,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 259.08 251.46 0)
+			(at 247.65 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4431,7 +5343,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 259.08 251.46 0)
+			(at 247.65 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4442,7 +5354,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 259.08 251.46 0)
+			(at 247.65 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4453,7 +5365,7 @@
 			)
 		)
 		(property "MR1_Role" "FB top: Vout = 0.596*(1+R106/R107) = 4.95V"
-			(at 259.08 251.46 0)
+			(at 247.65 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4480,7 +5392,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 76.2 251.46 0)
+		(at 264.16 128.27 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4490,7 +5402,7 @@
 		(dnp no)
 		(uuid "f747d609-27f0-4425-aa4e-13a35dfbfe1a")
 		(property "Reference" "R101"
-			(at 78.74 250.19 0)
+			(at 266.7 127 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4501,7 +5413,7 @@
 			)
 		)
 		(property "Value" "1k (verify)"
-			(at 78.74 252.73 0)
+			(at 266.7 129.54 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4512,7 +5424,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 76.2 251.46 0)
+			(at 264.16 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4523,7 +5435,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 251.46 0)
+			(at 264.16 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4534,7 +5446,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 76.2 251.46 0)
+			(at 264.16 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4545,7 +5457,7 @@
 			)
 		)
 		(property "MR1_Role" "VBUS -> VBUS_VS_DISCH (pin 18) sense/discharge series R"
-			(at 76.2 251.46 0)
+			(at 264.16 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
